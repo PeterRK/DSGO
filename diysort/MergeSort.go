@@ -1,6 +1,6 @@
 package diysort
 
-////复杂度为O(log N) + O(N)，具有稳定性
+//复杂度为O(log N) + O(N)，具有稳定性
 func MergeSort(list []int) {
 	var size = len(list)
 	if size < 8 {

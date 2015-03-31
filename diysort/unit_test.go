@@ -101,14 +101,27 @@ func checkLinkList(head *Node, size int) bool {
 	return cnt == size
 }
 
-func Test_LinkSort(t *testing.T) {
+func Test_LinkMergeSort(t *testing.T) {
 	defer guard_ut(t)
 
 	const size = 1000
 	rand.Seed(time.Now().Unix())
 
 	var head = ramdomLinkList(size)
-	head = LinkSort(head)
+	head = LinkMergeSort(head)
+	if !checkLinkList(head, size) {
+		t.Fail()
+	}
+}
+
+func Test_LinkQuickSort(t *testing.T) {
+	defer guard_ut(t)
+
+	const size = 1000
+	rand.Seed(time.Now().Unix())
+
+	var head = ramdomLinkList(size)
+	head = LinkQuickSort(head)
 	if !checkLinkList(head, size) {
 		t.Fail()
 	}

@@ -18,6 +18,7 @@ func Benchmark_SelectSort(b *testing.B) {
 	SelectSort(list)
 }
 */
+
 func Benchmark_HeapSort(b *testing.B) {
 	b.StopTimer()
 	var list = ramdomArray(b.N)
@@ -42,9 +43,17 @@ func Benchmark_Introsort(b *testing.B) {
 	b.StartTimer()
 	Introsort(list)
 }
-func Benchmark_LinkSort(b *testing.B) {
+
+func Benchmark_LinkMergeSort(b *testing.B) {
 	b.StopTimer()
 	var head = ramdomLinkList(b.N)
 	b.StartTimer()
-	LinkSort(head)
+	LinkMergeSort(head)
+}
+
+func Benchmark_LinkQuickSort(b *testing.B) {
+	b.StopTimer()
+	var head = ramdomLinkList(b.N)
+	b.StartTimer()
+	LinkQuickSort(head)
 }

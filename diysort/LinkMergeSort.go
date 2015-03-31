@@ -34,7 +34,7 @@ func mergeList(left *Node, right *Node) (head *Node, tail *Node) {
 }
 
 //O(2N) + O(1)
-func LinkSort(head *Node) *Node {
+func LinkMergeSort(head *Node) *Node {
 	var stop = false
 	for step := 1; !stop; step *= 2 {
 		tail, knot := head, FakeHead(&head)
