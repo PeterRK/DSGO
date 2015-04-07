@@ -55,20 +55,20 @@ func Introsort(list []int) {
 		}
 
 		var left, right = start + 1, end - 1
-		for left < right {
-			if list[right] <= seed {
-				if list[left] > seed {
-					list[left], list[right] = list[right], list[left]
-					right--
-				}
+		for { //注意对称性
+			for list[left] < seed {
 				left++
-			} else {
+			}
+			for list[right] > seed {
 				right--
 			}
-		}
-		if list[right] > seed {
+			if left >= right {
+				break
+			}
+			list[left], list[right] = list[right], list[left]
+			left++
 			right--
-		} //这里不能用left，left可能越界
+		}
 		list[start], list[right] = list[right], seed
 		//每轮保证至少解决一个，否则最坏情况可能是死循环
 		tasks.push(right+1, end)

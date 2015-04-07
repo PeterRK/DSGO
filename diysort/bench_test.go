@@ -43,7 +43,6 @@ func Benchmark_Introsort(b *testing.B) {
 	b.StartTimer()
 	Introsort(list)
 }
-
 func Benchmark_LinkMergeSort(b *testing.B) {
 	b.StopTimer()
 	var head = ramdomLinkList(b.N)
