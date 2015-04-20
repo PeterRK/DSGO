@@ -6,8 +6,6 @@ import (
 	"time"
 )
 
-//func init() {}	//这用于初始化包中数据，这里不合适
-
 var tree_ut = Tree{root: NULL}
 var dirty_ut = false
 
