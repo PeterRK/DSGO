@@ -1,20 +1,5 @@
 package diysort
 
-import (
-	"unsafe"
-)
-
-type Node struct {
-	key  int
-	next *Node
-}
-
-func FakeHead(this **Node) *Node {
-	var base = uintptr(unsafe.Pointer(this))
-	var off = unsafe.Offsetof((*this).next)
-	return (*Node)(unsafe.Pointer(base - off))
-}
-
 func mergeList(left *Node, right *Node) (head *Node, tail *Node) {
 	head, tail = nil, FakeHead(&head)
 	for ; left != nil && right != nil; tail = tail.next {

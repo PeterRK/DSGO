@@ -16,15 +16,22 @@ func Introsort(list []int) {
 
 	for !tasks.isEmpty() {
 		var start, end = tasks.pop()
-		if end-start < 7 { //内建SelectSort
-			for i := start; i < end-1; i++ {
-				var pos = i
-				for j := i + 1; j < end; j++ {
-					if list[j] < list[pos] {
-						pos = j
+		if end-start < sz_limit { //内建InsertSort
+			for i := start + 1; i < end; i++ {
+				var left, right = start, i
+				var key = list[i]
+				for left < right {
+					var mid = (left + right) / 2
+					if key < list[mid] {
+						right = mid
+					} else {
+						left = mid + 1
 					}
 				}
-				list[pos], list[i] = list[i], list[pos]
+				for j := i; j > left; j-- {
+					list[j] = list[j-1]
+				}
+				list[left] = key
 			}
 			continue
 		}

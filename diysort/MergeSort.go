@@ -1,23 +1,24 @@
 package diysort
 
-//复杂度为O(log N) + O(N)，具有稳定性
+//复杂度为O(NlogN) & O(N)，具有稳定性
+//比较操作是O(NlogN)，常数小于HeapSort
+//挪移操作是O(NlogN)，常数与HeapSort相当
 func MergeSort(list []int) {
 	var size = len(list)
-	if size < 8 {
+	if size < sz_limit {
 		InsertSort(list)
-		return
+	} else {
+		var shadow = make([]int, size)
+		for i := 0; i < size; i++ {
+			shadow[i] = list[i]
+		}
+		doMergeSort(shadow, list)
 	}
-
-	var shadow = make([]int, size)
-	for i := 0; i < size; i++ {
-		shadow[i] = list[i]
-	}
-	doMergeSort(shadow, list)
 }
 
 func doMergeSort(in []int, out []int) {
 	var size = len(in)
-	if size < 8 { //内建InsertSort
+	if size < sz_limit { //内建InsertSort
 		for i := 1; i < size; i++ {
 			var left, right = 0, i
 			var key = in[i]

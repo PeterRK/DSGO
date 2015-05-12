@@ -1,20 +1,30 @@
 package diysort
 
-//最坏情况是O(N)，不具有稳定性
+//复杂度为O(NlogN) & O(logN)
+//最坏情况是O(N^2)，不具有稳定性
+//比较操作是O(NlogN)，常数与MergeSort相当
+//挪移操作是O(NlogN)，常数小于MergeSort
 func QuickSort(list []int) {
 	var tasks stack
 	tasks.push(0, len(list))
 	for !tasks.isEmpty() {
 		var start, end = tasks.pop()
-		if end-start < 7 { //内建SelectSort
-			for i := start; i < end-1; i++ {
-				var pos = i
-				for j := i + 1; j < end; j++ {
-					if list[j] < list[pos] {
-						pos = j
+		if end-start < sz_limit { //内建InsertSort
+			for i := start + 1; i < end; i++ {
+				var left, right = start, i
+				var key = list[i]
+				for left < right {
+					var mid = (left + right) / 2
+					if key < list[mid] {
+						right = mid
+					} else {
+						left = mid + 1
 					}
 				}
-				list[pos], list[i] = list[i], list[pos]
+				for j := i; j > left; j-- {
+					list[j] = list[j-1]
+				}
+				list[left] = key
 			}
 			continue
 		}
@@ -60,31 +70,4 @@ func QuickSort(list []int) {
 		tasks.push(right+1, end)
 		tasks.push(start, right)
 	}
-}
-
-type pair struct {
-	start int
-	end   int
-}
-type stack struct {
-	core []pair
-}
-
-func (this *stack) clear() {
-	this.core = this.core[:0]
-}
-func (this *stack) size() int {
-	return len(this.core)
-}
-func (this *stack) isEmpty() bool {
-	return len(this.core) == 0
-}
-func (this *stack) push(start int, end int) {
-	this.core = append(this.core, pair{start, end})
-}
-func (this *stack) pop() (start int, end int) {
-	var sz = len(this.core) - 1
-	var unit = this.core[sz]
-	this.core = this.core[:sz]
-	return unit.start, unit.end
 }

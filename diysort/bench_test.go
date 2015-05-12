@@ -4,18 +4,24 @@ import (
 	"testing"
 )
 
-/*	这两个要跑很久
-func Benchmark_InsertSort(b *testing.B) {
+/*	这几个要跑很久
+func Benchmark_BubleSort(b *testing.B) {
 	b.StopTimer()
 	var list = ramdomArray(b.N)
 	b.StartTimer()
-	InsertSort(list)
+	BubleSort(list)
 }
 func Benchmark_SelectSort(b *testing.B) {
 	b.StopTimer()
 	var list = ramdomArray(b.N)
 	b.StartTimer()
 	SelectSort(list)
+}
+func Benchmark_InsertSort(b *testing.B) {
+	b.StopTimer()
+	var list = ramdomArray(b.N)
+	b.StartTimer()
+	InsertSort(list)
 }
 */
 
@@ -49,7 +55,6 @@ func Benchmark_LinkMergeSort(b *testing.B) {
 	b.StartTimer()
 	LinkMergeSort(head)
 }
-
 func Benchmark_LinkQuickSort(b *testing.B) {
 	b.StopTimer()
 	var head = ramdomLinkList(b.N)

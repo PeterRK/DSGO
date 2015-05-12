@@ -1,10 +1,27 @@
 package diysort
 
-//复杂度为O(log N) + O(1)，不具备稳定性
+//复杂度为O(NlogN) & O(1)，不具备稳定性
+//比较操作是O(NlogN)，挪移操作也是O(NlogN)
+//建堆开销为O(N)
 func HeapSort(list []int) {
 	var size = len(list)
-	if size < 7 {
-		SelectSort(list)
+	if size < sz_limit { //内建InsertSort
+		for i := 1; i < size; i++ {
+			var left, right = 0, i
+			var key = list[i]
+			for left < right {
+				var mid = (left + right) / 2
+				if key < list[mid] {
+					right = mid
+				} else {
+					left = mid + 1
+				}
+			}
+			for j := i; j > left; j-- {
+				list[j] = list[j-1]
+			}
+			list[left] = key
+		}
 		return
 	}
 

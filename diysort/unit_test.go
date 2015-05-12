@@ -6,6 +6,10 @@ import (
 	"time"
 )
 
+const sz_tiny = 5
+const sz_small = 300
+const sz_big = 10000
+
 func guard_ut(t *testing.T) {
 	if err := recover(); err != nil {
 		t.Fail()
@@ -28,54 +32,44 @@ func checkArrary(list []int) bool {
 	}
 	return true
 }
-
-func Test_InsertSort(t *testing.T) {
+func testArraySort(t *testing.T, size int, doit func([]int)) {
 	defer guard_ut(t)
-	var list = ramdomArray(100)
-	InsertSort(list)
+	var list = ramdomArray(size)
+	doit(list)
 	if !checkArrary(list) {
 		t.Fail()
 	}
+	list = ramdomArray(sz_tiny)
+	doit(list)
+	if !checkArrary(list) {
+		t.Fail()
+	}
+	list = []int{0}
+	doit(list)
+	list = list[:0]
+	doit(list)
+}
+
+func Test_BubleSort(t *testing.T) {
+	testArraySort(t, sz_small, BubleSort)
 }
 func Test_SelectSort(t *testing.T) {
-	defer guard_ut(t)
-	var list = ramdomArray(100)
-	SelectSort(list)
-	if !checkArrary(list) {
-		t.Fail()
-	}
+	testArraySort(t, sz_small, SelectSort)
+}
+func Test_InsertSort(t *testing.T) {
+	testArraySort(t, sz_small, InsertSort)
 }
 func Test_HeapSort(t *testing.T) {
-	defer guard_ut(t)
-	var list = ramdomArray(1000)
-	HeapSort(list)
-	if !checkArrary(list) {
-		t.Fail()
-	}
+	testArraySort(t, sz_big, HeapSort)
 }
 func Test_MergeSort(t *testing.T) {
-	defer guard_ut(t)
-	var list = ramdomArray(1000)
-	MergeSort(list)
-	if !checkArrary(list) {
-		t.Fail()
-	}
+	testArraySort(t, sz_big, MergeSort)
 }
 func Test_QuickSort(t *testing.T) {
-	defer guard_ut(t)
-	var list = ramdomArray(1000)
-	QuickSort(list)
-	if !checkArrary(list) {
-		t.Fail()
-	}
+	testArraySort(t, sz_big, QuickSort)
 }
 func Test_Introsort(t *testing.T) {
-	defer guard_ut(t)
-	var list = ramdomArray(1000)
-	Introsort(list)
-	if !checkArrary(list) {
-		t.Fail()
-	}
+	testArraySort(t, sz_big, Introsort)
 }
 
 func ramdomLinkList(size int) *Node {
@@ -100,29 +94,28 @@ func checkLinkList(head *Node, size int) bool {
 	}
 	return cnt == size
 }
-
-func Test_LinkMergeSort(t *testing.T) {
+func testLinkListSort(t *testing.T, doit func(*Node) *Node) {
 	defer guard_ut(t)
-
-	const size = 1000
-	rand.Seed(time.Now().Unix())
-
-	var head = ramdomLinkList(size)
-	head = LinkMergeSort(head)
-	if !checkLinkList(head, size) {
+	var head = ramdomLinkList(sz_small)
+	head = doit(head)
+	if !checkLinkList(head, sz_small) {
 		t.Fail()
 	}
+	head = ramdomLinkList(sz_tiny)
+	head = doit(head)
+	if !checkLinkList(head, sz_tiny) {
+		t.Fail()
+	}
+	head = new(Node)
+	head.next = nil
+	head = doit(head)
+	head = nil
+	head = doit(head)
 }
 
+func Test_LinkMergeSort(t *testing.T) {
+	testLinkListSort(t, LinkMergeSort)
+}
 func Test_LinkQuickSort(t *testing.T) {
-	defer guard_ut(t)
-
-	const size = 1000
-	rand.Seed(time.Now().Unix())
-
-	var head = ramdomLinkList(size)
-	head = LinkQuickSort(head)
-	if !checkLinkList(head, size) {
-		t.Fail()
-	}
+	testLinkListSort(t, LinkQuickSort)
 }
