@@ -18,7 +18,6 @@ func mergeList(left *Node, right *Node) (head *Node, tail *Node) {
 	return
 }
 
-//O(2N) + O(1)
 func LinkMergeSort(head *Node) *Node {
 	var stop = false
 	for step := 1; !stop; step *= 2 {
