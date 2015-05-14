@@ -1,21 +1,6 @@
-package diysort
-
-import (
-	"unsafe"
-)
+package sort
 
 const sz_limit = 7
-
-type Node struct {
-	key  int
-	next *Node
-}
-
-func FakeHead(this **Node) *Node {
-	var base = uintptr(unsafe.Pointer(this))
-	var off = unsafe.Offsetof((*this).next)
-	return (*Node)(unsafe.Pointer(base - off))
-}
 
 type pair struct {
 	start int

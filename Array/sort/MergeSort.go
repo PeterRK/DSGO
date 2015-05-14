@@ -1,4 +1,4 @@
-package diysort
+package sort
 
 //复杂度为O(NlogN) & O(N)，具有稳定性
 //比较操作是O(NlogN)，常数小于HeapSort

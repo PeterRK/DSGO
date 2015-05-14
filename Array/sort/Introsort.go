@@ -1,12 +1,19 @@
-package diysort
+package sort
 
-//复杂度为O(NlogN) & O(logN)
-//最坏情况是O(N^2)，不具有稳定性
-//比较操作是O(NlogN)，常数与MergeSort相当
-//挪移操作是O(NlogN)，常数小于MergeSort
-func QuickSort(list []int) {
+//内省排序是QuickSort的变种，混合排序
+func Introsort(list []int) {
+	var size = len(list)
+	if size < 2 {
+		return
+	}
 	var tasks stack
-	tasks.push(0, len(list))
+	tasks.push(0, size)
+
+	var level int
+	for level = 0; size != 0; level++ {
+		size /= 2
+	}
+
 	for !tasks.isEmpty() {
 		var start, end = tasks.pop()
 		if end-start < sz_limit { //内建InsertSort
@@ -26,6 +33,10 @@ func QuickSort(list []int) {
 				}
 				list[left] = key
 			}
+			continue
+		}
+		if tasks.size() == level { //约束最坏情况
+			HeapSort(list[start:end])
 			continue
 		}
 

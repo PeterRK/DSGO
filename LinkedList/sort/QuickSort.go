@@ -1,13 +1,13 @@
-package diysort
+package sort
 
-func LinkQuickSort(head *Node) *Node {
+func QuickSort(head *Node) *Node {
 	if head != nil {
-		head, _ = linkQuickSort(head)
+		head, _ = quickSort(head)
 	}
 	return head
 }
 
-func linkQuickSort(list *Node) (head *Node, tail *Node) {
+func quickSort(list *Node) (head *Node, tail *Node) {
 	if list.next == nil {
 		return list, list
 	}
@@ -54,8 +54,8 @@ func linkQuickSort(list *Node) (head *Node, tail *Node) {
 	}
 	tail1.next, tail2.next = nil, nil
 
-	head, tail1 = linkQuickSort(first)
+	head, tail1 = quickSort(first)
 	tail1.next = list
-	list.next, tail = linkQuickSort(second)
+	list.next, tail = quickSort(second)
 	return
 }

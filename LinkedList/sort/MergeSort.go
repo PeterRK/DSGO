@@ -1,4 +1,4 @@
-package diysort
+package sort
 
 func mergeList(left *Node, right *Node) (head *Node, tail *Node) {
 	head, tail = nil, FakeHead(&head)
@@ -18,7 +18,7 @@ func mergeList(left *Node, right *Node) (head *Node, tail *Node) {
 	return
 }
 
-func LinkMergeSort(head *Node) *Node {
+func MergeSort(head *Node) *Node {
 	var stop = false
 	for step := 1; !stop; step *= 2 {
 		tail, knot := head, FakeHead(&head)

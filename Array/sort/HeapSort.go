@@ -1,4 +1,4 @@
-package diysort
+package sort
 
 //复杂度为O(NlogN) & O(1)，不具备稳定性
 //比较操作是O(NlogN)，挪移操作也是O(NlogN)

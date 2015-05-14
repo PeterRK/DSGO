@@ -1,4 +1,4 @@
-package diysort
+package sort
 
 //比较操作是O(N^2)，挪移是O(N^2)
 //最原始的排序方法
@@ -15,7 +15,7 @@ func BubleSort(list []int) {
 
 //比较操作是O(N^2)，挪移是O(N)
 //不具有稳定性
-//实测综合而言不如InsertSort
+//综合而言(实测)不如InsertSort
 func SelectSort(list []int) {
 	var size = len(list)
 	for i := 0; i < size-1; i++ {
@@ -31,7 +31,7 @@ func SelectSort(list []int) {
 
 //比较操作是O(NlogN)，挪移是O(N^2)
 //具有稳定性
-//实测综合而言优于SelectSort
+//综合而言(实测)优于SelectSort
 func InsertSort(list []int) {
 	var size = len(list)
 	for i := 1; i < size; i++ {
@@ -41,10 +41,10 @@ func InsertSort(list []int) {
 			var mid = (left + right) / 2
 			if key < list[mid] {
 				right = mid
-			} else {
+			} else { //找第一个大于key的位置
 				left = mid + 1
 			}
-		}
+		} //不会越界
 		for j := i; j > left; j-- {
 			list[j] = list[j-1]
 		}

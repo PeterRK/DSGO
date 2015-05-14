@@ -1,4 +1,4 @@
-package diysort
+package sort
 
 import (
 	"testing"
@@ -48,16 +48,4 @@ func Benchmark_Introsort(b *testing.B) {
 	var list = ramdomArray(b.N)
 	b.StartTimer()
 	Introsort(list)
-}
-func Benchmark_LinkMergeSort(b *testing.B) {
-	b.StopTimer()
-	var head = ramdomLinkList(b.N)
-	b.StartTimer()
-	LinkMergeSort(head)
-}
-func Benchmark_LinkQuickSort(b *testing.B) {
-	b.StopTimer()
-	var head = ramdomLinkList(b.N)
-	b.StartTimer()
-	LinkQuickSort(head)
 }
