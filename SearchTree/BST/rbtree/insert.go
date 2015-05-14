@@ -1,16 +1,16 @@
-//红黑树的实现
-package rbtreex
+package rbtree
 
 func newNode(key int) (unit *node) {
 	unit = new(node)
 	unit.key, unit.black = key, false
-	unit.left, unit.right = NULL, NULL
+	unit.left, unit.right = nil, nil
 	return
 }
 
 //红黑树插入过程包括：O(log N)的搜索，O(1)的旋转，O(log N)的平衡因子调整
+//成功返回true，冲突返回false
 func (tree *Tree) Insert(key int) bool {
-	if tree.root == NULL {
+	if tree.root == nil {
 		tree.root = newNode(key) //默认为红
 		tree.root.black = true
 		return true
@@ -26,7 +26,7 @@ func (tree *Tree) Insert(key int) bool {
 		}
 		if key < parent.key {
 			kid_is_left = true
-			if parent.left == NULL {
+			if parent.left == nil {
 				kid = newNode(key) //默认为红
 				parent.left = kid
 				break
@@ -35,7 +35,7 @@ func (tree *Tree) Insert(key int) bool {
 			parent = parent.left
 		} else {
 			kid_is_left = false
-			if parent.right == NULL {
+			if parent.right == nil {
 				kid = newNode(key) //默认为红
 				parent.right = kid
 				break
@@ -49,7 +49,7 @@ func (tree *Tree) Insert(key int) bool {
 		var grandparent, parent_is_left = tree.path.pop() //必然存在，根为黑，parent非根
 		if parent_is_left {
 			var another = grandparent.right
-			if !another.black { //红叔模式，变色解决
+			if another != nil && !another.black { //红叔模式，变色解决
 				parent.black, another.black = true, true
 				if !tree.path.isEmpty() {
 					grandparent.black = false
@@ -71,9 +71,8 @@ func (tree *Tree) Insert(key int) bool {
 			}
 		} else {
 			var another = grandparent.left
-			if !another.black { //红叔模式，变色解决
-				parent.black = true
-				another.black = true
+			if another != nil && !another.black { //红叔模式，变色解决
+				parent.black, another.black = true, true
 				if !tree.path.isEmpty() {
 					grandparent.black = false
 					kid = grandparent

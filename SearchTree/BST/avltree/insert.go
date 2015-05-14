@@ -8,6 +8,7 @@ func newNode(key int) (unit *node) {
 }
 
 //AVL树插入过程包括：O(log N)的搜索，O(1)的旋转，O(log N)的平衡因子调整
+//成功返回true，冲突返回false
 func (tree *Tree) Insert(key int) bool {
 	if tree.root == nil {
 		tree.root = newNode(key)

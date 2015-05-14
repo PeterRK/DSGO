@@ -1,7 +1,8 @@
 package rbtree
 
 //红黑树删除过程包括：O(log N)的搜索，O(1)的旋转，O(log N)的平衡因子调整
-func (tree *Tree) Remove(key int) {
+//成功返回true，没有返回false
+func (tree *Tree) Remove(key int) bool {
 	tree.path.clear()
 	var target = tree.root
 	for target != nil && key != target.key {
@@ -14,7 +15,7 @@ func (tree *Tree) Remove(key int) {
 		}
 	}
 	if target == nil {
-		return
+		return false
 	}
 
 	var victim, orphan *node = nil, nil
@@ -47,7 +48,7 @@ func (tree *Tree) Remove(key int) {
 		}
 		target.key = victim.key //李代桃僵
 	}
-	return
+	return true
 }
 
 func (tree *Tree) adjustAfterDelete() {

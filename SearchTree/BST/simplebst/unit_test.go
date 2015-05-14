@@ -1,4 +1,4 @@
-package rbtreex
+package simplebst
 
 import (
 	"math/rand"
@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-var tree_ut = Tree{root: NULL}
+var tree_ut Tree
 var dirty_ut = false
 
 const size_ut = 200

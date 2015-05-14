@@ -75,7 +75,7 @@ func (unit *index) ceil() int {
 	}
 }
 
-func (tree *Tree) Find(key int) bool {
+func (tree *Tree) Search(key int) bool {
 	if tree.root == nil ||
 		key > tree.root.ceil() {
 		return false
