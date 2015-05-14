@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"math/rand"
 	"time"
+	"unsafe"
 )
 
 type BST interface {
@@ -48,11 +49,22 @@ func newTree(hint int) BST {
 
 func mixArray(size int) []int {
 	var list = make([]int, size)
-	rand.Seed(time.Now().Unix())
+
+	const bits_of_int = uint(unsafe.Sizeof(size)) * 8
+	var tmp = uint(size)
+	var cnt uint = 0
+	for cnt < bits_of_int && tmp != 0 {
+		cnt++
+		tmp >>= 1
+	}
+	cnt = bits_of_int - cnt - 11
+	var mask = ^((^0) << cnt)
+
 	var num = 0
+	rand.Seed(time.Now().Unix())
 	for i := 0; i < size; i++ {
 		if i%32 == 0 { //局部参入有序数列
-			num += rand.Int() % 128
+			num += rand.Int() & mask
 			list[i] = num
 		} else {
 			list[i] = rand.Int()
@@ -77,6 +89,7 @@ func DoOneTry(list []int, hint int) {
 	}
 	fmt.Println("search:", time.Since(start))
 	start = time.Now()
+	//for i := 0; i < size; i++ { //对非平衡树而言删除顺序重要
 	for i := size - 1; i >= 0; i-- {
 		tree.Remove(list[i])
 	}
@@ -91,6 +104,6 @@ func DoBenchMark(size int) {
 	var list = mixArray(size)
 
 	DoOneTry(list, SIMPLE_BST)
-	DoOneTry(list, AVL_TREE)
-	DoOneTry(list, RB_TREE)
+	//DoOneTry(list, AVL_TREE)
+	//DoOneTry(list, RB_TREE)
 }

@@ -30,6 +30,7 @@ func benchRemove(b *testing.B, hint int) {
 		tree.Insert(list[i])
 	}
 	b.StartTimer()
+	//for i := 0; i < b.N; i++ { //对非平衡树而言删除顺序重要
 	for i := b.N - 1; i >= 0; i-- {
 		tree.Remove(list[i])
 	}
