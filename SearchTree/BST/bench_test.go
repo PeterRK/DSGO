@@ -6,8 +6,7 @@ import (
 
 func benchInsert(b *testing.B, hint int) {
 	b.StopTimer()
-	var tree = newTree(hint)
-	var list = ramdomArray(b.N)
+	var tree, list = newTree(hint), mixArray(b.N)
 	b.StartTimer()
 	for i := 0; i < b.N; i++ {
 		tree.Insert(list[i])
@@ -15,8 +14,7 @@ func benchInsert(b *testing.B, hint int) {
 }
 func benchFind(b *testing.B, hint int) {
 	b.StopTimer()
-	var tree = newTree(hint)
-	var list = ramdomArray(b.N)
+	var tree, list = newTree(hint), mixArray(b.N)
 	for i := 0; i < b.N; i++ {
 		tree.Insert(list[i])
 	}
@@ -27,13 +25,12 @@ func benchFind(b *testing.B, hint int) {
 }
 func benchRemove(b *testing.B, hint int) {
 	b.StopTimer()
-	var tree = newTree(hint)
-	var list = ramdomArray(b.N)
+	var tree, list = newTree(hint), mixArray(b.N)
 	for i := 0; i < b.N; i++ {
 		tree.Insert(list[i])
 	}
 	b.StartTimer()
-	for i := 0; i < b.N; i++ {
+	for i := b.N - 1; i >= 0; i-- {
 		tree.Remove(list[i])
 	}
 }

@@ -46,11 +46,17 @@ func newTree(hint int) BST {
 	}
 }
 
-func ramdomArray(size int) []int {
-	rand.Seed(time.Now().Unix())
+func mixArray(size int) []int {
 	var list = make([]int, size)
+	rand.Seed(time.Now().Unix())
+	var num = 0
 	for i := 0; i < size; i++ {
-		list[i] = rand.Int()
+		if i%32 == 0 { //局部参入有序数列
+			num += rand.Int() % 128
+			list[i] = num
+		} else {
+			list[i] = rand.Int()
+		}
 	}
 	return list
 }
@@ -71,17 +77,18 @@ func DoOneTry(list []int, hint int) {
 	}
 	fmt.Println("search:", time.Since(start))
 	start = time.Now()
-	for i := 0; i < size; i++ {
+	for i := size - 1; i >= 0; i-- {
 		tree.Remove(list[i])
 	}
 	fmt.Println("remove:", time.Since(start))
-
-	//	fmt.Println()
 }
 
-func DoBenchMark() {
-	const size = 2000000
-	var list = ramdomArray(size)
+func DoBenchMark(size int) {
+	if size < 1000 {
+		fmt.Println("too small")
+		return
+	}
+	var list = mixArray(size)
 
 	DoOneTry(list, SIMPLE_BST)
 	DoOneTry(list, AVL_TREE)
