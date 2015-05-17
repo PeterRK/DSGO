@@ -104,6 +104,6 @@ func DoBenchMark(size int) {
 	var list = mixArray(size)
 
 	DoOneTry(list, SIMPLE_BST)
-	//DoOneTry(list, AVL_TREE)
-	//DoOneTry(list, RB_TREE)
+	DoOneTry(list, AVL_TREE)
+	DoOneTry(list, RB_TREE)
 }
