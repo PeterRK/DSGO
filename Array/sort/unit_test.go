@@ -68,6 +68,6 @@ func Test_MergeSort(t *testing.T) {
 func Test_QuickSort(t *testing.T) {
 	testArraySort(t, sz_big, QuickSort)
 }
-func Test_Introsort(t *testing.T) {
-	testArraySort(t, sz_big, Introsort)
+func Test_IntroSort(t *testing.T) {
+	testArraySort(t, sz_big, IntroSort)
 }

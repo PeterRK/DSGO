@@ -35,27 +35,28 @@ func doMergeSort(in []int, out []int) {
 			}
 			out[left] = key
 		}
-		return
-	}
-	var half = size / 2
-	doMergeSort(out[:half], in[:half])
-	doMergeSort(out[half:], in[half:])
-	var pos, i, j = 0, 0, half
-	for ; i < half && j < size; pos++ {
-		if in[i] > in[j] {
-			out[pos] = in[j]
-			j++
-		} else {
+	} else {
+		var half = size / 2
+		doMergeSort(out[:half], in[:half])
+		doMergeSort(out[half:], in[half:])
+
+		var pos, i, j = 0, 0, half
+		for ; i < half && j < size; pos++ {
+			if in[i] > in[j] {
+				out[pos] = in[j]
+				j++
+			} else {
+				out[pos] = in[i]
+				i++
+			}
+		}
+		for ; i < half; pos++ {
 			out[pos] = in[i]
 			i++
 		}
-	}
-	for ; i < half; pos++ {
-		out[pos] = in[i]
-		i++
-	}
-	for ; j < size; pos++ {
-		out[pos] = in[j]
-		j++
+		for ; j < size; pos++ {
+			out[pos] = in[j]
+			j++
+		}
 	}
 }

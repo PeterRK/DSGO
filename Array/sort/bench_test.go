@@ -43,9 +43,9 @@ func Benchmark_QuickSort(b *testing.B) {
 	b.StartTimer()
 	QuickSort(list)
 }
-func Benchmark_Introsort(b *testing.B) {
+func Benchmark_IntroSort(b *testing.B) {
 	b.StopTimer()
 	var list = ramdomArray(b.N)
 	b.StartTimer()
-	Introsort(list)
+	IntroSort(list)
 }
