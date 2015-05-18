@@ -33,14 +33,12 @@ func (heap *Heap) FloatUp(target *Node, value int) {
 		}
 
 		if big_bro != target {
-			target.child = big_bro
-			big_bro.prev = target
 			parent.prev, target.prev = target.prev, parent.prev
 			parent.prev.brother = parent
+			target.child, big_bro.prev = big_bro, target
 		} else { //target恰好是左子
-			target.child = parent
 			target.prev = parent.prev
-			parent.prev = target
+			target.child, parent.prev = parent, target
 		}
 
 		if target.prev == nil {
