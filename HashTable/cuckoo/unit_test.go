@@ -1,4 +1,4 @@
-package chained
+package cuckoo
 
 import (
 	"testing"
