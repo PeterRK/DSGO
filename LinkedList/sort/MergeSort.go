@@ -1,53 +1,57 @@
 package sort
 
-func mergeList(left *Node, right *Node) (head *Node, tail *Node) {
-	head, tail = nil, FakeHead(&head)
-	for ; left != nil && right != nil; tail = tail.next {
-		if left.key > right.key {
-			tail.next, right = right, right.next
+import (
+	"linkedlist"
+)
+
+func merge(left *linkedlist.Node, right *linkedlist.Node) (head *linkedlist.Node, tail *linkedlist.Node) {
+	head, tail = nil, linkedlist.FakeHead(&head)
+	for ; left != nil && right != nil; tail = tail.Next {
+		if left.Val > right.Val {
+			tail.Next, right = right, right.Next
 		} else {
-			tail.next, left = left, left.next
+			tail.Next, left = left, left.Next
 		}
 	}
-	for ; left != nil; tail = tail.next {
-		tail.next, left = left, left.next
+	for ; left != nil; tail = tail.Next {
+		tail.Next, left = left, left.Next
 	}
-	for ; right != nil; tail = tail.next {
-		tail.next, right = right, right.next
+	for ; right != nil; tail = tail.Next {
+		tail.Next, right = right, right.Next
 	}
 	return
 }
 
-func MergeSort(head *Node) *Node {
+func MergeSort(head *linkedlist.Node) *linkedlist.Node {
 	var stop = false
 	for step := 1; !stop; step *= 2 {
-		tail, knot := head, FakeHead(&head)
+		tail, knot := head, linkedlist.FakeHead(&head)
 		stop = true
 		for {
 			var left = tail
 			for i := 1; i < step && tail != nil; i++ {
-				tail = tail.next
+				tail = tail.Next
 			}
-			if tail == nil || tail.next == nil {
+			if tail == nil || tail.Next == nil {
 				break
 			}
 			stop = false
 			var last = tail
-			tail = tail.next
-			last.next = nil
+			tail = tail.Next
+			last.Next = nil
 
 			var right = tail
 			for i := 1; i < step && tail != nil; i++ {
-				tail = tail.next
+				tail = tail.Next
 			}
 			if tail != nil {
 				last = tail
-				tail = tail.next
-				last.next = nil
+				tail = tail.Next
+				last.Next = nil
 			}
 
-			knot.next, last = mergeList(left, right)
-			last.next = tail
+			knot.Next, last = merge(left, right)
+			last.Next = tail
 			knot = last
 		}
 	}

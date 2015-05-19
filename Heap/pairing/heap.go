@@ -4,10 +4,10 @@ package pairingheap
 //虽然Fibonacci堆中floatUp操作的理论复杂度更好，但配对堆实际上更为实用
 
 type Node struct {
-	key     int
-	child   *Node
-	brother *Node
-	prev    *Node
+	key   int
+	child *Node
+	prev  *Node //父兄节点
+	next  *Node //弟节点
 }
 type Heap struct {
 	root *Node
@@ -16,18 +16,18 @@ type Heap struct {
 func (heap *Heap) IsEmpty() bool {
 	return heap.root == nil
 }
-func (heap *Heap) Top() int {
+func (heap *Heap) Top() (key int, err bool) {
 	if heap.IsEmpty() {
-		return 0
+		return 0, true
 	}
-	return heap.root.key
+	return heap.root.key, false
 }
 
 func merge(one *Node, another *Node) *Node {
 	if one.key > another.key {
 		one, another = another, one
 	}
-	another.brother = one.child
+	another.next = one.child
 	if one.child != nil {
 		one.child.prev = another
 	}
@@ -51,7 +51,7 @@ func (heap *Heap) PushNode(unit *Node) {
 	if unit == nil {
 		return
 	}
-	unit.child, unit.brother, unit.prev = nil, nil, nil
+	unit.prev, unit.next, unit.child = nil, nil, nil
 	if heap.root == nil {
 		heap.root = unit
 	} else {

@@ -1,10 +1,10 @@
 package deque
 
-const piece_sz = 62
+const piece_sz = 30
 
 type piece struct {
-	forward, backward *piece
-	space             [piece_sz]int
+	fw, bw *piece
+	space  [piece_sz]int
 }
 type index struct {
 	pt  *piece
@@ -25,7 +25,7 @@ const (
 func (this *deque) initialize(hint int) {
 	this.cnt = 0
 	var block = new(piece)
-	block.forward, block.backward = nil, nil
+	block.fw, block.bw = nil, nil
 	this.front.pt, this.back.pt = block, block
 	switch hint {
 	case STACK:
@@ -48,10 +48,10 @@ func (this *deque) Size() int {
 func (this *deque) PushFront(key int) {
 	if this.front.idx == piece_sz {
 		this.front.idx = 0
-		if this.front.pt.forward == nil {
+		if this.front.pt.fw == nil {
 			var block = new(piece)
-			block.backward, block.forward = this.front.pt, nil
-			this.front.pt.forward = block
+			block.bw, block.fw = this.front.pt, nil
+			this.front.pt.fw = block
 			this.front.pt = block
 		}
 	}
@@ -63,10 +63,10 @@ func (this *deque) PushFront(key int) {
 func (this *deque) PushBack(key int) {
 	if this.back.idx == -1 {
 		this.back.idx = piece_sz - 1
-		if this.back.pt.backward == nil {
+		if this.back.pt.bw == nil {
 			var block = new(piece)
-			block.forward, block.backward = this.back.pt, nil
-			this.back.pt.backward = block
+			block.fw, block.bw = this.back.pt, nil
+			this.back.pt.bw = block
 			this.back.pt = block
 		}
 	}
@@ -96,9 +96,9 @@ func (this *deque) PopFront() (key int, err bool) {
 	this.front.idx--
 	key = this.front.pt.space[this.front.idx]
 	if this.front.idx == 0 {
-		this.front.idx = piece_sz   //this.front.idx永远不指向0
-		this.front.pt.forward = nil //只保留一块缓冲
-		this.front.pt = this.front.pt.backward
+		this.front.idx = piece_sz //this.front.idx永远不指向0
+		this.front.pt.fw = nil    //只保留一块缓冲
+		this.front.pt = this.front.pt.bw
 	}
 	return key, false
 }
@@ -111,8 +111,8 @@ func (this *deque) PopBack() (key int, err bool) {
 	key = this.back.pt.space[this.back.idx]
 	if this.back.idx == piece_sz-1 {
 		this.back.idx = -1 //this.back.idx永远不指向(piece_sz-1)
-		this.back.pt.backward = nil
-		this.back.pt = this.back.pt.forward
+		this.back.pt.bw = nil
+		this.back.pt = this.back.pt.fw
 	}
 	return key, false
 }

@@ -1,5 +1,27 @@
 package pairingheap
 
+//值挪移
+func (heap *Heap) FloatUpX(target *Node, value int) *Node {
+	if target == nil || target.key <= value {
+		return target
+	}
+	for target != heap.root {
+		var brother = target
+		for brother.prev.child != brother {
+			brother = brother.prev
+		} //找到长兄节点和父节点
+		var parent = brother.prev
+
+		if parent.key <= value {
+			break
+		}
+		target.key, target = parent.key, parent
+	}
+	target.key = value
+	return target
+}
+
+//节点挪移
 func (heap *Heap) FloatUp(target *Node, value int) {
 	if target == nil || value >= target.key {
 		return
@@ -10,21 +32,21 @@ func (heap *Heap) FloatUp(target *Node, value int) {
 	}
 
 	for {
-		var big_bro = target
-		for big_bro.prev.child != big_bro {
-			big_bro = big_bro.prev
-		}
-		var parent = big_bro.prev
+		var brother = target
+		for brother.prev.child != brother {
+			brother = brother.prev
+		} //找到长兄节点和父节点
+		var parent = brother.prev
 		if parent.key <= target.key {
 			return
 		}
 
-		parent.brother, target.brother = target.brother, parent.brother
-		if parent.brother != nil {
-			parent.brother.prev = parent
+		target.next, parent.next = parent.next, target.next
+		if parent.next != nil {
+			parent.next.prev = parent
 		}
-		if target.brother != nil {
-			target.brother.prev = target
+		if target.next != nil {
+			target.next.prev = target
 		}
 
 		parent.child = target.child
@@ -32,11 +54,11 @@ func (heap *Heap) FloatUp(target *Node, value int) {
 			parent.child.prev = parent
 		}
 
-		if big_bro != target {
+		if brother != target {
 			parent.prev, target.prev = target.prev, parent.prev
-			parent.prev.brother = parent
-			target.child, big_bro.prev = big_bro, target
-		} else { //target恰好是左子
+			parent.prev.next = parent
+			target.child, brother.prev = brother, target
+		} else { //target恰好是长兄
 			target.prev = parent.prev
 			target.child, parent.prev = parent, target
 		}
@@ -46,8 +68,8 @@ func (heap *Heap) FloatUp(target *Node, value int) {
 			break
 		} else {
 			var super = target.prev
-			if super.brother == parent {
-				super.brother = target
+			if super.next == parent {
+				super.next = target
 			} else {
 				super.child = target
 			}

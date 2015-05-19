@@ -17,24 +17,24 @@ func Prim(roads [][]graph.Path) [][]int {
 	for i := 1; i < size; i++ {
 		list[i].id = -1
 	}
-	list[0].id, list[0].dist, list[0].next = 0, 0, 0
+	list[0].id, list[0].dist, list[0].lnk = 0, 0, 0
 
 	var root = Insert(nil, &list[0])
 	for root != nil {
 		var current = root
 		root = Extract(root)
-		result[current.next] = append(result[current.next], current.id)
-		current.next = -1
+		result[current.lnk] = append(result[current.lnk], current.id)
+		current.lnk = -1
 		for _, path := range roads[current.id] {
 			var peer = &list[path.Next]
 			if peer.id == path.Next { //已经入围的点
-				if peer.next != -1 && //还不是内点
+				if peer.lnk != -1 && //还不是内点
 					path.Dist < peer.dist {
-					peer.next = current.id
+					peer.lnk = current.id
 					root = FloatUp(root, peer, path.Dist)
 				}
 			} else {
-				peer.id, peer.next, peer.dist = path.Next, current.id, path.Dist
+				peer.id, peer.lnk, peer.dist = path.Next, current.id, path.Dist
 				root = Insert(root, peer)
 			}
 		}
@@ -54,24 +54,24 @@ func PrimX(roads [][]graph.Path) (result uint) {
 	for i := 1; i < size; i++ {
 		list[i].id = -1
 	}
-	list[0].id, list[0].dist, list[0].next = 0, 0, 0
+	list[0].id, list[0].dist, list[0].lnk = 0, 0, 0
 
 	var root = Insert(nil, &list[0])
 	for root != nil {
 		var current = root
 		root = Extract(root)
 		result += current.dist
-		current.next = -1
+		current.lnk = -1
 		for _, path := range roads[current.id] {
 			var peer = &list[path.Next]
 			if peer.id == path.Next { //已经入围的点
-				if peer.next != -1 && //还不是内点
+				if peer.lnk != -1 && //还不是内点
 					path.Dist < peer.dist {
-					peer.next = current.id
+					peer.lnk = current.id
 					root = FloatUp(root, peer, path.Dist)
 				}
 			} else {
-				peer.id, peer.next, peer.dist = path.Next, current.id, path.Dist
+				peer.id, peer.lnk, peer.dist = path.Next, current.id, path.Dist
 				root = Insert(root, peer)
 			}
 		}
