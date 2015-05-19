@@ -1,7 +1,7 @@
 package sort
 
 import (
-	"linkedlist"
+	"LinkedList/list"
 	"math/rand"
 	"testing"
 	"time"
@@ -17,19 +17,19 @@ func guard_ut(t *testing.T) {
 	}
 }
 
-func ramdomLinkList(size int) *linkedlist.Node {
+func ramdomLinkList(size int) *list.Node {
 	rand.Seed(time.Now().Unix())
-	var head *linkedlist.Node
-	var tail = linkedlist.FakeHead(&head)
+	var head *list.Node
+	var tail = list.FakeHead(&head)
 	for i := 0; i < size; i++ {
-		tail.Next = new(linkedlist.Node)
+		tail.Next = new(list.Node)
 		tail = tail.Next
 		tail.Val = rand.Int()
 	}
 	tail.Next = nil
 	return head
 }
-func checkLinkList(head *linkedlist.Node, size int) bool {
+func checkLinkList(head *list.Node, size int) bool {
 	var cnt = 1
 	for ; head.Next != nil; head = head.Next {
 		if head.Next.Val < head.Val {
@@ -39,7 +39,7 @@ func checkLinkList(head *linkedlist.Node, size int) bool {
 	}
 	return cnt == size
 }
-func testLinkListSort(t *testing.T, doit func(*linkedlist.Node) *linkedlist.Node) {
+func testLinkListSort(t *testing.T, doit func(*list.Node) *list.Node) {
 	defer guard_ut(t)
 	var head = ramdomLinkList(sz_small)
 	head = doit(head)
@@ -51,16 +51,19 @@ func testLinkListSort(t *testing.T, doit func(*linkedlist.Node) *linkedlist.Node
 	if !checkLinkList(head, sz_tiny) {
 		t.Fail()
 	}
-	head = new(linkedlist.Node)
+	head = new(list.Node)
 	head.Next = nil
 	head = doit(head)
 	head = nil
 	head = doit(head)
 }
 
-func Test_LinkMergeSort(t *testing.T) {
+func Test_MergeSort(t *testing.T) {
 	testLinkListSort(t, MergeSort)
 }
-func Test_LinkQuickSort(t *testing.T) {
+func Test_QuickSort(t *testing.T) {
 	testLinkListSort(t, QuickSort)
+}
+func Test_IntroSort(t *testing.T) {
+	testLinkListSort(t, IntroSort)
 }

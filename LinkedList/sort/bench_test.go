@@ -16,3 +16,9 @@ func Benchmark_QuickSort(b *testing.B) {
 	b.StartTimer()
 	QuickSort(head)
 }
+func Benchmark_IntroSort(b *testing.B) {
+	b.StopTimer()
+	var head = ramdomLinkList(b.N)
+	b.StartTimer()
+	IntroSort(head)
+}

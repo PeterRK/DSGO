@@ -1,65 +1,70 @@
 package sort
 
 import (
-	"linkedlist"
+	"LinkedList/list"
 )
 
-func QuickSort(head *linkedlist.Node) *linkedlist.Node {
+func QuickSort(head *list.Node) *list.Node {
 	if head != nil {
 		head, _ = quickSort(head)
 	}
 	return head
 }
-
-func quickSort(list *linkedlist.Node) (head *linkedlist.Node, tail *linkedlist.Node) {
-	if list.Next == nil {
-		return list, list
+func quickSort(head *list.Node) (first *list.Node, last *list.Node) {
+	if head.Next == nil {
+		return head, head
 	}
-	var first = list.Next
-	if first.Next == nil {
-		if list.Val > first.Val {
-			first.Next, list.Next = list, nil
-			return first, list
+	var node = head.Next
+	if node.Next == nil {
+		if head.Val > node.Val {
+			node.Next, head.Next = head, nil
+			return node, head
 		}
-		return list, first
+		return head, node
 	}
-	var second = first.Next
-	tail = second.Next
+	var left, center, right = part(head, node, node.Next)
 
-	if list.Val > first.Val { //a > b
-		if first.Val > second.Val { //b > c		//b a c = c b a
-			first, list, second = second, first, list
+	first, node = quickSort(left)
+	node.Next = center
+	center.Next, last = quickSort(right)
+	return
+}
+
+func part(node0 *list.Node, node1 *list.Node, node2 *list.Node) (left *list.Node, center *list.Node, right *list.Node) {
+	var tail = node2.Next
+
+	if node0.Val > node1.Val { //a > b
+		if node1.Val > node2.Val { //b > c		//a b c = b c a
+			center, left, right = node1, node2, node0
 		} else { //c >= b
-			if list.Val > second.Val { //a > c		//b a c = b c a
-				list, second = second, list
-			} //else b a c = b a c
+			if node0.Val > node2.Val { //a > c	//a b c = c b a
+				center, left, right = node2, node1, node0
+			} else { //a b c = a b c
+				center, left, right = node0, node1, node2
+			}
 		}
 	} else { //b >= a
-		if second.Val > list.Val { //c > a
-			if first.Val > second.Val { //b > c		//b a c = a c b
-				first, list, second = list, second, first
-			} else { //b a c = a b c
-				first, list = list, first
+		if node2.Val > node0.Val { //c > a
+			if node1.Val > node2.Val { //b > c	//a b c = c a b
+				center, left, right = node2, node0, node1
+			} else { //a b c = b a c
+				center, left, right = node1, node0, node2
 			}
-		} else { //b a c = c a b
-			first, second = second, first
+		} else { //a b c = a c b
+			center, left, right = node0, node2, node1
 		}
 	}
 
-	var tail1, tail2 = first, second
+	node1, node2 = left, right
 	for ; tail != nil; tail = tail.Next {
-		if tail.Val < list.Val {
-			tail1.Next = tail
-			tail1 = tail
+		if tail.Val < center.Val {
+			node1.Next = tail
+			node1 = tail
 		} else {
-			tail2.Next = tail
-			tail2 = tail
+			node2.Next = tail
+			node2 = tail
 		}
 	}
-	tail1.Next, tail2.Next = nil, nil
-
-	head, tail1 = quickSort(first)
-	tail1.Next = list
-	list.Next, tail = quickSort(second)
+	node1.Next, node2.Next = nil, nil
 	return
 }
