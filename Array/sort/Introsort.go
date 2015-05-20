@@ -7,7 +7,7 @@ func IntroSort(list []int) {
 	tasks.push(0, size)
 
 	var level int
-	for level = 0; size != 0; level++ {
+	for level = 3; size != 0; level++ {
 		size /= 2
 	}
 	for !tasks.isEmpty() {

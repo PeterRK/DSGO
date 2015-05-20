@@ -10,41 +10,47 @@ func MergeSort(head *list.Node) *list.Node {
 	}
 	return head
 }
-func mergeSort(head *list.Node) (first *list.Node, last *list.Node) {
-	var stop = false
-	for step := 1; !stop; step *= 2 {
-		tail, knot := head, list.FakeHead(&head)
-		stop = true
-		for {
-			var left = tail
-			for i := 1; i < step && tail != nil; i++ {
-				last, tail = tail, tail.Next
-			}
-			if tail == nil {
-				break
-			} else if tail.Next == nil {
-				last = tail
-				break
-			}
-			stop = false
-			last, tail = tail, tail.Next
-			last.Next = nil
-
-			var right = tail
-			for i := 1; i < step && tail != nil; i++ {
-				last, tail = tail, tail.Next
-			}
-			if tail != nil {
-				last, tail = tail, tail.Next
-				last.Next = nil
-			}
-
-			knot.Next, last = merge(left, right)
-			last.Next = tail
-			knot = last
+func mergeSort(head *list.Node) (first *list.Node, last *list.Node) { //head != nil
+	first, last = head, list.FakeHead(&first)
+	var size = 0
+	for ; head != nil; size += 2 {
+		if head.Next == nil {
+			last = head
+			size++
+			break
+		}
+		var one, another = head, head.Next
+		head = another.Next
+		if one.Val > another.Val {
+			last.Next, another.Next, one.Next = another, one, head
+			last = one
+		} else {
+			last = another
 		}
 	}
-	return head, last
+
+	for step := 2; step < size; step *= 2 {
+		head, last = first, list.FakeHead(&first)
+		for head != nil {
+			var left, right, node *list.Node
+			left, head = head, cutPeice(head, step)
+			right, head = head, cutPeice(head, step)
+
+			last.Next, node = merge(left, right)
+			last, node.Next = node, head
+		}
+	}
+	return
+}
+func cutPeice(head *list.Node, sz int) *list.Node {
+	for i := 1; i < sz && head != nil; i++ {
+		head = head.Next
+	}
+	if head != nil {
+		var last = head
+		head, last.Next = head.Next, nil
+	}
+	return head
 }
 
 func merge(left *list.Node, right *list.Node) (first *list.Node, last *list.Node) {
