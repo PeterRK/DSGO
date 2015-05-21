@@ -54,17 +54,17 @@ func Test_Insert(t *testing.T) {
 	}
 }
 
-func Test_Find(t *testing.T) {
+func Test_Search(t *testing.T) {
 	if dirty_ut {
 		t.SkipNow()
 	}
 	defer detectAndMark(t)
 
 	for i := 0; i < size_ut; i++ {
-		if !tree_ut.Find(list4_ut[i]) ||
-			!tree_ut.Find(list3_ut[i]) ||
-			!tree_ut.Find(list2_ut[i]) ||
-			!tree_ut.Find(list1_ut[i]) {
+		if !tree_ut.Search(list4_ut[i]) ||
+			!tree_ut.Search(list3_ut[i]) ||
+			!tree_ut.Search(list2_ut[i]) ||
+			!tree_ut.Search(list1_ut[i]) {
 			markFail(t)
 		}
 	}
@@ -105,18 +105,18 @@ func Test_FindAfterRemove(t *testing.T) {
 	defer detectAndMark(t)
 
 	for i := 0; i < size_ut; i++ {
-		if !tree_ut.Find(list1_ut[i]) {
+		if !tree_ut.Search(list1_ut[i]) {
 			markFail(t)
 		}
 	}
 	for i := 0; i < size_ut; i++ {
-		if tree_ut.Find(list2_ut[i]) ||
-			tree_ut.Find(list4_ut[i]) {
+		if tree_ut.Search(list2_ut[i]) ||
+			tree_ut.Search(list4_ut[i]) {
 			markFail(t)
 		}
 	}
 	for i := 0; i < size_ut; i++ {
-		if !tree_ut.Find(list3_ut[i]) {
+		if !tree_ut.Search(list3_ut[i]) {
 			markFail(t)
 		}
 	}

@@ -6,11 +6,11 @@ import (
 
 func MergeSort(head *list.Node) *list.Node {
 	if head != nil {
-		head, _ = mergeSort(head)
+		head, _ = doMergeSort(head)
 	}
 	return head
 }
-func mergeSort(head *list.Node) (first *list.Node, last *list.Node) { //head != nil
+func doMergeSort(head *list.Node) (first *list.Node, last *list.Node) { //head != nil
 	first, last = head, list.FakeHead(&first)
 	var size = 0
 	for ; head != nil; size += 2 {
@@ -19,13 +19,13 @@ func mergeSort(head *list.Node) (first *list.Node, last *list.Node) { //head != 
 			size++
 			break
 		}
-		var one, another = head, head.Next
-		head = another.Next
-		if one.Val > another.Val {
-			last.Next, another.Next, one.Next = another, one, head
-			last = one
+		var node0, node1 = head, head.Next
+		head = node1.Next
+		if node0.Val > node1.Val {
+			last.Next, node1.Next, node0.Next = node1, node0, head
+			last = node0
 		} else {
-			last = another
+			last = node1
 		}
 	}
 
@@ -40,8 +40,9 @@ func mergeSort(head *list.Node) (first *list.Node, last *list.Node) { //head != 
 			last, node.Next = node, head
 		}
 	}
-	return
+	return first, last
 }
+
 func cutPeice(head *list.Node, sz int) *list.Node {
 	for i := 1; i < sz && head != nil; i++ {
 		head = head.Next
@@ -52,7 +53,6 @@ func cutPeice(head *list.Node, sz int) *list.Node {
 	}
 	return head
 }
-
 func merge(left *list.Node, right *list.Node) (first *list.Node, last *list.Node) {
 	first, last = nil, list.FakeHead(&first)
 	for ; left != nil && right != nil; last = last.Next {
@@ -68,5 +68,5 @@ func merge(left *list.Node, right *list.Node) (first *list.Node, last *list.Node
 	for ; right != nil; last = last.Next {
 		last.Next, right = right, right.Next
 	}
-	return
+	return first, last
 }

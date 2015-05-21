@@ -18,9 +18,8 @@ func BinarySearch(list []int, key int) int {
 
 //在由小到大的序列中寻找目标，找打返回索引范围，没有则返回(-1,-1)
 func SearchRange(list []int, key int) (first int, last int) {
-	first, last = -1, -1
 	if len(list) == 0 {
-		return
+		return -1, -1
 	}
 	var left, right = 0, len(list) - 1
 	for left < right {
@@ -32,7 +31,7 @@ func SearchRange(list []int, key int) (first int, last int) {
 		}
 	}
 	if list[left] != key {
-		return
+		return -1, -1
 	}
 	first = left
 
@@ -45,8 +44,7 @@ func SearchRange(list []int, key int) (first int, last int) {
 			left = mid
 		}
 	}
-	last = right
-	return
+	return first, right
 }
 
 //在由小到大的序列中寻找第一个大于key的位置

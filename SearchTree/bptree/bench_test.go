@@ -37,7 +37,7 @@ func Benchmark_Remove(b *testing.B) {
 	}
 }
 
-func Benchmark_Find(b *testing.B) {
+func Benchmark_Search(b *testing.B) {
 	b.StopTimer()
 	var tree Tree
 	var list = make([]int, b.N)
@@ -49,6 +49,6 @@ func Benchmark_Find(b *testing.B) {
 	b.StartTimer()
 
 	for i := 0; i < b.N; i++ {
-		tree.Find(list[i])
+		tree.Search(list[i])
 	}
 }

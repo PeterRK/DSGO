@@ -33,7 +33,7 @@ func (heap *Heap) PopNode() (unit *Node) {
 	heap.root.prev = nil
 	return
 }
-func (heap *Heap) Pop() (key int, err bool) {
+func (heap *Heap) Pop() (key int, fail bool) {
 	var node = heap.PopNode()
 	if node == nil {
 		return 0, true

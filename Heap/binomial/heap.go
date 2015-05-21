@@ -14,9 +14,9 @@ func (heap *Heap) IsEmpty() bool {
 	return heap.list == nil
 }
 
-func (heap *Heap) Top() int {
+func (heap *Heap) Top() (key int, fail bool) {
 	if heap.IsEmpty() {
-		return 0
+		return 0, true
 	}
 	var best = heap.list.key
 	for pt := heap.list.brother; pt != nil; pt = pt.brother {
@@ -24,7 +24,7 @@ func (heap *Heap) Top() int {
 			best = pt.key
 		}
 	}
-	return best
+	return best, false
 }
 func (heap *Heap) Push(key int) {
 	var peer = new(node)
@@ -47,9 +47,9 @@ func reverse(head *node) *node {
 	}
 	return head
 }
-func (heap *Heap) Pop() (key int) {
+func (heap *Heap) Pop() (key int, fail bool) {
 	if heap.IsEmpty() {
-		return 0
+		return 0, true
 	}
 
 	var knot = fakeHead(&heap.list)
@@ -62,5 +62,5 @@ func (heap *Heap) Pop() (key int) {
 	var list = reverse(knot.brother.child)
 	knot.brother = knot.brother.brother
 	heap.merge(list)
-	return
+	return key, false
 }

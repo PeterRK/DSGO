@@ -28,7 +28,7 @@ func newNode(key int) (unit *node) {
 	unit = new(node)
 	unit.key = key
 	unit.left, unit.right = nil, nil
-	return
+	return unit
 }
 
 //成功返回true，冲突返回false

@@ -75,20 +75,20 @@ func (this *deque) PushBack(key int) {
 	this.cnt++
 }
 
-func (this *deque) Front() (key int, err bool) {
+func (this *deque) Front() (key int, fail bool) {
 	if this.IsEmpty() {
 		return 0, true
 	}
 	return this.front.pt.space[this.front.idx-1], false
 }
-func (this *deque) Back() (key int, err bool) {
+func (this *deque) Back() (key int, fail bool) {
 	if this.IsEmpty() {
 		return 0, true
 	}
 	return this.back.pt.space[this.back.idx+1], false
 }
 
-func (this *deque) PopFront() (key int, err bool) {
+func (this *deque) PopFront() (key int, fail bool) {
 	if this.IsEmpty() {
 		return 0, true
 	}
@@ -102,7 +102,7 @@ func (this *deque) PopFront() (key int, err bool) {
 	}
 	return key, false
 }
-func (this *deque) PopBack() (key int, err bool) {
+func (this *deque) PopBack() (key int, fail bool) {
 	if this.IsEmpty() {
 		return 0, true
 	}

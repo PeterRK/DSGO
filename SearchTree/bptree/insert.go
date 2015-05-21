@@ -34,7 +34,7 @@ func (node *leaf) insert(place int, key int) (peer *leaf) {
 			peer.data[i-LEAF_HALF] = node.data[i]
 		}
 	}
-	return
+	return peer
 }
 
 func (node *index) insert(place int, kid *index) (peer *index) {
@@ -75,7 +75,7 @@ func (node *index) insert(place int, kid *index) (peer *index) {
 			peer.kids[i-INDEX_HALF] = node.kids[i]
 		}
 	}
-	return
+	return peer
 }
 
 func (tree *Tree) Insert(key int) bool {

@@ -1,8 +1,8 @@
 package deque
 
 type Deque interface {
-	IsEmpty() bool
 	Size() int
+	IsEmpty() bool
 	PushFront(key int)
 	PushBack(key int)
 	PopFront() (key int, err bool)
@@ -21,8 +21,8 @@ type stack struct {
 	deque
 }
 type Stack interface {
-	IsEmpty() bool
 	Size() int
+	IsEmpty() bool
 	Push(key int)
 	Pop() (key int, err bool)
 	Top() (key int, err bool)
@@ -36,10 +36,10 @@ func NewStack() Stack {
 func (this *stack) Push(key int) {
 	this.PushFront(key)
 }
-func (this *stack) Pop() (key int, err bool) {
+func (this *stack) Pop() (key int, fail bool) {
 	return this.PopFront()
 }
-func (this *stack) Top() (key int, err bool) {
+func (this *stack) Top() (key int, fail bool) {
 	return this.Front()
 }
 
@@ -47,8 +47,8 @@ type queue struct {
 	deque
 }
 type Queue interface {
-	IsEmpty() bool
 	Size() int
+	IsEmpty() bool
 	Push(key int)
 	Pop() (key int, err bool)
 	Front() (key int, err bool)
@@ -63,6 +63,6 @@ func NewQueue() Queue {
 func (this *queue) Push(key int) {
 	this.PushBack(key)
 }
-func (this *queue) Pop() (key int, err bool) {
+func (this *queue) Pop() (key int, fail bool) {
 	return this.PopFront()
 }

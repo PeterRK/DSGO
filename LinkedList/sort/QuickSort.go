@@ -6,11 +6,11 @@ import (
 
 func QuickSort(head *list.Node) *list.Node {
 	if head != nil {
-		head, _ = quickSort(head)
+		head, _ = doQuickSort(head)
 	}
 	return head
 }
-func quickSort(head *list.Node) (first *list.Node, last *list.Node) {
+func doQuickSort(head *list.Node) (first *list.Node, last *list.Node) {
 	if head.Next == nil {
 		return head, head
 	}
@@ -22,15 +22,15 @@ func quickSort(head *list.Node) (first *list.Node, last *list.Node) {
 		}
 		return head, node
 	}
-	var left, center, right = part(head, node, node.Next)
+	var left, center, right, _ = part(head, node, node.Next)
 
-	first, node = quickSort(left)
+	first, node = doQuickSort(left)
 	node.Next = center
-	center.Next, last = quickSort(right)
-	return
+	center.Next, last = doQuickSort(right)
+	return first, last
 }
 
-func part(node0 *list.Node, node1 *list.Node, node2 *list.Node) (left *list.Node, center *list.Node, right *list.Node) {
+func part(node0 *list.Node, node1 *list.Node, node2 *list.Node) (left *list.Node, center *list.Node, right *list.Node, size int) {
 	var tail = node2.Next
 
 	if node0.Val > node1.Val { //a > b
@@ -55,6 +55,7 @@ func part(node0 *list.Node, node1 *list.Node, node2 *list.Node) (left *list.Node
 		}
 	}
 
+	size = 3
 	node1, node2 = left, right
 	for ; tail != nil; tail = tail.Next {
 		if tail.Val < center.Val {
@@ -64,7 +65,8 @@ func part(node0 *list.Node, node1 *list.Node, node2 *list.Node) (left *list.Node
 			node2.Next = tail
 			node2 = tail
 		}
+		size++
 	}
 	node1.Next, node2.Next = nil, nil
-	return
+	return left, center, right, size
 }

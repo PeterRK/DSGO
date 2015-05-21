@@ -4,7 +4,7 @@ func newNode(key int) (unit *node) {
 	unit = new(node)
 	unit.key, unit.balance = key, 0
 	unit.left, unit.right = nil, nil
-	return
+	return unit
 }
 
 //AVL树插入过程包括：O(log N)的搜索，O(1)的旋转，O(log N)的平衡因子调整

@@ -1,8 +1,8 @@
 package avltree
 
-func (parent *node) rotate() (root *node, keep_height bool) {
-	keep_height = false
-	//	root = nil
+func (parent *node) rotate() (root *node, over bool) {
+	over = false
+	//root = nil
 	if parent.balance == 2 { //左倾右旋
 		var child = parent.left
 		if child.balance == -1 { //LR
@@ -23,7 +23,7 @@ func (parent *node) rotate() (root *node, keep_height bool) {
 			parent.left, child.right = child.right, parent
 			if child.balance == 0 { //不降高旋转
 				parent.balance, child.balance = 1, -1
-				keep_height = true
+				over = true
 			} else { //child.balance == 1
 				parent.balance, child.balance = 0, 0
 			}
@@ -49,12 +49,12 @@ func (parent *node) rotate() (root *node, keep_height bool) {
 			parent.right, child.left = child.left, parent
 			if child.balance == 0 { //不降高旋转
 				parent.balance, child.balance = -1, 1
-				keep_height = true
+				over = true
 			} else { //child.balance == -1
 				parent.balance, child.balance = 0, 0
 			}
 			root = child
 		}
 	}
-	return
+	return root, over
 }

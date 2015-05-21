@@ -16,7 +16,7 @@ type Heap struct {
 func (heap *Heap) IsEmpty() bool {
 	return heap.root == nil
 }
-func (heap *Heap) Top() (key int, err bool) {
+func (heap *Heap) Top() (key int, fail bool) {
 	if heap.IsEmpty() {
 		return 0, true
 	}

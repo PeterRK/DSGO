@@ -12,11 +12,11 @@ func (heap *Heap) IsEmpty() bool {
 	return len(heap.core) == 0
 }
 
-func (heap *Heap) Top() int {
+func (heap *Heap) Top() (key int, fail bool) {
 	if heap.IsEmpty() {
-		return 0
+		return 0, true
 	}
-	return heap.core[0]
+	return heap.core[0], false
 }
 
 func (heap *Heap) Build(list []int) {
@@ -31,11 +31,12 @@ func (heap *Heap) Push(key int) {
 	heap.core = append(heap.core, key)
 	heap.adjustUp(place)
 }
-func (heap *Heap) Pop() (key int) {
-	var size = len(heap.core)
+func (heap *Heap) Pop() (key int, fail bool) {
+	var size = heap.Size()
 	if size == 0 {
-		return 0
+		return 0, true
 	}
+
 	key = heap.core[0]
 	if size == 1 {
 		heap.core = heap.core[:0]
@@ -44,5 +45,5 @@ func (heap *Heap) Pop() (key int) {
 		heap.core = heap.core[:size-1]
 		heap.adjustDown(0)
 	}
-	return
+	return key, false
 }

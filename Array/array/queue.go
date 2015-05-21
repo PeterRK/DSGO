@@ -26,7 +26,7 @@ func (queue *Queue) IsFull() bool {
 	return next == queue.rpt
 }
 
-func (queue *Queue) Push(key int) (err bool) {
+func (queue *Queue) Push(key int) (fail bool) {
 	var next = (queue.wpt + 1) & queue.mask
 	if next == queue.rpt {
 		return true
@@ -36,13 +36,13 @@ func (queue *Queue) Push(key int) (err bool) {
 	return false
 }
 
-func (queue *Queue) Top() (key int, err bool) {
+func (queue *Queue) Top() (key int, fail bool) {
 	return queue.space[queue.rpt], queue.IsEmpty()
 }
-func (queue *Queue) Pop() (key int, err bool) {
+func (queue *Queue) Pop() (key int, fail bool) {
 	if queue.IsEmpty() {
 		return 0, true
 	}
 	key, queue.rpt = queue.space[queue.rpt], (queue.rpt+1)&queue.mask
-	return
+	return key, fail
 }

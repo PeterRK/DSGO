@@ -54,5 +54,5 @@ func doIntroSort(head *list.Node, life uint) (first *list.Node, last *list.Node)
 	first, node = doIntroSort(left, life-1)
 	node.Next = center
 	center.Next, last = doIntroSort(right, life-1)
-	return
+	return first, last
 }
