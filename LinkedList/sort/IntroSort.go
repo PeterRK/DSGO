@@ -4,6 +4,7 @@ import (
 	"LinkedList/list"
 )
 
+//内省排序，基于快速排序的一种混合排序算法，不具有稳定性。
 func IntroSort(head *list.Node) *list.Node {
 	if head == nil {
 		return nil

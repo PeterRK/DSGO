@@ -4,10 +4,14 @@ import (
 	"Graph/graph"
 )
 
+//输入邻接表，返回某点到各点的最短路径的长度(-1指不通)。
+//本实现复杂度为O(ElogV)，理论上最佳为O(E+VlogV)
+//已知最快的单源最短路径算法，对稀疏图尤甚。
+//可以处理有向图，不能处理负权边。
 func Dijkstra(roads [][]graph.Path, start int) []int {
 	var size = len(roads)
 	if size == 0 || start < 0 || start >= size {
-		return make([]int, 0)
+		return []int{}
 	}
 
 	var result = make([]int, size)
@@ -16,20 +20,20 @@ func Dijkstra(roads [][]graph.Path, start int) []int {
 		return result
 	}
 
-	var root, list = InitHeap(size, start)
-	for root != nil {
+	var root, list = newHeap(size, start)
+	for root != nil && root.dist != MaxDistance {
 		var current = root
-		root = Extract(root)
+		root = extract(root)
 		for _, path := range roads[current.index] {
 			var peer = &list[path.Next]
-			if peer.index == path.Next {
+			if peer.index == path.Next { //针对未处理的点
 				var distance = current.dist + path.Dist
 				if distance < peer.dist {
-					root = FloatUp(root, peer, distance)
+					root = floatUp(root, peer, distance)
 				}
 			}
 		}
-		current.index = -1
+		current.index = -1 //标记为已经处理
 	}
 
 	for i := 0; i < size; i++ {
@@ -42,6 +46,7 @@ func Dijkstra(roads [][]graph.Path, start int) []int {
 	return result
 }
 
+//输入邻接表，返回两点间最短路径的长度(-1指不通)。
 func DijkstraX(roads [][]graph.Path, start int, end int) int {
 	var size = len(roads)
 	if start < 0 || end < 0 || start >= size || end >= size {
@@ -51,23 +56,24 @@ func DijkstraX(roads [][]graph.Path, start int, end int) int {
 		return 0
 	}
 
-	var root, list = InitHeap(size, start)
-	for root != nil && root.index != end {
+	var root, list = newHeap(size, start)
+	for root != nil && root.dist != MaxDistance {
+		if root.index == end {
+			return (int)(root.dist)
+		}
 		var current = root
-		root = Extract(root)
+		root = extract(root)
 		for _, path := range roads[current.index] {
 			var peer = &list[path.Next]
-			if peer.index == path.Next {
+			if peer.index == path.Next { //针对未处理的点
 				var distance = current.dist + path.Dist
 				if distance < peer.dist {
-					root = FloatUp(root, peer, distance)
+					root = floatUp(root, peer, distance)
 				}
 			}
 		}
-		current.index = -1
+		current.index = -1 //标记为已经处理
 	}
-	if list[end].dist == MaxDistance {
-		return -1
-	}
-	return (int)(list[end].dist)
+
+	return -1
 }

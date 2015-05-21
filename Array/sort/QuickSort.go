@@ -1,9 +1,8 @@
 package sort
 
-//复杂度为O(NlogN) & O(logN)
-//最坏情况是O(N^2)，不具有稳定性
-//比较操作是O(NlogN)，常数与MergeSort相当
-//挪移操作是O(NlogN)，常数小于MergeSort
+//快速排序，改进的冒泡排序，不具有稳定性。
+//平均复杂度为O(NlogN) & O(logN)，最坏情况是O(N^2) & O(N)。
+//其中比较操作是O(NlogN)，常数与MergeSort相当；挪移操作是O(NlogN)，常数小于MergeSort。
 func QuickSort(list []int) {
 	var tasks stack
 	tasks.push(0, len(list))

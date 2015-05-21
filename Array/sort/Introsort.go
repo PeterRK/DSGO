@@ -1,6 +1,7 @@
 package sort
 
-//内省排序是QuickSort的变种，混合排序
+//内省排序，基于快速排序的一种混合排序算法，不具有稳定性。
+//复杂度为O(NlogN) & O(logN)。
 func IntroSort(list []int) {
 	var size = len(list)
 	var tasks stack

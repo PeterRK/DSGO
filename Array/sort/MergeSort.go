@@ -1,8 +1,8 @@
 package sort
 
-//复杂度为O(NlogN) & O(N)，具有稳定性
-//比较操作是O(NlogN)，常数小于HeapSort
-//挪移操作是O(NlogN)，常数与HeapSort相当
+//归并排序，改进的插入排序，具有稳定性。
+//复杂度为O(NlogN) & O(N)。
+//其中比较操作是O(NlogN)，但常数小于HeapSort；挪移操作是O(NlogN)，常数与HeapSort相当。
 func MergeSort(list []int) {
 	var size = len(list)
 	if size < sz_limit {

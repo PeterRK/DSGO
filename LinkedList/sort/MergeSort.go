@@ -4,6 +4,7 @@ import (
 	"LinkedList/list"
 )
 
+//归并排序，复杂度为O(2NlogN) & O(1)，具有稳定性。
 func MergeSort(head *list.Node) *list.Node {
 	if head != nil {
 		head, _ = doMergeSort(head)

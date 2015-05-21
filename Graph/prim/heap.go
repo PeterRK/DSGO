@@ -9,19 +9,19 @@ type vertex struct {
 	lnk  int  //关联顶点编号
 	dist uint //与关联顶点间的距离
 }
-type Node struct {
+type node struct {
 	vertex
-	child *Node
-	prev  *Node //父兄节点
-	next  *Node //弟节点
+	child *node
+	prev  *node //父兄节点
+	next  *node //弟节点
 }
 
-func fakeHead(spt **Node) *Node {
+func fakeHead(spt **node) *node {
 	var base = uintptr(unsafe.Pointer(spt))
 	var off = unsafe.Offsetof((*spt).next)
-	return (*Node)(unsafe.Pointer(base - off))
+	return (*node)(unsafe.Pointer(base - off))
 }
-func merge(one *Node, another *Node) *Node {
+func merge(one *node, another *node) *node {
 	if one.dist > another.dist {
 		one, another = another, one
 	}
@@ -32,7 +32,7 @@ func merge(one *Node, another *Node) *Node {
 	one.child, another.prev = another, one
 	return one
 }
-func Insert(root *Node, unit *Node) *Node {
+func insert(root *node, unit *node) *node {
 	if unit == nil {
 		return root
 	}
@@ -44,7 +44,7 @@ func Insert(root *Node, unit *Node) *Node {
 	}
 	return root
 }
-func Extract(root *Node) *Node {
+func extract(root *node) *node {
 	if root == nil {
 		return nil
 	}
@@ -66,7 +66,7 @@ func Extract(root *Node) *Node {
 	return root
 }
 
-func FloatUp(root *Node, target *Node, distance uint) *Node {
+func floatUp(root *node, target *node, distance uint) *node {
 	if target == nil || distance >= target.dist {
 		return root
 	}
