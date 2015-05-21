@@ -1,48 +1,63 @@
 package array
 
-type Queue struct {
+type Queue interface {
+	Clear()
+	IsFull() bool
+	IsEmpty() bool
+	Push(key int) (fail bool)
+	Pop() (key int, fail bool)
+	Front() (key int, fail bool)
+}
+
+func NewQueue(lv uint) Queue {
+	var core = new(queue)
+	core.initialize(lv)
+	return core
+}
+
+type queue struct {
 	space    []int
 	mask     int
 	rpt, wpt int
 }
 
-func (queue *Queue) Initialize(lv uint) {
+func (this *queue) initialize(lv uint) {
 	if lv < 4 {
 		lv = 4
 	}
-	queue.space = make([]int, lv)
-	queue.mask = ^(int(-1) << lv)
-	queue.clear()
+	this.space = make([]int, lv)
+	this.mask = ^(int(-1) << lv)
+	this.Clear()
 }
-func (queue *Queue) clear() {
-	queue.rpt, queue.wpt = 0, 0
-}
-
-func (queue *Queue) IsEmpty() bool {
-	return queue.rpt == queue.wpt
-}
-func (queue *Queue) IsFull() bool {
-	var next = (queue.wpt + 1) & queue.mask
-	return next == queue.rpt
+func (this *queue) Clear() {
+	this.rpt, this.wpt = 0, 0
 }
 
-func (queue *Queue) Push(key int) (fail bool) {
-	var next = (queue.wpt + 1) & queue.mask
-	if next == queue.rpt {
+func (this *queue) IsFull() bool {
+	var next = (this.wpt + 1) & this.mask
+	return next == this.rpt
+}
+func (this *queue) IsEmpty() bool {
+	return this.rpt == this.wpt
+}
+
+func (this *queue) Push(key int) (fail bool) {
+	var next = (this.wpt + 1) & this.mask
+	if next == this.rpt {
 		return true
 	}
-	queue.space[queue.wpt] = key
-	queue.wpt = next
+	this.space[this.wpt] = key
+	this.wpt = next
 	return false
 }
 
-func (queue *Queue) Top() (key int, fail bool) {
-	return queue.space[queue.rpt], queue.IsEmpty()
+func (this *queue) Front() (key int, fail bool) {
+	return this.space[this.rpt], this.IsEmpty()
 }
-func (queue *Queue) Pop() (key int, fail bool) {
-	if queue.IsEmpty() {
+func (this *queue) Pop() (key int, fail bool) {
+	if this.IsEmpty() {
 		return 0, true
 	}
-	key, queue.rpt = queue.space[queue.rpt], (queue.rpt+1)&queue.mask
+	key, this.rpt = this.space[this.rpt], (this.rpt+1)&this.mask
 	return key, fail
 }

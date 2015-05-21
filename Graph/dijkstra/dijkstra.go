@@ -1,7 +1,7 @@
 package dijkstra
 
 import (
-	"graph"
+	"Graph/graph"
 )
 
 func Dijkstra(roads [][]graph.Path, start int) []int {

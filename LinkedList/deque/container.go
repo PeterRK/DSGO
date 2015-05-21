@@ -16,25 +16,18 @@ type deque struct {
 	cnt         int
 }
 
-const (
-	STACK = iota
-	QUEUE
-	DEQUE
-)
-
-func (this *deque) initialize(hint int) {
+func (this *deque) initialize() {
 	this.cnt = 0
 	var block = new(piece)
 	block.fw, block.bw = nil, nil
 	this.front.pt, this.back.pt = block, block
-	switch hint {
-	case STACK:
-		this.front.idx, this.back.idx = 0, -1
-	case QUEUE:
-		this.front.idx, this.back.idx = piece_sz, piece_sz-1
-	default: //DEQUE
-		this.front.idx, this.back.idx = piece_sz/2, piece_sz/2-1
-	}
+	this.front.idx, this.back.idx = piece_sz/2, piece_sz/2-1
+}
+func (this *deque) Clear() {
+	this.cnt = 0
+	this.back.pt = this.front.pt
+	this.front.pt.fw, this.back.pt.bw = nil, nil
+	this.front.idx, this.back.idx = piece_sz/2, piece_sz/2-1
 }
 
 func (this *deque) IsEmpty() bool {

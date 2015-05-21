@@ -22,9 +22,9 @@ func (table *HashTable) IsEmpty() bool {
 	return table.cnt == 0
 }
 
-func (table *HashTable) Initialize(f1 func(str string) uint, f2 func(str string) uint) {
+func (table *HashTable) Initialize(fn1 func(str string) uint, fn2 func(str string) uint) {
 	table.cnt = 0
-	table.first.hash, table.second.hash = f1, f2
+	table.first.hash, table.second.hash = fn1, fn2
 	table.first.id, table.second.id = 0, 1
 	table.first.bucket, table.second.bucket = make([]*node, 32), make([]*node, 16) //保持first为second的两倍
 	table.first.mask, table.second.mask = 0x1f, 0xf

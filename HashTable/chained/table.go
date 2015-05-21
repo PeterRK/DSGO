@@ -52,8 +52,8 @@ func (table *HashTable) isCrowded() bool {
 	return table.cnt*2 > len(table.bucket)*3
 }
 
-func (table *HashTable) Initialize(f func(str string) uint) {
+func (table *HashTable) Initialize(fn func(str string) uint) {
 	table.cnt = 0
-	table.hash = f
+	table.hash = fn
 	table.bucket = make([]*node, size_primes[0])
 }

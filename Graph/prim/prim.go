@@ -1,7 +1,7 @@
 package prim
 
 import (
-	"graph"
+	"Graph/graph"
 )
 
 //Prim对有向图不适用，多路同权时选择有问题（不能倒着用，可能选错）

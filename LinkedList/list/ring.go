@@ -8,7 +8,6 @@ type NodeX struct {
 	prev, next *NodeX
 	val        int
 }
-
 type Ring struct {
 	prev, next *NodeX
 	self       *NodeX
