@@ -5,8 +5,9 @@ import (
 )
 
 type vertex struct {
-	index int
-	dist  uint
+	index int  //本顶点编号
+	link  int  //关联顶点编号
+	dist  uint //与关联顶点间的距离
 }
 type node struct {
 	vertex

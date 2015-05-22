@@ -20,15 +20,10 @@ func PlainDijkstra(matrix [][]uint, start int) []int {
 		var best = 0
 		for i := 0; i < last; i++ {
 			var step = matrix[list[last].index][list[i].index]
-			var distance uint
-			if step != 0 { //通
-				distance = list[last].dist + step
-				if distance < list[i].dist {
-					list[i].dist = distance
-				} else {
-					distance = list[i].dist
-				}
-			} else { //不通
+			var distance = list[last].dist + step
+			if step != 0 && distance < list[i].dist {
+				list[i].dist = distance
+			} else {
 				distance = list[i].dist
 			}
 			if distance < list[best].dist {
@@ -48,14 +43,14 @@ func PlainDijkstra(matrix [][]uint, start int) []int {
 	return result
 }
 
-//输入邻接矩阵(0指不通)，返回两点间最短路径的长度(-1指不通)。
-func PlainDijkstraX(matrix [][]uint, start int, end int) int {
+//输入邻接矩阵(0指不通)，返回两点间的最短路径及其长度(-1指不通)。
+func PlainDijkstraPath(matrix [][]uint, start int, end int) (dist int, marks []int) {
 	var size = len(matrix)
 	if start < 0 || end < 0 || start >= size || end >= size {
-		return -1
+		return -1, marks
 	}
 	if start == end {
-		return 0
+		return 0, marks
 	}
 
 	var list = make([]vertex, size)
@@ -65,22 +60,30 @@ func PlainDijkstraX(matrix [][]uint, start int, end int) int {
 	list[start].index = size - 1
 	list[size-1].index, list[size-1].dist = start, 0
 
-	for last := size - 1; last > 0 && list[last].dist != MaxDistance; last-- {
+	for last := size - 1; last >= 0 && list[last].dist != MaxDistance; last-- {
 		if list[last].index == end {
-			return int(list[last].dist)
+			for idx := last; idx < size-1; {
+				var next = list[idx].link
+				for list[idx].index != next {
+					idx++
+				}
+				marks = append(marks, next)
+			}
+			for left, right := 0, len(marks)-1; left < right; {
+				marks[left], marks[right] = marks[right], marks[left]
+				left++
+				right--
+			}
+			marks = append(marks, end)
+			return (int)(list[last].dist), marks
 		}
 		var best = 0
 		for i := 0; i < last; i++ {
 			var step = matrix[list[last].index][list[i].index]
-			var distance uint
-			if step != 0 { //通
-				distance = list[last].dist + step
-				if distance < list[i].dist {
-					list[i].dist = distance
-				} else {
-					distance = list[i].dist
-				}
-			} else { //不通
+			var distance = list[last].dist + step
+			if step != 0 && distance < list[i].dist {
+				list[i].dist, list[i].link = distance, list[last].index
+			} else {
 				distance = list[i].dist
 			}
 			if distance < list[best].dist {
@@ -89,5 +92,5 @@ func PlainDijkstraX(matrix [][]uint, start int, end int) int {
 		}
 		list[best], list[last-1] = list[last-1], list[best]
 	}
-	return -1
+	return -1, marks
 }
