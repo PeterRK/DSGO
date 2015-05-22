@@ -50,10 +50,10 @@ func Dijkstra(roads [][]graph.Path, start int) []int {
 func DijkstraPath(roads [][]graph.Path, start int, end int) (Dist int, marks []int) {
 	var size = len(roads)
 	if start < 0 || end < 0 || start >= size || end >= size {
-		return -1, marks
+		return -1, []int{}
 	}
 	if start == end {
-		return 0, marks
+		return 0, []int{start}
 	}
 
 	var root, list = graph.NewHeap(size, start)
@@ -84,5 +84,5 @@ func DijkstraPath(roads [][]graph.Path, start int, end int) (Dist int, marks []i
 		}
 		current.Index = -1 //标记为已经处理
 	}
-	return -1, marks
+	return -1, []int{}
 }

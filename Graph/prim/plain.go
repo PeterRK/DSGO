@@ -10,7 +10,7 @@ func PlainPrim(matrix [][]uint) (sum uint, fail bool) {
 	var size = len(matrix)
 	sum = uint(0)
 	if size < 2 {
-		return sum, true
+		return 0, true
 	}
 
 	var list = make([]graph.Vertex, size)
@@ -33,7 +33,7 @@ func PlainPrim(matrix [][]uint) (sum uint, fail bool) {
 			}
 		}
 		if list[best].Dist == graph.MaxDistance {
-			return sum, true
+			return 0, true
 		}
 		sum += list[best].Dist
 		list[best], list[last-1] = list[last-1], list[best]
@@ -44,7 +44,7 @@ func PlainPrim(matrix [][]uint) (sum uint, fail bool) {
 func PlainPrimTree(matrix [][]uint) (tree [][]int, fail bool) {
 	var size = len(matrix)
 	if size < 2 {
-		return tree, true
+		return [][]int{}, true
 	}
 	tree = make([][]int, size)
 
@@ -68,7 +68,7 @@ func PlainPrimTree(matrix [][]uint) (tree [][]int, fail bool) {
 			}
 		}
 		if list[best].Dist == graph.MaxDistance {
-			return tree, true
+			return [][]int{}, true
 		}
 		tree[list[best].Link] = append(tree[list[best].Link], list[best].Index)
 		list[best], list[last-1] = list[last-1], list[best]

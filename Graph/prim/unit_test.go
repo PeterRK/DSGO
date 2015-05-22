@@ -66,6 +66,30 @@ func Test_PlainPrim(t *testing.T) {
 	}
 }
 
+func Test_Kruskal(t *testing.T) {
+	defer guard_ut(t)
+	var roads = []graph.PathX{
+		{0, 1, 8},
+		{0, 3, 4},
+		{0, 6, 11},
+		{1, 2, 7},
+		{1, 4, 2},
+		{1, 8, 4},
+		{2, 5, 9},
+		{2, 8, 14},
+		{3, 6, 8},
+		{4, 6, 7},
+		{4, 7, 6},
+		{5, 8, 10},
+		{6, 7, 1},
+		{7, 8, 2}}
+
+	var dist, fail = Kruskal(roads, 9)
+	if fail || dist != 37 {
+		t.Fail()
+	}
+}
+
 func Test_PrimTree(t *testing.T) {
 	defer guard_ut(t)
 	var roads = make([][]graph.Path, 9)

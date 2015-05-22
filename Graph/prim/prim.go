@@ -5,13 +5,13 @@ import (
 )
 
 //输入邻接表，返回最小生成树的权。
-//与本实现复杂度为O(ElogV)，不比Kruskal差。
+//与本实现复杂度为O(ElogV)，通常比Kruskal强。
 //对有向图不适用，多路同权时选择有问题（不能倒着用，可能选错）。
 func Prim(roads [][]graph.Path) (sum uint, fail bool) {
 	var size = len(roads)
 	sum = uint(0)
 	if size < 2 {
-		return sum, true
+		return 0, true
 	}
 
 	var list = graph.NewVector(size)
@@ -48,7 +48,7 @@ func Prim(roads [][]graph.Path) (sum uint, fail bool) {
 func PrimTree(roads [][]graph.Path) (tree [][]int, fail bool) {
 	var size = len(roads)
 	if size < 2 {
-		return tree, true
+		return [][]int{}, true
 	}
 	tree = make([][]int, size)
 

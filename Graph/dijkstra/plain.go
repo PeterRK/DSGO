@@ -51,10 +51,10 @@ func PlainDijkstra(matrix [][]uint, start int) []int {
 func PlainDijkstraPath(matrix [][]uint, start int, end int) (Dist int, marks []int) {
 	var size = len(matrix)
 	if start < 0 || end < 0 || start >= size || end >= size {
-		return -1, marks
+		return -1, []int{}
 	}
 	if start == end {
-		return 0, marks
+		return 0, []int{start}
 	}
 
 	var list = make([]graph.Vertex, size)
@@ -96,5 +96,5 @@ func PlainDijkstraPath(matrix [][]uint, start int, end int) (Dist int, marks []i
 		}
 		list[best], list[last-1] = list[last-1], list[best]
 	}
-	return -1, marks
+	return -1, []int{}
 }
