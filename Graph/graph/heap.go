@@ -1,19 +1,44 @@
-package prim
+package graph
 
 import (
 	"unsafe"
 )
 
-type vertex struct {
-	index int  //本顶点编号
-	link  int  //关联顶点编号
-	dist  uint //与关联顶点间的距离
-}
 type node struct {
-	vertex
+	Vertex
 	child *node
 	prev  *node //父兄节点
 	next  *node //弟节点
+}
+
+func NewVector(size int) []node {
+	return make([]node, size)
+}
+func NewHeap(size int, start int) (root *node, list []node) {
+	list = make([]node, size)
+	for i := 0; i < size; i++ {
+		list[i].Index, list[i].Dist, list[i].child = i, MaxDistance, nil
+	}
+	for i := 1; i < size; i++ {
+		list[i].prev, list[i-1].next = &list[i-1], &list[i]
+	}
+	list[0].prev, list[size-1].next = nil, nil
+
+	list[start].Dist = 0
+	list[start].prev, list[start].next = nil, nil
+	if start == 0 {
+		list[start].child = &list[1]
+	} else {
+		list[start].child = &list[0]
+		list[0].prev = &list[start]
+		if start == size-1 {
+			list[start-1].next = nil
+		} else {
+			list[start+1].prev, list[start-1].next = &list[start-1], &list[start+1]
+		}
+	}
+	root = &list[start]
+	return
 }
 
 func fakeHead(spt **node) *node {
@@ -22,7 +47,7 @@ func fakeHead(spt **node) *node {
 	return (*node)(unsafe.Pointer(base - off))
 }
 func merge(one *node, another *node) *node {
-	if one.dist > another.dist {
+	if one.Dist > another.Dist {
 		one, another = another, one
 	}
 	another.next = one.child
@@ -32,7 +57,8 @@ func merge(one *node, another *node) *node {
 	one.child, another.prev = another, one
 	return one
 }
-func insert(root *node, unit *node) *node {
+
+func Insert(root *node, unit *node) *node {
 	if unit == nil {
 		return root
 	}
@@ -44,7 +70,7 @@ func insert(root *node, unit *node) *node {
 	}
 	return root
 }
-func extract(root *node) *node {
+func Extract(root *node) *node {
 	if root == nil {
 		return nil
 	}
@@ -66,11 +92,11 @@ func extract(root *node) *node {
 	return root
 }
 
-func floatUp(root *node, target *node, distance uint) *node {
-	if target == nil || distance >= target.dist {
+func FloatUp(root *node, target *node, distance uint) *node {
+	if target == nil || distance >= target.Dist {
 		return root
 	}
-	target.dist = distance
+	target.Dist = distance
 	if target == root {
 		return root
 	}
@@ -81,7 +107,7 @@ func floatUp(root *node, target *node, distance uint) *node {
 			brother = brother.prev
 		}
 		var parent = brother.prev
-		if parent.dist <= target.dist {
+		if parent.Dist <= target.Dist {
 			return root
 		}
 

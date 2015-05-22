@@ -14,30 +14,30 @@ func Prim(roads [][]graph.Path) (sum uint, fail bool) {
 		return sum, true
 	}
 
-	var list = make([]node, size)
+	var list = graph.NewVector(size)
 	for i := 1; i < size; i++ {
-		list[i].index = -1
+		list[i].Index = -1
 	}
-	list[0].index, list[0].dist, list[0].link = 0, 0, 0
+	list[0].Index, list[0].Dist, list[0].Link = 0, 0, 0
 
 	var cnt int
-	var root = insert(nil, &list[0])
+	var root = graph.Insert(nil, &list[0])
 	for cnt = 0; root != nil; cnt++ {
 		var current = root
-		root = extract(root)
-		sum += current.dist
-		current.link = -1
-		for _, path := range roads[current.index] {
+		root = graph.Extract(root)
+		sum += current.Dist
+		current.Link = -1
+		for _, path := range roads[current.Index] {
 			var peer = &list[path.Next]
-			if peer.index == path.Next { //已经入围的点
-				if peer.link != -1 && //还不是内点
-					path.Dist < peer.dist {
-					peer.link = current.index
-					root = floatUp(root, peer, path.Dist)
+			if peer.Index == path.Next { //已经入围的点
+				if peer.Link != -1 && //还不是内点
+					path.Dist < peer.Dist {
+					peer.Link = current.Index
+					root = graph.FloatUp(root, peer, path.Dist)
 				}
 			} else {
-				peer.index, peer.link, peer.dist = path.Next, current.index, path.Dist
-				root = insert(root, peer)
+				peer.Index, peer.Link, peer.Dist = path.Next, current.Index, path.Dist
+				root = graph.Insert(root, peer)
 			}
 		}
 	}
@@ -52,30 +52,30 @@ func PrimTree(roads [][]graph.Path) (tree [][]int, fail bool) {
 	}
 	tree = make([][]int, size)
 
-	var list = make([]node, size)
+	var list = graph.NewVector(size)
 	for i := 1; i < size; i++ {
-		list[i].index = -1
+		list[i].Index = -1
 	}
-	list[0].index, list[0].dist, list[0].link = 0, 0, 0
+	list[0].Index, list[0].Dist, list[0].Link = 0, 0, 0
 
 	var cnt int
-	var root = insert(nil, &list[0])
+	var root = graph.Insert(nil, &list[0])
 	for cnt = 0; root != nil; cnt++ {
 		var current = root
-		root = extract(root)
-		tree[current.link] = append(tree[current.link], current.index)
-		current.link = -1
-		for _, path := range roads[current.index] {
+		root = graph.Extract(root)
+		tree[current.Link] = append(tree[current.Link], current.Index)
+		current.Link = -1
+		for _, path := range roads[current.Index] {
 			var peer = &list[path.Next]
-			if peer.index == path.Next { //已经入围的点
-				if peer.link != -1 && //还不是内点
-					path.Dist < peer.dist {
-					peer.link = current.index
-					root = floatUp(root, peer, path.Dist)
+			if peer.Index == path.Next { //已经入围的点
+				if peer.Link != -1 && //还不是内点
+					path.Dist < peer.Dist {
+					peer.Link = current.Index
+					root = graph.FloatUp(root, peer, path.Dist)
 				}
 			} else {
-				peer.index, peer.link, peer.dist = path.Next, current.index, path.Dist
-				root = insert(root, peer)
+				peer.Index, peer.Link, peer.Dist = path.Next, current.Index, path.Dist
+				root = graph.Insert(root, peer)
 			}
 		}
 	}

@@ -20,34 +20,34 @@ func Dijkstra(roads [][]graph.Path, start int) []int {
 		return result
 	}
 
-	var root, list = newHeap(size, start)
-	for root != nil && root.dist != MaxDistance {
+	var root, list = graph.NewHeap(size, start)
+	for root != nil && root.Dist != graph.MaxDistance {
 		var current = root
-		root = extract(root)
-		for _, path := range roads[current.index] {
+		root = graph.Extract(root)
+		for _, path := range roads[current.Index] {
 			var peer = &list[path.Next]
-			if peer.index == path.Next { //针对未处理的点
-				var distance = current.dist + path.Dist
-				if distance < peer.dist {
-					root = floatUp(root, peer, distance)
+			if peer.Index == path.Next { //针对未处理的点
+				var distance = current.Dist + path.Dist
+				if distance < peer.Dist {
+					root = graph.FloatUp(root, peer, distance)
 				}
 			}
 		}
-		current.index = -1 //标记为已经处理
+		current.Index = -1 //标记为已经处理
 	}
 
 	for i := 0; i < size; i++ {
-		if list[i].dist == MaxDistance {
+		if list[i].Dist == graph.MaxDistance {
 			result[i] = -1
 		} else {
-			result[i] = (int)(list[i].dist)
+			result[i] = (int)(list[i].Dist)
 		}
 	}
 	return result
 }
 
 //输入邻接表，返回两点间的最短路径及其长度(-1指不通)。
-func DijkstraPath(roads [][]graph.Path, start int, end int) (dist int, marks []int) {
+func DijkstraPath(roads [][]graph.Path, start int, end int) (Dist int, marks []int) {
 	var size = len(roads)
 	if start < 0 || end < 0 || start >= size || end >= size {
 		return -1, marks
@@ -56,10 +56,10 @@ func DijkstraPath(roads [][]graph.Path, start int, end int) (dist int, marks []i
 		return 0, marks
 	}
 
-	var root, list = newHeap(size, start)
-	for root != nil && root.dist != MaxDistance {
-		if root.index == end {
-			for idx := end; idx != start; idx = list[idx].link {
+	var root, list = graph.NewHeap(size, start)
+	for root != nil && root.Dist != graph.MaxDistance {
+		if root.Index == end {
+			for idx := end; idx != start; idx = list[idx].Link {
 				marks = append(marks, idx)
 			}
 			marks = append(marks, start)
@@ -68,21 +68,21 @@ func DijkstraPath(roads [][]graph.Path, start int, end int) (dist int, marks []i
 				left++
 				right--
 			}
-			return (int)(root.dist), marks
+			return (int)(root.Dist), marks
 		}
 		var current = root
-		root = extract(root)
-		for _, path := range roads[current.index] {
+		root = graph.Extract(root)
+		for _, path := range roads[current.Index] {
 			var peer = &list[path.Next]
-			if peer.index == path.Next { //针对未处理的点
-				var distance = current.dist + path.Dist
-				if distance < peer.dist {
-					peer.link = current.index
-					root = floatUp(root, peer, distance)
+			if peer.Index == path.Next { //针对未处理的点
+				var distance = current.Dist + path.Dist
+				if distance < peer.Dist {
+					peer.Link = current.Index
+					root = graph.FloatUp(root, peer, distance)
 				}
 			}
 		}
-		current.index = -1 //标记为已经处理
+		current.Index = -1 //标记为已经处理
 	}
 	return -1, marks
 }
