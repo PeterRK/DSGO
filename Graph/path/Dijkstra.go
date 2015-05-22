@@ -1,4 +1,4 @@
-package dijkstra
+package path
 
 import (
 	"Graph/graph"

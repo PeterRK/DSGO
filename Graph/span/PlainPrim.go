@@ -1,4 +1,4 @@
-package prim
+package tree
 
 import (
 	"Graph/graph"

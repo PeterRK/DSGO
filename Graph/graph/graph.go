@@ -1,15 +1,10 @@
 package graph
 
-//邻接矩阵
-//棋盘
-
-//邻接表
 type Path struct {
 	Next int
 	Dist uint
 }
-
-type PathX struct {
+type Edge struct {
 	A, B int
 	Dist uint
 }

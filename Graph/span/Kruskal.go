@@ -1,4 +1,4 @@
-package prim
+package tree
 
 import (
 	"Graph/graph"
@@ -12,7 +12,7 @@ type memo struct {
 
 //输入邻接表，返回最小生成树的权。
 //复杂度为O(ElogE)，性能通常不如Prim
-func Kruskal(roads []graph.PathX, size int) (sum uint, fail bool) {
+func Kruskal(roads []graph.Edge, size int) (sum uint, fail bool) {
 	if size < 2 || len(roads) < size-1 {
 		return 0, true
 	}

@@ -1,4 +1,4 @@
-package dijkstra
+package path
 
 import (
 	"Graph/graph"
@@ -51,6 +51,22 @@ func Test_PlainDijkstra(t *testing.T) {
 	var expected = []int{19, 0, 11, 16, 4}
 	var ret = PlainDijkstra(matrix, 1)
 	if !isTheSame(ret, expected) {
+		t.Fail()
+	}
+}
+
+func Test_SPFA(t *testing.T) {
+	defer guard_ut(t)
+	var roads = make([][]Path, 5)
+	roads[0] = []Path{{1, 1}, {3, 2}}
+	roads[1] = []Path{{4, 4}}
+	roads[2] = []Path{{0, 10}, {3, 5}}
+	roads[3] = []Path{{0, 3}, {1, 9}, {4, 2}}
+	roads[4] = []Path{{1, 6}, {2, 7}}
+
+	var expected = []int{19, 0, 11, 16, 4}
+	var dists, _ = SPFA(roads, 1)
+	if !isTheSame(dists, expected) {
 		t.Fail()
 	}
 }

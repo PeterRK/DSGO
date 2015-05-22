@@ -1,6 +1,6 @@
 package graph
 
-func Sort(list []PathX) {
+func Sort(list []Edge) {
 	var size = len(list)
 	var tasks stack
 	tasks.push(0, size)
@@ -23,7 +23,7 @@ func Sort(list []PathX) {
 	}
 }
 
-func part(list []PathX) int {
+func part(list []Edge) int {
 	var size = len(list)
 
 	var seed = list[0]
@@ -66,7 +66,7 @@ func part(list []PathX) int {
 	return right
 }
 
-func heapSort(list []PathX) {
+func heapSort(list []Edge) {
 	var size = len(list)
 	for idx := size/2 - 1; idx >= 0; idx-- {
 		down(list, idx)
@@ -77,7 +77,7 @@ func heapSort(list []PathX) {
 	}
 }
 
-func down(list []PathX, spot int) {
+func down(list []Edge, spot int) {
 	var size = len(list)
 	var key = list[spot]
 	var left, right = spot*2 + 1, spot*2 + 2
@@ -102,7 +102,7 @@ LabelOver:
 	list[spot] = key
 }
 
-func insertSort(list []PathX) {
+func insertSort(list []Edge) {
 	var size = len(list)
 	for i := 1; i < size; i++ {
 		var left, right = 0, i
