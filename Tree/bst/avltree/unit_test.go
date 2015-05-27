@@ -15,11 +15,11 @@ func Test_Tree(t *testing.T) {
 	var tree Tree
 	var cnt = 0
 	const size = 200
-	var list [size * 2]int
+	var list [size * 2]int32
 
 	rand.Seed(time.Now().Unix())
 	for i := 0; i < size*2; i++ {
-		list[i] = rand.Int()
+		list[i] = int32(rand.Int())
 	}
 
 	//插入两份

@@ -1,7 +1,7 @@
 package simplebst
 
 type node struct {
-	key   int
+	key   int32
 	left  *node
 	right *node
 }
@@ -13,7 +13,7 @@ func (tree *Tree) IsEmpty() bool {
 	return tree.root == nil
 }
 
-func (tree *Tree) Search(key int) bool {
+func (tree *Tree) Search(key int32) bool {
 	var target = tree.root
 	for target != nil {
 		if key == target.key {
@@ -28,7 +28,7 @@ func (tree *Tree) Search(key int) bool {
 	return false
 }
 
-func newNode(key int) (unit *node) {
+func newNode(key int32) (unit *node) {
 	unit = new(node)
 	unit.key = key
 	unit.left, unit.right = nil, nil
@@ -36,7 +36,7 @@ func newNode(key int) (unit *node) {
 }
 
 //成功返回true，冲突返回false
-func (tree *Tree) Insert(key int) bool {
+func (tree *Tree) Insert(key int32) bool {
 	if tree.root == nil {
 		tree.root = newNode(key)
 		return true
@@ -65,7 +65,7 @@ func (tree *Tree) Insert(key int) bool {
 }
 
 //成功返回true，没有返回false
-func (tree *Tree) Remove(key int) bool {
+func (tree *Tree) Remove(key int32) bool {
 	var target, parrent, lf = tree.root, (*node)(nil), false
 	for target != nil && key != target.key {
 		if key < target.key {

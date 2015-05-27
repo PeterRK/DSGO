@@ -1,4 +1,4 @@
-package avltree
+package avlt
 
 //--------------LR形式--------------
 //|       G       |       C       |
@@ -26,8 +26,8 @@ func (G *node) rotate() (root *node, stop bool) {
 		var P = G.left
 		if P.state == -1 { //LR
 			var C = P.right //一定非nil
-			P.right, G.left = P.tryHook(C.left), G.tryHook(C.right)
-			C.left, C.right = C.hook(P), C.hook(G)
+			P.right, G.left = C.left, C.right
+			C.left, C.right = P, G
 			switch C.state {
 			case -1:
 				G.state, P.state = 0, 1
@@ -39,7 +39,7 @@ func (G *node) rotate() (root *node, stop bool) {
 			C.state = 0
 			root = C
 		} else { //LL
-			G.left, P.right = G.tryHook(P.right), P.hook(G)
+			G.left, P.right = P.right, G
 			if P.state == 0 { //不降高旋转
 				G.state, P.state = 1, -1
 				stop = true
@@ -52,8 +52,8 @@ func (G *node) rotate() (root *node, stop bool) {
 		var P = G.right
 		if P.state == 1 { //RL
 			var C = P.left //一定非nil
-			P.left, G.right = P.tryHook(C.right), G.tryHook(C.left)
-			C.right, C.left = C.hook(P), C.hook(G)
+			P.left, G.right = C.right, C.left
+			C.right, C.left = P, G
 			switch C.state {
 			case -1:
 				G.state, P.state = 1, 0
@@ -65,7 +65,7 @@ func (G *node) rotate() (root *node, stop bool) {
 			C.state = 0
 			root = C
 		} else { //RR
-			G.right, P.left = G.tryHook(P.left), P.hook(G)
+			G.right, P.left = P.left, G
 			if P.state == 0 { //不降高旋转
 				G.state, P.state = -1, 1
 				stop = true

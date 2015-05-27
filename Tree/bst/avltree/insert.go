@@ -2,52 +2,64 @@ package avltree
 
 //成功返回true，冲突返回false。
 //AVL树插入过程包括：O(log N)的搜索，O(1)的旋转，O(log N)的平衡因子调整。
-func (tree *Tree) Insert(key int) bool {
+func (tree *Tree) Insert(key int32) bool {
 	if tree.root == nil {
-		tree.root = newNode(key)
+		tree.root = newNode(nil, key)
 		return true
 	}
-	tree.path.clear()
-	var parent = tree.root
+
+	var root = tree.root
 	for {
-		if key < parent.key {
-			tree.path.push(parent, true)
-			if parent.left == nil {
-				parent.left = newNode(key)
+		if key < root.key {
+			if root.left == nil {
+				root.left = newNode(root, key)
 				break
 			}
-			parent = parent.left
-		} else if key > parent.key {
-			tree.path.push(parent, false)
-			if parent.right == nil {
-				parent.right = newNode(key)
+			root = root.left
+		} else if key > root.key {
+			if root.right == nil {
+				root.right = newNode(root, key)
 				break
 			}
-			parent = parent.right
-		} else { //key == parent.key
+			root = root.right
+		} else { //key == root.key
 			return false
 		}
 	}
 
-	var state, subroot, lf = int8(0), parent, false
-	for !tree.path.isEmpty() && state == 0 {
-		subroot, lf = tree.path.pop()
-		state = subroot.adjust(!lf)
-	}
-	if subroot.isUnbalance() {
-		newsub, _ := subroot.rotate()
-		if tree.path.isEmpty() {
-			tree.root = newsub
+	for {
+		var state = root.state
+		if key < root.key {
+			root.state++
 		} else {
-			tree.hookSubTree(newsub)
+			root.state--
 		}
+		if state == 0 && root.parent != nil {
+			root = root.parent
+			continue
+		}
+		if state != 0 && root.state != 0 { //2 || -2
+			var super = root.parent
+			root, _ = root.rotate()
+			if super == nil {
+				tree.root = super.hook(root)
+			} else {
+				if key < super.key {
+					super.left = super.hook(root)
+				} else {
+					super.right = super.hook(root)
+				}
+			}
+		}
+		break
 	}
 	return true
 }
 
-func newNode(key int) (unit *node) {
+func newNode(parent *node, key int32) (unit *node) {
 	unit = new(node)
 	unit.key, unit.state = key, 0
+	unit.parent = parent
 	unit.left, unit.right = nil, nil
 	return unit
 }

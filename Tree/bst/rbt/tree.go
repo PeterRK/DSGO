@@ -1,16 +1,16 @@
-package rbtree
+package rbt
 
 //AVL树的平衡因子有5态，需要3bit存储空间。
 //而红黑树的平衡因子只需1bit，有时候可以巧妙地隐藏掉。
 type node struct {
-	key    int32
-	black  bool
-	parent *node
-	left   *node
-	right  *node
+	key   int32
+	black bool
+	left  *node
+	right *node
 }
 type Tree struct {
 	root *node
+	path stack
 }
 
 func (tree *Tree) IsEmpty() bool {
@@ -32,24 +32,14 @@ func (tree *Tree) Search(key int32) bool {
 	return false
 }
 
-func (parent *node) tryHook(child *node) *node {
-	if child != nil {
-		child.parent = parent
-	}
-	return child
-}
-func (parent *node) hook(child *node) *node {
-	child.parent = parent
-	return child
-}
-func (tree *Tree) hookSubTree(super *node, root *node) {
-	if super == nil {
-		tree.root = super.hook(root)
+func (tree *Tree) hookSubTree(root *node) {
+	if tree.path.isEmpty() {
+		tree.root = root
 	} else {
-		if root.key < super.key {
-			super.left = super.hook(root)
+		if super, lf := tree.path.top(); lf {
+			super.left = root
 		} else {
-			super.right = super.hook(root)
+			super.right = root
 		}
 	}
 }

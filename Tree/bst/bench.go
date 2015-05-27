@@ -1,7 +1,9 @@
 package bst
 
 import (
+	"Tree/bst/avlt"
 	"Tree/bst/avltree"
+	"Tree/bst/rbt"
 	"Tree/bst/rbtree"
 	"Tree/bst/simplebst"
 	"fmt"
@@ -12,15 +14,17 @@ import (
 
 type BST interface {
 	IsEmpty() bool
-	Insert(key int) bool
-	Search(key int) bool
-	Remove(key int) bool
+	Insert(key int32) bool
+	Search(key int32) bool
+	Remove(key int32) bool
 }
 
 const (
 	SIMPLE_BST = iota
 	AVL_TREE
 	RB_TREE
+	PLAIN_AVL
+	PLAIN_RB
 )
 
 func showName(hint int) string {
@@ -31,6 +35,10 @@ func showName(hint int) string {
 		return "AVL tree"
 	case RB_TREE:
 		return "red-black tree"
+	case PLAIN_AVL:
+		return "AVL tree [no uplink]"
+	case PLAIN_RB:
+		return "red-black [no uplink]"
 	default:
 		panic("Illegal BST type")
 	}
@@ -43,15 +51,19 @@ func newTree(hint int) BST {
 		return new(avltree.Tree)
 	case RB_TREE:
 		return new(rbtree.Tree)
+	case PLAIN_AVL:
+		return new(avlt.Tree)
+	case PLAIN_RB:
+		return new(rbt.Tree)
 	default:
 		panic("Illegal BST type")
 	}
 }
 
-func mixArray(size int) []int {
-	var list = make([]int, size)
+func mixedArray(size int) []int32 {
+	var list = make([]int32, size)
 
-	const bits_of_int = uint(unsafe.Sizeof(size)) * 8
+	const bits_of_int = uint(unsafe.Sizeof(list[0])) * 8
 	var tmp = uint(size)
 	var cnt uint = 0
 	for cnt < bits_of_int && tmp != 0 {
@@ -61,20 +73,20 @@ func mixArray(size int) []int {
 	cnt = bits_of_int - cnt - 11
 	var mask = ^((^0) << cnt)
 
-	var num = 0
+	var num = int32(0)
 	rand.Seed(time.Now().Unix())
 	for i := 0; i < size; i++ {
 		if i%32 == 0 { //局部参入有序数列
-			num += rand.Int() & mask
+			num += int32(rand.Int() & mask)
 			list[i] = num
 		} else {
-			list[i] = rand.Int()
+			list[i] = int32(rand.Int())
 		}
 	}
 	return list
 }
 
-func benchMark(list []int, hint int) {
+func benchMark(list []int32, hint int) {
 	var tree = newTree(hint)
 	var size = len(list)
 	fmt.Println(showName(hint))
@@ -102,9 +114,10 @@ func BenchMark(size int) {
 		fmt.Println("too small")
 		return
 	}
-	var list = mixArray(size)
+	var list = mixedArray(size)
 
-	benchMark(list, SIMPLE_BST)
+	benchMark(list, PLAIN_AVL)
 	benchMark(list, AVL_TREE)
+	benchMark(list, PLAIN_RB)
 	benchMark(list, RB_TREE)
 }

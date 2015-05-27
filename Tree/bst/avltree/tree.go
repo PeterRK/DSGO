@@ -1,21 +1,21 @@
 package avltree
 
 type node struct {
-	key   int
-	state int8 //1, 0, -1
-	left  *node
-	right *node
+	key    int32
+	state  int8 //(2), 1, 0, -1, (-2)
+	parent *node
+	left   *node
+	right  *node
 }
 type Tree struct {
 	root *node
-	path stack
 }
 
 func (tree *Tree) IsEmpty() bool {
 	return tree.root == nil
 }
 
-func (tree *Tree) Search(key int) bool {
+func (tree *Tree) Search(key int32) bool {
 	var target = tree.root
 	for target != nil {
 		if key == target.key {
@@ -30,26 +30,13 @@ func (tree *Tree) Search(key int) bool {
 	return false
 }
 
-func (unit *node) isUnbalance() bool {
-	//	return unit.state == 2 || unit.state == -2
-	return (unit.state & -unit.state) == 2
-}
-func (unit *node) adjust(ltor bool) (oldst int8) {
-	oldst = unit.state
-	if ltor {
-		unit.state--
-	} else {
-		unit.state++
+func (parent *node) tryHook(child *node) *node {
+	if child != nil {
+		child.parent = parent
 	}
-	return oldst
+	return child
 }
-
-func (tree *Tree) hookSubTree(subroot *node) (super *node, lf bool) {
-	super, lf = tree.path.pop()
-	if lf {
-		super.left = subroot
-	} else {
-		super.right = subroot
-	}
-	return super, lf
+func (parent *node) hook(child *node) *node {
+	child.parent = parent
+	return child
 }

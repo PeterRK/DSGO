@@ -1,13 +1,16 @@
-package avltree
+package avlt
 
 //成功返回true，没有返回false。
 //AVL树删除过程包括：O(log N)的搜索，O(log N)的旋转，O(log N)的平衡因子调整。
 func (tree *Tree) Remove(key int32) bool {
+	tree.path.clear()
 	var target = tree.root
 	for target != nil && key != target.key {
 		if key < target.key {
+			tree.path.push(target, true)
 			target = target.left
 		} else {
+			tree.path.push(target, false)
 			target = target.right
 		}
 	}
@@ -22,64 +25,50 @@ func (tree *Tree) Remove(key int32) bool {
 		victim, orphan = target, target.left
 	} else {
 		if target.state == 1 {
+			tree.path.push(target, true)
 			victim = target.left
 			for victim.right != nil {
+				tree.path.push(victim, false)
 				victim = victim.right
 			}
 			orphan = victim.left
 		} else {
+			tree.path.push(target, false)
 			victim = target.right
 			for victim.left != nil {
+				tree.path.push(victim, true)
 				victim = victim.left
 			}
 			orphan = victim.right
 		}
 	}
 
-	var root = victim.parent
-	if root == nil { //此时victim==target
-		tree.root = root.tryHook(orphan)
+	if tree.path.isEmpty() { //此时victim==target
+		tree.root = orphan
 		return true
 	}
-	key = victim.key
+	target.key = victim.key //李代桃僵
 
-	var state, stop = root.state, false
-	if key < root.key {
-		root.left = root.tryHook(orphan)
-		root.state--
-	} else {
-		root.right = root.tryHook(orphan)
-		root.state++
-	}
-
+	var root, lf = tree.hookSubTree(orphan)
+	var state, stop = root.adjust(lf), false
 	for state != 0 { //如果原平衡因子为0则子树高度不变
-		var super = root.parent
-		if super == nil {
-			if root.state != 0 { //2 || -2
-				root, _ = root.rotate()
-				tree.root = super.hook(root)
-			}
-			break
-		} else {
-			if root.state != 0 { //2 || -2
-				root, stop = root.rotate()
-				if key < super.key {
-					super.left = super.hook(root)
-				} else {
-					super.right = super.hook(root)
-				}
-				if stop {
-					break
-				}
-			}
-			root, state = super, super.state
-			if key < root.key {
-				root.state--
+		if root.state != 0 { //2 || -2
+			root, stop = root.rotate()
+			if tree.path.isEmpty() {
+				tree.root = root
 			} else {
-				root.state++
+				root, lf = tree.hookSubTree(root)
+				if !stop {
+					state = root.adjust(lf)
+					continue
+				}
 			}
+		} else if !tree.path.isEmpty() {
+			root, lf = tree.path.pop()
+			state = root.adjust(lf)
+			continue
 		}
+		break
 	}
-	target.key = key
 	return true
 }
