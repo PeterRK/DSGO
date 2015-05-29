@@ -23,7 +23,7 @@ func doQuickSort(head *list.Node) (first *list.Node, last *list.Node) {
 		}
 		return head, node
 	}
-	var left, center, right, _ = part(head, node, node.Next)
+	var left, center, right, _ = partition(head, node, node.Next)
 
 	first, node = doQuickSort(left)
 	node.Next = center
@@ -31,7 +31,7 @@ func doQuickSort(head *list.Node) (first *list.Node, last *list.Node) {
 	return first, last
 }
 
-func part(node0 *list.Node, node1 *list.Node, node2 *list.Node) (left *list.Node, center *list.Node, right *list.Node, size int) {
+func partition(node0 *list.Node, node1 *list.Node, node2 *list.Node) (left *list.Node, center *list.Node, right *list.Node, size int) {
 	var tail = node2.Next
 
 	if node0.Val > node1.Val { //a > b

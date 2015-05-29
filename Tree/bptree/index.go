@@ -75,8 +75,7 @@ func (unit *index) combine(peer *index) bool {
 			unit.data[i] = peer.data[i-unit.cnt]
 			unit.kids[i] = peer.kids[i-unit.cnt]
 		}
-		unit.cnt, peer.cnt = total, 0
-		//
+		unit.cnt = total
 		return true
 	}
 	//分流而不合并

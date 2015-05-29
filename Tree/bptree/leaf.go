@@ -75,8 +75,7 @@ func (unit *leaf) combine(peer *leaf) bool {
 			unit.data[i] = peer.data[i-unit.cnt]
 			//
 		}
-		unit.cnt, peer.cnt = total, 0
-		unit.next = peer.next
+		unit.cnt, unit.next = total, peer.next
 		return true
 	}
 	//分流而不合并

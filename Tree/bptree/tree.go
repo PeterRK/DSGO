@@ -26,8 +26,7 @@ func (unit *node) ceil() int {
 	return unit.data[unit.cnt-1]
 }
 func (unit *node) locate(key int) int {
-	var end = unit.cnt - 1
-	var start = 0
+	var start, end = 0, unit.cnt - 1
 	for start < end {
 		var mid = (start + end) / 2
 		if key > unit.data[mid] {
@@ -50,8 +49,7 @@ func (unit *node) ceil() int {
 	}
 }
 func (unit *node) locate(key int) int {
-	var end = unit.cnt - 1
-	var start = 0
+	var start, end = 0, unit.cnt - 1
 	if unit.inner {
 		var unitx = (*index)(unsafe.Pointer(unit))
 		for start < end {

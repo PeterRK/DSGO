@@ -22,7 +22,7 @@ func IntroSort(head *list.Node) *list.Node {
 		return head
 	}
 
-	var left, center, right, size = part(head, node, node.Next)
+	var left, center, right, size = partition(head, node, node.Next)
 
 	var life uint
 	for life = 3; size != 0; life++ {
@@ -50,7 +50,7 @@ func doIntroSort(head *list.Node, life uint) (first *list.Node, last *list.Node)
 		return doMergeSort(head)
 	}
 
-	var left, center, right, _ = part(head, node, node.Next)
+	var left, center, right, _ = partition(head, node, node.Next)
 
 	first, node = doIntroSort(left, life-1)
 	node.Next = center

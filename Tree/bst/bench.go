@@ -1,9 +1,9 @@
 package bst
 
 import (
-	"Tree/bst/avlt"
 	"Tree/bst/avltree"
-	"Tree/bst/rbt"
+	"Tree/bst/compact/avlt"
+	"Tree/bst/compact/rbt"
 	"Tree/bst/rbtree"
 	"Tree/bst/simplebst"
 	"fmt"
@@ -116,8 +116,8 @@ func BenchMark(size int) {
 	}
 	var list = mixedArray(size)
 
-	benchMark(list, PLAIN_AVL)
 	benchMark(list, AVL_TREE)
-	benchMark(list, PLAIN_RB)
 	benchMark(list, RB_TREE)
+	benchMark(list, PLAIN_AVL)
+	benchMark(list, PLAIN_RB)
 }

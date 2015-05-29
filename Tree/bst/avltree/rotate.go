@@ -29,10 +29,10 @@ func (G *node) rotate() (root *node, stop bool) {
 			P.right, G.left = P.tryHook(C.left), G.tryHook(C.right)
 			C.left, C.right = C.hook(P), C.hook(G)
 			switch C.state {
-			case -1:
-				G.state, P.state = 0, 1
 			case 1:
 				G.state, P.state = -1, 0
+			case -1:
+				G.state, P.state = 0, 1
 			default:
 				G.state, P.state = 0, 0
 			}

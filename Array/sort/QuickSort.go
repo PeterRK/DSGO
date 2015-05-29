@@ -11,14 +11,14 @@ func QuickSort(list []int) {
 		if end-start < sz_limit {
 			InsertSort(list[start:end])
 		} else {
-			var knot = part(list[start:end]) + start
+			var knot = partition(list[start:end]) + start
 			tasks.push(knot+1, end)
 			tasks.push(start, knot)
 		} //每轮保证至少解决一个，否则最坏情况可能是死循环
 	}
 }
 
-func part(list []int) int {
+func partition(list []int) int {
 	var size = len(list)
 
 	//三点取中法，最后保证seed落入中间，每轮至少解决此一处
