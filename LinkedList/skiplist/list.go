@@ -1,7 +1,6 @@
 package skiplist
 
 import (
-	"math/rand"
 	"time"
 	"unsafe"
 )
@@ -24,17 +23,23 @@ type node struct {
 type skipList struct {
 	heads []*node
 	knots []*node
-	level int //不能为零
-	mark  int //不能为零
-	ceil  int //不能为零
-	floor int
+	level int //非零
+	mark  int //非零
+	ceil  int //非零
+	floor int //非零
+	rand  mt19937
 }
 
 func NewSkipList() SkipList {
 	var list = new(skipList)
+	list.initialize()
+	return list
+}
+
+func (list *skipList) initialize() {
+	list.rand.initialize(uint32(time.Now().Unix()))
 	list.heads, list.knots = make([]*node, 1), make([]*node, 1)
 	list.level, list.mark, list.ceil, list.floor = 1, 1, factor, 0
-	return list
 }
 
 func (list *skipList) IsEmpty() bool {
@@ -83,9 +88,8 @@ func (list *skipList) Insert(key int) bool {
 		list.knots = append(list.knots, (*node)(unsafe.Pointer(list)))
 	}
 
-	rand.Seed(time.Now().Unix())
 	var lv = 1
-	for rand.Uint32() < (^uint32(0)/uint32(factor)) &&
+	for list.rand.next() <= (^uint32(0)/uint32(factor)) &&
 		lv < list.level {
 		lv++
 	}
