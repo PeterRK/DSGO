@@ -35,14 +35,14 @@ func NewStack() Stack {
 	container.initialize()
 	return container
 }
-func (this *stack) Push(key int) {
-	this.PushFront(key)
+func (s *stack) Push(key int) {
+	s.PushFront(key)
 }
-func (this *stack) Pop() (key int, fail bool) {
-	return this.PopFront()
+func (s *stack) Pop() (key int, fail bool) {
+	return s.PopFront()
 }
-func (this *stack) Top() (key int, fail bool) {
-	return this.Front()
+func (s *stack) Top() (key int, fail bool) {
+	return s.Front()
 }
 
 type queue struct {
@@ -63,9 +63,9 @@ func NewQueue() Queue {
 	container.initialize()
 	return container
 }
-func (this *queue) Push(key int) {
-	this.PushBack(key)
+func (q *queue) Push(key int) {
+	q.PushBack(key)
 }
-func (this *queue) Pop() (key int, fail bool) {
-	return this.PopFront()
+func (q *queue) Pop() (key int, fail bool) {
+	return q.PopFront()
 }

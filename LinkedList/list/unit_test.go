@@ -4,6 +4,6 @@ import (
 	"testing"
 )
 
-func Test_Nothing(t *testing.T) {
-	//Do Nothing
+func Test_Ring(t *testing.T) {
+
 }

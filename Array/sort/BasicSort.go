@@ -49,3 +49,5 @@ func InsertSort(list []int) {
 		list[left] = key
 	}
 }
+
+const sz_limit = 7

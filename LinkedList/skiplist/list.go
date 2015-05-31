@@ -39,11 +39,11 @@ func NewSkipList() SkipList {
 func (list *skipList) initialize() {
 	list.rand.initialize(uint32(time.Now().Unix()))
 	list.heads, list.knots = make([]*node, 1), make([]*node, 1)
-	list.level, list.mark, list.ceil, list.floor = 1, 1, factor, 0
+	list.level, list.mark, list.ceil, list.floor = 1, 1, factor, 1
 }
 
 func (list *skipList) IsEmpty() bool {
-	return list.mark == 1
+	return list.Size() == 0
 }
 func (list *skipList) Size() int {
 	return list.mark - 1

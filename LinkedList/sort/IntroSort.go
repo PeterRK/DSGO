@@ -5,6 +5,7 @@ import (
 )
 
 //内省排序，基于快速排序的一种混合排序算法，不具有稳定性。
+//主要限制了QuickSort的最坏情况，适合递归实现(没有爆栈风险)。
 func IntroSort(head *list.Node) *list.Node {
 	if head == nil {
 		return nil
@@ -25,13 +26,13 @@ func IntroSort(head *list.Node) *list.Node {
 	var left, center, right, size = partition(head, node, node.Next)
 
 	var life uint
-	for life = 3; size != 0; life++ {
+	for life = 12; size != 0; life++ {
 		size /= 2
 	}
 
-	head, node = doIntroSort(left, life-1)
+	head, node = doIntroSort(left, life)
 	node.Next = center
-	center.Next, _ = doIntroSort(right, life-1)
+	center.Next, _ = doIntroSort(right, life)
 	return head
 }
 func doIntroSort(head *list.Node, life uint) (first *list.Node, last *list.Node) { //head != nil

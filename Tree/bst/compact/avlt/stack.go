@@ -8,18 +8,18 @@ type stack struct {
 	core []stackNode
 }
 
-func (this *stack) clear() {
-	this.core = this.core[:0]
+func (s *stack) clear() {
+	s.core = s.core[:0]
 }
-func (this *stack) isEmpty() bool {
-	return len(this.core) == 0
+func (s *stack) isEmpty() bool {
+	return len(s.core) == 0
 }
-func (this *stack) push(pt *node, lf bool) {
-	this.core = append(this.core, stackNode{pt, lf})
+func (s *stack) push(pt *node, lf bool) {
+	s.core = append(s.core, stackNode{pt, lf})
 }
-func (this *stack) pop() (pt *node, lf bool) {
-	var sz = len(this.core) - 1
-	var unit = this.core[sz]
-	this.core = this.core[:sz]
+func (s *stack) pop() (pt *node, lf bool) {
+	var sz = len(s.core) - 1
+	var unit = s.core[sz]
+	s.core = s.core[:sz]
 	return unit.pt, unit.lf
 }

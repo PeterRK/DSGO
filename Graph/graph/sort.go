@@ -130,21 +130,21 @@ type stack struct {
 	core []pair
 }
 
-func (this *stack) clear() {
-	this.core = this.core[:0]
+func (s *stack) clear() {
+	s.core = s.core[:0]
 }
-func (this *stack) size() int {
-	return len(this.core)
+func (s *stack) size() int {
+	return len(s.core)
 }
-func (this *stack) isEmpty() bool {
-	return len(this.core) == 0
+func (s *stack) isEmpty() bool {
+	return len(s.core) == 0
 }
-func (this *stack) push(start int, end int) {
-	this.core = append(this.core, pair{start, end})
+func (s *stack) push(start int, end int) {
+	s.core = append(s.core, pair{start, end})
 }
-func (this *stack) pop() (start int, end int) {
-	var sz = len(this.core) - 1
-	var unit = this.core[sz]
-	this.core = this.core[:sz]
+func (s *stack) pop() (start int, end int) {
+	var sz = len(s.core) - 1
+	var unit = s.core[sz]
+	s.core = s.core[:sz]
 	return unit.start, unit.end
 }
