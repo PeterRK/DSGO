@@ -2,28 +2,26 @@ package graph
 
 func Sort(list []Edge) {
 	var size = len(list)
-	var tasks stack
-	tasks.push(0, size)
-
-	var level int
-	for level = 3; size != 0; level++ {
+	var life uint
+	for life = 12; size != 0; life++ {
 		size /= 2
 	}
-	for !tasks.isEmpty() {
-		var start, end = tasks.pop()
-		if end-start < 7 {
-			insertSort(list[start:end])
-		} else if tasks.size() == level {
-			heapSort(list[start:end])
-		} else {
-			var knot = part(list[start:end]) + start
-			tasks.push(knot+1, end)
-			tasks.push(start, knot)
-		} //每轮保证至少解决一个，否则最坏情况可能是死循环
+	doIntroSort(list, life)
+}
+func doIntroSort(list []Edge, life uint) {
+	var size = len(list)
+	if size < 7 {
+		insertSort(list)
+	} else if life == 0 {
+		heapSort(list)
+	} else {
+		var knot = partition(list)
+		doIntroSort(list[0:knot], life-1)
+		doIntroSort(list[knot+1:size], life-1)
 	}
 }
 
-func part(list []Edge) int {
+func partition(list []Edge) int {
 	var size = len(list)
 
 	var seed = list[0]
@@ -76,7 +74,6 @@ func heapSort(list []Edge) {
 		down(list[:sz], 0)
 	}
 }
-
 func down(list []Edge, spot int) {
 	var size = len(list)
 	var key = list[spot]
@@ -120,31 +117,4 @@ func insertSort(list []Edge) {
 		}
 		list[left] = key
 	}
-}
-
-type pair struct {
-	start int
-	end   int
-}
-type stack struct {
-	core []pair
-}
-
-func (s *stack) clear() {
-	s.core = s.core[:0]
-}
-func (s *stack) size() int {
-	return len(s.core)
-}
-func (s *stack) isEmpty() bool {
-	return len(s.core) == 0
-}
-func (s *stack) push(start int, end int) {
-	s.core = append(s.core, pair{start, end})
-}
-func (s *stack) pop() (start int, end int) {
-	var sz = len(s.core) - 1
-	var unit = s.core[sz]
-	s.core = s.core[:sz]
-	return unit.start, unit.end
 }
