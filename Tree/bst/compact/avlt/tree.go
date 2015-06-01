@@ -11,12 +11,12 @@ type Tree struct {
 	path stack
 }
 
-func (tree *Tree) IsEmpty() bool {
-	return tree.root == nil
+func (tr *Tree) IsEmpty() bool {
+	return tr.root == nil
 }
 
-func (tree *Tree) Search(key int32) bool {
-	var target = tree.root
+func (tr *Tree) Search(key int32) bool {
+	var target = tr.root
 	for target != nil {
 		if key == target.key {
 			return true
@@ -40,8 +40,8 @@ func (unit *node) adjust(ltor bool) (oldst int8) {
 	return oldst
 }
 
-func (tree *Tree) hookSubTree(root *node) (super *node, lf bool) {
-	super, lf = tree.path.pop()
+func (tr *Tree) hookSubTree(root *node) (super *node, lf bool) {
+	super, lf = tr.path.pop()
 	if lf {
 		super.left = root
 	} else {

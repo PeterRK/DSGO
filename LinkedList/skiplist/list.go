@@ -31,32 +31,32 @@ type skipList struct {
 }
 
 func NewSkipList() SkipList {
-	var list = new(skipList)
-	list.initialize()
-	return list
+	var l = new(skipList)
+	l.initialize()
+	return l
 }
 
-func (list *skipList) initialize() {
-	list.rand.initialize(uint32(time.Now().Unix()))
-	list.heads, list.knots = make([]*node, 1), make([]*node, 1)
-	list.level, list.mark, list.ceil, list.floor = 1, 1, factor, 1
+func (l *skipList) initialize() {
+	l.rand.initialize(uint32(time.Now().Unix()))
+	l.heads, l.knots = make([]*node, 1), make([]*node, 1)
+	l.level, l.mark, l.ceil, l.floor = 1, 1, factor, 1
 }
 
-func (list *skipList) IsEmpty() bool {
-	return list.Size() == 0
+func (l *skipList) IsEmpty() bool {
+	return l.Size() == 0
 }
-func (list *skipList) Size() int {
-	return list.mark - 1
+func (l *skipList) Size() int {
+	return l.mark - 1
 }
 
-func (list *skipList) Travel(doit func(int)) {
-	for unit := list.heads[0]; unit != nil; unit = unit.next[0] {
+func (l *skipList) Travel(doit func(int)) {
+	for unit := l.heads[0]; unit != nil; unit = unit.next[0] {
 		doit(unit.key)
 	}
 }
-func (list *skipList) Search(key int) bool {
-	var knot = (*node)(unsafe.Pointer(list))
-	for i := list.level - 1; i >= 0; i-- {
+func (l *skipList) Search(key int) bool {
+	var knot = (*node)(unsafe.Pointer(l))
+	for i := l.level - 1; i >= 0; i-- {
 		for knot.next[i] != nil && knot.next[i].key < key {
 			knot = knot.next[i]
 		}
@@ -66,69 +66,69 @@ func (list *skipList) Search(key int) bool {
 }
 
 //成功返回true，冲突返回false
-func (list *skipList) Insert(key int) bool {
-	var knot = (*node)(unsafe.Pointer(list))
-	for i := list.level - 1; i >= 0; i-- {
+func (l *skipList) Insert(key int) bool {
+	var knot = (*node)(unsafe.Pointer(l))
+	for i := l.level - 1; i >= 0; i-- {
 		for knot.next[i] != nil && knot.next[i].key < key {
 			knot = knot.next[i]
 		}
-		list.knots[i] = knot
+		l.knots[i] = knot
 	}
 	var target = knot.next[0]
 	if target != nil && target.key == key {
 		return false
 	}
 
-	list.mark++
-	if list.mark == list.ceil {
-		list.floor = list.ceil
-		list.ceil *= factor
-		list.level++
-		list.heads = append(list.heads, nil)
-		list.knots = append(list.knots, (*node)(unsafe.Pointer(list)))
+	l.mark++
+	if l.mark == l.ceil {
+		l.floor = l.ceil
+		l.ceil *= factor
+		l.level++
+		l.heads = append(l.heads, nil)
+		l.knots = append(l.knots, (*node)(unsafe.Pointer(l)))
 	}
 
 	var lv = 1
-	for list.rand.next() <= (^uint32(0)/uint32(factor)) &&
-		lv < list.level {
+	for l.rand.next() <= (^uint32(0)/uint32(factor)) &&
+		lv < l.level {
 		lv++
 	}
 	target = new(node)
 	target.key = key
 	target.next = make([]*node, lv)
 	for i := 0; i < lv; i++ {
-		target.next[i] = list.knots[i].next[i]
-		list.knots[i].next[i] = target
+		target.next[i] = l.knots[i].next[i]
+		l.knots[i].next[i] = target
 	}
 	return true
 }
 
 //成功返回true，没有返回false
-func (list *skipList) Remove(key int) bool {
-	var knot = (*node)(unsafe.Pointer(list))
-	for i := list.level - 1; i >= 0; i-- {
+func (l *skipList) Remove(key int) bool {
+	var knot = (*node)(unsafe.Pointer(l))
+	for i := l.level - 1; i >= 0; i-- {
 		for knot.next[i] != nil && knot.next[i].key < key {
 			knot = knot.next[i]
 		}
-		list.knots[i] = knot
+		l.knots[i] = knot
 	}
 	var target = knot.next[0]
 	if target == nil || target.key != key {
 		return false
 	}
 
-	var lv = min(len(target.next), list.level)
+	var lv = min(len(target.next), l.level)
 	for i := 0; i < lv; i++ {
-		list.knots[i].next[i] = target.next[i]
+		l.knots[i].next[i] = target.next[i]
 	}
 
-	list.mark--
-	if list.mark < list.floor { //注意不能==
-		list.ceil = list.floor
-		list.floor /= factor
-		list.level--
-		list.heads = list.heads[:list.level]
-		list.knots = list.knots[:list.level]
+	l.mark--
+	if l.mark < l.floor { //注意不能==
+		l.ceil = l.floor
+		l.floor /= factor
+		l.level--
+		l.heads = l.heads[:l.level]
+		l.knots = l.knots[:l.level]
 	}
 	return true
 }

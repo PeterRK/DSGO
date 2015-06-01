@@ -1,11 +1,11 @@
 package pairing
 
 //值挪移
-func (heap *Heap) FloatUpX(target *Node, value int) *Node {
+func (hp *Heap) FloatUpX(target *Node, value int) *Node {
 	if target == nil || target.key <= value {
 		return target
 	}
-	for target != heap.root {
+	for target != hp.root {
 		var brother = target
 		for brother.prev.child != brother {
 			brother = brother.prev
@@ -22,12 +22,12 @@ func (heap *Heap) FloatUpX(target *Node, value int) *Node {
 }
 
 //节点挪移
-func (heap *Heap) FloatUp(target *Node, value int) {
+func (hp *Heap) FloatUp(target *Node, value int) {
 	if target == nil || value >= target.key {
 		return
 	}
 	target.key = value
-	if target == heap.root {
+	if target == hp.root {
 		return
 	}
 
@@ -64,7 +64,7 @@ func (heap *Heap) FloatUp(target *Node, value int) {
 		}
 
 		if target.prev == nil {
-			heap.root = target
+			hp.root = target
 			break
 		} else {
 			var super = target.prev

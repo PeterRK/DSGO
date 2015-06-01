@@ -2,14 +2,14 @@ package rbtree
 
 //成功返回true，冲突返回false。
 //红黑树插入过程包括：O(log N)的搜索，O(1)的旋转，O(log N)的平衡因子调整。
-func (tree *Tree) Insert(key int32) bool {
-	if tree.root == nil {
-		tree.root = newNode(nil, key) //默认为红
-		tree.root.black = true
+func (tr *Tree) Insert(key int32) bool {
+	if tr.root == nil {
+		tr.root = newNode(nil, key) //默认为红
+		tr.root.black = true
 		return true
 	}
 
-	var root = tree.root
+	var root = tr.root
 	for {
 		if key < root.key {
 			if root.left == nil {
@@ -68,13 +68,13 @@ func (tree *Tree) Insert(key int32) bool {
 				if key < P.key { //LL
 					G.left, P.right = G.tryHook(P.right), P.hook(G)
 					G.black, P.black = false, true
-					tree.hookSubTree(super, P)
+					tr.hookSubTree(super, P)
 				} else { //LR
 					var C = P.right
 					P.right, G.left = P.tryHook(C.left), G.tryHook(C.right)
 					C.left, C.right = C.hook(P), C.hook(G)
 					G.black, C.black = false, true
-					tree.hookSubTree(super, C)
+					tr.hookSubTree(super, C)
 				}
 			}
 		} else {
@@ -90,13 +90,13 @@ func (tree *Tree) Insert(key int32) bool {
 				if key > P.key { //RR
 					G.right, P.left = G.tryHook(P.left), P.hook(G)
 					G.black, P.black = false, true
-					tree.hookSubTree(super, P)
+					tr.hookSubTree(super, P)
 				} else { //RL
 					var C = P.left
 					P.left, G.right = P.tryHook(C.right), G.tryHook(C.left)
 					C.right, C.left = C.hook(P), C.hook(G)
 					G.black, C.black = false, true
-					tree.hookSubTree(super, C)
+					tr.hookSubTree(super, C)
 				}
 			}
 		}

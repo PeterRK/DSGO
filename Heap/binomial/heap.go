@@ -12,27 +12,27 @@ type node struct {
 	child *node
 }
 
-func (heap *Heap) IsEmpty() bool {
-	return heap.list == nil
+func (hp *Heap) IsEmpty() bool {
+	return hp.list == nil
 }
 
-func (heap *Heap) Top() (key int, fail bool) {
-	if heap.IsEmpty() {
+func (hp *Heap) Top() (key int, fail bool) {
+	if hp.IsEmpty() {
 		return 0, true
 	}
-	return heap.top.key, false
+	return hp.top.key, false
 }
-func (heap *Heap) Push(key int) {
+func (hp *Heap) Push(key int) {
 	var unit = new(node)
 	unit.key, unit.level = key, 0
 	unit.peer, unit.child = nil, nil
-	if heap.IsEmpty() {
-		heap.list, heap.top = unit, unit
+	if hp.IsEmpty() {
+		hp.list, hp.top = unit, unit
 	} else {
-		if key < heap.top.key {
-			heap.top = unit
+		if key < hp.top.key {
+			hp.top = unit
 		}
-		heap.merge(unit)
+		hp.merge(unit)
 	}
 }
 
@@ -46,24 +46,24 @@ func reverse(list *node) *node {
 	}
 	return head
 }
-func (heap *Heap) Pop() (key int, fail bool) {
-	if heap.IsEmpty() {
+func (hp *Heap) Pop() (key int, fail bool) {
+	if hp.IsEmpty() {
 		return 0, true
 	}
-	key = heap.top.key
+	key = hp.top.key
 
-	var knot = fakeHead(&heap.list)
-	for knot.peer != heap.top {
+	var knot = fakeHead(&hp.list)
+	for knot.peer != hp.top {
 		knot = knot.peer
 	}
 	knot.peer = knot.peer.peer
 
-	heap.merge(reverse(heap.top.child))
-	heap.top = heap.list
-	if heap.list != nil {
-		for pt := heap.list.peer; pt != nil; pt = pt.peer {
-			if pt.key < heap.top.key {
-				heap.top = pt
+	hp.merge(reverse(hp.top.child))
+	hp.top = hp.list
+	if hp.list != nil {
+		for pt := hp.list.peer; pt != nil; pt = pt.peer {
+			if pt.key < hp.top.key {
+				hp.top = pt
 			}
 		}
 	}

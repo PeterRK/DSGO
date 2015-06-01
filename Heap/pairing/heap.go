@@ -12,14 +12,14 @@ type Node struct {
 	next  *Node //弟节点
 }
 
-func (heap *Heap) IsEmpty() bool {
-	return heap.root == nil
+func (hp *Heap) IsEmpty() bool {
+	return hp.root == nil
 }
-func (heap *Heap) Top() (key int, fail bool) {
-	if heap.IsEmpty() {
+func (hp *Heap) Top() (key int, fail bool) {
+	if hp.IsEmpty() {
 		return 0, true
 	}
-	return heap.root.key, false
+	return hp.root.key, false
 }
 
 func merge(one *Node, another *Node) *Node {
@@ -33,33 +33,33 @@ func merge(one *Node, another *Node) *Node {
 	one.child, another.prev = another, one
 	return one
 }
-func (heap *Heap) Merge(peer *Heap) {
-	if heap == peer || peer.root == nil {
+func (hp *Heap) Merge(peer *Heap) {
+	if hp == peer || peer.root == nil {
 		return
 	}
-	if heap.root == nil {
-		heap.root = peer.root
+	if hp.root == nil {
+		hp.root = peer.root
 	} else {
-		heap.root = merge(heap.root, peer.root)
+		hp.root = merge(hp.root, peer.root)
 	}
 	peer.root = nil
 }
 
 //这货Push时不怎么管整理，到Pop时再做
-func (heap *Heap) PushNode(unit *Node) {
+func (hp *Heap) PushNode(unit *Node) {
 	if unit == nil {
 		return
 	}
 	unit.prev, unit.next, unit.child = nil, nil, nil
-	if heap.root == nil {
-		heap.root = unit
+	if hp.root == nil {
+		hp.root = unit
 	} else {
-		heap.root = merge(heap.root, unit)
+		hp.root = merge(hp.root, unit)
 	}
 }
-func (heap *Heap) Push(key int) *Node {
+func (hp *Heap) Push(key int) *Node {
 	var unit = new(Node)
 	unit.key = key
-	heap.PushNode(unit)
+	hp.PushNode(unit)
 	return unit
 }

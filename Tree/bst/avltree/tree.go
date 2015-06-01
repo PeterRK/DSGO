@@ -11,12 +11,12 @@ type Tree struct {
 	root *node
 }
 
-func (tree *Tree) IsEmpty() bool {
-	return tree.root == nil
+func (tr *Tree) IsEmpty() bool {
+	return tr.root == nil
 }
 
-func (tree *Tree) Search(key int32) bool {
-	var target = tree.root
+func (tr *Tree) Search(key int32) bool {
+	var target = tr.root
 	for target != nil {
 		if key == target.key {
 			return true

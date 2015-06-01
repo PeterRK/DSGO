@@ -9,12 +9,12 @@ type Tree struct {
 	root *node
 }
 
-func (tree *Tree) IsEmpty() bool {
-	return tree.root == nil
+func (tr *Tree) IsEmpty() bool {
+	return tr.root == nil
 }
 
-func (tree *Tree) Search(key int32) bool {
-	var target = tree.root
+func (tr *Tree) Search(key int32) bool {
+	var target = tr.root
 	for target != nil {
 		if key == target.key {
 			return true
@@ -36,13 +36,13 @@ func newNode(key int32) (unit *node) {
 }
 
 //成功返回true，冲突返回false
-func (tree *Tree) Insert(key int32) bool {
-	if tree.root == nil {
-		tree.root = newNode(key)
+func (tr *Tree) Insert(key int32) bool {
+	if tr.root == nil {
+		tr.root = newNode(key)
 		return true
 	}
 
-	var parrent = tree.root
+	var parrent = tr.root
 	for {
 		if key == parrent.key {
 			return false
@@ -65,8 +65,8 @@ func (tree *Tree) Insert(key int32) bool {
 }
 
 //成功返回true，没有返回false
-func (tree *Tree) Remove(key int32) bool {
-	var target, parrent, lf = tree.root, (*node)(nil), false
+func (tr *Tree) Remove(key int32) bool {
+	var target, parrent, lf = tr.root, (*node)(nil), false
 	for target != nil && key != target.key {
 		if key < target.key {
 			target, parrent, lf = target.left, target, true
@@ -92,7 +92,7 @@ func (tree *Tree) Remove(key int32) bool {
 	}
 
 	if parrent == nil { //此时victim==target
-		tree.root = orphan
+		tr.root = orphan
 	} else {
 		if lf {
 			parrent.left = orphan

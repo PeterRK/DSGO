@@ -13,23 +13,23 @@ type node struct {
 	data  [0]int
 }
 
-func (unit *leaf) asIndex() *index {
-	return (*index)(unsafe.Pointer(unit))
+func (u *leaf) asIndex() *index {
+	return (*index)(unsafe.Pointer(u))
 }
-func (unit *index) asLeaf() *leaf {
-	return (*leaf)(unsafe.Pointer(unit))
+func (u *index) asLeaf() *leaf {
+	return (*leaf)(unsafe.Pointer(u))
 }
 
 /*
 //关闭数组越界审查后使用
-func (unit *node) ceil() int {
-	return unit.data[unit.cnt-1]
+func (u *node) ceil() int {
+	return u.data[u.cnt-1]
 }
-func (unit *node) locate(key int) int {
-	var start, end = 0, unit.cnt - 1
+func (u *node) locate(key int) int {
+	var start, end = 0, u.cnt - 1
 	for start < end {
 		var mid = (start + end) / 2
-		if key > unit.data[mid] {
+		if key > u.data[mid] {
 			start = mid + 1
 		} else {
 			end = mid
@@ -39,19 +39,19 @@ func (unit *node) locate(key int) int {
 }
 */
 //开启数组越界审查时使用
-func (unit *node) ceil() int {
-	if unit.inner {
-		var unitx = (*index)(unsafe.Pointer(unit))
-		return unitx.data[unitx.cnt-1]
+func (u *node) ceil() int {
+	if u.inner {
+		var unit = (*index)(unsafe.Pointer(u))
+		return unit.data[unit.cnt-1]
 	} else {
-		var unitx = (*leaf)(unsafe.Pointer(unit))
-		return unitx.data[unitx.cnt-1]
+		var unit = (*leaf)(unsafe.Pointer(u))
+		return unit.data[unit.cnt-1]
 	}
 }
-func (unit *node) locate(key int) int {
-	var start, end = 0, unit.cnt - 1
-	if unit.inner {
-		var unitx = (*index)(unsafe.Pointer(unit))
+func (u *node) locate(key int) int {
+	var start, end = 0, u.cnt - 1
+	if u.inner {
+		var unitx = (*index)(unsafe.Pointer(u))
 		for start < end {
 			var mid = (start + end) / 2
 			if key > unitx.data[mid] {
@@ -61,7 +61,7 @@ func (unit *node) locate(key int) int {
 			}
 		}
 	} else {
-		var unitx = (*leaf)(unsafe.Pointer(unit))
+		var unitx = (*leaf)(unsafe.Pointer(u))
 		for start < end {
 			var mid = (start + end) / 2
 			if key > unitx.data[mid] {
@@ -80,16 +80,16 @@ type Tree struct {
 	path stack
 }
 
-func (tree *Tree) IsEmpty() bool {
-	return tree.root == nil
+func (tr *Tree) IsEmpty() bool {
+	return tr.root == nil
 }
 
-func (tree *Tree) Search(key int) bool {
-	if tree.root == nil ||
-		key > tree.root.ceil() {
+func (tr *Tree) Search(key int) bool {
+	if tr.root == nil ||
+		key > tr.root.ceil() {
 		return false
 	}
-	var target = tree.root
+	var target = tr.root
 	for target.inner {
 		var idx = target.locate(key)
 		if key == target.data[idx] {
@@ -101,8 +101,8 @@ func (tree *Tree) Search(key int) bool {
 	return key == unit.data[unit.locate(key)]
 }
 
-func (tree *Tree) Travel(doit func(int)) {
-	for unit := tree.head; unit != nil; unit = unit.next {
+func (tr *Tree) Travel(doit func(int)) {
+	for unit := tr.head; unit != nil; unit = unit.next {
 		for i := 0; i < unit.cnt; i++ {
 			doit(unit.data[i])
 		}

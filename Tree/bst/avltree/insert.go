@@ -2,13 +2,13 @@ package avltree
 
 //成功返回true，冲突返回false。
 //AVL树插入过程包括：O(log N)的搜索，O(1)的旋转，O(log N)的平衡因子调整。
-func (tree *Tree) Insert(key int32) bool {
-	if tree.root == nil {
-		tree.root = newNode(nil, key)
+func (tr *Tree) Insert(key int32) bool {
+	if tr.root == nil {
+		tr.root = newNode(nil, key)
 		return true
 	}
 
-	var root = tree.root
+	var root = tr.root
 	for {
 		if key < root.key {
 			if root.left == nil {
@@ -42,7 +42,7 @@ func (tree *Tree) Insert(key int32) bool {
 			var super = root.parent
 			root, _ = root.rotate()
 			if super == nil {
-				tree.root = super.hook(root)
+				tr.root = super.hook(root)
 			} else {
 				if key < super.key {
 					super.left = super.hook(root)

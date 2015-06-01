@@ -11,8 +11,8 @@ func fakeHead(spt **node) *node {
 }
 
 //list是从少到多的
-func (heap *Heap) merge(list *node) {
-	var knot = fakeHead(&heap.list)
+func (hp *Heap) merge(list *node) {
+	var knot = fakeHead(&hp.list)
 	for knot.peer != nil && list != nil {
 		if knot.peer.level == list.level {
 			var root = knot.peer
@@ -40,12 +40,12 @@ func (heap *Heap) merge(list *node) {
 		knot.peer = list
 	}
 }
-func (heap *Heap) Merge(victim *Heap) {
-	if heap != victim {
-		if heap.top.key > victim.top.key {
-			heap.top = victim.top
+func (hp *Heap) Merge(victim *Heap) {
+	if hp != victim {
+		if hp.top.key > victim.top.key {
+			hp.top = victim.top
 		}
-		heap.merge(victim.list)
+		hp.merge(victim.list)
 		victim.list, victim.top = nil, nil
 	}
 }

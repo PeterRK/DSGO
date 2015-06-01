@@ -13,12 +13,12 @@ type Tree struct {
 	root *node
 }
 
-func (tree *Tree) IsEmpty() bool {
-	return tree.root == nil
+func (tr *Tree) IsEmpty() bool {
+	return tr.root == nil
 }
 
-func (tree *Tree) Search(key int32) bool {
-	var target = tree.root
+func (tr *Tree) Search(key int32) bool {
+	var target = tr.root
 	for target != nil {
 		if key == target.key {
 			return true
@@ -42,9 +42,9 @@ func (parent *node) hook(child *node) *node {
 	child.parent = parent
 	return child
 }
-func (tree *Tree) hookSubTree(super *node, root *node) {
+func (tr *Tree) hookSubTree(super *node, root *node) {
 	if super == nil {
-		tree.root = super.hook(root)
+		tr.root = super.hook(root)
 	} else {
 		if root.key < super.key {
 			super.left = super.hook(root)

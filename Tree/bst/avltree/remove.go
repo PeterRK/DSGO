@@ -2,8 +2,8 @@ package avltree
 
 //成功返回true，没有返回false。
 //AVL树删除过程包括：O(log N)的搜索，O(log N)的旋转，O(log N)的平衡因子调整。
-func (tree *Tree) Remove(key int32) bool {
-	var target = tree.root
+func (tr *Tree) Remove(key int32) bool {
+	var target = tr.root
 	for target != nil && key != target.key {
 		if key < target.key {
 			target = target.left
@@ -38,7 +38,7 @@ func (tree *Tree) Remove(key int32) bool {
 
 	var root = victim.parent
 	if root == nil { //此时victim==target
-		tree.root = root.tryHook(orphan)
+		tr.root = root.tryHook(orphan)
 		return true
 	}
 	key = victim.key
@@ -57,7 +57,7 @@ func (tree *Tree) Remove(key int32) bool {
 		if super == nil {
 			if root.state != 0 { //2 || -2
 				root, _ = root.rotate()
-				tree.root = super.hook(root)
+				tr.root = super.hook(root)
 			}
 			break
 		} else {

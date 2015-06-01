@@ -2,8 +2,8 @@ package rbtree
 
 //成功返回true，没有返回false。
 //红黑树删除过程包括：O(log N)的搜索，O(1)的旋转，O(log N)的平衡因子调整。
-func (tree *Tree) Remove(key int32) bool {
-	var target = tree.root
+func (tr *Tree) Remove(key int32) bool {
+	var target = tr.root
 	for target != nil && key != target.key {
 		if key < target.key {
 			target = target.left
@@ -30,9 +30,9 @@ func (tree *Tree) Remove(key int32) bool {
 
 	var root = victim.parent
 	if root == nil { //此时victim==target
-		tree.root = root.tryHook(orphan)
-		if tree.root != nil {
-			tree.root.black = true
+		tr.root = root.tryHook(orphan)
+		if tr.root != nil {
+			tr.root.black = true
 		}
 	} else {
 		if key < root.key {
@@ -44,7 +44,7 @@ func (tree *Tree) Remove(key int32) bool {
 			if orphan != nil && !orphan.black {
 				orphan.black = true //红子变黑顶上
 			} else {
-				tree.adjustAfterDelete(root, victim.key)
+				tr.adjustAfterDelete(root, victim.key)
 			}
 		}
 		target.key = victim.key
@@ -82,7 +82,7 @@ func (tree *Tree) Remove(key int32) bool {
 //|       /  \       |                  |
 //|      u    v      |                  |
 
-func (tree *Tree) adjustAfterDelete(G *node, key int32) {
+func (tr *Tree) adjustAfterDelete(G *node, key int32) {
 	for { //剩下情况：victim黑，orphan也黑，此时victim(orphan顶替)的兄弟必然存在
 		var super = G.parent
 		if key < G.key {
@@ -91,7 +91,7 @@ func (tree *Tree) adjustAfterDelete(G *node, key int32) {
 			if !U.black { //红U下必是两个实体黑，以保证每条支路至少双黑（与victim和orphan也黑双黑匹配）
 				G.right, U.left = G.hook(L), U.hook(G)
 				U.black, G.black = true, false
-				tree.hookSubTree(super, U)
+				tr.hookSubTree(super, U)
 				continue //变出黑U后再行解决
 			} else {
 				if L == nil || L.black {
@@ -105,13 +105,13 @@ func (tree *Tree) adjustAfterDelete(G *node, key int32) {
 					} else { //中黑外红
 						G.right, U.left = G.tryHook(L), U.hook(G)
 						U.black, G.black, R.black = G.black, true, true
-						tree.hookSubTree(super, U)
+						tr.hookSubTree(super, U)
 					}
 				} else { //中红
 					U.left, G.right = U.tryHook(L.right), G.tryHook(L.left)
 					L.right, L.left = L.hook(U), L.hook(G)
 					L.black, G.black = G.black, true
-					tree.hookSubTree(super, L)
+					tr.hookSubTree(super, L)
 				}
 			}
 		} else {
@@ -120,7 +120,7 @@ func (tree *Tree) adjustAfterDelete(G *node, key int32) {
 			if !U.black { //红U下必是两个实体黑，以保证每条支路至少双黑（与victim和orphan也黑双黑匹配）
 				G.left, U.right = G.hook(R), U.hook(G)
 				U.black, G.black = true, false
-				tree.hookSubTree(super, U)
+				tr.hookSubTree(super, U)
 				continue //变出黑U后再行解决
 			} else {
 				if R == nil || R.black {
@@ -134,13 +134,13 @@ func (tree *Tree) adjustAfterDelete(G *node, key int32) {
 					} else { //中黑外红
 						G.left, U.right = G.tryHook(R), U.hook(G)
 						U.black, G.black, L.black = G.black, true, true
-						tree.hookSubTree(super, U)
+						tr.hookSubTree(super, U)
 					}
 				} else { //中红
 					U.right, G.left = U.tryHook(R.left), G.tryHook(R.right)
 					R.left, R.right = R.hook(U), R.hook(G)
 					R.black, G.black = G.black, true
-					tree.hookSubTree(super, R)
+					tr.hookSubTree(super, R)
 				}
 			}
 		}
