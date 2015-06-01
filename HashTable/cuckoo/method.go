@@ -1,60 +1,60 @@
 package cuckoo
 
-func (table *HashTable) Search(key string) bool {
-	return table.first.search(key) || table.second.search(key)
+func (tb *hashTable) Search(key string) bool {
+	return tb.a.search(key) || tb.b.search(key)
 }
-func (table *coreTable) search(key string) bool {
-	var code = table.hash(key)
-	var pt = table.bucket[code%uint(len(table.bucket))]
-	return pt != nil && pt.code[table.id] == code && pt.key == key
+func (tb *table) search(key string) bool {
+	var code = tb.hash(key)
+	var unit = tb.bucket[code&tb.mask]
+	return unit != nil && unit.code[tb.id] == code && unit.key == key
 }
 
 //成功返回true，没有返回false
-func (table *HashTable) Remove(key string) bool {
-	if table.first.search(key) || table.second.search(key) {
-		table.cnt--
+func (tb *hashTable) Remove(key string) bool {
+	if tb.a.search(key) || tb.b.search(key) {
+		tb.cnt--
 		return true
 	}
 	return false
 }
-func (table *coreTable) remove(key string) bool {
-	var code = table.hash(key)
-	var index = code & table.mask
-	var pt = table.bucket[index]
-	if pt != nil && pt.code[table.id] == code && pt.key == key {
-		table.bucket[index] = nil
+func (tb *table) remove(key string) bool {
+	var code = tb.hash(key)
+	var index = code & tb.mask
+	var unit = tb.bucket[index]
+	if unit != nil && unit.code[tb.id] == code && unit.key == key {
+		tb.bucket[index] = nil
 		return true
 	}
 	return false
 }
 
 //成功返回true，冲突返回false
-func (table *HashTable) Insert(key string) bool {
-	if table.Search(key) {
+func (tb *hashTable) Insert(key string) bool {
+	if tb.Search(key) {
 		return false
 	}
-	var obj = new(node)
-	obj.key = key
-	obj.code[table.first.id], obj.code[table.second.id] = table.first.hash(key), table.second.hash(key)
+	var unit = new(node)
+	unit.key = key
+	unit.code[tb.a.id], unit.code[tb.b.id] = tb.a.hash(key), tb.b.hash(key)
+	tb.cnt++
 
-	for age := 0; ; age++ {
-		var pt = obj
+	for obj, age := unit, 0; ; age++ {
 		for { //震荡调整
-			var index = obj.code[table.first.id] & table.first.mask
-			if table.first.bucket[index] == nil {
-				table.first.bucket[index] = pt
+			var index = obj.code[tb.a.id] & tb.a.mask
+			if tb.a.bucket[index] == nil {
+				tb.a.bucket[index] = obj
 				return true
 			}
-			pt, table.first.bucket[index] = table.first.bucket[index], pt
-			if pt == obj {
+			obj, tb.a.bucket[index] = tb.a.bucket[index], obj
+			if obj == unit {
 				break
 			}
-			index = obj.code[table.second.id] & table.second.mask
-			if table.second.bucket[index] == nil {
-				table.second.bucket[index] = pt
+			index = obj.code[tb.b.id] & tb.b.mask
+			if tb.b.bucket[index] == nil {
+				tb.b.bucket[index] = obj
 				return true
 			}
-			pt, table.second.bucket[index] = table.second.bucket[index], pt
+			obj, tb.b.bucket[index] = tb.b.bucket[index], obj
 		}
 
 		if age == 2 {
@@ -62,13 +62,15 @@ func (table *HashTable) Insert(key string) bool {
 		} //实际上不能解决大量hash重码的情况
 
 		//调整失败(回绕)，扩容
-		table.first, table.second = table.second, table.first
-		var old_bucket = table.first.bucket
-		table.first.bucket = make([]*node, len(old_bucket)<<2)
-		table.first.mask = (table.first.mask << 2) | 0x3
-		for _, unit := range old_bucket {
-			var index = unit.code[table.first.id] & table.first.mask
-			table.first.bucket[index] = unit //倍扩，绝对不会冲突
+		tb.a, tb.b = tb.b, tb.a
+		var old_bucket = tb.a.bucket
+		tb.a.bucket = make([]*node, len(old_bucket)<<2)
+		tb.a.mask = (tb.a.mask << 2) | 0x3
+		for _, pt := range old_bucket {
+			if pt != nil {
+				var index = pt.code[tb.a.id] & tb.a.mask
+				tb.a.bucket[index] = pt //倍扩，绝对不会冲突
+			}
 		}
 	}
 	return false

@@ -1,5 +1,13 @@
 package hash
 
+type HashTable interface {
+	Size() int
+	IsEmpty() bool
+	Insert(key string) bool
+	Search(key string) bool
+	Remove(key string) bool
+}
+
 //by Brian Kernighan & Dennis Ritchie
 func BKDRhash(str string) uint {
 	const factor uint = 131 //31、131、1313、 13131、131313
