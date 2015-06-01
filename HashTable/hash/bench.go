@@ -43,7 +43,7 @@ func TryByFile(filenme string) {
 }
 func ShowBucketCounts(msg string, data []string, size uint, fn func(str string) uint) {
 	var vec, top = BucketCounts(data, size, fn)
-	fmt.Printf("%s [max=%d] %v [%d/%d]\n", msg, top, vec, len(data), size)
+	fmt.Printf("%s [max=%d] %v	[%d/%d]\n", msg, top, vec, len(data), size)
 }
 func BucketCounts(data []string, size uint, fn func(str string) uint) (vec [6]uint, top uint) {
 	var book = make([]uint, size)
@@ -59,13 +59,15 @@ func BucketCounts(data []string, size uint, fn func(str string) uint) (vec [6]ui
 		vec[i] = 0
 	}
 	for _, num := range book {
-		if num > top {
-			top = num
+		if num != 0 {
+			if num > top {
+				top = num
+			}
+			if num > uint(len(vec)) {
+				num = uint(len(vec))
+			}
+			vec[num-1]++
 		}
-		if num >= uint(len(vec)) {
-			num = uint(len(vec)) - 1
-		}
-		vec[num]++
 	}
 	return vec, top
 }
