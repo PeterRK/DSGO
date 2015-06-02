@@ -8,6 +8,8 @@ type HashTable interface {
 	Remove(key string) bool
 }
 
+//以下算法搜集自网络，基本思路类似，效果相近
+
 //by Brian Kernighan & Dennis Ritchie
 func BKDRhash(str string) uint {
 	const factor uint = 131 //31、131、1313、 13131、131313
