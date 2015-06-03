@@ -34,43 +34,42 @@ func partition(list []Edge) int {
 	var x, y = int(magic % uint(size-1)), int(magic % uint(size-2))
 	magic = magic*1103515245 + 12345
 	var a, b = 1 + x, 1 + (1+x+y)%(size-1) //a != b
-	var seed = list[0]
+	var barrier = list[0]
 	if list[0].Dist > list[a].Dist {
 		if list[a].Dist > list[b].Dist {
-			seed, list[a] = list[a], list[0]
+			barrier, list[a] = list[a], list[0]
 		} else { //c >= b
 			if list[0].Dist > list[b].Dist {
-				seed, list[b] = list[b], list[0]
+				barrier, list[b] = list[b], list[0]
 			}
 		}
 	} else { //b >= a
 		if list[b].Dist > list[0].Dist {
 			if list[a].Dist > list[b].Dist {
-				seed, list[b] = list[b], list[0]
+				barrier, list[b] = list[b], list[0]
 			} else {
-				seed, list[a] = list[a], list[0]
+				barrier, list[a] = list[a], list[0]
 			}
 		}
 	}
 
-	var left, right = 1, size - 1
+	a, b = 1, size-1
 	for { //注意对称性
-		for list[left].Dist < seed.Dist {
-			left++
+		for list[a].Dist < barrier.Dist {
+			a++
 		}
-		for list[right].Dist > seed.Dist {
-			right--
+		for list[b].Dist > barrier.Dist {
+			b--
 		}
-		if left >= right {
+		if a >= b {
 			break
 		}
-		list[left], list[right] = list[right], list[left]
-		left++
-		right--
+		list[a], list[b] = list[b], list[a]
+		a++
+		b--
 	}
-	list[0], list[right] = list[right], seed
-
-	return right
+	list[0], list[b] = list[b], barrier
+	return b
 }
 
 func heapSort(list []Edge) {

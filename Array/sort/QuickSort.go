@@ -32,44 +32,44 @@ func partition(list []int) int {
 	var x, y = int(magic % uint(size-1)), int(magic % uint(size-2))
 	magic = magic*1103515245 + 12345
 	var a, b = 1 + x, 1 + (1+x+y)%(size-1) //a != b
-	//三点取中法，最后保证seed落入中间，每轮至少解决此一处
-	var seed = list[0]
+	//三点取中法，每轮至少解决一个
+	var barrier = list[0]
 	if list[0] > list[a] {
 		if list[a] > list[b] {
-			seed, list[a] = list[a], list[0]
+			barrier, list[a] = list[a], list[0]
 		} else { //c >= b
 			if list[0] > list[b] {
-				seed, list[b] = list[b], list[0]
+				barrier, list[b] = list[b], list[0]
 			}
 		}
 	} else { //b >= a
 		if list[b] > list[0] {
 			if list[a] > list[b] {
-				seed, list[b] = list[b], list[0]
+				barrier, list[b] = list[b], list[0]
 			} else {
-				seed, list[a] = list[a], list[0]
+				barrier, list[a] = list[a], list[0]
 			}
 		}
 	}
 
-	var left, right = 1, size - 1
+	a, b = 1, size-1
 	for { //注意对称性
-		for list[left] < seed {
-			left++
+		for list[a] < barrier {
+			a++
 		}
-		for list[right] > seed {
-			right--
+		for list[b] > barrier {
+			b--
 		}
-		if left >= right {
+		if a >= b {
 			break
 		}
 		//以下的交换操作是主要开销所在
-		list[left], list[right] = list[right], list[left]
-		left++
-		right--
+		list[a], list[b] = list[b], list[a]
+		a++
+		b--
 	}
-	list[0], list[right] = list[right], seed
-	return right
+	list[0], list[b] = list[b], barrier
+	return b
 }
 
 type pair struct {

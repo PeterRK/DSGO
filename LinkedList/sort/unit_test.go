@@ -12,18 +12,15 @@ const sz_small = 100
 
 func Test_MergeSort(t *testing.T) {
 	testLinkListSort(t, sz_big, ramdomLinkList, MergeSort)
-	testLinkListSort(t, sz_small, stupidLinkListA, MergeSort)
-	testLinkListSort(t, sz_small, stupidLinkListB, MergeSort)
+	testLinkListSort(t, sz_small, stupidLinkList, MergeSort)
 }
 func Test_QuickSort(t *testing.T) {
 	testLinkListSort(t, sz_big, ramdomLinkList, QuickSort)
-	testLinkListSort(t, sz_small, stupidLinkListA, QuickSort)
-	testLinkListSort(t, sz_small, stupidLinkListB, QuickSort)
+	testLinkListSort(t, sz_small, stupidLinkList, QuickSort)
 }
 func Test_IntroSort(t *testing.T) {
 	testLinkListSort(t, sz_big, ramdomLinkList, IntroSort)
-	testLinkListSort(t, sz_small, stupidLinkListA, IntroSort)
-	testLinkListSort(t, sz_small, stupidLinkListB, IntroSort)
+	testLinkListSort(t, sz_small, stupidLinkList, IntroSort)
 }
 
 func testLinkListSort(t *testing.T, size int, create func(int) *list.Node, doit func(*list.Node) *list.Node) {
@@ -71,24 +68,13 @@ func ramdomLinkList(size int) *list.Node {
 	tail.Next = nil
 	return head
 }
-func stupidLinkListA(size int) *list.Node {
+func stupidLinkList(size int) *list.Node {
 	var head *list.Node
 	var tail = list.FakeHead(&head)
 	for i := 0; i < size; i++ {
 		tail.Next = new(list.Node)
 		tail = tail.Next
 		tail.Val = i / 2
-	}
-	tail.Next = nil
-	return head
-}
-func stupidLinkListB(size int) *list.Node {
-	var head *list.Node
-	var tail = list.FakeHead(&head)
-	for i := 0; i < size; i++ {
-		tail.Next = new(list.Node)
-		tail = tail.Next
-		tail.Val = (size - i) / 2
 	}
 	tail.Next = nil
 	return head

@@ -12,38 +12,31 @@ const sz_small = 300
 
 func Test_BubleSort(t *testing.T) {
 	testArraySort(t, sz_small, ramdomArray, BubleSort)
-	testArraySort(t, sz_small, stupidArrayA, BubleSort)
-	testArraySort(t, sz_small, stupidArrayB, BubleSort)
+	testArraySort(t, sz_small, stupidArray, BubleSort)
 }
 func Test_SelectSort(t *testing.T) {
 	testArraySort(t, sz_small, ramdomArray, SelectSort)
-	testArraySort(t, sz_small, stupidArrayA, SelectSort)
-	testArraySort(t, sz_small, stupidArrayB, SelectSort)
+	testArraySort(t, sz_small, stupidArray, SelectSort)
 }
 func Test_InsertSort(t *testing.T) {
 	testArraySort(t, sz_small, ramdomArray, InsertSort)
-	testArraySort(t, sz_small, stupidArrayA, InsertSort)
-	testArraySort(t, sz_small, stupidArrayB, InsertSort)
+	testArraySort(t, sz_small, stupidArray, InsertSort)
 }
 func Test_HeapSort(t *testing.T) {
 	testArraySort(t, sz_big, ramdomArray, HeapSort)
-	testArraySort(t, sz_small, stupidArrayA, HeapSort)
-	testArraySort(t, sz_small, stupidArrayB, HeapSort)
+	testArraySort(t, sz_small, stupidArray, HeapSort)
 }
 func Test_MergeSort(t *testing.T) {
 	testArraySort(t, sz_big, ramdomArray, MergeSort)
-	testArraySort(t, sz_small, stupidArrayA, MergeSort)
-	testArraySort(t, sz_small, stupidArrayB, MergeSort)
+	testArraySort(t, sz_small, stupidArray, MergeSort)
 }
 func Test_QuickSort(t *testing.T) {
 	testArraySort(t, sz_big, ramdomArray, QuickSort)
-	testArraySort(t, sz_small, stupidArrayA, QuickSort)
-	testArraySort(t, sz_small, stupidArrayB, QuickSort)
+	testArraySort(t, sz_small, stupidArray, QuickSort)
 }
 func Test_IntroSort(t *testing.T) {
 	testArraySort(t, sz_big, ramdomArray, IntroSort)
-	testArraySort(t, sz_big, stupidArrayA, IntroSort)
-	testArraySort(t, sz_big, stupidArrayB, IntroSort)
+	testArraySort(t, sz_big, stupidArray, IntroSort)
 }
 
 func testArraySort(t *testing.T, size int, create func(int) []int, doit func([]int)) {
@@ -84,14 +77,7 @@ func ramdomArray(size int) []int {
 	}
 	return list
 }
-func stupidArrayA(size int) []int {
-	var list = make([]int, size)
-	for i := 0; i < size; i++ {
-		list[i] = i / 2
-	}
-	return list
-}
-func stupidArrayB(size int) []int {
+func stupidArray(size int) []int {
 	var list = make([]int, size)
 	for i := 0; i < size; i++ {
 		list[i] = (size - i) / 2

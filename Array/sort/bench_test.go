@@ -50,25 +50,25 @@ func Benchmark_IntroSort(b *testing.B) {
 }
 func Benchmark_ExtremeHeapSort(b *testing.B) {
 	b.StopTimer()
-	var list = stupidArrayB(b.N)
+	var list = stupidArray(b.N)
 	b.StartTimer()
 	HeapSort(list)
 }
 func Benchmark_ExtremeMergeSort(b *testing.B) {
 	b.StopTimer()
-	var list = stupidArrayB(b.N)
+	var list = stupidArray(b.N)
 	b.StartTimer()
 	MergeSort(list)
 }
 func Benchmark_ExtremeQuickSort(b *testing.B) {
 	b.StopTimer()
-	var list = stupidArrayB(b.N)
+	var list = stupidArray(b.N)
 	b.StartTimer()
 	QuickSort(list)
 }
 func Benchmark_ExtremeIntroSort(b *testing.B) {
 	b.StopTimer()
-	var list = stupidArrayB(b.N)
+	var list = stupidArray(b.N)
 	b.StartTimer()
 	IntroSort(list)
 }
