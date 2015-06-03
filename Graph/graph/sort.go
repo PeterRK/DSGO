@@ -1,11 +1,16 @@
 package graph
 
+import (
+	"time"
+)
+
 func Sort(list []Edge) {
 	var size = len(list)
 	var life uint
 	for life = 12; size != 0; life++ {
 		size /= 2
 	}
+	magic = uint(time.Now().Unix())
 	doIntroSort(list, life)
 }
 func doIntroSort(list []Edge, life uint) {
@@ -21,30 +26,34 @@ func doIntroSort(list []Edge, life uint) {
 	}
 }
 
+var magic = ^uint(0)
+
 func partition(list []Edge) int {
 	var size = len(list)
 
+	var x, y = int(magic % uint(size-1)), int(magic % uint(size-2))
+	magic = magic*1103515245 + 12345
+	var a, b = 1 + x, 1 + (1+x+y)%(size-1) //a != b
 	var seed = list[0]
-	var mid, last = size / 2, size - 1
-	if list[0].Dist > list[mid].Dist {
-		if list[mid].Dist > list[last].Dist {
-			seed, list[mid] = list[mid], list[0]
+	if list[0].Dist > list[a].Dist {
+		if list[a].Dist > list[b].Dist {
+			seed, list[a] = list[a], list[0]
 		} else { //c >= b
-			if list[0].Dist > list[last].Dist {
-				seed, list[last] = list[last], list[0]
+			if list[0].Dist > list[b].Dist {
+				seed, list[b] = list[b], list[0]
 			}
 		}
 	} else { //b >= a
-		if list[last].Dist > list[0].Dist {
-			if list[mid].Dist > list[last].Dist {
-				seed, list[last] = list[last], list[0]
+		if list[b].Dist > list[0].Dist {
+			if list[a].Dist > list[b].Dist {
+				seed, list[b] = list[b], list[0]
 			} else {
-				seed, list[mid] = list[mid], list[0]
+				seed, list[a] = list[a], list[0]
 			}
 		}
 	}
 
-	var left, right = 1, last
+	var left, right = 1, size - 1
 	for { //注意对称性
 		for list[left].Dist < seed.Dist {
 			left++

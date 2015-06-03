@@ -24,7 +24,6 @@ func Benchmark_InsertSort(b *testing.B) {
 	InsertSort(list)
 }
 */
-
 func Benchmark_HeapSort(b *testing.B) {
 	b.StopTimer()
 	var list = ramdomArray(b.N)
@@ -46,6 +45,30 @@ func Benchmark_QuickSort(b *testing.B) {
 func Benchmark_IntroSort(b *testing.B) {
 	b.StopTimer()
 	var list = ramdomArray(b.N)
+	b.StartTimer()
+	IntroSort(list)
+}
+func Benchmark_ExtremeHeapSort(b *testing.B) {
+	b.StopTimer()
+	var list = stupidArrayB(b.N)
+	b.StartTimer()
+	HeapSort(list)
+}
+func Benchmark_ExtremeMergeSort(b *testing.B) {
+	b.StopTimer()
+	var list = stupidArrayB(b.N)
+	b.StartTimer()
+	MergeSort(list)
+}
+func Benchmark_ExtremeQuickSort(b *testing.B) {
+	b.StopTimer()
+	var list = stupidArrayB(b.N)
+	b.StartTimer()
+	QuickSort(list)
+}
+func Benchmark_ExtremeIntroSort(b *testing.B) {
+	b.StopTimer()
+	var list = stupidArrayB(b.N)
 	b.StartTimer()
 	IntroSort(list)
 }

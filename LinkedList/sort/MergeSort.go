@@ -56,18 +56,25 @@ func cutPeice(head *list.Node, sz int) *list.Node {
 }
 func merge(left *list.Node, right *list.Node) (first *list.Node, last *list.Node) {
 	first, last = nil, list.FakeHead(&first)
-	for ; left != nil && right != nil; last = last.Next {
-		if left.Val > right.Val {
-			last.Next, right = right, right.Next
-		} else {
-			last.Next, left = left, left.Next
+	for {
+		last.Next = left
+		if right == nil {
+			break
+		}
+		for ; left != nil && left.Val <= right.Val; left = left.Next {
+			last = left
+		}
+
+		last.Next = right
+		if left == nil {
+			break
+		}
+		for ; right != nil && left.Val > right.Val; right = right.Next {
+			last = right
 		}
 	}
-	for ; left != nil; last = last.Next {
-		last.Next, left = left, left.Next
-	}
-	for ; right != nil; last = last.Next {
-		last.Next, right = right, right.Next
+	for last.Next != nil {
+		last = last.Next
 	}
 	return first, last
 }

@@ -27,7 +27,7 @@ type skipList struct {
 	mark  int //非零
 	ceil  int //非零
 	floor int //非零
-	rand  mt19937
+	rand  Random
 }
 
 func NewSkipList() SkipList {
@@ -37,7 +37,7 @@ func NewSkipList() SkipList {
 }
 
 func (l *skipList) initialize() {
-	l.rand.initialize(uint32(time.Now().Unix()))
+	l.rand = NewEasyRand(uint(time.Now().Unix()))
 	l.heads, l.knots = make([]*node, 1), make([]*node, 1)
 	l.level, l.mark, l.ceil, l.floor = 1, 1, factor, 1
 }
@@ -89,8 +89,8 @@ func (l *skipList) Insert(key int) bool {
 	}
 
 	var lv = 1
-	for l.rand.next() <= (^uint32(0)/uint32(factor)) &&
-		lv < l.level {
+	for lv < l.level &&
+		l.rand.Next() <= (^uint32(0)/uint32(factor)) {
 		lv++
 	}
 	target = new(node)

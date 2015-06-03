@@ -15,23 +15,25 @@ func FakeHead(spt **Node) *Node {
 	return (*Node)(unsafe.Pointer(base - off))
 }
 
-func Merge(list1 *Node, list2 *Node) *Node {
-	var head *Node = nil
-	var tail = FakeHead(&head)
-	for ; list1 != nil && list2 != nil; tail = tail.Next {
-		if list1.Val > list2.Val {
-			tail.Next, list2 = list2, list2.Next
-		} else {
-			tail.Next, list1 = list1, list1.Next
+func Merge(lst1 *Node, lst2 *Node) (list *Node) {
+	var last = FakeHead(&list)
+	for {
+		last.Next = lst1
+		if lst2 == nil {
+			return list
+		}
+		for ; lst1 != nil && lst1.Val <= lst2.Val; lst1 = lst1.Next {
+			last = lst1
+		}
+
+		last.Next = lst2
+		if lst1 == nil {
+			return list
+		}
+		for ; lst2 != nil && lst1.Val > lst2.Val; lst2 = lst2.Next {
+			last = lst2
 		}
 	}
-	for ; list1 != nil; tail = tail.Next {
-		tail.Next, list1 = list1, list1.Next
-	}
-	for ; list2 != nil; tail = tail.Next {
-		tail.Next, list2 = list2, list2.Next
-	}
-	return head
 }
 
 func Reverse(list *Node) *Node {

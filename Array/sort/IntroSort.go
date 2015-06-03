@@ -1,5 +1,9 @@
 package sort
 
+import (
+	"time"
+)
+
 //内省排序，基于快速排序的一种混合排序算法，不具有稳定性。
 //复杂度为O(NlogN) & O(logN)。
 //主要限制了QuickSort的最坏情况，适合递归实现(没有爆栈风险)。
@@ -9,6 +13,7 @@ func IntroSort(list []int) {
 	for life = 12; size != 0; life++ {
 		size /= 2
 	}
+	magic = uint(time.Now().Unix())
 	doIntroSort(list, life)
 }
 func doIntroSort(list []int, life uint) {

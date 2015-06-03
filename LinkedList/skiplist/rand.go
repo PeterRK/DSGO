@@ -1,7 +1,25 @@
 package skiplist
 
-//本实现参考维基百科
+type Random interface {
+	Next() uint32
+}
 
+type easyRand struct {
+	magic uint
+}
+
+func NewEasyRand(seed uint) Random {
+	var rand = new(easyRand)
+	rand.magic = seed
+	return rand
+}
+func (r *easyRand) Next() uint32 {
+	var num = uint32(r.magic)
+	r.magic = r.magic*1103515245 + 12345
+	return num
+}
+
+//MT19937的实现参考维基百科
 type mt19937 struct {
 	index int
 	array [624]uint32
@@ -13,8 +31,13 @@ func (mt *mt19937) initialize(seed uint32) {
 		mt.array[i] = uint32(0x6c078965)*(mt.array[i-1]^(mt.array[i-1]>>30)) + uint32(i)
 	}
 }
+func NewMT19937(seed uint) Random {
+	var mt = new(mt19937)
+	mt.initialize(uint32(seed))
+	return mt
+}
 
-func (mt *mt19937) next() uint32 {
+func (mt *mt19937) Next() uint32 {
 	if mt.index == 0 {
 		for i := 0; i < 624; i++ {
 			var num = (mt.array[i] & uint32(0x80000000)) + (mt.array[(i+1)%624] & uint32(0x7fffffff))

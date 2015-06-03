@@ -22,3 +22,21 @@ func Benchmark_IntroSort(b *testing.B) {
 	b.StartTimer()
 	IntroSort(head)
 }
+func Benchmark_ExtremeMergeSort(b *testing.B) {
+	b.StopTimer()
+	var head = stupidLinkListB(b.N)
+	b.StartTimer()
+	MergeSort(head)
+}
+func Benchmark_ExtremeQuickSort(b *testing.B) {
+	b.StopTimer()
+	var head = stupidLinkListB(b.N)
+	b.StartTimer()
+	QuickSort(head)
+}
+func Benchmark_ExtremeIntroSort(b *testing.B) {
+	b.StopTimer()
+	var head = stupidLinkListB(b.N)
+	b.StartTimer()
+	IntroSort(head)
+}

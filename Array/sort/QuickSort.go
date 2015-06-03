@@ -1,10 +1,15 @@
 package sort
 
+import (
+	"time"
+)
+
 //快速排序，改进的冒泡排序，不具有稳定性。
 //平均复杂度为O(NlogN) & O(logN)，最坏情况是O(N^2) & O(N)。
 //其中比较操作是O(NlogN)，常数与MergeSort相当；挪移操作是O(NlogN)，常数小于MergeSort。
 //QuickSort不适合递归实现(有爆栈风险)。
 func QuickSort(list []int) {
+	magic = uint(time.Now().Unix())
 	var tasks stack
 	tasks.push(0, len(list))
 	for !tasks.isEmpty() {
@@ -19,31 +24,35 @@ func QuickSort(list []int) {
 	}
 }
 
-func partition(list []int) int {
-	var size = len(list)
+var magic = ^uint(0)
 
+func partition(list []int) int {
+	var size = len(list) //list不小于3
+
+	var x, y = int(magic % uint(size-1)), int(magic % uint(size-2))
+	magic = magic*1103515245 + 12345
+	var a, b = 1 + x, 1 + (1+x+y)%(size-1) //a != b
 	//三点取中法，最后保证seed落入中间，每轮至少解决此一处
 	var seed = list[0]
-	var mid, last = size / 2, size - 1
-	if list[0] > list[mid] {
-		if list[mid] > list[last] {
-			seed, list[mid] = list[mid], list[0]
+	if list[0] > list[a] {
+		if list[a] > list[b] {
+			seed, list[a] = list[a], list[0]
 		} else { //c >= b
-			if list[0] > list[last] {
-				seed, list[last] = list[last], list[0]
+			if list[0] > list[b] {
+				seed, list[b] = list[b], list[0]
 			}
 		}
 	} else { //b >= a
-		if list[last] > list[0] {
-			if list[mid] > list[last] {
-				seed, list[last] = list[last], list[0]
+		if list[b] > list[0] {
+			if list[a] > list[b] {
+				seed, list[b] = list[b], list[0]
 			} else {
-				seed, list[mid] = list[mid], list[0]
+				seed, list[a] = list[a], list[0]
 			}
 		}
 	}
 
-	var left, right = 1, last
+	var left, right = 1, size - 1
 	for { //注意对称性
 		for list[left] < seed {
 			left++
@@ -54,12 +63,12 @@ func partition(list []int) int {
 		if left >= right {
 			break
 		}
+		//以下的交换操作是主要开销所在
 		list[left], list[right] = list[right], list[left]
 		left++
 		right--
 	}
 	list[0], list[right] = list[right], seed
-
 	return right
 }
 
