@@ -110,19 +110,19 @@ LabelOver:
 func insertSort(list []Edge) {
 	var size = len(list)
 	for i := 1; i < size; i++ {
-		var left, right = 0, i
 		var key = list[i]
-		for left < right {
-			var mid = (left + right) / 2
+		var start, end = 0, i
+		for start < end {
+			var mid = (start + end) / 2
 			if key.Dist < list[mid].Dist {
-				right = mid
+				end = mid
 			} else { //找第一个大于key的位置
-				left = mid + 1
+				start = mid + 1
 			}
 		} //不会越界
-		for j := i; j > left; j-- {
+		for j := i; j > start; j-- {
 			list[j] = list[j-1]
 		}
-		list[left] = key
+		list[start] = key
 	}
 }

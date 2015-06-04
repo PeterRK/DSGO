@@ -15,25 +15,24 @@ func MergeSort(list []int) {
 		doMergeSort(shadow, list)
 	}
 }
-
 func doMergeSort(in []int, out []int) {
 	var size = len(in)
 	if size < sz_limit { //内建InsertSort
 		for i := 1; i < size; i++ {
-			var left, right = 0, i
+			var start, end = 0, i
 			var key = in[i]
-			for left < right {
-				var mid = (left + right) / 2
+			for start < end {
+				var mid = (start + end) / 2
 				if key < out[mid] {
-					right = mid
+					end = mid
 				} else {
-					left = mid + 1
+					start = mid + 1
 				}
 			}
-			for j := i; j > left; j-- {
+			for j := i; j > start; j-- {
 				out[j] = out[j-1]
 			}
-			out[left] = key
+			out[start] = key
 		}
 	} else {
 		var half = size / 2

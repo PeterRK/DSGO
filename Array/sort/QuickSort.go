@@ -27,7 +27,7 @@ func QuickSort(list []int) {
 var magic = ^uint(0)
 
 func partition(list []int) int {
-	var size = len(list) //list不小于3
+	var size = len(list) //不少于3
 
 	var x, y = int(magic % uint(size-1)), int(magic % uint(size-2))
 	magic = magic*1103515245 + 12345
