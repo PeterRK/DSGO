@@ -46,7 +46,7 @@ func DFS(table [][]int, x int, y int) {
 			y--
 			path = append(path, LEFT)
 		} else {
-		LabelLoop:
+		Label_LOOP:
 			var last = len(path) - 1
 			if last < 0 {
 				return
@@ -65,7 +65,7 @@ func DFS(table [][]int, x int, y int) {
 			case DOWN:
 				x--
 				path = path[:last]
-				goto LabelLoop
+				goto Label_LOOP
 			}
 		}
 	}

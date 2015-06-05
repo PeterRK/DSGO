@@ -62,25 +62,3 @@ func Insert(list []int, key int) []int {
 	list[spot] = key
 	return list
 }
-
-//保持顺序
-func Delete(list []int, idx int) []int {
-	var last = len(list) - 1
-	if idx < 0 || idx > last {
-		return list
-	}
-	for i := idx; i < last; i++ {
-		list[i] = list[i+1] //前移
-	}
-	return list[:last]
-}
-
-//不保持顺序
-func Erease(list []int, idx int) []int {
-	var last = len(list) - 1
-	if idx < 0 || idx > last {
-		return list
-	}
-	list[idx] = list[last]
-	return list[:last]
-}

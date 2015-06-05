@@ -90,7 +90,7 @@ func down(list []Edge, spot int) {
 			kid = right
 		}
 		if key.Dist >= list[kid].Dist {
-			goto LabelOver
+			goto Label_OVER
 		}
 		list[spot] = list[kid]
 		spot, left, right = kid, kid*2+1, kid*2+2
@@ -99,7 +99,7 @@ func down(list []Edge, spot int) {
 		list[spot], list[left] = list[left], key
 		return
 	}
-LabelOver:
+Label_OVER:
 	list[spot] = key
 }
 

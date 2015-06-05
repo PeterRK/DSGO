@@ -41,7 +41,7 @@ func separate(shadow [][]edge, matrix [][]uint, book []uint, space []int) (ok bo
 		var current = space[rpt]
 		if matrix[current][size-1] != 0 {
 			book[size-1] = book[current] + 1
-			goto ReachGoal //到终点层
+			goto Label_REACH //到终点层
 		}
 		for i := 1; i < size-1; i++ {
 			if book[i] == FAKE_LEVEL && matrix[current][i] != 0 {
@@ -53,7 +53,7 @@ func separate(shadow [][]edge, matrix [][]uint, book []uint, space []int) (ok bo
 	}
 	return false
 
-ReachGoal:
+Label_REACH:
 	for wpt--; wpt >= 0; wpt-- {
 		var current = space[wpt]
 		//shadow[current] = shadow[current][:0]
