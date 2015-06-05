@@ -5,55 +5,56 @@ import (
 )
 
 type NodeX struct {
-	prev, next *NodeX
-	val        int
+	Prev, Next *NodeX
+	Val        int
 }
 type Ring struct {
-	prev, next *NodeX
-	self       *NodeX
+	Prev, Next *NodeX
 }
 
+func (r *Ring) asNodeX() *NodeX {
+	return (*NodeX)(unsafe.Pointer(r))
+}
 func (r *Ring) Initialize() {
-	r.self = (*NodeX)(unsafe.Pointer(r))
-	r.prev, r.next = r.self, r.self
+	r.Prev, r.Next = r.asNodeX(), r.asNodeX()
 }
 func (r *Ring) IsEmpty() bool {
-	return r.next == r.self
+	return r.Next == r.asNodeX()
 }
 
 func (r *Ring) InsertHead(node *NodeX) {
-	node.next = r.next
-	node.next.prev = node
-	node.prev = r.self
-	r.next = node
+	node.Next = r.Next
+	node.Next.Prev = node
+	node.Prev = r.asNodeX()
+	r.Next = node
 }
 func (r *Ring) PopHead() *NodeX {
 	if r.IsEmpty() {
 		return nil
 	}
-	var node = r.next
-	r.next = node.next
-	r.next.prev = r.self
+	var node = r.Next
+	r.Next = node.Next
+	r.Next.Prev = r.asNodeX()
 	return node
 }
 
 func (r *Ring) InsertTail(node *NodeX) {
-	node.prev = r.prev
-	node.prev.next = node
-	node.next = r.self
-	r.prev = node
+	node.Prev = r.Prev
+	node.Prev.Next = node
+	node.Next = r.asNodeX()
+	r.Prev = node
 }
 func (r *Ring) PopTail() *NodeX {
 	if r.IsEmpty() {
 		return nil
 	}
-	var node = r.prev
-	r.prev = node.prev
-	r.prev.next = r.self
+	var node = r.Prev
+	r.Prev = node.Prev
+	r.Prev.Next = r.asNodeX()
 	return node
 }
 
 func Release(node *NodeX) {
-	node.next.prev = node.prev
-	node.prev.next = node.next
+	node.Next.Prev = node.Prev
+	node.Prev.Next = node.Next
 }

@@ -13,7 +13,7 @@ func Test_Ring(t *testing.T) {
 
 	var space [10]NodeX
 	for i := 0; i < 10; i++ {
-		space[i].val = i
+		space[i].Val = i
 	}
 
 	var ring Ring
@@ -38,16 +38,16 @@ func Test_Ring(t *testing.T) {
 	//9 1 2 3 4 5 6 7 8 0
 
 	var node = ring.PopHead()
-	if node == nil || node.val != 9 {
+	if node == nil || node.Val != 9 {
 		t.Fail()
 	}
 	node = ring.PopTail()
-	if node == nil || node.val != 0 {
+	if node == nil || node.Val != 0 {
 		t.Fail()
 	}
 	for i := 1; i < 9; i++ {
 		node = ring.PopHead()
-		if node == nil || node.val != i {
+		if node == nil || node.Val != i {
 			t.Fail()
 		}
 	}
