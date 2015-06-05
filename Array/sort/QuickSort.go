@@ -30,25 +30,20 @@ func partition(list []int) int {
 	magic = magic*1103515245 + 12345
 
 	var a, b = 1 + x, 1 + (1+x+y)%(size-1) //a != b
-	//三点取中法，每轮至少解决一个
 	var barrier = list[0]
-	if list[0] > list[a] {
-		if list[a] > list[b] {
-			barrier, list[a] = list[a], list[0]
-		} else { //c >= b
-			if list[0] > list[b] {
-				barrier, list[b] = list[b], list[0]
-			}
+	if list[a] < list[b] {
+		if barrier < list[a] {
+			barrier, list[a] = list[a], barrier
+		} else if list[b] < barrier {
+			barrier, list[b] = list[b], barrier
 		}
-	} else { //b >= a
-		if list[b] > list[0] {
-			if list[a] > list[b] {
-				barrier, list[b] = list[b], list[0]
-			} else {
-				barrier, list[a] = list[a], list[0]
-			}
+	} else { //list[a] >= list[b]
+		if barrier > list[a] {
+			barrier, list[a] = list[a], barrier
+		} else if list[b] > barrier {
+			barrier, list[b] = list[b], barrier
 		}
-	}
+	} //三点取中法，每轮至少解决一个
 
 	a, b = 1, size-1
 	for { //注意对称性

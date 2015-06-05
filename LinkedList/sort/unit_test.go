@@ -42,8 +42,13 @@ func testLinkListSort(t *testing.T, size int, create func(int) *list.Node, doit 
 	head = new(list.Node)
 	head.Next = nil
 	head = doit(head)
+	if head == nil || head.Next != nil {
+		t.Fail()
+	}
 	head = nil
-	head = doit(head)
+	if doit(head) != nil {
+		t.Fail()
+	}
 }
 func checkLinkList(head *list.Node, size int) bool {
 	var cnt = 1
