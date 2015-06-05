@@ -4,21 +4,19 @@ package sort
 //复杂度为O(NlogN) & O(N)。
 //其中比较操作是O(NlogN)，但常数小于HeapSort；挪移操作是O(NlogN)，常数与HeapSort相当。
 func MergeSort(list []int) {
-	var size = len(list)
-	if size < sz_limit {
+	if len(list) < sz_limit {
 		InsertSort(list)
 	} else {
-		var shadow = make([]int, size)
-		for i := 0; i < size; i++ {
+		var shadow = make([]int, len(list))
+		for i := 0; i < len(list); i++ {
 			shadow[i] = list[i]
 		}
 		doMergeSort(shadow, list)
 	}
 }
 func doMergeSort(in []int, out []int) {
-	var size = len(in)
-	if size < sz_limit { //内建InsertSort
-		for i := 1; i < size; i++ {
+	if len(in) < sz_limit { //内建InsertSort
+		for i := 1; i < len(in); i++ {
 			var start, end = 0, i
 			var key = in[i]
 			for start < end {
@@ -35,11 +33,11 @@ func doMergeSort(in []int, out []int) {
 			out[start] = key
 		}
 	} else {
-		var half = size / 2
+		var half = len(in) / 2
 		doMergeSort(out[:half], in[:half])
 		doMergeSort(out[half:], in[half:])
 
-		var pos, i, j = 0, 0, half
+		var pos, i, j, size = 0, 0, half, len(in)
 		for ; i < half && j < size; pos++ {
 			if in[i] > in[j] {
 				out[pos] = in[j]
@@ -57,5 +55,25 @@ func doMergeSort(in []int, out []int) {
 			out[pos] = in[j]
 			j++
 		}
+	}
+}
+func merge(in1 []int, in2 []int, out []int) {
+	var i, j, k = 0, 0, 0
+	for ; i < len(in1) && j < len(in2); k++ {
+		if in1[i] <= in2[j] {
+			out[k] = in1[i]
+			i++
+		} else {
+			out[k] = in2[j]
+			j++
+		}
+	}
+	for ; i < len(in1); k++ {
+		out[k] = in1[i]
+		i++
+	}
+	for ; j < len(in2); k++ {
+		out[k] = in2[j]
+		j++
 	}
 }

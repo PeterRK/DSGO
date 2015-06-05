@@ -64,7 +64,6 @@ func merge(left *list.Node, right *list.Node) (first *list.Node, last *list.Node
 		for ; left != nil && left.Val <= right.Val; left = left.Next {
 			last = left
 		}
-
 		last.Next = right
 		if left == nil {
 			break

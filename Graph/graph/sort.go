@@ -5,24 +5,22 @@ import (
 )
 
 func Sort(list []Edge) {
-	var size = len(list)
-	var life uint
-	for life = 12; size != 0; life++ {
-		size /= 2
+	var life = uint(12)
+	for sz := len(list); sz != 0; sz /= 2 {
+		life++
 	}
 	magic = uint(time.Now().Unix())
 	doIntroSort(list, life)
 }
 func doIntroSort(list []Edge, life uint) {
-	var size = len(list)
-	if size < 7 {
+	if len(list) < 7 {
 		insertSort(list)
 	} else if life == 0 {
 		heapSort(list)
 	} else {
 		var knot = partition(list)
-		doIntroSort(list[0:knot], life-1)
-		doIntroSort(list[knot+1:size], life-1)
+		doIntroSort(list[:knot], life-1)
+		doIntroSort(list[knot+1:], life-1)
 	}
 }
 
@@ -30,9 +28,9 @@ var magic = ^uint(0)
 
 func partition(list []Edge) int {
 	var size = len(list)
-
 	var x, y = int(magic % uint(size-1)), int(magic % uint(size-2))
 	magic = magic*1103515245 + 12345
+
 	var a, b = 1 + x, 1 + (1+x+y)%(size-1) //a != b
 	var barrier = list[0]
 	if list[0].Dist > list[a].Dist {
@@ -73,20 +71,18 @@ func partition(list []Edge) int {
 }
 
 func heapSort(list []Edge) {
-	var size = len(list)
-	for idx := size/2 - 1; idx >= 0; idx-- {
+	for idx := len(list)/2 - 1; idx >= 0; idx-- {
 		down(list, idx)
 	}
-	for sz := size - 1; sz > 0; sz-- {
+	for sz := len(list) - 1; sz > 0; sz-- {
 		list[0], list[sz] = list[sz], list[0]
 		down(list[:sz], 0)
 	}
 }
 func down(list []Edge, spot int) {
-	var size = len(list)
 	var key = list[spot]
 	var left, right = spot*2 + 1, spot*2 + 2
-	for right < size {
+	for right < len(list) {
 		var kid int
 		if list[left].Dist > list[right].Dist {
 			kid = left
@@ -99,7 +95,7 @@ func down(list []Edge, spot int) {
 		list[spot] = list[kid]
 		spot, left, right = kid, kid*2+1, kid*2+2
 	}
-	if right == size && key.Dist < list[left].Dist {
+	if right == len(list) && key.Dist < list[left].Dist {
 		list[spot], list[left] = list[left], key
 		return
 	}
@@ -108,8 +104,7 @@ LabelOver:
 }
 
 func insertSort(list []Edge) {
-	var size = len(list)
-	for i := 1; i < size; i++ {
+	for i := 1; i < len(list); i++ {
 		var key = list[i]
 		var start, end = 0, i
 		for start < end {

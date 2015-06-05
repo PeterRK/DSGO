@@ -10,17 +10,15 @@ import (
 //QuickSort不适合递归实现(有爆栈风险)。
 func QuickSort(list []int) {
 	magic = uint(time.Now().Unix())
-	var tasks stack
-	tasks.push(0, len(list))
-	for !tasks.isEmpty() {
-		var start, end = tasks.pop()
-		if end-start < sz_limit {
-			InsertSort(list[start:end])
-		} else {
-			var knot = partition(list[start:end]) + start
-			tasks.push(knot+1, end)
-			tasks.push(start, knot)
-		} //每轮保证至少解决一个，否则最坏情况可能是死循环
+	doQuickSort(list)
+}
+func doQuickSort(list []int) {
+	if len(list) < sz_limit {
+		InsertSort(list)
+	} else {
+		var knot = partition(list)
+		doQuickSort(list[:knot])
+		doQuickSort(list[knot+1:])
 	}
 }
 
@@ -28,9 +26,9 @@ var magic = ^uint(0)
 
 func partition(list []int) int {
 	var size = len(list) //不少于3
-
 	var x, y = int(magic % uint(size-1)), int(magic % uint(size-2))
 	magic = magic*1103515245 + 12345
+
 	var a, b = 1 + x, 1 + (1+x+y)%(size-1) //a != b
 	//三点取中法，每轮至少解决一个
 	var barrier = list[0]
@@ -72,6 +70,23 @@ func partition(list []int) int {
 	return b
 }
 
+/*
+func QuickSort(list []int) {
+	magic = uint(time.Now().Unix())
+	var tasks stack
+	tasks.push(0, len(list))
+	for !tasks.isEmpty() {
+		var start, end = tasks.pop()
+		if end-start < sz_limit {
+			InsertSort(list[start:end])
+		} else {
+			var knot = partition(list[start:end]) + start
+			tasks.push(knot+1, end)
+			tasks.push(start, knot)
+		} //每轮保证至少解决一个，否则最坏情况可能是死循环
+	}
+}
+
 type pair struct {
 	start int
 	end   int
@@ -95,3 +110,4 @@ func (s *stack) pop() (start int, end int) {
 	s.core = s.core[:sz]
 	return unit.start, unit.end
 }
+*/

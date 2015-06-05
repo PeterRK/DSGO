@@ -10,7 +10,6 @@ func IntroSort(head *list.Node) *list.Node {
 	if head == nil {
 		return nil
 	}
-
 	if head.Next == nil {
 		return head
 	}
