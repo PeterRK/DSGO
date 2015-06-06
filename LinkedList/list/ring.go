@@ -9,49 +9,61 @@ type NodeX struct {
 	Val        int
 }
 type Ring struct {
-	Prev, Next *NodeX
+	tail, head *NodeX
 }
 
 func (r *Ring) asNodeX() *NodeX {
 	return (*NodeX)(unsafe.Pointer(r))
 }
 func (r *Ring) Initialize() {
-	r.Prev, r.Next = r.asNodeX(), r.asNodeX()
+	r.head, r.tail = r.asNodeX(), r.asNodeX()
 }
 func (r *Ring) IsEmpty() bool {
-	return r.Next == r.asNodeX()
+	return r.head == r.asNodeX()
 }
 
-func (r *Ring) InsertHead(node *NodeX) {
-	node.Next = r.Next
-	node.Next.Prev = node
-	node.Prev = r.asNodeX()
-	r.Next = node
+func (r *Ring) Head() *NodeX {
+	if r.IsEmpty() {
+		return nil
+	}
+	return r.head
 }
 func (r *Ring) PopHead() *NodeX {
 	if r.IsEmpty() {
 		return nil
 	}
-	var node = r.Next
-	r.Next = node.Next
-	r.Next.Prev = r.asNodeX()
+	var node = r.head
+	r.head = node.Next
+	r.head.Prev = r.asNodeX()
 	return node
 }
+func (r *Ring) InsertHead(node *NodeX) {
+	node.Next = r.head
+	node.Next.Prev = node
+	node.Prev = r.asNodeX()
+	r.head = node
+}
 
-func (r *Ring) InsertTail(node *NodeX) {
-	node.Prev = r.Prev
-	node.Prev.Next = node
-	node.Next = r.asNodeX()
-	r.Prev = node
+func (r *Ring) Tail() *NodeX {
+	if r.IsEmpty() {
+		return nil
+	}
+	return r.tail
 }
 func (r *Ring) PopTail() *NodeX {
 	if r.IsEmpty() {
 		return nil
 	}
-	var node = r.Prev
-	r.Prev = node.Prev
-	r.Prev.Next = r.asNodeX()
+	var node = r.tail
+	r.tail = node.Prev
+	r.tail.Next = r.asNodeX()
 	return node
+}
+func (r *Ring) InsertTail(node *NodeX) {
+	node.Prev = r.tail
+	node.Prev.Next = node
+	node.Next = r.asNodeX()
+	r.tail = node
 }
 
 func Release(node *NodeX) {

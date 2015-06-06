@@ -15,20 +15,19 @@ type deque struct {
 	cnt         int
 }
 
-//dq.front.idx永远不指向0
-//dq.back.idx永远不指向(piece_sz-1)
+//dq.front.idx永远不为0，以piece_sz代之，此时要求dq.front.fw != nil
+//dq.back.idx永远不为(piece_sz-1)，以-1代之，此时要求dq.front.bw != nil
 
 func (dq *deque) initialize() {
-	dq.cnt = 0
-	var block = new(piece)
-	block.fw, block.bw = nil, nil
-	dq.front.pt, dq.back.pt = block, block
-	dq.front.idx, dq.back.idx = piece_sz/2, piece_sz/2-1
+	dq.reset(new(piece))
 }
 func (dq *deque) Clear() {
+	dq.reset(dq.front.pt)
+}
+func (dq *deque) reset(block *piece) {
 	dq.cnt = 0
-	dq.back.pt = dq.front.pt
-	dq.front.pt.fw, dq.back.pt.bw = nil, nil
+	block.fw, block.bw = nil, nil
+	dq.front.pt, dq.back.pt = block, block
 	dq.front.idx, dq.back.idx = piece_sz/2, piece_sz/2-1
 }
 
@@ -89,7 +88,7 @@ func (dq *deque) PopFront() (key int, fail bool) {
 	dq.front.idx--
 	key = dq.front.pt.space[dq.front.idx]
 	if dq.front.idx == 0 {
-		dq.front.idx = piece_sz //dq.front.idx永远不指向0
+		dq.front.idx = piece_sz //dq.front.idx永远不为0
 		dq.front.pt.fw = nil    //只保留一块缓冲
 		dq.front.pt = dq.front.pt.bw
 	}
@@ -103,8 +102,8 @@ func (dq *deque) PopBack() (key int, fail bool) {
 	dq.back.idx++
 	key = dq.back.pt.space[dq.back.idx]
 	if dq.back.idx == piece_sz-1 {
-		dq.back.idx = -1    //dq.back.idx永远不指向(piece_sz-1)
-		dq.back.pt.bw = nil //只保留一块缓冲
+		dq.back.idx = -1    //dq.back.idx永远不为(piece_sz-1)
+		dq.back.pt.bw = nil //只保留一块缓冲，因为
 		dq.back.pt = dq.back.pt.fw
 	}
 	return key, false
