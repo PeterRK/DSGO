@@ -21,13 +21,10 @@ type node struct {
 	key  int
 }
 type skipList struct {
-	heads []*node
-	knots []*node
-	level int //非零
-	mark  int //非零
-	ceil  int //非零
-	floor int //非零
-	rand  Random
+	heads, knots []*node
+	cnt, level   int //非零
+	ceil, floor  int //非零
+	rand         Random
 }
 
 func NewSkipList() SkipList {
@@ -39,14 +36,14 @@ func NewSkipList() SkipList {
 func (l *skipList) initialize() {
 	l.rand = NewEasyRand(uint(time.Now().Unix()))
 	l.heads, l.knots = make([]*node, 1), make([]*node, 1)
-	l.level, l.mark, l.ceil, l.floor = 1, 1, factor, 1
+	l.level, l.cnt, l.ceil, l.floor = 1, 1, factor, 1
 }
 
 func (l *skipList) IsEmpty() bool {
 	return l.Size() == 0
 }
 func (l *skipList) Size() int {
-	return l.mark - 1
+	return l.cnt - 1
 }
 
 func (l *skipList) Travel(doit func(int)) {
@@ -79,8 +76,8 @@ func (l *skipList) Insert(key int) bool {
 		return false
 	}
 
-	l.mark++
-	if l.mark == l.ceil {
+	l.cnt++
+	if l.cnt == l.ceil {
 		l.floor = l.ceil
 		l.ceil *= factor
 		l.level++
@@ -122,8 +119,8 @@ func (l *skipList) Remove(key int) bool {
 		l.knots[i].next[i] = target.next[i]
 	}
 
-	l.mark--
-	if l.mark < l.floor { //注意不能==
+	l.cnt--
+	if l.cnt < l.floor { //注意不能==
 		l.ceil = l.floor
 		l.floor /= factor
 		l.level--
