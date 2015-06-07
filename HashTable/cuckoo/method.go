@@ -54,30 +54,20 @@ func (tb *hashTable) Insert(key string) bool {
 	}
 	tb.cnt++
 	var unit = new(node)
-	unit.key = key
-	unit.code = code
+	unit.key, unit.code = key, code
+
 	for obj, age := unit, 0; ; age++ {
-		for { //循环调整
-			var table = &tb.core[tb.idx]
-			//var index = obj.code[tb.idx] % uint(len(table.bucket))
-			var index = obj.code[tb.idx] & (uint(len(table.bucket)) - 1)
+		for idx, trys := tb.idx, 0; trys < WAYS; idx = (idx + 1) % WAYS {
+			var table = &tb.core[idx]
+			//var index = obj.code[idx] % uint(len(table.bucket))
+			var index = obj.code[idx] & (uint(len(table.bucket)) - 1)
 			if table.bucket[index] == nil {
 				table.bucket[index] = obj
 				return true
 			}
 			obj, table.bucket[index] = table.bucket[index], obj
 			if obj == unit {
-				break //回绕
-			}
-			for idx := (tb.idx + 1) % WAYS; idx != tb.idx; idx = (idx + 1) % WAYS {
-				table = &tb.core[idx]
-				//index = obj.code[idx] % uint(len(table.bucket))
-				index = obj.code[idx] & (uint(len(table.bucket)) - 1)
-				if table.bucket[index] == nil {
-					table.bucket[index] = obj
-					return true
-				}
-				obj, table.bucket[index] = table.bucket[index], obj
+				trys++ //回绕计数
 			}
 		}
 

@@ -17,7 +17,7 @@ func Test_HashTable(t *testing.T) {
 		book[i] = string(tpl[i : i+26])
 	}
 
-	var fn = [WAYS]func(str string) uint{hash.FNVhash, hash.RShash, hash.JShash}
+	var fn = [WAYS]func(str string) uint{hash.APhash, hash.FNVhash, hash.JShash}
 	var table = NewHashTable(fn)
 	for i := 0; i < 52; i++ {
 		if !table.Insert(book[i]) {

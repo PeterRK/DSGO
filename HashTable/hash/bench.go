@@ -25,11 +25,11 @@ func ConflictRate(data []string, size uint, fn func(str string) uint) float64 {
 }
 
 func TryByFile(filenme string) {
-	if data, err := fetchLines(filenme); err != nil {
+	if data, err := FetchLines(filenme); err != nil {
 		fmt.Println("fail to open file:", filenme)
 	} else {
-		fmt.Println(filenme)
 		var size = bestSize(uint(len(data)))
+		fmt.Printf("%s [%d/%d]\n", filenme, len(data), size)
 		ShowBucketCounts("BKDRhash:", data, size, BKDRhash)
 		ShowBucketCounts("SDBMhash:", data, size, SDBMhash)
 		ShowBucketCounts("DJBhash: ", data, size, DJBhash)
@@ -43,7 +43,7 @@ func TryByFile(filenme string) {
 }
 func ShowBucketCounts(msg string, data []string, size uint, fn func(str string) uint) {
 	var vec, top = BucketCounts(data, size, fn)
-	fmt.Printf("%s [max=%d] %v	[%d/%d]\n", msg, top, vec, len(data), size)
+	fmt.Printf("%s <%d> %v\n", msg, top, vec)
 }
 func BucketCounts(data []string, size uint, fn func(str string) uint) (vec [6]uint, top uint) {
 	var book = make([]uint, size)
@@ -64,15 +64,16 @@ func BucketCounts(data []string, size uint, fn func(str string) uint) (vec [6]ui
 				top = num
 			}
 			if num > uint(len(vec)) {
-				num = uint(len(vec))
+				vec[len(vec)-1] += num
+			} else {
+				vec[num-1] += num
 			}
-			vec[num-1]++
 		}
 	}
 	return vec, top
 }
 
-func fetchLines(name string) (data []string, err error) {
+func FetchLines(name string) (data []string, err error) {
 	var file *os.File
 	if file, err = os.Open(name); err != nil {
 		return data, err

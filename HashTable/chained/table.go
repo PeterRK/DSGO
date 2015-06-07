@@ -25,8 +25,7 @@ func (tb *hashTable) isCrowded() bool {
 }
 
 func (tb *hashTable) initialize(fn func(str string) uint) {
-	tb.cnt = 0
-	tb.hash = fn
+	tb.cnt, tb.hash = 0, fn
 	tb.bucket = make([]*node, primes[0])
 }
 func NewHashTable(fn func(str string) uint) hash.HashTable {
