@@ -31,7 +31,7 @@ func Test_BinarySearch(t *testing.T) {
 func Test_CyclicQueue(t *testing.T) {
 	defer guard_ut(t)
 
-	var queue = NewQueue(5)
+	var queue, _ = NewQueue(5)
 	for i := 1; i < 8; i++ {
 		var fail = queue.Push(i)
 		if fail {
@@ -42,6 +42,7 @@ func Test_CyclicQueue(t *testing.T) {
 	if !fail {
 		t.Fail()
 	}
+	//1, 2, 3, 4, 5, 6, 7
 
 	for i := 1; i < 5; i++ {
 		var key, fail = queue.Pop()
@@ -49,6 +50,7 @@ func Test_CyclicQueue(t *testing.T) {
 			t.Fail()
 		}
 	}
+	//5, 6, 7
 	for i := 8; i < 12; i++ {
 		var fail = queue.Push(i)
 		if fail {
@@ -58,6 +60,7 @@ func Test_CyclicQueue(t *testing.T) {
 	if !queue.IsFull() {
 		t.Fail()
 	}
+	//5, 6, 7, 8, 9, 10, 11
 
 	for i := 5; i < 12; i++ {
 		var key, fail = queue.Pop()
