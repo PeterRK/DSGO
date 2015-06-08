@@ -66,12 +66,12 @@ func (tr *Tree) Insert(key int32) bool {
 
 //成功返回true，没有返回false
 func (tr *Tree) Remove(key int32) bool {
-	var target, parrent, lf = tr.root, (*node)(nil), false
+	var target, parrent = tr.root, (*node)(nil)
 	for target != nil && key != target.key {
 		if key < target.key {
-			target, parrent, lf = target.left, target, true
+			target, parrent = target.left, target
 		} else {
-			target, parrent, lf = target.right, target, false
+			target, parrent = target.right, target
 		}
 	}
 	if target == nil {
@@ -84,9 +84,9 @@ func (tr *Tree) Remove(key int32) bool {
 	} else if target.right == nil {
 		victim, orphan = target, target.left
 	} else { //取中右，取中左也是可以的
-		victim, parrent, lf = target.right, target, false
+		victim, parrent = target.right, target
 		for victim.left != nil {
-			victim, parrent, lf = victim.left, victim, true
+			victim, parrent = victim.left, victim
 		}
 		orphan = victim.right
 	}
@@ -94,13 +94,12 @@ func (tr *Tree) Remove(key int32) bool {
 	if parrent == nil { //此时victim==target
 		tr.root = orphan
 	} else {
-		if lf {
+		if victim.key < parrent.key {
 			parrent.left = orphan
 		} else {
 			parrent.right = orphan
 		}
 		target.key = victim.key //李代桃僵
 	}
-
 	return true
 }
