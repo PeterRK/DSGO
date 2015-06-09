@@ -52,7 +52,7 @@ func (tr *Tree) Insert(key int32) bool {
 	//|    u    v        |                  |
 
 	var P = root
-	for !P.black { //违法双红禁
+	for !P.black { //违反双红禁
 		var G = P.parent //必然存在，根为黑，P非根
 		var super = G.parent
 		if key < G.key {

@@ -71,7 +71,7 @@ func mixedArray(size int) []int32 {
 	var num = int32(0)
 	rand.Seed(time.Now().Unix())
 	for i := 0; i < size; i++ {
-		if i%32 == 0 { //局部参入有序数列
+		if i%32 == 0 { //局部摻入有序数列
 			num += int32(rand.Int() & mask)
 			list[i] = num
 		} else {
