@@ -1,6 +1,6 @@
 package avltree
 
-//--------------LR形式--------------
+//---------------LR型--------------
 //|       G       |       C       |
 //|      / \      |      / \      |
 //|     P         |     P   G     |
@@ -9,7 +9,7 @@ package avltree
 //|      / \      |               |
 //|     u   v     |               |
 
-//--------------LL形式--------------
+//---------------LL型--------------
 //|       G       |       P       |
 //|      / \      |      / \      |
 //|     P         |     C   G     |
@@ -40,11 +40,11 @@ func (G *node) rotate() (root *node, stop bool) {
 			root = C
 		} else { //LL
 			G.left, P.right = G.tryHook(P.right), P.hook(G)
-			if P.state == 0 { //不降高旋转
-				G.state, P.state = 1, -1
-				stop = true
-			} else { //P.state == 1
+			if P.state == 1 { //真LL
 				G.state, P.state = 0, 0
+			} else { //伪LL，保持高度
+				stop = true
+				G.state, P.state = 1, -1
 			}
 			root = P
 		}
@@ -66,11 +66,11 @@ func (G *node) rotate() (root *node, stop bool) {
 			root = C
 		} else { //RR
 			G.right, P.left = G.tryHook(P.left), P.hook(G)
-			if P.state == 0 { //不降高旋转
-				G.state, P.state = -1, 1
-				stop = true
-			} else { //P.state == -1
+			if P.state == -1 { //真RR
 				G.state, P.state = 0, 0
+			} else { //伪RR，保持高度
+				stop = true
+				G.state, P.state = -1, 1
 			}
 			root = P
 		}
