@@ -45,20 +45,20 @@ int main(int argc, char* argv[])
 		std::uniform_int_distribution<int>(), std::default_random_engine(std::random_device()())
 	);
 
-	const unsigned size = 1000000;
+	const unsigned size = 5000000;
 	std::vector<int> list(size);
 	for (unsigned i = 0; i < size; i++) {
 		list[i] = rand();
 	}
+
+	puts("B+ Tree");
+	BenchMark<BplusTree>(list);
 
 	puts("AVL Tree");
 	BenchMark<AVLtree>(list);
 
 	puts("Red-Black Tree");
 	BenchMark<RBtree>(list);
-
-	puts("B+ Tree");
-	BenchMark<BplusTree>(list);
 
 	puts("SkipList");
 	BenchMark<SkipList>(list);

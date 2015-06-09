@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"math/rand"
 	"time"
-	"unsafe"
 )
 
 type BST interface {
@@ -55,32 +54,14 @@ func newTree(hint int) BST {
 	}
 }
 
-func mixedArray(size int) []int32 {
-	var list = make([]int32, size)
-
-	const bits_of_int = uint(unsafe.Sizeof(list[0])) * 8
-	var tmp = uint(size)
-	var cnt uint = 0
-	for cnt < bits_of_int && tmp != 0 {
-		cnt++
-		tmp >>= 1
-	}
-	cnt = bits_of_int - cnt - 11
-	var mask = ^((^0) << cnt)
-
-	var num = int32(0)
+func ramdomArray(size int) []int32 {
 	rand.Seed(time.Now().Unix())
+	var list = make([]int32, size)
 	for i := 0; i < size; i++ {
-		if i%32 == 0 { //局部摻入有序数列
-			num += int32(rand.Int() & mask)
-			list[i] = num
-		} else {
-			list[i] = int32(rand.Int())
-		}
+		list[i] = int32(rand.Int())
 	}
 	return list
 }
-
 func benchMark(list []int32, hint int) {
 	var tree = newTree(hint)
 	var size = len(list)
@@ -103,13 +84,12 @@ func benchMark(list []int32, hint int) {
 	}
 	fmt.Println("remove:", time.Since(start))
 }
-
 func BenchMark(size int) {
 	if size < 10000 {
 		fmt.Println("too small")
 		return
 	}
-	var list = mixedArray(size)
+	var list = ramdomArray(size)
 
 	benchMark(list, AVL_TREE)
 	benchMark(list, RB_TREE)

@@ -32,7 +32,7 @@ inline RBtree::Node* RBtree::newNode(RBtree::Node* parent, int key)
 	Node* node = m_pool.allocate();
 	node->key = key;
 	node->black = false;
-	node->parent = reinterpret_cast<uintptr_t>(parent);
+	node->parent(parent);
 	node->left = NULL;
 	node->right = NULL;
 	return node;
@@ -89,9 +89,9 @@ bool RBtree::insert(int key)
 	//|    u    v        |                  |
 
 	Node* P = root;
-	while (!P->black) { //违法双红禁
-		Node* G = reinterpret_cast<Node*>(P->parent); //必然存在，根为黑，P非根
-		Node* super = reinterpret_cast<Node*>(G->parent);
+	while (!P->black) { //违反双红禁
+		Node* G = P->parent(); //必然存在，根为黑，P非根
+		Node* super = G->parent();
 		if (key < G->key) {
 			Node* U = G->right;
 			if (U != NULL && !U->black) { //红叔模式，变色解决
@@ -99,7 +99,7 @@ bool RBtree::insert(int key)
 				U->black = true;
 				if (super != NULL) {
 					G->black = false;
-					P = reinterpret_cast<Node*>(G->parent);
+					P = G->parent();
 					continue; //上溯，检查双红禁
 				} //遇根终止
 			} else { //黑叔模式，旋转解决
@@ -127,7 +127,7 @@ bool RBtree::insert(int key)
 				U->black = true;
 				if (super != NULL) {
 					G->black = false;
-					P = reinterpret_cast<Node*>(G->parent);
+					P = G->parent();
 					continue; //上溯，检查双红禁
 				} //遇根终止
 			} else { //黑叔模式，旋转解决
@@ -183,7 +183,7 @@ bool RBtree::remove(int key)
 		orphan = victim->right;
 	}
 
-	Node* root = reinterpret_cast<Node*>(victim->parent);
+	Node* root = victim->parent();
 	if (root == NULL) { //此时victim==target
 		m_root = root->tryHook(orphan);
 		if (m_root != NULL) {
@@ -210,7 +210,7 @@ bool RBtree::remove(int key)
 void RBtree::adjustAfterDelete(Node* G, int key)
 {
 	while(true) { //剩下情况：victim黑，orphan也黑，此时victim(orphan顶替)的兄弟必然存在
-		Node* super = reinterpret_cast<Node*>(G->parent);
+		Node* super = G->parent();
 		if (key < G->key) {
 			Node* U = G->right; //U != NULL
 			Node* L = U->left;

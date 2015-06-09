@@ -4,18 +4,24 @@ class RBtree : NonCopyable {
 private:
 	struct Node {
 		int			key;
-		uintptr_t	black : 1;
-		uintptr_t	parent : sizeof(uintptr_t)*8 - 1;
 		Node*		left;
 		Node*		right;
+		uintptr_t	black : 1;
+		uintptr_t	_parent : sizeof(uintptr_t)* 8 - 1;
+		Node* parent() const {
+			return (Node*)(_parent << 1);
+		}
+		void parent(Node* pt) {
+			_parent = ((uintptr_t)pt) >> 1;
+		}
 
 		Node* hook(Node* child) {
-			child->parent = reinterpret_cast<uintptr_t>(this);
+			child->parent(this);
 			return child;
 		}
 		Node* tryHook(Node* child) {
 			if (child != NULL) {
-				child->parent = reinterpret_cast<uintptr_t>(this);
+				child->parent(this);
 			}
 			return child;
 		}
