@@ -37,8 +37,7 @@ func NewHeap(size int, start int) (root *node, list []node) {
 			list[start+1].prev, list[start-1].next = &list[start-1], &list[start+1]
 		}
 	}
-	root = &list[start]
-	return
+	return &list[start], list
 }
 
 func fakeHead(spt **node) *node {
@@ -59,14 +58,13 @@ func merge(one *node, another *node) *node {
 }
 
 func Insert(root *node, unit *node) *node {
-	if unit == nil {
-		return root
-	}
-	unit.child, unit.next, unit.prev = nil, nil, nil
-	if root == nil {
-		root = unit
-	} else {
-		root = merge(root, unit)
+	if unit != nil {
+		unit.child, unit.next, unit.prev = nil, nil, nil
+		if root == nil {
+			root = unit
+		} else {
+			root = merge(root, unit)
+		}
 	}
 	return root
 }

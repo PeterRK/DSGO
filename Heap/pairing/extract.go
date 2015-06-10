@@ -31,7 +31,7 @@ func (hp *Heap) PopNode() (unit *Node) {
 		knot.next = list
 	}
 	hp.root.prev = nil
-	return
+	return unit
 }
 func (hp *Heap) Pop() (key int, fail bool) {
 	var node = hp.PopNode()

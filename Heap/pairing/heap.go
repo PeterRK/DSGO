@@ -47,14 +47,13 @@ func (hp *Heap) Merge(peer *Heap) {
 
 //这货Push时不怎么管整理，到Pop时再做
 func (hp *Heap) PushNode(unit *Node) {
-	if unit == nil {
-		return
-	}
-	unit.prev, unit.next, unit.child = nil, nil, nil
-	if hp.root == nil {
-		hp.root = unit
-	} else {
-		hp.root = merge(hp.root, unit)
+	if unit != nil {
+		unit.prev, unit.next, unit.child = nil, nil, nil
+		if hp.root == nil {
+			hp.root = unit
+		} else {
+			hp.root = merge(hp.root, unit)
+		}
 	}
 }
 func (hp *Heap) Push(key int) *Node {
