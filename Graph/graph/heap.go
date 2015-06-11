@@ -37,9 +37,16 @@ func NewHeap(size int, start int) (root *node, list []node) {
 			list[start+1].prev, list[start-1].next = &list[start-1], &list[start+1]
 		}
 	}
-	return &list[start], list
+	root = &list[start]
+	return
 }
 
+func (node *Node) hook(peer *Node) *Node {
+	if peer != nil {
+		peer.prev = node
+	}
+	return peer
+}
 func fakeHead(spt **node) *node {
 	var base = uintptr(unsafe.Pointer(spt))
 	var off = unsafe.Offsetof((*spt).next)
@@ -109,18 +116,8 @@ func FloatUp(root *node, target *node, distance uint) *node {
 			return root
 		}
 
-		target.next, parent.next = parent.next, target.next
-		if parent.next != nil {
-			parent.next.prev = parent
-		}
-		if target.next != nil {
-			target.next.prev = target
-		}
-
-		parent.child = target.child
-		if parent.child != nil {
-			parent.child.prev = parent
-		}
+		target.next, parent.next = target.hook(parent.next), parent.hook(target.next)
+		parent.child = parent.hook(target.child)
 
 		if brother != target {
 			parent.prev, target.prev = target.prev, parent.prev
