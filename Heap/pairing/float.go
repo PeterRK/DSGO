@@ -41,18 +41,8 @@ func (hp *Heap) FloatUp(target *Node, value int) {
 			return
 		}
 
-		target.next, parent.next = parent.next, target.next
-		if parent.next != nil {
-			parent.next.prev = parent
-		}
-		if target.next != nil {
-			target.next.prev = target
-		}
-
-		parent.child = target.child
-		if parent.child != nil {
-			parent.child.prev = parent
-		}
+		target.next, parent.next = target.hook(parent.next), parent.hook(target.next)
+		parent.child = parent.hook(target.child)
 
 		if brother != target {
 			parent.prev, target.prev = target.prev, parent.prev

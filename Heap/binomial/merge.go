@@ -13,31 +13,24 @@ func fakeHead(spt **node) *node {
 //list是从少到多的
 func (hp *Heap) merge(list *node) {
 	var knot = fakeHead(&hp.list)
-	for knot.peer != nil && list != nil {
-		if knot.peer.level == list.level {
-			var root = knot.peer
-			knot.peer = root.peer
-			var another = list
-			list = another.peer
-
-			if root.key > another.key {
-				root, another = another, root
-			}
-			another.peer, root.child = root.child, another
-			root.level++
-
-			root.peer, list = list, root
-		} else {
-			if knot.peer.level > list.level {
-				var target = list
-				list = list.peer
-				target.peer, knot.peer = knot.peer, target
-			}
+	for list != nil {
+		var one, another = list, knot.peer
+		if another == nil || one.level < another.level {
+			list, one.peer = one.peer, another
+			knot.peer = one
+		} else if one.level > another.level {
 			knot = knot.peer
+		} else { //同级合并
+			list, knot.peer = one.peer, another.peer
+
+			if one.key > another.key {
+				one, another = another, one
+			}
+			another.peer, one.child = one.child, another
+			one.level++
+
+			one.peer, list = list, one //可能会有一项逆序，不影响大局
 		}
-	}
-	if list != nil {
-		knot.peer = list
 	}
 }
 func (hp *Heap) Merge(victim *Heap) {

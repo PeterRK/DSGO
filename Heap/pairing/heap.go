@@ -12,6 +12,13 @@ type Node struct {
 	next  *Node //弟节点
 }
 
+func (node *Node) hook(peer *Node) *Node {
+	if peer != nil {
+		peer.prev = node
+	}
+	return peer
+}
+
 func (hp *Heap) IsEmpty() bool {
 	return hp.root == nil
 }
@@ -22,14 +29,11 @@ func (hp *Heap) Top() (key int, fail bool) {
 	return hp.root.key, false
 }
 
-func merge(one *Node, another *Node) *Node {
+func merge(one *Node, another *Node) *Node { //one != nil && another != nil
 	if one.key > another.key {
 		one, another = another, one
 	}
-	another.next = one.child
-	if one.child != nil {
-		one.child.prev = another
-	}
+	another.next = another.hook(one.child)
 	one.child, another.prev = another, one
 	return one
 }
