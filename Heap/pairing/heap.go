@@ -32,9 +32,8 @@ func merge(one *Node, another *Node) *Node { //one != nil && another != nil
 	if one.key > another.key {
 		one, another = another, one
 	}
-	another.next = one.child
 	another.next = another.hook(one.child)
-	one.child, another.prev = another, one
+	one.child = one.hook(another)
 	return one
 }
 func (hp *Heap) Merge(victim *Heap) {

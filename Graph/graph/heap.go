@@ -57,7 +57,7 @@ func merge(one *node, another *node) *node {
 		one, another = another, one
 	}
 	another.next = another.hook(one.child)
-	one.child, another.prev = another, one
+	one.child = one.hook(another)
 	return one
 }
 
@@ -96,19 +96,15 @@ func Extract(root *node) *node {
 	}
 	return nil
 }
-
 func FloatUp(root *node, target *node, distance uint) *node {
 	if target != nil && distance < target.Dist {
 		target.Dist = distance
-		var super = target.prev
-		if super != nil {
-			if super.child == target {
-				if super.Dist > distance {
-					super.child, target.next = super.hook(target.next), nil
-					root = merge(root, target)
-				}
-			} else {
+		if super := target.prev; super != nil {
+			if super.next == target {
 				super.next, target.next = super.hook(target.next), nil
+				root = merge(root, target)
+			} else if super.Dist > distance {
+				super.child, target.next = super.hook(target.next), nil
 				root = merge(root, target)
 			}
 		}

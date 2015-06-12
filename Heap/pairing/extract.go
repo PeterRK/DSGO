@@ -10,6 +10,7 @@ func fakeHead(spt **Node) *Node {
 	return (*Node)(unsafe.Pointer(base - off))
 }
 
+/*
 func collect(head *Node) *Node {
 	if head != nil {
 		for head.next != nil {
@@ -23,6 +24,31 @@ func collect(head *Node) *Node {
 			knot.next = list
 		}
 		head.prev = nil
+	}
+	return head
+}
+*/
+
+func collect(head *Node) *Node {
+	if head != nil && head.next != nil {
+		var list, last = head, fakeHead(&head)
+		for list != nil && list.next != nil { //两两配对
+			var one, another = list, list.next
+			list = another.next
+			last.next = last.hook(merge(one, another))
+			last = last.next
+		}
+		head.prev = nil
+		if list == nil {
+			head, list = last, last.prev
+		} else {
+			head, list = list, last
+		}
+		for list != nil {
+			last, list = list, list.prev
+			head = merge(head, last)
+		}
+		head.prev, head.next = nil, nil
 	}
 	return head
 }
@@ -44,14 +70,16 @@ func (hp *Heap) Pop() (key int, fail bool) {
 
 func (hp *Heap) Remove(target *Node) {
 	if target != nil {
-		if target == hp.root { //根
+		if super := target.prev; super == nil { //根
 			hp.root = collect(target.child)
 		} else {
-			var super = target.prev
 			if super.child == target { //super为父
 				super.child = super.hook(target.next)
 			} else { //super为兄
 				super.next = super.hook(target.next)
+			}
+			if target = collect(target.child); target != nil {
+				hp.root = merge(hp.root, target)
 			}
 		}
 	}
@@ -59,15 +87,12 @@ func (hp *Heap) Remove(target *Node) {
 func (hp *Heap) FloatUp(target *Node, value int) {
 	if target != nil && value < target.key {
 		target.key = value
-		var super = target.prev
-		if super != nil { //非根
-			if super.child == target { //super为父
-				if super.key > value { //但被超越
-					super.child, target.next = super.hook(target.next), nil
-					hp.root = merge(hp.root, target)
-				}
-			} else { //super为兄
+		if super := target.prev; super != nil { //非根
+			if super.next == target { //super为兄
 				super.next, target.next = super.hook(target.next), nil
+				hp.root = merge(hp.root, target)
+			} else if super.key > value { //super为父，但被超越
+				super.child, target.next = super.hook(target.next), nil
 				hp.root = merge(hp.root, target)
 			}
 		}
