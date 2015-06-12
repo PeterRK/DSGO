@@ -5,8 +5,7 @@ import (
 )
 
 //输入邻接表，返回某点到各点的最短路径的长度(-1指不通)。
-//本实现复杂度为O(ElogV)，理论上最佳为O(E+VlogV)。
-//已知最快的单源最短路径算法，对稀疏图尤甚。
+//复杂度为O(E+VlogV)，已知最快的单源最短路径算法，对稀疏图尤甚。
 //可以处理有向图，不能处理负权边。
 func Dijkstra(roads [][]graph.Path, start int) []int {
 	var size = len(roads)

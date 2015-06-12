@@ -57,7 +57,7 @@ func merge(one *node, another *node) *node {
 		one, another = another, one
 	}
 	another.next = another.hook(one.child)
-	one.child = one.hook(another)
+	one.child, another.prev = another, one
 	return one
 }
 
