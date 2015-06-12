@@ -1,7 +1,6 @@
 package pairing
 
-//配对堆的理论复杂度较好，Pop和FloatUp为O(log N)，其余核心操作为O(1)。
-//虽然Fibonacci堆中FloatUp操作的理论复杂度更好，但配对堆实际上更为实用。
+//虽然Fibonacci理论复杂度更好，但配对堆实际上更为实用。
 type Heap struct {
 	root *Node
 }
@@ -12,9 +11,9 @@ type Node struct {
 	next  *Node //弟节点
 }
 
-func (node *Node) hook(peer *Node) *Node {
+func (unit *Node) hook(peer *Node) *Node {
 	if peer != nil {
-		peer.prev = node
+		peer.prev = unit
 	}
 	return peer
 }
@@ -33,20 +32,21 @@ func merge(one *Node, another *Node) *Node { //one != nil && another != nil
 	if one.key > another.key {
 		one, another = another, one
 	}
+	another.next = one.child
 	another.next = another.hook(one.child)
 	one.child, another.prev = another, one
 	return one
 }
-func (hp *Heap) Merge(peer *Heap) {
-	if hp == peer || peer.root == nil {
+func (hp *Heap) Merge(victim *Heap) {
+	if hp == victim || victim.root == nil {
 		return
 	}
 	if hp.root == nil {
-		hp.root = peer.root
+		hp.root = victim.root
 	} else {
-		hp.root = merge(hp.root, peer.root)
+		hp.root = merge(hp.root, victim.root)
 	}
-	peer.root = nil
+	victim.root = nil
 }
 
 //这货Push时不怎么管整理，到Pop时再做

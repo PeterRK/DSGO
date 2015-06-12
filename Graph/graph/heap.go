@@ -7,8 +7,8 @@ import (
 type node struct {
 	Vertex
 	child *node
-	prev  *node //父兄节点
-	next  *node //弟节点
+	prev  *node
+	next  *node
 }
 
 func NewVector(size int) []node {
@@ -41,9 +41,9 @@ func NewHeap(size int, start int) (root *node, list []node) {
 	return
 }
 
-func (node *Node) hook(peer *Node) *Node {
+func (unit *node) hook(peer *node) *node {
 	if peer != nil {
-		peer.prev = node
+		peer.prev = unit
 	}
 	return peer
 }
@@ -56,10 +56,7 @@ func merge(one *node, another *node) *node {
 	if one.Dist > another.Dist {
 		one, another = another, one
 	}
-	another.next = one.child
-	if one.child != nil {
-		one.child.prev = another
-	}
+	another.next = another.hook(one.child)
 	one.child, another.prev = another, one
 	return one
 }
@@ -75,68 +72,44 @@ func Insert(root *node, unit *node) *node {
 	}
 	return root
 }
-func Extract(root *node) *node {
-	if root == nil {
-		return nil
-	}
-	root = root.child
-	if root == nil {
-		return nil
-	}
-	for root.next != nil {
-		var list, knot = root, fakeHead(&root)
-		for list != nil && list.next != nil {
-			var one, another = list, list.next
-			list = another.next
-			knot.next = merge(one, another)
-			knot = knot.next
+
+func collect(head *node) *node {
+	if head != nil {
+		for head.next != nil {
+			var list, knot = head, fakeHead(&head)
+			for list != nil && list.next != nil {
+				var one, another = list, list.next
+				list = another.next
+				knot.next = merge(one, another)
+				knot = knot.next
+			}
+			knot.next = list
 		}
-		knot.next = list
+		head.prev = nil
 	}
-	root.prev = nil
-	return root
+	return head
+}
+
+func Extract(root *node) *node {
+	if root != nil {
+		return collect(root.child)
+	}
+	return nil
 }
 
 func FloatUp(root *node, target *node, distance uint) *node {
-	if target == nil || distance >= target.Dist {
-		return root
-	}
-	target.Dist = distance
-	if target == root {
-		return root
-	}
-
-	for {
-		var brother = target
-		for brother.prev.child != brother {
-			brother = brother.prev
-		}
-		var parent = brother.prev
-		if parent.Dist <= target.Dist {
-			return root
-		}
-
-		target.next, parent.next = target.hook(parent.next), parent.hook(target.next)
-		parent.child = parent.hook(target.child)
-
-		if brother != target {
-			parent.prev, target.prev = target.prev, parent.prev
-			parent.prev.next = parent
-			target.child, brother.prev = brother, target
-		} else {
-			target.prev = parent.prev
-			target.child, parent.prev = parent, target
-		}
-
-		if target.prev == nil {
-			root = target
-			break
-		} else {
-			var super = target.prev
-			if super.next == parent {
-				super.next = target
+	if target != nil && distance < target.Dist {
+		target.Dist = distance
+		var super = target.prev
+		if super != nil {
+			if super.child == target {
+				if super.Dist > distance {
+					super.child, target.next = super.hook(target.next), nil
+					root = merge(root, target)
+				}
 			} else {
-				super.child = target
+				super.next, target.next = super.hook(target.next), nil
+				root = merge(root, target)
 			}
 		}
 	}

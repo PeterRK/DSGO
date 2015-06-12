@@ -69,14 +69,6 @@ func Test_Heap(t *testing.T) {
 		mark = key
 	}
 
-	//值上浮
-	mark--
-	heap.FloatUpX(node, mark)
-	key, fail = heap.Top()
-	if fail || key != mark || key == node.key {
-		t.Fail()
-	}
-
 	//节点上浮
 	mark--
 	heap.FloatUp(node, mark)
