@@ -10,7 +10,7 @@ type memo struct {
 	next  *memo
 }
 
-//输入邻接表，返回最小生成树的权。
+//输入边集，返回最小生成树的权。
 //复杂度为O(ElogE)，性能通常不如Prim。
 func Kruskal(roads []graph.Edge, size int) (sum uint, fail bool) {
 	if size < 2 || len(roads) < size-1 {
