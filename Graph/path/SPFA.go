@@ -15,35 +15,57 @@ func SPFA(roads [][]Path, start int) (dists []int, fail bool) {
 		return []int{}, true
 	}
 
-	var ready = make([]bool, size)
+	var q = newQueue(size)
 	dists = make([]int, size)
-	var cnts = make([]int, size)
+	var cnts = make([]int, size) //绝对值记录入队次数，负值表示在队
 	for i := 0; i < size; i++ {
-		ready[i], dists[i], cnts[i] = true, MAX_DIST, 0
+		dists[i], cnts[i] = MAX_DIST, 0
 	}
-	var space = make([]int, size)
-	var rpt, wpt = 0, 0
 
-	ready[start], dists[start], cnts[start] = false, 0, 1
-	space[wpt] = start
-	for wpt++; rpt != wpt; rpt = (rpt + 1) % size { //队列非空
-		var current = space[rpt]
-		ready[current] = true
+	q.push(start)
+	dists[start], cnts[start] = 0, -1
+	for !q.isEmpty() {
+		var current = q.pop()
+		cnts[current] = -cnts[current]
 		for _, path := range roads[current] {
 			var distance = dists[current] + path.Dist
 			var peer = path.Next
 			if distance < dists[peer] {
 				dists[peer] = distance
-				if ready[peer] { //未入队
-					ready[peer] = false
-					space[wpt], wpt = peer, (wpt+1)%size
+				if cnts[peer] >= 0 { //未入队
+					q.push(peer)
 					cnts[peer]++
 					if cnts[peer] > size { //负回路
 						return []int{}, true
 					}
+					cnts[peer] = -cnts[peer] //入队
 				}
 			}
 		}
 	}
 	return dists, false
+}
+
+type queue struct {
+	space    []int
+	rpt, wpt int
+}
+
+func newQueue(size int) *queue {
+	var q = new(queue)
+	q.space = make([]int, size)
+	q.rpt, q.wpt = 0, 0
+	return q
+}
+func (q *queue) isEmpty() bool {
+	return q.rpt == q.wpt
+}
+func (q *queue) push(key int) {
+	q.space[q.wpt] = key
+	q.wpt = (q.wpt + 1) % len(q.space)
+}
+func (q *queue) pop() int {
+	var key = q.space[q.rpt]
+	q.rpt = (q.rpt + 1) % len(q.space)
+	return key
 }

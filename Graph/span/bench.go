@@ -14,7 +14,7 @@ func BenchMark() {
 		return
 	}
 	var roads = transform(edges, size)
-	fmt.Printf("Prepare Graph [%d vertexs & %d edges] in %v\n", size, len(edges), time.Since(start))
+	fmt.Printf("Prepare Graph [%d vertexes & %d edges] in %v\n", size, len(edges), time.Since(start))
 
 	start = time.Now()
 	ret1, fail := Kruskal(edges, size)
@@ -61,4 +61,3 @@ func transform(edges []graph.Edge, size int) [][]graph.Path {
 	}
 	return roads
 }
-

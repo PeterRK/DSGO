@@ -14,32 +14,6 @@ type node struct {
 func NewVector(size int) []node {
 	return make([]node, size)
 }
-func NewHeap(size int, start int) (root *node, list []node) {
-	list = make([]node, size)
-	for i := 0; i < size; i++ {
-		list[i].Index, list[i].Dist, list[i].child = i, MaxDistance, nil
-	}
-	for i := 1; i < size; i++ {
-		list[i].prev, list[i-1].next = &list[i-1], &list[i]
-	}
-	list[0].prev, list[size-1].next = nil, nil
-
-	list[start].Dist = 0
-	list[start].prev, list[start].next = nil, nil
-	if start == 0 {
-		list[start].child = &list[1]
-	} else {
-		list[start].child = &list[0]
-		list[0].prev = &list[start]
-		if start == size-1 {
-			list[start-1].next = nil
-		} else {
-			list[start+1].prev, list[start-1].next = &list[start-1], &list[start+1]
-		}
-	}
-	root = &list[start]
-	return
-}
 
 func (unit *node) hook(peer *node) *node {
 	if peer != nil {

@@ -8,12 +8,11 @@ func FloydWarshall(matrix [][]int) {
 	for k := 0; k < size; k++ {
 		for i := 0; i < size; i++ {
 			for j := 0; j < size; j++ {
-				if matrix[i][k] == MAX_DIST || matrix[k][j] == MAX_DIST {
-					continue
-				}
-				var distance = matrix[i][k] + matrix[k][j]
-				if distance < matrix[i][j] {
-					matrix[i][j] = distance
+				if matrix[i][k] != MAX_DIST && matrix[k][j] != MAX_DIST {
+					var distance = matrix[i][k] + matrix[k][j]
+					if distance < matrix[i][j] {
+						matrix[i][j] = distance
+					}
 				}
 			}
 		}

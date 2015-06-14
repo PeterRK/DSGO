@@ -17,29 +17,28 @@ func Prim(roads [][]graph.Path) (sum uint, fail bool) {
 	const FAKE = -1
 	var list = graph.NewVector(size)
 	for i := 1; i < size; i++ {
-		list[i].Index = FAKE
+		list[i].Link = FAKE
 	}
-	list[0].Index, list[0].Dist = 0, 0
+	list[0].Index, list[0].Link, list[0].Dist = 0, 0, 0
+	var root = graph.Insert(nil, &list[0])
 
 	var cnt int
-	var root = graph.Insert(nil, &list[0])
 	for cnt = 0; root != nil; cnt++ {
 		var current = root
-		current.Link, root = FAKE, graph.Extract(root)
+		root = graph.Extract(root)
 		sum += current.Dist
 		for _, path := range roads[current.Index] {
 			var peer = &list[path.Next]
-			if peer.Index == path.Next { //已经入围的点
-				if peer.Link != FAKE && //还不是内点
-					path.Dist < peer.Dist {
-					peer.Link = current.Index
-					root = graph.FloatUp(root, peer, path.Dist)
-				}
-			} else {
+			if peer.Link == FAKE { //未涉及点
 				peer.Index, peer.Link, peer.Dist = path.Next, current.Index, path.Dist
 				root = graph.Insert(root, peer)
+			} else if peer.Index != FAKE && //外围点
+				path.Dist < peer.Dist { //可更新
+				peer.Link = current.Index
+				root = graph.FloatUp(root, peer, path.Dist)
 			}
 		}
+		current.Index = FAKE //入围
 	}
 	return sum, cnt != size
 }
@@ -59,27 +58,26 @@ func PrimTree(roads [][]graph.Path) (edges []Edge, fail bool) {
 	const FAKE = -1
 	var list = graph.NewVector(size)
 	for i := 1; i < size; i++ {
-		list[i].Index = FAKE
+		list[i].Link = FAKE
 	}
-	list[0].Index, list[0].Dist = 0, 0
-
+	list[0].Index, list[0].Link, list[0].Dist = 0, 0, 0
 	var root = graph.Insert(nil, &list[0])
+
 	for {
 		var current = root
-		current.Link, root = FAKE, graph.Extract(root)
+		root = graph.Extract(root)
 		for _, path := range roads[current.Index] {
 			var peer = &list[path.Next]
-			if peer.Index == path.Next { //已经入围的点
-				if peer.Link != FAKE && //还不是内点
-					path.Dist < peer.Dist {
-					peer.Link = current.Index
-					root = graph.FloatUp(root, peer, path.Dist)
-				}
-			} else {
+			if peer.Link == FAKE { //未涉及点
 				peer.Index, peer.Link, peer.Dist = path.Next, current.Index, path.Dist
 				root = graph.Insert(root, peer)
+			} else if peer.Index != FAKE && //外围点
+				path.Dist < peer.Dist { //可更新
+				peer.Link = current.Index
+				root = graph.FloatUp(root, peer, path.Dist)
 			}
 		}
+		current.Index = FAKE //入围
 		if root == nil {
 			break
 		}

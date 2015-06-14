@@ -19,20 +19,32 @@ func Dijkstra(roads [][]graph.Path, start int) []int {
 		return result
 	}
 
-	var root, list = graph.NewHeap(size, start)
+	const FAKE = -1
+	var list = graph.NewVector(size)
+	for i := 0; i < size; i++ {
+		list[i].Link = FAKE
+	}
+	list[start].Index, list[start].Link, list[start].Dist = start, start, 0
+	var root = graph.Insert(nil, &list[start])
+
 	for root != nil && root.Dist != graph.MaxDistance {
 		var current = root
 		root = graph.Extract(root)
 		for _, path := range roads[current.Index] {
 			var peer = &list[path.Next]
-			if peer.Index == path.Next { //针对未处理的点
+			if peer.Link == FAKE { //未涉及点
+				peer.Index, peer.Link = path.Next, current.Index
+				peer.Dist = current.Dist + path.Dist
+				root = graph.Insert(root, peer)
+			} else if peer.Index != FAKE { //外围点
 				var distance = current.Dist + path.Dist
 				if distance < peer.Dist {
+					//peer.Link = current.Index
 					root = graph.FloatUp(root, peer, distance)
 				}
 			}
 		}
-		current.Index = -1 //标记为已经处理
+		current.Index = FAKE //入围
 	}
 
 	for i := 0; i < size; i++ {
@@ -55,9 +67,17 @@ func DijkstraPath(roads [][]graph.Path, start int, end int) (Dist int, marks []i
 		return 0, []int{start}
 	}
 
-	var root, list = graph.NewHeap(size, start)
+	const FAKE = -1
+	var list = graph.NewVector(size)
+	for i := 0; i < size; i++ {
+		list[i].Link = FAKE
+	}
+	list[start].Index, list[start].Link, list[start].Dist = start, start, 0
+	var root = graph.Insert(nil, &list[start])
+
 	for root != nil && root.Dist != graph.MaxDistance {
-		if root.Index == end {
+		var current = root
+		if current.Index == end {
 			for idx := end; idx != start; idx = list[idx].Link {
 				marks = append(marks, idx)
 			}
@@ -67,13 +87,16 @@ func DijkstraPath(roads [][]graph.Path, start int, end int) (Dist int, marks []i
 				left++
 				right--
 			}
-			return (int)(root.Dist), marks
+			return (int)(current.Dist), marks
 		}
-		var current = root
 		root = graph.Extract(root)
 		for _, path := range roads[current.Index] {
 			var peer = &list[path.Next]
-			if peer.Index == path.Next { //针对未处理的点
+			if peer.Link == FAKE { //未涉及点
+				peer.Index, peer.Link = path.Next, current.Index
+				peer.Dist = current.Dist + path.Dist
+				root = graph.Insert(root, peer)
+			} else if peer.Index != FAKE { //外围点
 				var distance = current.Dist + path.Dist
 				if distance < peer.Dist {
 					peer.Link = current.Index
@@ -81,7 +104,7 @@ func DijkstraPath(roads [][]graph.Path, start int, end int) (Dist int, marks []i
 				}
 			}
 		}
-		current.Index = -1 //标记为已经处理
+		current.Index = FAKE //入围
 	}
 	return -1, []int{}
 }
