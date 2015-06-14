@@ -1,4 +1,4 @@
-package tree
+package span
 
 import (
 	"Graph/graph"
@@ -6,55 +6,59 @@ import (
 	"time"
 )
 
-func DoBenchMark() {
-	var roads, size, err = readGraph()
+func BenchMark() {
+	var start = time.Now()
+	var edges, size, err = readGraph() //IO就是慢！！！
 	if err != nil {
 		fmt.Println("Illegal Input")
 		return
 	}
-	fmt.Println("Read: OK")
-	var table = transform(roads, size)
-	fmt.Println("Prepare: OK")
+	var roads = transform(edges, size)
+	fmt.Printf("Prepare Graph [%d vertexs & %d edges] in %v\n", size, len(edges), time.Since(start))
 
-	var start = time.Now()
-	var ret, fail = Kruskal(roads, size)
-	var tm = time.Since(start)
+	start = time.Now()
+	ret1, fail := Kruskal(edges, size)
+	var tm1 = time.Since(start)
 	if fail {
 		fmt.Println("fail")
-	} else {
-		fmt.Printf("Kruskal %v: %v\n", tm, ret)
 	}
 
 	start = time.Now()
-	ret, fail = Prim(table)
-	tm = time.Since(start)
+	ret2, fail := Prim(roads)
+	var tm2 = time.Since(start)
 	if fail {
 		fmt.Println("fail")
+	}
+
+	if ret1 != ret2 {
+		fmt.Printf("Kruskal[%d] != Prim[%d]\n", ret1, ret2)
 	} else {
-		fmt.Printf("Prim %v: %v\n", tm, ret)
+		fmt.Println("Kruskal:", tm1)
+		fmt.Println("Prim:   ", tm2)
 	}
 }
 
-func readGraph() (roads []graph.Edge, size int, err error) {
+func readGraph() (edges []graph.Edge, size int, err error) {
 	var total int
 	_, err = fmt.Scan(&size, &total)
 	if err != nil || size < 2 || size > total {
 		return []graph.Edge{}, 0, err
 	}
-	roads = make([]graph.Edge, total)
+	edges = make([]graph.Edge, total)
 	for i := 0; i < total; i++ {
-		_, err = fmt.Scan(&roads[i].A, &roads[i].B, &roads[i].Dist)
+		_, err = fmt.Scan(&edges[i].A, &edges[i].B, &edges[i].Dist)
 		if err != nil {
 			return []graph.Edge{}, 0, err
 		}
 	}
-	return roads, size, nil
+	return edges, size, nil
 }
 
-func transform(roads []graph.Edge, size int) [][]graph.Path {
-	var table = make([][]graph.Path, size)
-	for _, path := range roads {
-		table[path.A] = append(table[path.A], graph.Path{Next: path.B, Dist: path.Dist})
+func transform(edges []graph.Edge, size int) [][]graph.Path {
+	var roads = make([][]graph.Path, size)
+	for _, path := range edges {
+		roads[path.A] = append(roads[path.A], graph.Path{Next: path.B, Dist: path.Dist})
 	}
-	return table
+	return roads
 }
+

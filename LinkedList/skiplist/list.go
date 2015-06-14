@@ -92,7 +92,7 @@ func (l *skipList) Insert(key int) bool {
 	}
 	target = new(node)
 	target.key = key
-	target.next = make([]*node, lv, lv) //永不扩张
+	target.next = make([]*node, lv)
 	for i := 0; i < lv; i++ {
 		target.next[i] = l.knots[i].next[i]
 		l.knots[i].next[i] = target

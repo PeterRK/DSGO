@@ -1,4 +1,4 @@
-package tree
+package span
 
 import (
 	"Graph/graph"
@@ -11,18 +11,13 @@ func guard_ut(t *testing.T) {
 	}
 }
 
-func isTheSame(mtx1 [][]int, mtx2 [][]int) bool {
-	if len(mtx1) != len(mtx2) {
+func isTheSame(vec1 []Edge, vec2 []Edge) bool {
+	if len(vec1) != len(vec2) {
 		return false
 	}
-	for i, size := 0, len(mtx1); i < size; i++ {
-		if len(mtx1[i]) != len(mtx2[i]) {
+	for i, size := 0, len(vec1); i < size; i++ {
+		if vec1[i] != vec2[i] {
 			return false
-		}
-		for j, sz := 0, len(mtx1[i]); j < sz; j++ {
-			if mtx1[i][j] != mtx2[i][j] {
-				return false
-			}
 		}
 	}
 	return true
@@ -103,12 +98,7 @@ func Test_PrimTree(t *testing.T) {
 	roads[7] = []graph.Path{{4, 6}, {6, 1}, {8, 2}}
 	roads[8] = []graph.Path{{1, 4}, {2, 14}, {5, 10}, {7, 2}}
 
-	var expected = make([][]int, 9)
-	expected[0] = []int{3, 1}
-	expected[1] = []int{4, 8, 2}
-	expected[2] = []int{5}
-	expected[7] = []int{6}
-	expected[8] = []int{7}
+	var expected = []Edge{{0, 3}, {0, 1}, {1, 4}, {1, 8}, {8, 7}, {7, 6}, {1, 2}, {2, 5}}
 
 	var ret, fail = PrimTree(roads)
 	if fail || !isTheSame(ret, expected) {
@@ -129,12 +119,7 @@ func Test_PlainPrimTree(t *testing.T) {
 		{0, 0, 0, 0, 6, 0, 1, 0, 2},
 		{0, 4, 14, 0, 0, 10, 0, 2, 0}}
 
-	var expected = make([][]int, 9)
-	expected[0] = []int{3, 1}
-	expected[1] = []int{4, 8, 2}
-	expected[2] = []int{5}
-	expected[7] = []int{6}
-	expected[8] = []int{7}
+	var expected = []Edge{{0, 3}, {0, 1}, {1, 4}, {1, 8}, {8, 7}, {7, 6}, {1, 2}, {2, 5}}
 
 	var ret, fail = PlainPrimTree(matrix)
 	if fail || !isTheSame(ret, expected) {

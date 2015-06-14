@@ -1,4 +1,4 @@
-package tree
+package span
 
 import (
 	"Graph/graph"
@@ -41,12 +41,12 @@ func PlainPrim(matrix [][]uint) (sum uint, fail bool) {
 	return sum, false
 }
 
-func PlainPrimTree(matrix [][]uint) (tree [][]int, fail bool) {
+func PlainPrimTree(matrix [][]uint) (edges []Edge, fail bool) {
 	var size = len(matrix)
 	if size < 2 {
-		return [][]int{}, true
+		return []Edge{}, true
 	}
-	tree = make([][]int, size)
+	edges = make([]Edge, 0, size-1)
 
 	var list = make([]graph.Vertex, size)
 	for i := 0; i < size-1; i++ {
@@ -68,10 +68,10 @@ func PlainPrimTree(matrix [][]uint) (tree [][]int, fail bool) {
 			}
 		}
 		if list[best].Dist == graph.MaxDistance {
-			return [][]int{}, true
+			return []Edge{}, true
 		}
-		tree[list[best].Link] = append(tree[list[best].Link], list[best].Index)
+		edges = append(edges, Edge{list[best].Link, list[best].Index})
 		list[best], list[last-1] = list[last-1], list[best]
 	}
-	return tree, false
+	return edges, false
 }
