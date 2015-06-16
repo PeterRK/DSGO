@@ -1,9 +1,13 @@
 package flow
 
+import (
+	"fmt"
+)
+
 //获取增广路径流量，复杂度为O(VE)。
 func search(shadow [][]edge, matrix [][]uint, s *stack) uint {
 	var size = len(matrix)
-	//该循环的每一轮复杂度为O(V)，每一轮都至少会删除图的一条边
+	//每一轮都至少会删除图的一条边
 	for flow, stream := uint(0), uint(0); ; flow += stream {
 		stream = ^uint(0)
 		s.clear()
@@ -24,9 +28,11 @@ func search(shadow [][]edge, matrix [][]uint, s *stack) uint {
 				shadow[current] = shadow[current][:last]
 			}
 		}
-		//找到增广路径
-		for !s.isEmpty() {
+
+		//该循环的每一轮复杂度为O(V)
+		for !s.isEmpty() { //处理找到的增广路径
 			var current, _ = s.pop()
+			fmt.Printf("%d ", current)
 			var last = len(shadow[current]) - 1
 			var path = &shadow[current][last]
 			path.val -= stream
@@ -35,6 +41,7 @@ func search(shadow [][]edge, matrix [][]uint, s *stack) uint {
 				shadow[current] = shadow[current][:last]
 			}
 		}
+		fmt.Println()
 	}
 	return 0
 }
