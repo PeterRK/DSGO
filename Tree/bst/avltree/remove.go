@@ -15,7 +15,7 @@ func (tr *Tree) Remove(key int32) bool {
 		return false
 	}
 
-	var victim, orphan *node = nil, nil
+	var victim, orphan *node
 	if target.left == nil {
 		victim, orphan = target, target.right
 	} else if target.right == nil {
