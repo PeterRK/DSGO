@@ -24,7 +24,7 @@ func DepthFirstSearch(root *BinaryNode, doit func(int)) {
 func BreadthFirstSearch(root *Node, doit func(int)) {
 	if root != nil {
 		var q = newQ()
-		for fail := false; !fail; root, fail = q.pop() {
+		for err := error(nil); err == nil; root, err = q.pop() {
 			for kid := root.child; kid != nil; kid = kid.peer {
 				q.push(kid)
 			}

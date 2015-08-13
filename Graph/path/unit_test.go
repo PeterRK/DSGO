@@ -65,8 +65,8 @@ func Test_SPFA(t *testing.T) {
 	roads[4] = []Path{{1, 6}, {2, 7}}
 
 	var expected = []int{19, 0, 11, 16, 4}
-	var dists, fail = SPFA(roads, 1)
-	if fail || !isTheSame(dists, expected) {
+	var dists, err = SPFA(roads, 1)
+	if err != nil || !isTheSame(dists, expected) {
 		t.Fail()
 	}
 }

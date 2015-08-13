@@ -17,17 +17,17 @@ func BenchMark() {
 	fmt.Printf("Prepare Graph [%d vertexes & %d edges] in %v\n", size, len(edges), time.Since(start))
 
 	start = time.Now()
-	ret1, fail := Kruskal(edges, size)
+	ret1, err := Kruskal(edges, size)
 	var tm1 = time.Since(start)
-	if fail {
-		fmt.Println("fail")
+	if err != nil {
+		fmt.Println(err)
 	}
 
 	start = time.Now()
-	ret2, fail := Prim(roads)
+	ret2, err := Prim(roads)
 	var tm2 = time.Since(start)
-	if fail {
-		fmt.Println("fail")
+	if err != nil {
+		fmt.Println(err)
 	}
 
 	if ret1 != ret2 {

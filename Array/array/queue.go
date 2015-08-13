@@ -8,9 +8,9 @@ type Queue interface {
 	Clear()
 	IsFull() bool
 	IsEmpty() bool
-	Push(key int) (fail bool)
-	Pop() (key int, fail bool)
-	Front() (key int, fail bool)
+	Push(key int) error
+	Pop() (int, error)
+	Front() (int, error)
 }
 
 func NewQueue(size int) (Queue, error) {
@@ -30,7 +30,7 @@ type queue struct {
 
 func (q *queue) initialize(size int) error {
 	if size < 1 || size > 0xffff {
-		return errors.New("Illefal queue size")
+		return errors.New("illefal queue size")
 	}
 	var sz = 4
 	for sz <= size {
@@ -53,26 +53,28 @@ func (q *queue) IsEmpty() bool {
 	return q.rpt == q.wpt
 }
 
-func (q *queue) Push(key int) (fail bool) {
+func (q *queue) Push(key int) error {
 	var next = (q.wpt + 1) & q.mask
 	if next == q.rpt {
-		return true
+		return errors.New("full")
 	}
 	q.space[q.wpt] = key
 	//memory barrier
 	q.wpt = next
-	return false
+	return nil
 }
 
-func (q *queue) Front() (key int, fail bool) {
-	return q.space[q.rpt], q.IsEmpty()
-}
-func (q *queue) Pop() (key int, fail bool) {
+func (q *queue) Front() (int, error) {
 	if q.IsEmpty() {
-		return 0, true
+		return 0, errors.New("empty")
 	}
-	key = q.space[q.rpt]
-	//memory barrier
-	q.rpt = (q.rpt + 1) & q.mask
-	return key, false
+	return q.space[q.rpt], nil
+}
+func (q *queue) Pop() (int, error) {
+	var key, err = q.Front()
+	if err == nil {
+		//memory barrier
+		q.rpt = (q.rpt + 1) & q.mask
+	}
+	return key, nil
 }

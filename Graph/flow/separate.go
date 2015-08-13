@@ -28,8 +28,8 @@ func separate(shadow [][]edge, matrix [][]uint, q *queue, memo []uint) (ok bool)
 
 Label_REACH:
 	for {
-		var current, fail = q.traceBack()
-		if fail {
+		var current, err = q.traceBack()
+		if err != nil {
 			break
 		}
 		//shadow[current] = shadow[current][:0]

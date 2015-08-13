@@ -2,15 +2,16 @@ package span
 
 import (
 	"Graph/graph"
+	"errors"
 )
 
 //输入邻接矩阵(0指不通)，返回最小生成树的权。
 //本实现复杂度为O(V^2)。
-func PlainPrim(matrix [][]uint) (sum uint, fail bool) {
+func PlainPrim(matrix [][]uint) (uint, error) {
 	var size = len(matrix)
-	sum = uint(0)
+	var sum = uint(0)
 	if size < 2 {
-		return 0, true
+		return 0, errors.New("illegal input")
 	}
 
 	var list = make([]graph.Vertex, size)
@@ -33,20 +34,20 @@ func PlainPrim(matrix [][]uint) (sum uint, fail bool) {
 			}
 		}
 		if list[best].Dist == graph.MaxDistance {
-			return 0, true
+			return 0, errors.New("isolated part exist")
 		}
 		sum += list[best].Dist
 		list[best], list[last-1] = list[last-1], list[best]
 	}
-	return sum, false
+	return sum, nil
 }
 
-func PlainPrimTree(matrix [][]uint) (edges []Edge, fail bool) {
+func PlainPrimTree(matrix [][]uint) ([]Edge, error) {
 	var size = len(matrix)
 	if size < 2 {
-		return []Edge{}, true
+		return []Edge{}, errors.New("illegal input")
 	}
-	edges = make([]Edge, 0, size-1)
+	var edges = make([]Edge, 0, size-1)
 
 	var list = make([]graph.Vertex, size)
 	for i := 0; i < size-1; i++ {
@@ -68,10 +69,10 @@ func PlainPrimTree(matrix [][]uint) (edges []Edge, fail bool) {
 			}
 		}
 		if list[best].Dist == graph.MaxDistance {
-			return []Edge{}, true
+			return []Edge{}, errors.New("isolated part exist")
 		}
 		edges = append(edges, Edge{list[best].Link, list[best].Index})
 		list[best], list[last-1] = list[last-1], list[best]
 	}
-	return edges, false
+	return edges, nil
 }

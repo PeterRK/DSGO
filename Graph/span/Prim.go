@@ -2,16 +2,17 @@ package span
 
 import (
 	"Graph/graph"
+	"errors"
 )
 
 //输入邻接表，返回最小生成树的权。
 //复杂度为O(E+VlogV)，通常比Kruskal强。
 //对有向图不适用，多路同权时选择有问题（不能倒着用，可能选错）。
-func Prim(roads [][]graph.Path) (sum uint, fail bool) {
+func Prim(roads [][]graph.Path) (uint, error) {
 	var size = len(roads)
-	sum = uint(0)
+	var sum = uint(0)
 	if size < 2 {
-		return 0, true
+		return 0, errors.New("illegal input")
 	}
 
 	const FAKE = -1
@@ -40,7 +41,10 @@ func Prim(roads [][]graph.Path) (sum uint, fail bool) {
 		}
 		current.Index = FAKE //入围
 	}
-	return sum, cnt != size
+	if cnt != size {
+		return sum, errors.New("isolated part exist")
+	}
+	return sum, nil
 }
 
 type Edge struct {
@@ -48,12 +52,12 @@ type Edge struct {
 }
 
 //输入邻接表，返回一个以0号节点为根的最小生成树。
-func PrimTree(roads [][]graph.Path) (edges []Edge, fail bool) {
+func PrimTree(roads [][]graph.Path) ([]Edge, error) {
 	var size = len(roads)
 	if size < 2 {
-		return []Edge{}, true
+		return []Edge{}, errors.New("illegal input")
 	}
-	edges = make([]Edge, 0, size-1)
+	var edges = make([]Edge, 0, size-1)
 
 	const FAKE = -1
 	var list = graph.NewVector(size)
@@ -83,5 +87,8 @@ func PrimTree(roads [][]graph.Path) (edges []Edge, fail bool) {
 		}
 		edges = append(edges, Edge{root.Link, root.Index})
 	}
-	return edges, len(edges) != size-1
+	if len(edges) != size-1 {
+		return edges, errors.New("isolated part exist")
+	}
+	return edges, nil
 }

@@ -35,15 +35,15 @@ func Test_Heap(t *testing.T) {
 
 	//合并
 	heap.Merge(&another)
-	var key, fail = heap.Top()
-	if fail || key != mark || !another.IsEmpty() {
+	var key, err = heap.Top()
+	if err != nil || key != mark || !another.IsEmpty() {
 		t.Fail()
 	}
 
 	//删除
 	for i := 0; i < size*2; i++ {
-		key, fail = heap.Pop()
-		if fail || key < mark {
+		key, err = heap.Pop()
+		if err != nil || key < mark {
 			t.Fail()
 		}
 		mark = key

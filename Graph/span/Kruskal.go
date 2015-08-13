@@ -2,6 +2,7 @@ package span
 
 import (
 	"Graph/graph"
+	"errors"
 )
 
 type memo struct {
@@ -12,9 +13,9 @@ type memo struct {
 
 //输入边集，返回最小生成树的权。
 //复杂度为O(ElogE)，性能通常不如Prim。
-func Kruskal(roads []graph.Edge, size int) (sum uint, fail bool) {
+func Kruskal(roads []graph.Edge, size int) (uint, error) {
 	if size < 2 || len(roads) < size-1 {
-		return 0, true
+		return 0, errors.New("illegal input")
 	}
 	graph.Sort(roads)
 
@@ -24,7 +25,7 @@ func Kruskal(roads []graph.Edge, size int) (sum uint, fail bool) {
 	}
 
 	var active = &list[0]
-	sum = uint(0)
+	var sum = uint(0)
 	for _, path := range roads {
 		if active.cnt == size {
 			break
@@ -47,5 +48,8 @@ func Kruskal(roads []graph.Edge, size int) (sum uint, fail bool) {
 			another.group = active.group
 		}
 	}
-	return sum, active.cnt != size
+	if active.cnt != size {
+		return sum, errors.New("isolated part exist")
+	}
+	return sum, nil
 }

@@ -1,5 +1,9 @@
 package binary
 
+import (
+	"errors"
+)
+
 //二叉堆，底层采用数组。
 //Build的复杂度为O(N)，Top的复杂度为O(1)，其余核心操作复杂度为O(logN)。
 type Heap struct {
@@ -13,11 +17,11 @@ func (hp *Heap) IsEmpty() bool {
 	return len(hp.core) == 0
 }
 
-func (hp *Heap) Top() (key int, fail bool) {
+func (hp *Heap) Top() (int, error) {
 	if hp.IsEmpty() {
-		return 0, true
+		return 0, errors.New("empty")
 	}
-	return hp.core[0], false
+	return hp.core[0], nil
 }
 
 func (hp *Heap) Build(list []int) {
@@ -32,13 +36,13 @@ func (hp *Heap) Push(key int) {
 	hp.core = append(hp.core, key)
 	hp.adjustUp(place)
 }
-func (hp *Heap) Pop() (key int, fail bool) {
+func (hp *Heap) Pop() (int, error) {
 	var size = hp.Size()
 	if size == 0 {
-		return 0, true
+		return 0, errors.New("empty")
 	}
 
-	key = hp.core[0]
+	var key = hp.core[0]
 	if size == 1 {
 		hp.core = hp.core[:0]
 	} else {
@@ -46,5 +50,5 @@ func (hp *Heap) Pop() (key int, fail bool) {
 		hp.core = hp.core[:size-1]
 		hp.adjustDown(0)
 	}
-	return key, false
+	return key, nil
 }

@@ -29,14 +29,14 @@ func Test_Deque(t *testing.T) {
 
 	//后删两段
 	for i := 0; i < size; i++ {
-		var key, fail = con.PopBack()
-		if fail || key != (size*1+(size-1)-i) {
+		var key, err = con.PopBack()
+		if err != nil || key != (size*1+(size-1)-i) {
 			t.Fail()
 		}
 	}
 	for i := 0; i < size; i++ {
-		var key, fail = con.PopBack()
-		if fail || key != (size*2+i) {
+		var key, err = con.PopBack()
+		if err != nil || key != (size*2+i) {
 			t.Fail()
 		}
 	}
@@ -48,14 +48,14 @@ func Test_Deque(t *testing.T) {
 
 	//前删两段
 	for i := 0; i < size; i++ {
-		var key, fail = con.PopFront()
-		if fail || key != (size*4+(size-1)-i) {
+		var key, err = con.PopFront()
+		if err != nil || key != (size*4+(size-1)-i) {
 			t.Fail()
 		}
 	}
 	for i := 0; i < size; i++ {
-		var key, fail = con.PopFront()
-		if fail || key != (size*3+(size-1)-i) {
+		var key, err = con.PopFront()
+		if err != nil || key != (size*3+(size-1)-i) {
 			t.Fail()
 		}
 	}
@@ -70,15 +70,15 @@ func Test_Deque(t *testing.T) {
 	}
 	//后删一段
 	for i := 0; i < size; i++ {
-		var key, fail = con.PopBack()
-		if fail || key != (size*5+(size-1)-i) {
+		var key, err = con.PopBack()
+		if err != nil || key != (size*5+(size-1)-i) {
 			t.Fail()
 		}
 	}
 	//前删一段
 	for i := 0; i < size; i++ {
-		var key, fail = con.PopFront()
-		if fail || key != (size*6+(size-1)-i) {
+		var key, err = con.PopFront()
+		if err != nil || key != (size*6+(size-1)-i) {
 			t.Fail()
 		}
 	}
@@ -96,8 +96,8 @@ func Test_Stack(t *testing.T) {
 		con.Push(i)
 	}
 	for i := 0; i < size; i++ {
-		var key, fail = con.Pop()
-		if fail || key != (size-1)-i {
+		var key, err = con.Pop()
+		if err != nil || key != (size-1)-i {
 			t.Fail()
 		}
 	}
@@ -115,8 +115,8 @@ func Test_Queue(t *testing.T) {
 		con.Push(i)
 	}
 	for i := 0; i < size; i++ {
-		var key, fail = con.Pop()
-		if fail || key != i {
+		var key, err = con.Pop()
+		if err != nil || key != i {
 			t.Fail()
 		}
 	}

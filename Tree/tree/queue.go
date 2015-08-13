@@ -1,5 +1,9 @@
 package tree
 
+import (
+	"errors"
+)
+
 const piece_sz = 30
 
 type piece struct {
@@ -40,17 +44,17 @@ func (q *queue) push(node *Node) {
 	q.cnt++
 }
 
-func (q *queue) pop() (node *Node, fail bool) {
+func (q *queue) pop() (*Node, error) {
 	if q.cnt == 0 {
-		return nil, true
+		return nil, errors.New("empty")
 	}
 	q.cnt--
 	q.back.idx++
-	node = q.back.pt.space[q.back.idx]
+	var node = q.back.pt.space[q.back.idx]
 	if q.back.idx == piece_sz-1 {
 		q.back.idx = -1    //q.back.idx永远不指向(piece_sz-1)
 		q.back.pt.bw = nil //只保留一块缓冲
 		q.back.pt = q.back.pt.fw
 	}
-	return node, false
+	return node, nil
 }

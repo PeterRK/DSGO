@@ -1,5 +1,9 @@
 package pairing
 
+import (
+	"errors"
+)
+
 //虽然Fibonacci理论复杂度更好，但配对堆实际上更为实用。
 type Heap struct {
 	root *Node
@@ -21,11 +25,11 @@ func (unit *Node) hook(peer *Node) *Node {
 func (hp *Heap) IsEmpty() bool {
 	return hp.root == nil
 }
-func (hp *Heap) Top() (key int, fail bool) {
+func (hp *Heap) Top() (int, error) {
 	if hp.IsEmpty() {
-		return 0, true
+		return 0, errors.New("empty")
 	}
-	return hp.root.key, false
+	return hp.root.key, nil
 }
 
 func merge(one *Node, another *Node) *Node { //one != nil && another != nil

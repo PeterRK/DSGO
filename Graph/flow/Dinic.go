@@ -1,5 +1,9 @@
 package flow
 
+import (
+	"errors"
+)
+
 type edge struct {
 	next int
 	val  uint
@@ -81,10 +85,10 @@ func (q *queue) pop() int {
 	q.rpt = (q.rpt + 1) % len(q.space)
 	return key
 }
-func (q *queue) traceBack() (key int, fail bool) {
+func (q *queue) traceBack() (int, error) {
 	q.wpt--
 	if q.wpt < 0 {
-		return 0, true
+		return 0, errors.New("empty")
 	}
-	return q.space[q.wpt], false
+	return q.space[q.wpt], nil
 }

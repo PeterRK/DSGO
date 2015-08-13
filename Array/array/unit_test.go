@@ -33,27 +33,27 @@ func Test_CyclicQueue(t *testing.T) {
 
 	var queue, _ = NewQueue(5)
 	for i := 1; i < 8; i++ {
-		var fail = queue.Push(i)
-		if fail {
+		var err = queue.Push(i)
+		if err != nil {
 			t.Fail()
 		}
 	}
-	var fail = queue.Push(9)
-	if !fail {
+	var err = queue.Push(9)
+	if err == nil {
 		t.Fail()
 	}
 	//1, 2, 3, 4, 5, 6, 7
 
 	for i := 1; i < 5; i++ {
-		var key, fail = queue.Pop()
-		if fail || key != i {
+		var key, err = queue.Pop()
+		if err != nil || key != i {
 			t.Fail()
 		}
 	}
 	//5, 6, 7
 	for i := 8; i < 12; i++ {
-		var fail = queue.Push(i)
-		if fail {
+		var err = queue.Push(i)
+		if err != nil {
 			t.Fail()
 		}
 	}
@@ -63,8 +63,8 @@ func Test_CyclicQueue(t *testing.T) {
 	//5, 6, 7, 8, 9, 10, 11
 
 	for i := 5; i < 12; i++ {
-		var key, fail = queue.Pop()
-		if fail || key != i {
+		var key, err = queue.Pop()
+		if err != nil || key != i {
 			t.Fail()
 		}
 	}

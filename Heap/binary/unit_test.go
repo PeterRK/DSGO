@@ -33,8 +33,8 @@ func Test_Heap(t *testing.T) {
 
 	//建堆
 	heap.Build(list[:])
-	var key, fail = heap.Top()
-	if fail || key != mark {
+	var key, err = heap.Top()
+	if err != nil || key != mark {
 		t.Fail()
 	}
 
@@ -45,15 +45,15 @@ func Test_Heap(t *testing.T) {
 	for i := 0; i < size; i++ {
 		heap.Push(list2[i])
 	}
-	key, fail = heap.Top()
-	if fail || key != mark {
+	key, err = heap.Top()
+	if err != nil || key != mark {
 		t.Fail()
 	}
 
 	//删除
 	for i := 0; i < size*2; i++ {
-		key, fail = heap.Pop()
-		if fail || key < mark {
+		key, err = heap.Pop()
+		if err != nil || key < mark {
 			t.Fail()
 		}
 	}
