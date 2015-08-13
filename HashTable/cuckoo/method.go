@@ -72,7 +72,7 @@ func (tb *hashTable) Insert(key string) bool {
 		}
 
 		if age != 0 { //这里设定一个阈值，限制扩容次数
-			panic("hash fail!")
+			panic("too many conflicts")
 		} //实际上不能解决大量hash重码的情况，最坏情况只能报错
 
 		//调整失败(回绕)，扩容
