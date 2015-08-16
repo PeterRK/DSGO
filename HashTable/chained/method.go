@@ -1,13 +1,14 @@
 package chained
 
 import (
+	"bytes"
 	"unsafe"
 )
 
-func (tb *hashTable) Search(key string) bool {
+func (tb *hashTable) Search(key []byte) bool {
 	var index = tb.hash(key) % uint(len(tb.bucket))
 	for unit := tb.bucket[index]; unit != nil; unit = unit.next {
-		if key == unit.key {
+		if bytes.Compare(key, unit.key) == 0 {
 			return true
 		}
 	}
@@ -15,10 +16,10 @@ func (tb *hashTable) Search(key string) bool {
 }
 
 //成功返回true，没有返回false
-func (tb *hashTable) Remove(key string) bool {
+func (tb *hashTable) Remove(key []byte) bool {
 	var index = tb.hash(key) % uint(len(tb.bucket))
 	for knot := fakeHead(&tb.bucket[index]); knot.next != nil; knot = knot.next {
-		if key == knot.next.key {
+		if bytes.Compare(key, knot.next.key) == 0 {
 			knot.next = knot.next.next
 			tb.cnt--
 			return true
@@ -33,10 +34,10 @@ func fakeHead(spt **node) *node {
 }
 
 //成功返回true，冲突返回false
-func (tb *hashTable) Insert(key string) bool {
+func (tb *hashTable) Insert(key []byte) bool {
 	var index = tb.hash(key) % uint(len(tb.bucket))
 	for unit := tb.bucket[index]; unit != nil; unit = unit.next {
-		if key == unit.key {
+		if bytes.Compare(key, unit.key) == 0 {
 			return false
 		}
 	}

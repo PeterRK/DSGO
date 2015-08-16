@@ -7,14 +7,14 @@ import (
 	"os"
 )
 
-func ConflictRate(data []string, size uint, fn func(str string) uint) float64 {
+func ConflictRate(data []string, size uint, fn func([]byte) uint) float64 {
 	var cnt = uint(0)
 	var book = make([]bool, size)
 	for i := uint(0); i < size; i++ {
 		book[i] = false
 	}
 	for _, str := range data {
-		var index = fn(str) % size
+		var index = fn([]byte(str)) % size
 		if book[index] {
 			cnt++
 		} else {
@@ -41,17 +41,17 @@ func TryByFile(filenme string) {
 		fmt.Println()
 	}
 }
-func ShowBucketCounts(msg string, data []string, size uint, fn func(str string) uint) {
+func ShowBucketCounts(msg string, data []string, size uint, fn func([]byte) uint) {
 	var vec, top = BucketCounts(data, size, fn)
 	fmt.Printf("%s <%d> %v\n", msg, top, vec)
 }
-func BucketCounts(data []string, size uint, fn func(str string) uint) (vec [6]uint, top uint) {
+func BucketCounts(data []string, size uint, fn func([]byte) uint) (vec [6]uint, top uint) {
 	var book = make([]uint, size)
 	for i := uint(0); i < size; i++ {
 		book[i] = 0
 	}
 	for _, str := range data {
-		var index = fn(str) % size
+		var index = fn([]byte(str)) % size
 		book[index]++
 	}
 	top = 1

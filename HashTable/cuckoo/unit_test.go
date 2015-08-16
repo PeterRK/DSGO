@@ -17,20 +17,20 @@ func Test_HashTable(t *testing.T) {
 		book[i] = string(tpl[i : i+26])
 	}
 
-	var fn = [WAYS]func(str string) uint{hash.APhash, hash.FNVhash, hash.JShash}
+	var fn = [WAYS]func([]byte) uint{hash.APhash, hash.FNVhash, hash.JShash}
 	var table = NewHashTable(fn)
 	for i := 0; i < 52; i++ {
-		if !table.Insert(book[i]) {
+		if !table.Insert([]byte(book[i])) {
 			t.Fail()
 		}
 	}
 	for i := 0; i < 52; i++ {
-		if !table.Search(book[i]) {
+		if !table.Search([]byte(book[i])) {
 			t.Fail()
 		}
 	}
 	for i := 0; i < 52; i++ {
-		if !table.Remove(book[i]) {
+		if !table.Remove([]byte(book[i])) {
 			t.Fail()
 		}
 	}

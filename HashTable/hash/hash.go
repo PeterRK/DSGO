@@ -3,70 +3,62 @@ package hash
 type HashTable interface {
 	Size() int
 	IsEmpty() bool
-	Insert(key string) bool
-	Search(key string) bool
-	Remove(key string) bool
+	Insert(key []byte) bool
+	Search(key []byte) bool
+	Remove(key []byte) bool
 }
 
 //以下算法搜集自网络，基本思路类似，效果相近
 
 //by Brian Kernighan & Dennis Ritchie
-func BKDRhash(str string) uint {
+func BKDRhash(str []byte) uint {
 	const factor uint = 131 //31、131、1313、 13131、131313
-	var data = []byte(str)
 	var code uint = 0
-	for _, ch := range data {
+	for _, ch := range str {
 		code = code*factor + uint(ch)
 	}
 	return code
 }
 
 //from SDBM
-func SDBMhash(str string) uint {
-	var data = []byte(str)
+func SDBMhash(str []byte) uint {
 	var code uint = 0
-	for _, ch := range data {
+	for _, ch := range str {
 		code = code*65599 + uint(ch)
 	}
 	return code
 }
 
 //by Daniel J. Bernstein
-func DJBhash(str string) uint {
-	var data = []byte(str)
+func DJBhash(str []byte) uint {
 	var code uint = 5381
-	for _, ch := range data {
+	for _, ch := range str {
 		code = code*33 + uint(ch)
 	}
 	return code
 }
-func DJB2hash(str string) uint {
-	var data = []byte(str)
+func DJB2hash(str []byte) uint {
 	var code uint = 5381
-	for _, ch := range data {
+	for _, ch := range str {
 		code = code*33 ^ uint(ch)
 	}
 	return code
 }
 
 //from Unix
-func FNVhash(str string) uint {
-	var data = []byte(str)
-
+func FNVhash(str []byte) uint {
 	var code uint = 2166136261
-	for _, ch := range data {
+	for _, ch := range str {
 		code = code*16777619 ^ uint(ch)
 	}
 	return code
 }
 
 //Robert Sedgwicks
-func RShash(str string) uint {
-	var data = []byte(str)
-
+func RShash(str []byte) uint {
 	var magic uint = 63689
 	var code uint = 0
-	for _, ch := range data {
+	for _, ch := range str {
 		code = code*magic + uint(ch)
 		magic *= 378551
 	}
@@ -74,23 +66,19 @@ func RShash(str string) uint {
 }
 
 //by Justin Sobel
-func JShash(str string) uint {
-	var data = []byte(str)
-
+func JShash(str []byte) uint {
 	var code uint = 1315423911
-	for _, ch := range data {
+	for _, ch := range str {
 		code ^= (code << 5) + uint(ch) + (code >> 2)
 	}
 	return code
 }
 
 //by Arash Partow
-func APhash(str string) uint {
-	var data = []byte(str)
-
+func APhash(str []byte) uint {
 	var code uint = 0
 	var tick = true
-	for _, ch := range data {
+	for _, ch := range str {
 		if tick {
 			code ^= (code << 7) ^ uint(ch) ^ (code >> 3)
 		} else {

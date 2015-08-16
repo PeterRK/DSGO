@@ -8,10 +8,10 @@ const WAYS = 3
 
 type node struct {
 	code [WAYS]uint
-	key  string
+	key  []byte
 }
 type table struct {
-	hash   func(str string) uint
+	hash   func([]byte) uint
 	bucket []*node
 }
 type hashTable struct {
@@ -27,7 +27,7 @@ func (tb *hashTable) IsEmpty() bool {
 	return tb.cnt == 0
 }
 
-func (tb *hashTable) initialize(fn [WAYS]func(str string) uint) {
+func (tb *hashTable) initialize(fn [WAYS]func(str []byte) uint) {
 	tb.idx, tb.cnt = 0, 0
 	var sz = 8 //2^n
 	for i := WAYS - 1; i >= 0; i-- {
@@ -36,7 +36,7 @@ func (tb *hashTable) initialize(fn [WAYS]func(str string) uint) {
 		sz *= 2
 	}
 }
-func NewHashTable(fn [WAYS]func(str string) uint) hash.HashTable {
+func NewHashTable(fn [WAYS]func(str []byte) uint) hash.HashTable {
 	var tb = new(hashTable)
 	tb.initialize(fn)
 	return tb

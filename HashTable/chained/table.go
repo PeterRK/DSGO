@@ -5,11 +5,11 @@ import (
 )
 
 type node struct {
-	key  string
+	key  []byte
 	next *node
 }
 type hashTable struct {
-	hash   func(str string) uint
+	hash   func(str []byte) uint
 	bucket []*node
 	cnt    int
 }
@@ -24,11 +24,11 @@ func (tb *hashTable) isCrowded() bool {
 	return tb.cnt*2 > len(tb.bucket)*3
 }
 
-func (tb *hashTable) initialize(fn func(str string) uint) {
+func (tb *hashTable) initialize(fn func(str []byte) uint) {
 	tb.cnt, tb.hash = 0, fn
 	tb.bucket = make([]*node, primes[0])
 }
-func NewHashTable(fn func(str string) uint) hash.HashTable {
+func NewHashTable(fn func(str []byte) uint) hash.HashTable {
 	var tb = new(hashTable)
 	tb.initialize(fn)
 	return tb

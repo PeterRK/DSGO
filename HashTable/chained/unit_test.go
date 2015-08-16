@@ -19,17 +19,17 @@ func Test_HashTable(t *testing.T) {
 
 	var table = NewHashTable(hash.BKDRhash)
 	for i := 0; i < 52; i++ {
-		if !table.Insert(book[i]) {
+		if !table.Insert([]byte(book[i])) {
 			t.Fail()
 		}
 	}
 	for i := 0; i < 52; i++ {
-		if !table.Search(book[i]) {
+		if !table.Search([]byte(book[i])) {
 			t.Fail()
 		}
 	}
 	for i := 0; i < 52; i++ {
-		if !table.Remove(book[i]) {
+		if !table.Remove([]byte(book[i])) {
 			t.Fail()
 		}
 	}
