@@ -1,1 +1,1 @@
-package tree
+package kdtree
