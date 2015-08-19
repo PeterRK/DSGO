@@ -18,10 +18,12 @@ func (tb *hashTable) Search(key []byte) bool {
 //成功返回true，没有返回false
 func (tb *hashTable) Remove(key []byte) bool {
 	var index = tb.hash(key) % uint(len(tb.bucket))
-	for knot := fakeHead(&tb.bucket[index]); knot.next != nil; knot = knot.next {
+	var list = tb.bucket[index] //直接取对GC不友好，绕一下道
+	for knot := fakeHead(&list); knot.next != nil; knot = knot.next {
 		if bytes.Compare(key, knot.next.key) == 0 {
 			knot.next = knot.next.next
 			tb.cnt--
+			tb.bucket[index] = list
 			return true
 		}
 	}
