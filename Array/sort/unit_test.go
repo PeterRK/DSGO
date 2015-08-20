@@ -1,4 +1,3 @@
-//1234567890
 package sort
 
 import (

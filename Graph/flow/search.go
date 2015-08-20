@@ -1,9 +1,5 @@
 package flow
 
-import (
-	"fmt"
-)
-
 //获取增广路径流量，复杂度为O(VE)。
 func search(shadow [][]edge, matrix [][]uint, s *stack) uint {
 	var size = len(matrix)
@@ -32,7 +28,6 @@ func search(shadow [][]edge, matrix [][]uint, s *stack) uint {
 		//该循环的每一轮复杂度为O(V)
 		for !s.isEmpty() { //处理找到的增广路径
 			var current, _ = s.pop()
-			fmt.Printf("%d ", current)
 			var last = len(shadow[current]) - 1
 			var path = &shadow[current][last]
 			path.val -= stream
@@ -41,7 +36,6 @@ func search(shadow [][]edge, matrix [][]uint, s *stack) uint {
 				shadow[current] = shadow[current][:last]
 			}
 		}
-		fmt.Println()
 	}
 	return 0
 }
