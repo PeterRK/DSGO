@@ -31,19 +31,15 @@ func partition(list []int) int {
 
 	var a, b = 1 + x, 1 + (1+x+y)%(size-1) //a != b
 	var barrier = list[0]
-	if list[a] < list[b] {
-		if barrier < list[a] {
-			barrier, list[a] = list[a], barrier
-		} else if list[b] < barrier {
-			barrier, list[b] = list[b], barrier
-		}
-	} else { //list[a] >= list[b]
-		if barrier > list[a] {
-			barrier, list[a] = list[a], barrier
-		} else if list[b] > barrier {
-			barrier, list[b] = list[b], barrier
-		}
-	} //三点取中法，每轮至少解决一个
+	if list[a] > list[b] {
+		a, b = b, a
+	}
+	switch {
+	case barrier < list[a]:
+		barrier, list[a] = list[a], barrier
+	case barrier > list[b]:
+		barrier, list[b] = list[b], barrier
+	}
 
 	a, b = 1, size-1
 	for { //注意对称性
@@ -53,7 +49,7 @@ func partition(list []int) int {
 		for list[b] > barrier {
 			b--
 		}
-		if a >= b {
+		if a >= b { //因为先做了三点取中，a和b绝无越界可能
 			break
 		}
 		//以下的交换操作是主要开销所在
