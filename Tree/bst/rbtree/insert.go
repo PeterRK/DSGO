@@ -11,22 +11,24 @@ func (tr *Tree) Insert(key int32) bool {
 
 	var root = tr.root
 	for {
-		if key < root.key {
+		switch {
+		case key < root.key:
 			if root.left == nil {
 				root.left = newNode(root, key) //默认为红
-				break
+				goto Label_DONE
 			}
 			root = root.left
-		} else if key > root.key {
+		case key > root.key:
 			if root.right == nil {
 				root.right = newNode(root, key) //默认为红
-				break
+				goto Label_DONE
 			}
 			root = root.right
-		} else { //key == root.key
+		default: //key == root.key
 			return false
 		}
 	}
+Label_DONE:
 
 	//------------红叔模式------------
 	//|      bG      |      rG      |

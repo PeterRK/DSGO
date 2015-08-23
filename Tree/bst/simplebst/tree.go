@@ -44,21 +44,21 @@ func (tr *Tree) Insert(key int32) bool {
 
 	var parrent = tr.root
 	for {
-		if key == parrent.key {
-			return false
-		}
-		if key < parrent.key {
+		switch {
+		case key < parrent.key:
 			if parrent.left == nil {
 				parrent.left = newNode(key)
 				return true
 			}
 			parrent = parrent.left
-		} else {
+		case key > parrent.key:
 			if parrent.right == nil {
 				parrent.right = newNode(key)
 				return true
 			}
 			parrent = parrent.right
+		default:
+			return false
 		}
 	}
 	return true
@@ -79,11 +79,12 @@ func (tr *Tree) Remove(key int32) bool {
 	}
 
 	var victim, orphan *node
-	if target.left == nil {
+	switch {
+	case target.left == nil:
 		victim, orphan = target, target.right
-	} else if target.right == nil {
+	case target.right == nil:
 		victim, orphan = target, target.left
-	} else { //取中右，取中左也是可以的
+	default: //取中右，取中左也是可以的
 		victim, parrent = target.right, target
 		for victim.left != nil {
 			victim, parrent = victim.left, victim

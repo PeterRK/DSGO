@@ -16,11 +16,12 @@ func (tr *Tree) Remove(key int32) bool {
 	}
 
 	var victim, orphan *node
-	if target.left == nil {
+	switch {
+	case target.left == nil:
 		victim, orphan = target, target.right
-	} else if target.right == nil {
+	case target.right == nil:
 		victim, orphan = target, target.left
-	} else {
+	default:
 		victim = target.right
 		for victim.left != nil {
 			victim = victim.left

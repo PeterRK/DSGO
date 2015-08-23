@@ -10,24 +10,26 @@ func (tr *Tree) Insert(key int32) bool {
 	}
 	tr.path.clear()
 	for root := tr.root; ; {
-		if key < root.key {
+		switch {
+		case key < root.key:
 			tr.path.push(root, true)
 			if root.left == nil {
 				root.left = newNode(key) //默认为红
-				break
+				goto Label_DONE
 			}
 			root = root.left
-		} else if key > root.key {
+		case key > root.key:
 			tr.path.push(root, false)
 			if root.right == nil {
 				root.right = newNode(key) //默认为红
-				break
+				goto Label_DONE
 			}
 			root = root.right
-		} else { //key == root.key
+		default: //key == root.key
 			return false
 		}
 	}
+Label_DONE:
 	tr.adjustAfterInsert()
 	return true
 }
