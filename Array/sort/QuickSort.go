@@ -1,47 +1,22 @@
 package sort
 
-import (
-	"time"
-)
-
 //快速排序，改进的冒泡排序，不具有稳定性。
 //平均复杂度为O(NlogN) & O(logN)，最坏情况是O(N^2) & O(N)。
 //其中比较操作是O(NlogN)，常数与MergeSort相当；挪移操作是O(NlogN)，常数小于MergeSort。
-//QuickSort不适合递归实现(有爆栈风险)。
+//这里采用递归实现，但QuickSort不适合递归实现(有爆栈风险)。
 func QuickSort(list []int) {
-	magic = uint(time.Now().Unix())
-	doQuickSort(list)
-}
-func doQuickSort(list []int) {
 	if len(list) < sz_limit {
 		InsertSort(list)
 	} else {
 		var knot = partition(list)
-		doQuickSort(list[:knot])
-		doQuickSort(list[knot+1:])
+		QuickSort(list[:knot])
+		QuickSort(list[knot:])
 	}
 }
 
-var magic = ^uint(0)
-
 func partition(list []int) int {
-	var size = len(list) //不少于3
-	var x, y = int(magic % uint(size-1)), int(magic % uint(size-2))
-	magic = magic*1103515245 + 12345
-
-	var a, b = 1 + x, 1 + (1+x+y)%(size-1) //a != b
-	var barrier = list[0]
-	if list[a] > list[b] {
-		a, b = b, a
-	}
-	switch {
-	case barrier < list[a]:
-		barrier, list[a] = list[a], barrier
-	case barrier > list[b]:
-		barrier, list[b] = list[b], barrier
-	}
-
-	a, b = 1, size-1
+	var barrier = list[len(list)/2]
+	var a, b = 0, len(list) - 1
 	for { //注意对称性
 		for list[a] < barrier {
 			a++
@@ -57,13 +32,11 @@ func partition(list []int) int {
 		a++
 		b--
 	}
-	list[0], list[b] = list[b], barrier
-	return b
+	return a
 }
 
 /*
 func QuickSort(list []int) {
-	magic = uint(time.Now().Unix())
 	var tasks stack
 	tasks.push(0, len(list))
 	for !tasks.isEmpty() {
@@ -72,7 +45,7 @@ func QuickSort(list []int) {
 			InsertSort(list[start:end])
 		} else {
 			var knot = partition(list[start:end]) + start
-			tasks.push(knot+1, end)
+			tasks.push(knot, end)
 			tasks.push(start, knot)
 		} //每轮保证至少解决一个，否则最坏情况可能是死循环
 	}
