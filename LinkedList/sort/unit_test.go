@@ -12,15 +12,15 @@ const sz_small = 100
 
 func Test_MergeSort(t *testing.T) {
 	testLinkListSort(t, sz_big, ramdomLinkList, MergeSort)
-	testLinkListSort(t, sz_small, stupidLinkList, MergeSort)
+	//testLinkListSort(t, sz_small, stupidLinkList, MergeSort)
 }
 func Test_QuickSort(t *testing.T) {
 	testLinkListSort(t, sz_big, ramdomLinkList, QuickSort)
-	testLinkListSort(t, sz_small, stupidLinkList, QuickSort)
+	//testLinkListSort(t, sz_small, stupidLinkList, QuickSort)
 }
 func Test_IntroSort(t *testing.T) {
 	testLinkListSort(t, sz_big, ramdomLinkList, IntroSort)
-	testLinkListSort(t, sz_small, stupidLinkList, IntroSort)
+	//testLinkListSort(t, sz_small, stupidLinkList, IntroSort)
 }
 
 func testLinkListSort(t *testing.T, size int, create func(int) *list.Node, doit func(*list.Node) *list.Node) {
@@ -29,6 +29,7 @@ func testLinkListSort(t *testing.T, size int, create func(int) *list.Node, doit 
 			t.Fail()
 		}
 	}()
+
 	var head = create(size)
 	head = doit(head)
 	if !checkLinkList(head, size) {
@@ -39,6 +40,7 @@ func testLinkListSort(t *testing.T, size int, create func(int) *list.Node, doit 
 	if !checkLinkList(head, 5) {
 		t.Fail()
 	}
+
 	head = new(list.Node)
 	head.Next = nil
 	head = doit(head)

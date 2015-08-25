@@ -15,7 +15,7 @@ func QuickSort(list []int) {
 }
 
 func partition(list []int) int {
-	var barrier = list[len(list)/2]
+	var barrier = list[len(list)/2] //该选择影响后面是否可能发生越界
 	var a, b = 0, len(list) - 1
 	for { //注意对称性
 		for list[a] < barrier {
@@ -24,7 +24,7 @@ func partition(list []int) int {
 		for list[b] > barrier {
 			b--
 		}
-		if a >= b { //因为先做了三点取中，a和b绝无越界可能
+		if a >= b {
 			break
 		}
 		//以下的交换操作是主要开销所在
@@ -47,7 +47,7 @@ func QuickSort(list []int) {
 			var knot = partition(list[start:end]) + start
 			tasks.push(knot, end)
 			tasks.push(start, knot)
-		} //每轮保证至少解决一个，否则最坏情况可能是死循环
+		}
 	}
 }
 
