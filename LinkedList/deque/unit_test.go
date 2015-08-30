@@ -4,12 +4,19 @@ import (
 	"testing"
 )
 
+func assert(t *testing.T, state bool) {
+	if !state {
+		t.Fail()
+	}
+}
+func guard_ut(t *testing.T) {
+	if err := recover(); err != nil {
+		t.Fail()
+	}
+}
+
 func Test_Deque(t *testing.T) {
-	defer func() {
-		if err := recover(); err != nil {
-			t.Fail()
-		}
-	}()
+	defer guard_ut(t)
 	const size = piece_sz + 1
 
 	var con = NewDeque()
@@ -30,15 +37,11 @@ func Test_Deque(t *testing.T) {
 	//后删两段
 	for i := 0; i < size; i++ {
 		var key, err = con.PopBack()
-		if err != nil || key != (size*1+(size-1)-i) {
-			t.Fail()
-		}
+		assert(t, err == nil && key == (size*1+(size-1)-i))
 	}
 	for i := 0; i < size; i++ {
 		var key, err = con.PopBack()
-		if err != nil || key != (size*2+i) {
-			t.Fail()
-		}
+		assert(t, err == nil && key == (size*2+i))
 	}
 
 	//前增一段
@@ -49,15 +52,11 @@ func Test_Deque(t *testing.T) {
 	//前删两段
 	for i := 0; i < size; i++ {
 		var key, err = con.PopFront()
-		if err != nil || key != (size*4+(size-1)-i) {
-			t.Fail()
-		}
+		assert(t, err == nil && key == (size*4+(size-1)-i))
 	}
 	for i := 0; i < size; i++ {
 		var key, err = con.PopFront()
-		if err != nil || key != (size*3+(size-1)-i) {
-			t.Fail()
-		}
+		assert(t, err == nil && key == (size*3+(size-1)-i))
 	}
 
 	//后增一段
@@ -71,25 +70,17 @@ func Test_Deque(t *testing.T) {
 	//后删一段
 	for i := 0; i < size; i++ {
 		var key, err = con.PopBack()
-		if err != nil || key != (size*5+(size-1)-i) {
-			t.Fail()
-		}
+		assert(t, err == nil && key == (size*5+(size-1)-i))
 	}
 	//前删一段
 	for i := 0; i < size; i++ {
 		var key, err = con.PopFront()
-		if err != nil || key != (size*6+(size-1)-i) {
-			t.Fail()
-		}
+		assert(t, err == nil && key == (size*6+(size-1)-i))
 	}
 }
 
 func Test_Stack(t *testing.T) {
-	defer func() {
-		if err := recover(); err != nil {
-			t.Fail()
-		}
-	}()
+	defer guard_ut(t)
 	const size = 200
 	var con = NewStack()
 	for i := 0; i < size; i++ {
@@ -97,18 +88,12 @@ func Test_Stack(t *testing.T) {
 	}
 	for i := 0; i < size; i++ {
 		var key, err = con.Pop()
-		if err != nil || key != (size-1)-i {
-			t.Fail()
-		}
+		assert(t, err == nil && key == (size-1)-i)
 	}
 }
 
 func Test_Queue(t *testing.T) {
-	defer func() {
-		if err := recover(); err != nil {
-			t.Fail()
-		}
-	}()
+	defer guard_ut(t)
 	const size = 20
 	var con = NewQueue()
 	for i := 0; i < size; i++ {
@@ -116,8 +101,6 @@ func Test_Queue(t *testing.T) {
 	}
 	for i := 0; i < size; i++ {
 		var key, err = con.Pop()
-		if err != nil || key != i {
-			t.Fail()
-		}
+		assert(t, err == nil && key == i)
 	}
 }

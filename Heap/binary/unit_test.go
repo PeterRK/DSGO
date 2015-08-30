@@ -6,12 +6,20 @@ import (
 	"time"
 )
 
+func assert(t *testing.T, state bool) {
+	if !state {
+		t.Fail()
+	}
+}
+func guard_ut(t *testing.T) {
+	if err := recover(); err != nil {
+		t.Fail()
+	}
+}
+
 func Test_Heap(t *testing.T) {
-	defer func() {
-		if err := recover(); err != nil {
-			t.Fail()
-		}
-	}()
+	defer guard_ut(t)
+
 	var heap Heap
 	const size = 200
 	var list, list2 [size]int
@@ -34,9 +42,7 @@ func Test_Heap(t *testing.T) {
 	//建堆
 	heap.Build(list[:])
 	var key, err = heap.Top()
-	if err != nil || key != mark {
-		t.Fail()
-	}
+	assert(t, err == nil && key == mark)
 
 	//插入
 	if mark > mark2 {
@@ -46,15 +52,11 @@ func Test_Heap(t *testing.T) {
 		heap.Push(list2[i])
 	}
 	key, err = heap.Top()
-	if err != nil || key != mark {
-		t.Fail()
-	}
+	assert(t, err == nil && key == mark)
 
 	//删除
 	for i := 0; i < size*2; i++ {
 		key, err = heap.Pop()
-		if err != nil || key < mark {
-			t.Fail()
-		}
+		assert(t, err == nil && key >= mark)
 	}
 }

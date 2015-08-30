@@ -7,12 +7,20 @@ import (
 	"time"
 )
 
+func assert(t *testing.T, state bool) {
+	if !state {
+		t.Fail()
+	}
+}
+func guard_ut(t *testing.T) {
+	if err := recover(); err != nil {
+		t.Fail()
+	}
+}
+
 func Test_SkipList(t *testing.T) {
-	defer func() {
-		if err := recover(); err != nil {
-			t.Fail()
-		}
-	}()
+	defer guard_ut(t)
+
 	var dict = NewSkipList()
 	var cnt = 0
 	const size = 300
@@ -29,13 +37,9 @@ func Test_SkipList(t *testing.T) {
 			cnt++
 		}
 	}
-	if dict.Insert(list[size]) {
-		t.Fail()
-	}
+	assert(t, !dict.Insert(list[size]))
 	for i := 0; i < size*2; i++ {
-		if !dict.Search(list[i]) {
-			t.Fail()
-		}
+		assert(t, dict.Search(list[i]))
 	}
 
 	//遍历
@@ -49,9 +53,7 @@ func Test_SkipList(t *testing.T) {
 		}
 	}
 	for i := 0; i < size; i++ {
-		if dict.Search(list[i]) {
-			t.Fail()
-		}
+		assert(t, !dict.Search(list[i]))
 	}
 
 	//删除第二份
@@ -60,9 +62,7 @@ func Test_SkipList(t *testing.T) {
 			cnt--
 		}
 	}
-	if !dict.IsEmpty() || cnt != 0 {
-		t.Fail()
-	}
+	assert(t, dict.IsEmpty() && cnt == 0)
 }
 
 var mark_ut = 0

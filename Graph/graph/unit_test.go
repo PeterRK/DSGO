@@ -4,6 +4,11 @@ import (
 	"testing"
 )
 
+func assert(t *testing.T, state bool) {
+	if !state {
+		t.Fail()
+	}
+}
 func guard_ut(t *testing.T) {
 	if err := recover(); err != nil {
 		t.Fail()
@@ -24,6 +29,7 @@ func isTheSame(vec1 []int, vec2 []int) bool {
 
 func Test_TopologicalSort(t *testing.T) {
 	defer guard_ut(t)
+
 	var roads = make([][]int, 13)
 	roads[0] = []int{1, 5, 6}
 	roads[1] = []int{}
@@ -41,7 +47,5 @@ func Test_TopologicalSort(t *testing.T) {
 
 	var expected = []int{8, 7, 2, 3, 0, 6, 9, 11, 12, 10, 5, 4, 1}
 	var vec, err = TopologicalSort(roads)
-	if err != nil || !isTheSame(vec, expected) {
-		t.Fail()
-	}
+	assert(t, err == nil && isTheSame(vec, expected))
 }

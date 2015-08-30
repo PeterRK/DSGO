@@ -7,6 +7,17 @@ import (
 	"time"
 )
 
+func assert(t *testing.T, state bool) {
+	if !state {
+		t.Fail()
+	}
+}
+func guard_ut(t *testing.T) {
+	if err := recover(); err != nil {
+		t.Fail()
+	}
+}
+
 const sz_big = 500
 const sz_small = 100
 
@@ -24,33 +35,21 @@ func Test_IntroSort(t *testing.T) {
 }
 
 func testLinkListSort(t *testing.T, size int, create func(int) *list.Node, doit func(*list.Node) *list.Node) {
-	defer func() {
-		if err := recover(); err != nil {
-			t.Fail()
-		}
-	}()
+	defer guard_ut(t)
 
 	var head = create(size)
 	head = doit(head)
-	if !checkLinkList(head, size) {
-		t.Fail()
-	}
+	assert(t, checkLinkList(head, size))
 	head = create(5)
 	head = doit(head)
-	if !checkLinkList(head, 5) {
-		t.Fail()
-	}
+	assert(t, checkLinkList(head, 5))
 
 	head = new(list.Node)
 	head.Next = nil
 	head = doit(head)
-	if head == nil || head.Next != nil {
-		t.Fail()
-	}
+	assert(t, head != nil && head.Next == nil)
 	head = nil
-	if doit(head) != nil {
-		t.Fail()
-	}
+	assert(t, doit(head) == nil)
 }
 func checkLinkList(head *list.Node, size int) bool {
 	var cnt = 1

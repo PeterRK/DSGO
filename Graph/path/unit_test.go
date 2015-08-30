@@ -5,6 +5,11 @@ import (
 	"testing"
 )
 
+func assert(t *testing.T, state bool) {
+	if !state {
+		t.Fail()
+	}
+}
 func guard_ut(t *testing.T) {
 	if err := recover(); err != nil {
 		t.Fail()
@@ -25,6 +30,7 @@ func isTheSame(vec1 []int, vec2 []int) bool {
 
 func Test_Dijkstra(t *testing.T) {
 	defer guard_ut(t)
+
 	var roads = make([][]graph.Path, 5)
 	roads[0] = []graph.Path{{1, 1}, {3, 2}}
 	roads[1] = []graph.Path{{4, 4}}
@@ -34,13 +40,12 @@ func Test_Dijkstra(t *testing.T) {
 
 	var expected = []int{19, 0, 11, 16, 4}
 	var ret = Dijkstra(roads, 1)
-	if !isTheSame(ret, expected) {
-		t.Fail()
-	}
+	assert(t, isTheSame(ret, expected))
 }
 
 func Test_PlainDijkstra(t *testing.T) {
 	defer guard_ut(t)
+
 	var matrix = [][]uint{
 		{0, 1, 0, 2, 0},
 		{0, 0, 0, 0, 4},
@@ -57,6 +62,7 @@ func Test_PlainDijkstra(t *testing.T) {
 
 func Test_SPFA(t *testing.T) {
 	defer guard_ut(t)
+
 	var roads = make([][]Path, 5)
 	roads[0] = []Path{{1, 1}, {3, 2}}
 	roads[1] = []Path{{4, 4}}
@@ -66,13 +72,12 @@ func Test_SPFA(t *testing.T) {
 
 	var expected = []int{19, 0, 11, 16, 4}
 	var dists, err = SPFA(roads, 1)
-	if err != nil || !isTheSame(dists, expected) {
-		t.Fail()
-	}
+	assert(t, err == nil && isTheSame(dists, expected))
 }
 
 func Test_FloydWarshall(t *testing.T) {
 	defer guard_ut(t)
+
 	var matrix = [][]int{
 		{0, 1, MAX_DIST, 2, MAX_DIST},
 		{MAX_DIST, 0, MAX_DIST, MAX_DIST, 4},
@@ -90,15 +95,14 @@ func Test_FloydWarshall(t *testing.T) {
 	FloydWarshall(matrix)
 	for i := 0; i < 5; i++ {
 		for j := 0; j < 5; j++ {
-			if matrix[i][j] != expected[i][j] {
-				t.Fail()
-			}
+			assert(t, matrix[i][j] == expected[i][j])
 		}
 	}
 }
 
 func Test_DijkstraPath(t *testing.T) {
 	defer guard_ut(t)
+
 	var roads = make([][]graph.Path, 5)
 	roads[0] = []graph.Path{{1, 1}, {3, 2}}
 	roads[1] = []graph.Path{{4, 4}}
@@ -108,13 +112,12 @@ func Test_DijkstraPath(t *testing.T) {
 
 	var expected = []int{1, 4, 2, 3, 0}
 	var dist, vec = DijkstraPath(roads, 1, 0)
-	if dist != 19 || !isTheSame(vec, expected) {
-		t.Fail()
-	}
+	assert(t, dist == 19 && isTheSame(vec, expected))
 }
 
 func Test_PlainDijkstraPath(t *testing.T) {
 	defer guard_ut(t)
+
 	var matrix = [][]uint{
 		{0, 1, 0, 2, 0},
 		{0, 0, 0, 0, 4},
@@ -124,7 +127,5 @@ func Test_PlainDijkstraPath(t *testing.T) {
 
 	var expected = []int{1, 4, 2, 3, 0}
 	var dist, vec = PlainDijkstraPath(matrix, 1, 0)
-	if dist != 19 || !isTheSame(vec, expected) {
-		t.Fail()
-	}
+	assert(t, dist == 19 && isTheSame(vec, expected))
 }

@@ -6,12 +6,20 @@ import (
 	"time"
 )
 
+func assert(t *testing.T, state bool) {
+	if !state {
+		t.Fail()
+	}
+}
+func guard_ut(t *testing.T) {
+	if err := recover(); err != nil {
+		t.Fail()
+	}
+}
+
 func Test_Heap(t *testing.T) {
-	defer func() {
-		if err := recover(); err != nil {
-			t.Fail()
-		}
-	}()
+	defer guard_ut(t)
+
 	var heap, another Heap
 	const size = 200
 	var list [size * 2]int
@@ -45,9 +53,7 @@ func Test_Heap(t *testing.T) {
 
 	//部分删除
 	var unit = another.PopNode()
-	if unit == nil {
-		t.Fail()
-	}
+	assert(t, unit != nil)
 	if unit.key > node.key {
 		node = unit
 	}
@@ -56,16 +62,12 @@ func Test_Heap(t *testing.T) {
 	//合并
 	heap.Merge(&another)
 	var key, err = heap.Top()
-	if err != nil || key != mark || !another.IsEmpty() {
-		t.Fail()
-	}
+	assert(t, err == nil && key == mark && another.IsEmpty())
 
 	//部分删除
 	for i := 0; i < size; i++ {
 		key, err = heap.Pop()
-		if err != nil || key < mark {
-			t.Fail()
-		}
+		assert(t, err == nil && key >= mark)
 		mark = key
 	}
 
@@ -73,19 +75,13 @@ func Test_Heap(t *testing.T) {
 	mark--
 	heap.FloatUp(node, mark)
 	key, err = heap.Top()
-	if err != nil || key != mark || key != node.key {
-		t.Fail()
-	}
+	assert(t, err == nil && key == mark && key == node.key)
 
 	//删除
 	for i := 0; i < size; i++ {
 		key, err = heap.Pop()
-		if err != nil || key < mark {
-			t.Fail()
-		}
+		assert(t, err == nil && key >= mark)
 		mark = key
 	}
-	if !heap.IsEmpty() {
-		t.Fail()
-	}
+	assert(t, heap.IsEmpty())
 }

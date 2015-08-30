@@ -5,12 +5,20 @@ import (
 	"testing"
 )
 
+func assert(t *testing.T, state bool) {
+	if !state {
+		t.Fail()
+	}
+}
+func guard_ut(t *testing.T) {
+	if err := recover(); err != nil {
+		t.Fail()
+	}
+}
+
 func Test_HashTable(t *testing.T) {
-	defer func() {
-		if err := recover(); err != nil {
-			t.Fail()
-		}
-	}()
+	defer guard_ut(t)
+
 	var tpl = []byte("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 	var book [52]string
 	for i := 0; i < 52; i++ {
@@ -20,21 +28,13 @@ func Test_HashTable(t *testing.T) {
 	var fn = [WAYS]func([]byte) uint{hash.APhash, hash.FNVhash, hash.JShash}
 	var table = NewHashTable(fn)
 	for i := 0; i < 52; i++ {
-		if !table.Insert([]byte(book[i])) {
-			t.Fail()
-		}
+		assert(t, table.Insert([]byte(book[i])))
 	}
 	for i := 0; i < 52; i++ {
-		if !table.Search([]byte(book[i])) {
-			t.Fail()
-		}
+		assert(t, table.Search([]byte(book[i])))
 	}
 	for i := 0; i < 52; i++ {
-		if !table.Remove([]byte(book[i])) {
-			t.Fail()
-		}
+		assert(t, table.Remove([]byte(book[i])))
 	}
-	if !table.IsEmpty() {
-		t.Fail()
-	}
+	assert(t, table.IsEmpty())
 }

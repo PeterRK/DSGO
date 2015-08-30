@@ -4,12 +4,19 @@ import (
 	"testing"
 )
 
+func assert(t *testing.T, state bool) {
+	if !state {
+		t.Fail()
+	}
+}
+func guard_ut(t *testing.T) {
+	if err := recover(); err != nil {
+		t.Fail()
+	}
+}
+
 func Test_Ring(t *testing.T) {
-	defer func() {
-		if err := recover(); err != nil {
-			t.Fail()
-		}
-	}()
+	defer guard_ut(t)
 
 	var space [10]NodeX
 	for i := 0; i < 10; i++ {
@@ -38,20 +45,12 @@ func Test_Ring(t *testing.T) {
 	//9 1 2 3 4 5 6 7 8 0
 
 	var node = ring.PopHead()
-	if node == nil || node.Val != 9 {
-		t.Fail()
-	}
+	assert(t, node != nil && node.Val == 9)
 	node = ring.PopTail()
-	if node == nil || node.Val != 0 {
-		t.Fail()
-	}
+	assert(t, node != nil && node.Val == 0)
 	for i := 1; i < 9; i++ {
 		node = ring.PopHead()
-		if node == nil || node.Val != i {
-			t.Fail()
-		}
+		assert(t, node != nil && node.Val == i)
 	}
-	if !ring.IsEmpty() {
-		t.Fail()
-	}
+	assert(t, ring.IsEmpty())
 }

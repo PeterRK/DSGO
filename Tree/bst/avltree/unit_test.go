@@ -6,12 +6,20 @@ import (
 	"time"
 )
 
+func assert(t *testing.T, state bool) {
+	if !state {
+		t.Fail()
+	}
+}
+func guard_ut(t *testing.T) {
+	if err := recover(); err != nil {
+		t.Fail()
+	}
+}
+
 func Test_Tree(t *testing.T) {
-	defer func() {
-		if err := recover(); err != nil {
-			t.Fail()
-		}
-	}()
+	defer guard_ut(t)
+
 	var tree Tree
 	var cnt = 0
 	const size = 200
@@ -28,13 +36,9 @@ func Test_Tree(t *testing.T) {
 			cnt++
 		}
 	}
-	if tree.Insert(list[size]) {
-		t.Fail()
-	}
+	assert(t, !tree.Insert(list[size]))
 	for i := 0; i < size*2; i++ {
-		if !tree.Search(list[i]) {
-			t.Fail()
-		}
+		assert(t, tree.Search(list[i]))
 	}
 
 	//删除第一份
@@ -44,9 +48,7 @@ func Test_Tree(t *testing.T) {
 		}
 	}
 	for i := 0; i < size; i++ {
-		if tree.Search(list[i]) {
-			t.Fail()
-		}
+		assert(t, !tree.Search(list[i]))
 	}
 
 	//删除第二份
@@ -55,7 +57,5 @@ func Test_Tree(t *testing.T) {
 			cnt--
 		}
 	}
-	if !tree.IsEmpty() || cnt != 0 {
-		t.Fail()
-	}
+	assert(t, tree.IsEmpty() && cnt == 0)
 }

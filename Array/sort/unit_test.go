@@ -38,23 +38,26 @@ func Test_IntroSort(t *testing.T) {
 	//testArraySort(t, sz_big, stupidArray, IntroSort)
 }
 
+func assert(t *testing.T, state bool) {
+	if !state {
+		t.Fail()
+	}
+}
+func guard_ut(t *testing.T) {
+	if err := recover(); err != nil {
+		t.Fail()
+	}
+}
+
 func testArraySort(t *testing.T, size int, create func(int) []int, doit func([]int)) {
-	defer func() {
-		if err := recover(); err != nil {
-			t.Fail()
-		}
-	}()
+	defer guard_ut(t)
 
 	var list = create(size)
 	doit(list)
-	if !checkArrary(list) {
-		t.Fail()
-	}
+	assert(t, checkArrary(list))
 	list = create(5)
 	doit(list)
-	if !checkArrary(list) {
-		t.Fail()
-	}
+	assert(t, checkArrary(list))
 
 	list = []int{0}
 	doit(list)
