@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include <string>
 #include "tricks.h"
-#include "Trie.h"
+#include "PrefixTree.h"
 ////////////////////////////////////////////////////////////////////////////
 #define ALLOC_IMP(lv) \
 	Trie::Node::Pointer* Trie::AllocatePtrArray##lv(void) {		\

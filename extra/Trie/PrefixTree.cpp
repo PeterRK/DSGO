@@ -3,7 +3,7 @@
 #include <string>
 #include <algorithm>
 #include "tricks.h"
-#include "Trie.h"
+#include "PrefixTree.h"
 ////////////////////////////////////////////////////////////////////////////
 inline Trie::Node* Trie::NewNode(void)
 {

@@ -17,7 +17,7 @@ type Trie interface {
 func newNode() *node {
 	var unit = new(node)
 	unit.cnt, unit.ref = 0, 0
-	unit.kids = make([]*node, 0, 4)
+	//unit.kids = make([]*node, 0, 4)
 	return unit
 }
 func NewTrie() Trie {
@@ -39,33 +39,36 @@ func (unit *node) searchKid(ch byte) int {
 	return start
 }
 
+func (root *node) consume(kid *node) {
+	if root.cnt+kid.cnt > capacity { //半缩
+		var j = uint8(0)
+		for i := root.cnt; i < capacity; i++ {
+			root.key[i] = kid.key[j]
+			j++
+		}
+		root.cnt = capacity
+		var i = uint8(0)
+		for ; j < kid.cnt; j++ {
+			kid.key[i] = kid.key[j]
+			i++
+		}
+		kid.cnt = i
+	} else { //全缩
+		for i := uint8(0); i < kid.cnt; i++ {
+			root.key[root.cnt] = kid.key[i]
+			root.cnt++
+		}
+		root.ref, root.kids = kid.ref, kid.kids
+	}
+}
+
 //除了查找，还要尝试节缩
 func (root *node) Search(data []byte) uint16 {
 	var mk = uint8(0)
 	for idx := 0; idx < len(data); idx++ {
 		if mk == root.cnt { //下探
 			if len(root.kids) == 1 && root.ref == 0 && root.cnt < capacity {
-				var kid = root.kids[0]
-				if root.cnt+kid.cnt > capacity { //半缩
-					var j = uint8(0)
-					for i := root.cnt; i < capacity; i++ {
-						root.key[i] = kid.key[j]
-						j++
-					}
-					root.cnt = capacity
-					var i = uint8(0)
-					for ; j < kid.cnt; j++ {
-						kid.key[i] = kid.key[j]
-						i++
-					}
-					kid.cnt = i
-				} else { //全缩
-					for i := uint8(0); i < kid.cnt; i++ {
-						root.key[root.cnt] = kid.key[i]
-						root.cnt++
-					}
-					root.ref, root.kids = kid.ref, kid.kids
-				}
+				root.consume(root.kids[0])
 			} else { //单纯下探
 				var spot = root.searchKid(data[idx])
 				if spot == len(root.kids) || root.kids[spot].key[0] != data[idx] {

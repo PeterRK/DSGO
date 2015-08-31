@@ -20,7 +20,7 @@
  - 5.2 [红黑树](pages/05-B.md)
  - 5.3 [B+树](pages/05-C.md)
  - 5.4 R树
- - 5.5 基数树(pages/05-E.md)
+ - 5.5 [基数树](pages/05-E.md)
 * 六、[堆](pages/06.md)
  - 6.1 [二叉堆](pages/06-A.md)
  - 6.2 [二项堆](pages/06-B.md)
