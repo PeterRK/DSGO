@@ -44,9 +44,6 @@ func (root *node) Search(data []byte) uint16 {
 	var mk = uint8(0)
 	for idx := 0; idx < len(data); idx++ {
 		if mk == root.cnt { //下探
-			if len(root.kids) == 0 {
-				return 0
-			}
 			if len(root.kids) == 1 && root.ref == 0 && root.cnt < capacity {
 				var kid = root.kids[0]
 				if root.cnt+kid.cnt > capacity { //半缩
@@ -137,7 +134,7 @@ func (root *node) Insert(data []byte) {
 			root = root.kids[spot]
 			mk = 1
 		} else {
-			if data[idx] != root.key[mk] {
+			if root.key[mk] != data[idx] {
 				root.split(mk)
 				root.kids = append(root.kids, createTail(data[idx:]))
 				if root.kids[0].key[0] > root.kids[1].key[0] {
@@ -173,13 +170,13 @@ func (root *node) Remove(data []byte, all bool) {
 			root = root.kids[spot]
 			mk = 1
 		} else {
-			if data[idx] != root.key[mk] {
+			if root.key[mk] != data[idx] {
 				return
 			}
 			mk++
 		}
 	}
-	if mk != root.cnt {
+	if mk != root.cnt || root.ref == 0 {
 		return
 	}
 	if all {

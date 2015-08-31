@@ -10,7 +10,7 @@ private:
 };
 
 template<typename T, unsigned N=1024>
-class Allocator final : NonCopyable {
+class Allocator : NonCopyable {
 private:
 	static const unsigned SIZE = N-1;
 	union Obj {
