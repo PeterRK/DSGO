@@ -22,6 +22,12 @@ func Benchmark_IntroSort(b *testing.B) {
 	b.StartTimer()
 	IntroSort(head)
 }
+func Benchmark_RadixSort(b *testing.B) {
+	b.StopTimer()
+	var head = ramdomLinkList(b.N)
+	b.StartTimer()
+	RadixSort(head)
+}
 func Benchmark_ExtremeMergeSort(b *testing.B) {
 	b.StopTimer()
 	var head = stupidLinkList(b.N)
@@ -39,4 +45,10 @@ func Benchmark_ExtremeIntroSort(b *testing.B) {
 	var head = stupidLinkList(b.N)
 	b.StartTimer()
 	IntroSort(head)
+}
+func Benchmark_ExtremeRadixSort(b *testing.B) {
+	b.StopTimer()
+	var head = stupidLinkList(b.N)
+	b.StartTimer()
+	RadixSort(head)
 }

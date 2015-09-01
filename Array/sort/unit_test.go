@@ -37,6 +37,9 @@ func Test_IntroSort(t *testing.T) {
 	testArraySort(t, sz_big, ramdomArray, IntroSort)
 	//testArraySort(t, sz_big, stupidArray, IntroSort)
 }
+func Test_RadixSort(t *testing.T) {
+	testArraySort(t, sz_big, ramdomArray, RadixSort)
+}
 
 func assert(t *testing.T, state bool) {
 	if !state {

@@ -57,6 +57,8 @@ func doMergeSort(in []int, out []int) {
 		}
 	}
 }
+
+/*
 func merge(in1 []int, in2 []int, out []int) {
 	var i, j, k = 0, 0, 0
 	for ; i < len(in1) && j < len(in2); k++ {
@@ -77,3 +79,4 @@ func merge(in1 []int, in2 []int, out []int) {
 		j++
 	}
 }
+*/

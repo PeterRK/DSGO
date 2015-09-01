@@ -48,6 +48,12 @@ func Benchmark_IntroSort(b *testing.B) {
 	b.StartTimer()
 	IntroSort(list)
 }
+func Benchmark_RadixSort(b *testing.B) {
+	b.StopTimer()
+	var list = ramdomArray(b.N)
+	b.StartTimer()
+	RadixSort(list)
+}
 func Benchmark_ExtremeHeapSort(b *testing.B) {
 	b.StopTimer()
 	var list = stupidArray(b.N)
@@ -71,4 +77,10 @@ func Benchmark_ExtremeIntroSort(b *testing.B) {
 	var list = stupidArray(b.N)
 	b.StartTimer()
 	IntroSort(list)
+}
+func Benchmark_ExtremeRadixSort(b *testing.B) {
+	b.StopTimer()
+	var list = stupidArray(b.N)
+	b.StartTimer()
+	RadixSort(list)
 }

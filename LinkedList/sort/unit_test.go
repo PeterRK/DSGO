@@ -33,6 +33,9 @@ func Test_IntroSort(t *testing.T) {
 	testLinkListSort(t, sz_big, ramdomLinkList, IntroSort)
 	//testLinkListSort(t, sz_small, stupidLinkList, IntroSort)
 }
+func Test_RadixSort(t *testing.T) {
+	testLinkListSort(t, sz_big, ramdomLinkList, RadixSort)
+}
 
 func testLinkListSort(t *testing.T, size int, create func(int) *list.Node, doit func(*list.Node) *list.Node) {
 	defer guard_ut(t)
