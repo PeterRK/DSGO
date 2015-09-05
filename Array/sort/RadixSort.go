@@ -8,7 +8,6 @@ import (
 //复杂度为 O((w/m)N) & O(N+2^m)
 func RadixSort(list []int) {
 	const bytesOfUint = uint(unsafe.Sizeof(uint(0)))
-	const lenOfUint = bytesOfUint * 8
 	const base = -int((^uint(0))>>1) - 1
 	var size = len(list)
 	for i := 0; i < size; i++ {
@@ -17,7 +16,7 @@ func RadixSort(list []int) {
 
 	var shadow = make([]int, size)
 	var book [256]uint
-	for step := uint(0); step < lenOfUint; step += 8 {
+	for step := uint(0); step < bytesOfUint*8; step += 8 {
 		for i := 0; i < 256; i++ {
 			book[i] = 0
 		}
