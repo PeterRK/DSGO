@@ -63,6 +63,7 @@ func Test_SkipList(t *testing.T) {
 		}
 	}
 	assert(t, dict.IsEmpty() && cnt == 0)
+	assert(t, !dict.Remove(0))
 }
 
 var mark_ut = 0

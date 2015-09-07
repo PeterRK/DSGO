@@ -43,8 +43,12 @@ func Test_Ring(t *testing.T) {
 	ring.InsertTail(&space[0])
 
 	//9 1 2 3 4 5 6 7 8 0
+	var node = ring.Head()
+	assert(t, node != nil && node.Val == 9)
+	node = ring.Tail()
+	assert(t, node != nil && node.Val == 0)
 
-	var node = ring.PopHead()
+	node = ring.PopHead()
 	assert(t, node != nil && node.Val == 9)
 	node = ring.PopTail()
 	assert(t, node != nil && node.Val == 0)
@@ -53,4 +57,6 @@ func Test_Ring(t *testing.T) {
 		assert(t, node != nil && node.Val == i)
 	}
 	assert(t, ring.IsEmpty())
+	assert(t, ring.Head() == nil && ring.Tail() == nil)
+	assert(t, ring.PopHead() == nil && ring.PopTail() == nil)
 }

@@ -77,6 +77,17 @@ func Test_Deque(t *testing.T) {
 		var key, err = con.PopFront()
 		assert(t, err == nil && key == (size*6+(size-1)-i))
 	}
+
+	var _, err = con.PopFront()
+	assert(t, err != nil)
+	_, err = con.PopBack()
+	assert(t, err != nil)
+	_, err = con.Front()
+	assert(t, err != nil)
+	_, err = con.Back()
+	assert(t, err != nil)
+	con.Clear()
+	assert(t, con.IsEmpty())
 }
 
 func Test_Stack(t *testing.T) {
@@ -86,10 +97,13 @@ func Test_Stack(t *testing.T) {
 	for i := 0; i < size; i++ {
 		con.Push(i)
 	}
+	var key, err = con.Top()
+	assert(t, err == nil && key == size-1)
 	for i := 0; i < size; i++ {
-		var key, err = con.Pop()
+		key, err = con.Pop()
 		assert(t, err == nil && key == (size-1)-i)
 	}
+	assert(t, con.IsEmpty())
 }
 
 func Test_Queue(t *testing.T) {
@@ -99,6 +113,8 @@ func Test_Queue(t *testing.T) {
 	for i := 0; i < size; i++ {
 		con.Push(i)
 	}
+	var key, err = con.Back()
+	assert(t, err == nil && key == size-1)
 	for i := 0; i < size; i++ {
 		var key, err = con.Pop()
 		assert(t, err == nil && key == i)

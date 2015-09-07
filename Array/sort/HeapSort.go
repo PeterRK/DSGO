@@ -34,8 +34,7 @@ func down(list []int, spot int) {
 		spot, left, right = kid, kid*2+1, kid*2+2
 	}
 	if right == len(list) && key < list[left] {
-		list[spot], list[left] = list[left], key
-		return
+		list[spot], spot = list[left], left
 	}
 Label_OVER:
 	list[spot] = key
