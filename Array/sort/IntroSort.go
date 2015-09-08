@@ -16,8 +16,8 @@ func doIntroSort(list []int, life uint) {
 	} else if len(list) < sz_limit {
 		InsertSort(list)
 	} else {
-		var knot = partition(list)
-		doIntroSort(list[:knot], life-1)
-		doIntroSort(list[knot:], life-1)
+		var line = partition(list)
+		doIntroSort(list[:line], life-1)
+		doIntroSort(list[line:], life-1)
 	}
 }

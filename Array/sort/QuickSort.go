@@ -8,20 +8,20 @@ func QuickSort(list []int) {
 	if len(list) < sz_limit {
 		InsertSort(list)
 	} else {
-		var knot = partition(list)
-		QuickSort(list[:knot])
-		QuickSort(list[knot:])
+		var line = partition(list)
+		QuickSort(list[:line])
+		QuickSort(list[line:])
 	}
 }
 
 func partition(list []int) int {
-	var barrier = list[len(list)/2] //该选择影响后面是否可能发生越界
+	var pivot = list[len(list)/2] //该选择影响后面是否可能发生越界
 	var a, b = 0, len(list) - 1
 	for { //注意对称性
-		for list[a] < barrier {
+		for list[a] < pivot {
 			a++
 		}
-		for list[b] > barrier {
+		for list[b] > pivot {
 			b--
 		}
 		if a >= b {

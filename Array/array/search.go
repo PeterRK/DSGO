@@ -14,6 +14,22 @@ func SearchAfter(list []int, key int) int {
 	return start
 }
 
+//寻找key的位置(未必是第一个)，没有返回-1
+func Search(list []int, key int) int {
+	for a, b := 0, len(list); a < b; {
+		var m = (a + b) / 2
+		switch {
+		case key > list[m]:
+			a = m + 1
+		case key < list[m]:
+			b = m
+		default:
+			return m
+		}
+	}
+	return -1
+}
+
 //在由小到大的序列中寻找第一个大于或等于key的位置
 func SearchFirst(list []int, key int) int {
 	var start, end = 0, len(list)

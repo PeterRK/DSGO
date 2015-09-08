@@ -16,7 +16,7 @@ func (tr *Tree) Insert(key int32) bool {
 	return true
 }
 
-//插入节点
+//插入节点，root != nil
 func (tr *Tree) insert(key int32) *node {
 	var root = tr.root
 	for {
