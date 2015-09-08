@@ -23,39 +23,28 @@ func Test_Tree(t *testing.T) {
 	var tree Tree
 	var cnt = 0
 	const size = 200
-	var list [size * 2]int32
+	var list = new([size]int32)
 
 	rand.Seed(time.Now().Unix())
-	for i := 0; i < size*2; i++ {
+	for i := 0; i < size; i++ {
 		list[i] = int32(rand.Int())
 	}
 
-	//插入两份
-	for i := 0; i < size*2; i++ {
+	for i := 0; i < size; i++ {
 		if tree.Insert(list[i]) {
 			cnt++
 		}
 	}
-	assert(t, !tree.Insert(list[size]))
-	for i := 0; i < size*2; i++ {
+	for i := 0; i < size; i++ {
 		assert(t, tree.Search(list[i]))
+		assert(t, !tree.Insert(list[i]))
 	}
-
-	//删除第一份
 	for i := 0; i < size; i++ {
 		if tree.Remove(list[i]) {
 			cnt--
 		}
-	}
-	for i := 0; i < size; i++ {
 		assert(t, !tree.Search(list[i]))
 	}
-
-	//删除第二份
-	for i := size; i < size*2; i++ {
-		if tree.Remove(list[i]) {
-			cnt--
-		}
-	}
 	assert(t, tree.IsEmpty() && cnt == 0)
+	assert(t, !tree.Remove(0))
 }

@@ -6,54 +6,62 @@ func (tr *Tree) Insert(key int32) bool {
 	if tr.root == nil {
 		tr.root = newNode(nil, key) //默认为红
 		tr.root.black = true
-		return true
+	} else {
+		var root = tr.insert(key)
+		if root == nil {
+			return false
+		}
+		tr.rebalanceAfterInsert(root, key)
 	}
+	return true
+}
 
+//插入节点
+func (tr *Tree) insert(key int32) *node {
 	var root = tr.root
 	for {
 		switch {
 		case key < root.key:
 			if root.left == nil {
 				root.left = newNode(root, key) //默认为红
-				goto Label_DONE
+				return root
 			}
 			root = root.left
 		case key > root.key:
 			if root.right == nil {
 				root.right = newNode(root, key) //默认为红
-				goto Label_DONE
+				return root
 			}
 			root = root.right
 		default: //key == root.key
-			return false
+			return nil
 		}
 	}
-Label_DONE:
+}
 
-	//------------红叔模式------------
-	//|      bG      |      rG      |
-	//|     /  \     |     /  \     |
-	//|   rP    rU   |   bP    bU   |
-	//|   |          |   |          |
-	//|   rC         |   rC         |
+//------------红叔模式------------
+//|      bG      |      rG      |
+//|     /  \     |     /  \     |
+//|   rP    rU   |   bP    bU   |
+//|   |          |   |          |
+//|   rC         |   rC         |
 
-	//------------------LL型-----------------
-	//|        bG        |        bP        |
-	//|       /  \       |       /  \       |
-	//|     rP    bU     |     rC     rG    |
-	//|    /  \          |          /  \    |
-	//|  rC    x         |         x    bU  |
+//------------------LL型-----------------
+//|        bG        |        bP        |
+//|       /  \       |       /  \       |
+//|     rP    bU     |     rC     rG    |
+//|    /  \          |          /  \    |
+//|  rC    x         |         x    bU  |
 
-	//------------------LR型-----------------
-	//|        bG        |        bC        |
-	//|       /  \       |       /  \       |
-	//|     rP    bU     |     rP    rG     |
-	//|    / \           |    / \    / \    |
-	//|      rC          |       u  v   bU  |
-	//|     /  \         |                  |
-	//|    u    v        |                  |
-
-	var P = root
+//------------------LR型-----------------
+//|        bG        |        bC        |
+//|       /  \       |       /  \       |
+//|     rP    bU     |     rP    rG     |
+//|    / \           |    / \    / \    |
+//|      rC          |       u  v   bU  |
+//|     /  \         |                  |
+//|    u    v        |                  |
+func (tr *Tree) rebalanceAfterInsert(P *node, key int32) {
 	for !P.black { //违反双红禁
 		var G = P.parent //必然存在，根为黑，P非根
 		var super = G.parent
@@ -104,7 +112,6 @@ Label_DONE:
 		}
 		break //变色时才需要循环
 	}
-	return true
 }
 
 func newNode(parent *node, key int32) (unit *node) {

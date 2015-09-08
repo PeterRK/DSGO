@@ -3,39 +3,19 @@ package rbtree
 //成功返回true，没有返回false。
 //红黑树删除过程包括：O(log N)的搜索，O(1)的旋转，O(log N)的平衡因子调整。
 func (tr *Tree) Remove(key int32) bool {
-	var target = tr.root
-	for target != nil && key != target.key {
-		if key < target.key {
-			target = target.left
-		} else {
-			target = target.right
-		}
-	}
+	var target = tr.findRemoveTarget(key)
 	if target == nil {
 		return false
 	}
+	var victim, orphan = findRemoveVictim(target)
 
-	var victim, orphan *node
-	switch {
-	case target.left == nil:
-		victim, orphan = target, target.right
-	case target.right == nil:
-		victim, orphan = target, target.left
-	default:
-		victim = target.right
-		for victim.left != nil {
-			victim = victim.left
-		}
-		orphan = victim.right
-	}
-
-	var root = victim.parent
-	if root == nil { //此时victim==target
-		tr.root = root.tryHook(orphan)
+	if victim.parent == nil { //此时victim==target
+		tr.root = ((*node)(nil)).tryHook(orphan)
 		if tr.root != nil {
 			tr.root.black = true
 		}
 	} else {
+		var root = victim.parent
 		if key < root.key {
 			root.left = root.tryHook(orphan)
 		} else {
@@ -51,6 +31,34 @@ func (tr *Tree) Remove(key int32) bool {
 		target.key = victim.key
 	}
 	return true
+}
+
+func (tr *Tree) findRemoveTarget(key int32) *node {
+	var target = tr.root
+	for target != nil && key != target.key {
+		if key < target.key {
+			target = target.left
+		} else {
+			target = target.right
+		}
+	}
+	return target
+}
+
+func findRemoveVictim(target *node) (victim *node, orphan *node) {
+	switch {
+	case target.left == nil:
+		victim, orphan = target, target.right
+	case target.right == nil:
+		victim, orphan = target, target.left
+	default:
+		victim = target.right
+		for victim.left != nil {
+			victim = victim.left
+		}
+		orphan = victim.right
+	}
+	return victim, orphan
 }
 
 //----------------红叔模式----------------

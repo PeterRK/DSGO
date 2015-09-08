@@ -3,6 +3,22 @@ package avltree
 //成功返回true，没有返回false。
 //AVL树删除过程包括：O(log N)的搜索，O(log N)的旋转，O(log N)的平衡因子调整。
 func (tr *Tree) Remove(key int32) bool {
+	var target = tr.findRemoveTarget(key)
+	if target == nil {
+		return false
+	}
+	var victim, orphan = findRemoveVictim(target)
+
+	if victim.parent == nil { //此时victim==target
+		tr.root = ((*node)(nil)).tryHook(orphan)
+	} else {
+		tr.rebalanceAfterRemove(victim, orphan, victim.key)
+		target.key = victim.key //调整好了再修正值
+	}
+	return true
+}
+
+func (tr *Tree) findRemoveTarget(key int32) *node {
 	var target = tr.root
 	for target != nil && key != target.key {
 		if key < target.key {
@@ -11,11 +27,10 @@ func (tr *Tree) Remove(key int32) bool {
 			target = target.right
 		}
 	}
-	if target == nil {
-		return false
-	}
+	return target
+}
 
-	var victim, orphan *node
+func findRemoveVictim(target *node) (victim *node, orphan *node) {
 	switch {
 	case target.left == nil:
 		victim, orphan = target, target.right
@@ -36,14 +51,11 @@ func (tr *Tree) Remove(key int32) bool {
 			orphan = victim.right
 		}
 	}
+	return victim, orphan
+}
 
+func (tr *Tree) rebalanceAfterRemove(victim *node, orphan *node, key int32) {
 	var root = victim.parent
-	if root == nil { //此时victim==target
-		tr.root = root.tryHook(orphan)
-		return true
-	}
-	key = victim.key
-
 	var state, stop = root.state, false
 	if key < root.key {
 		root.left = root.tryHook(orphan)
@@ -81,6 +93,4 @@ func (tr *Tree) Remove(key int32) bool {
 			}
 		}
 	}
-	target.key = key
-	return true
 }

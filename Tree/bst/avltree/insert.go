@@ -5,30 +5,41 @@ package avltree
 func (tr *Tree) Insert(key int32) bool {
 	if tr.root == nil {
 		tr.root = newNode(nil, key)
-		return true
+	} else {
+		var root = tr.insert(key)
+		if root == nil {
+			return false
+		}
+		tr.rebalanceAfterInsert(root, key)
 	}
+	return true
+}
 
+//插入节点
+func (tr *Tree) insert(key int32) *node {
 	var root = tr.root
 	for {
 		switch {
 		case key < root.key:
 			if root.left == nil {
 				root.left = newNode(root, key)
-				goto Label_DONE
+				return root
 			}
 			root = root.left
 		case key > root.key:
 			if root.right == nil {
 				root.right = newNode(root, key)
-				goto Label_DONE
+				return root
 			}
 			root = root.right
 		default: //key == root.key
-			return false
+			return nil
 		}
 	}
-Label_DONE:
+}
 
+//回溯矫正
+func (tr *Tree) rebalanceAfterInsert(root *node, key int32) {
 	for {
 		var state = root.state
 		if key < root.key {
@@ -55,7 +66,6 @@ Label_DONE:
 		}
 		break
 	}
-	return true
 }
 
 func newNode(parent *node, key int32) (unit *node) {
