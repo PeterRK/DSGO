@@ -70,8 +70,8 @@ func (tr *Tree) rebalanceAfterInsert(root *node, key int32) {
 
 func newNode(parent *node, key int32) (unit *node) {
 	unit = new(node)
-	unit.key, unit.state = key, 0
-	unit.parent = parent
-	unit.left, unit.right = nil, nil
+	//unit.state = 0
+	//unit.left, unit.right = nil, nil
+	unit.parent, unit.key = parent, key
 	return unit
 }

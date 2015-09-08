@@ -16,7 +16,7 @@ type Trie interface {
 
 func newNode() *node {
 	var unit = new(node)
-	unit.cnt, unit.ref = 0, 0
+	//unit.cnt, unit.ref = 0, 0
 	//unit.kids = make([]*node, 0, 4)
 	return unit
 }

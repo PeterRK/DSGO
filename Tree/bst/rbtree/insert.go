@@ -61,6 +61,7 @@ func (tr *Tree) insert(key int32) *node {
 //|      rC          |       u  v   bU  |
 //|     /  \         |                  |
 //|    u    v        |                  |
+
 func (tr *Tree) rebalanceAfterInsert(P *node, key int32) {
 	for !P.black { //违反双红禁
 		var G = P.parent //必然存在，根为黑，P非根
@@ -116,8 +117,8 @@ func (tr *Tree) rebalanceAfterInsert(P *node, key int32) {
 
 func newNode(parent *node, key int32) (unit *node) {
 	unit = new(node)
-	unit.key, unit.black = key, false
-	unit.parent = parent
-	unit.left, unit.right = nil, nil
+	//unit.black = false
+	//unit.left, unit.right = nil, nil
+	unit.parent, unit.key = parent, key
 	return unit
 }
