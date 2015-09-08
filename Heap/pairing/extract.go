@@ -89,6 +89,7 @@ func (hp *Heap) FloatUp(target *Node, value int) {
 	if target != nil && value < target.key {
 		target.key = value
 		if super := target.prev; super != nil { //非根
+			target.prev = nil
 			if super.next == target { //super为兄
 				super.next, target.next = super.hook(target.next), nil
 				hp.root = merge(hp.root, target)

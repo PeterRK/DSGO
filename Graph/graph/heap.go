@@ -74,6 +74,7 @@ func FloatUp(root *node, target *node, distance uint) *node {
 	if target != nil && distance < target.Dist {
 		target.Dist = distance
 		if super := target.prev; super != nil {
+			target.prev = nil
 			if super.next == target {
 				super.next, target.next = super.hook(target.next), nil
 				root = merge(root, target)

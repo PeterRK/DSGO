@@ -25,6 +25,10 @@ func (unit *Node) hook(peer *Node) *Node {
 func (hp *Heap) IsEmpty() bool {
 	return hp.root == nil
 }
+func (hp *Heap) Clear() {
+	hp.root = nil
+}
+
 func (hp *Heap) Top() (int, error) {
 	if hp.IsEmpty() {
 		return 0, errors.New("empty")
@@ -41,15 +45,14 @@ func merge(one *Node, another *Node) *Node { //one != nil && another != nil
 	return one
 }
 func (hp *Heap) Merge(victim *Heap) {
-	if hp == victim || victim.root == nil {
-		return
+	if hp != victim && !victim.IsEmpty() {
+		if hp.IsEmpty() {
+			*hp = *victim
+		} else {
+			hp.root = merge(hp.root, victim.root)
+		}
+		victim.Clear()
 	}
-	if hp.root == nil {
-		hp.root = victim.root
-	} else {
-		hp.root = merge(hp.root, victim.root)
-	}
-	victim.root = nil
 }
 
 //这货Push时不怎么管整理，到Pop时再做

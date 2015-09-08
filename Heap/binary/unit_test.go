@@ -22,7 +22,8 @@ func Test_Heap(t *testing.T) {
 
 	var heap Heap
 	const size = 200
-	var list, list2 [size]int
+	var list = new([size]int)
+	var lst2 = new([size]int)
 
 	const INT_MAX = int(^uint(0) >> 1)
 	var mark, mark2 = INT_MAX, INT_MAX
@@ -33,9 +34,9 @@ func Test_Heap(t *testing.T) {
 		if list[i] < mark {
 			mark = list[i]
 		}
-		list2[i] = rand.Int()
-		if list2[i] < mark2 {
-			mark2 = list2[i]
+		lst2[i] = rand.Int()
+		if lst2[i] < mark2 {
+			mark2 = lst2[i]
 		}
 	}
 
@@ -49,7 +50,7 @@ func Test_Heap(t *testing.T) {
 		mark = mark2
 	}
 	for i := 0; i < size; i++ {
-		heap.Push(list2[i])
+		heap.Push(lst2[i])
 	}
 	key, err = heap.Top()
 	assert(t, err == nil && key == mark)
@@ -59,4 +60,13 @@ func Test_Heap(t *testing.T) {
 		key, err = heap.Pop()
 		assert(t, err == nil && key >= mark)
 	}
+
+	key, err = heap.Top()
+	assert(t, err != nil)
+	key, err = heap.Pop()
+	assert(t, err != nil)
+	heap.Push(99)
+	assert(t, !heap.IsEmpty())
+	heap.Clear()
+	assert(t, heap.IsEmpty())
 }

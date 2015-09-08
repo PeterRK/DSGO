@@ -19,6 +19,9 @@ type node struct {
 func (hp *Heap) IsEmpty() bool {
 	return hp.list == nil
 }
+func (hp *Heap) Clear() {
+	hp.list, hp.top = nil, nil
+}
 
 func (hp *Heap) Top() (int, error) {
 	if hp.IsEmpty() {

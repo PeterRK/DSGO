@@ -16,6 +16,9 @@ func (hp *Heap) Size() int {
 func (hp *Heap) IsEmpty() bool {
 	return len(hp.core) == 0
 }
+func (hp *Heap) Clear() {
+	hp.core = hp.core[:0]
+}
 
 func (hp *Heap) Top() (int, error) {
 	if hp.IsEmpty() {
