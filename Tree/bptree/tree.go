@@ -10,7 +10,6 @@ const BASE_SIZE = 16
 type node struct {
 	inner bool
 	cnt   int
-	data  [0]int
 }
 
 func (u *leaf) asIndex() *index {
@@ -22,14 +21,21 @@ func (u *index) asLeaf() *leaf {
 
 /*
 //关闭数组越界审查后使用
+type nodex struct {
+	node
+	data [1]int
+}
+
 func (u *node) ceil() int {
-	return u.data[u.cnt-1]
+	var unit = (*nodex)(unsafe.Pointer(u))
+	return unit.data[unit.cnt-1]
 }
 func (u *node) locate(key int) int {
-	var start, end = 0, u.cnt - 1
+	var unit = (*nodex)(unsafe.Pointer(u))
+	var start, end = 0, unit.cnt - 1
 	for start < end {
 		var mid = (start + end) / 2
-		if key > u.data[mid] {
+		if key > unit.data[mid] {
 			start = mid + 1
 		} else {
 			end = mid
@@ -38,6 +44,7 @@ func (u *node) locate(key int) int {
 	return start
 }
 */
+
 //开启数组越界审查时使用
 func (u *node) ceil() int {
 	if u.inner {
@@ -108,3 +115,4 @@ func (tr *Tree) Travel(doit func(int)) {
 		}
 	}
 }
+
