@@ -20,7 +20,8 @@ func PlainDijkstra(matrix [][]uint, start int) []int {
 	list[start].Index = size - 1
 	list[size-1].Index, list[size-1].Dist = start, 0
 
-	for last := size - 1; last > 0 && list[last].Dist != graph.MaxDistance; last-- {
+	for last := size - 1; last > 0 &&
+		list[last].Dist != graph.MaxDistance; last-- {
 		var best = 0
 		for i := 0; i < last; i++ {
 			var step = matrix[list[last].Index][list[i].Index]
@@ -48,7 +49,8 @@ func PlainDijkstra(matrix [][]uint, start int) []int {
 }
 
 //输入邻接矩阵(0指不通)，返回两点间的最短路径及其长度(-1指不通)。
-func PlainDijkstraPath(matrix [][]uint, start int, end int) (Dist int, marks []int) {
+func PlainDijkstraPath(matrix [][]uint, start int, end int) (
+	Dist int, marks []int) {
 	var size = len(matrix)
 	if start < 0 || end < 0 || start >= size || end >= size {
 		return -1, []int{}
@@ -64,7 +66,8 @@ func PlainDijkstraPath(matrix [][]uint, start int, end int) (Dist int, marks []i
 	list[start].Index = size - 1
 	list[size-1].Index, list[size-1].Dist = start, 0
 
-	for last := size - 1; last >= 0 && list[last].Dist != graph.MaxDistance; last-- {
+	for last := size - 1; last >= 0 &&
+		list[last].Dist != graph.MaxDistance; last-- {
 		if list[last].Index == end {
 			for idx := last; idx < size-1; {
 				var next = list[idx].Link

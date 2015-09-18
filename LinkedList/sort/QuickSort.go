@@ -41,7 +41,9 @@ func sortOnlyTwo(head *list.Node) (first *list.Node, last *list.Node) {
 	return nil, nil
 }
 
-func partition(node0 *list.Node) (left *list.Node, center *list.Node, right *list.Node, size int) {
+func partition(node0 *list.Node) (
+	left *list.Node, center *list.Node, right *list.Node, size int) {
+
 	var node1 = node0.Next
 	var node2 = node1.Next
 	var tail = node2.Next
@@ -61,10 +63,12 @@ func partition(node0 *list.Node) (left *list.Node, center *list.Node, right *lis
 	size = 3
 	node1, node2 = left, right
 	for tail != nil {
-		for node1.Next = tail; tail != nil && tail.Val <= center.Val; size++ {
+		for node1.Next = tail; tail != nil &&
+			tail.Val <= center.Val; size++ {
 			node1, tail = tail, tail.Next
 		}
-		for node2.Next = tail; tail != nil && tail.Val > center.Val; size++ {
+		for node2.Next = tail; tail != nil &&
+			tail.Val > center.Val; size++ {
 			node2, tail = tail, tail.Next
 		}
 	}

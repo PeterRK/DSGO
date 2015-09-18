@@ -101,7 +101,8 @@ func Test_PrimTree(t *testing.T) {
 	roads[7] = []graph.Path{{4, 6}, {6, 1}, {8, 2}}
 	roads[8] = []graph.Path{{1, 4}, {2, 14}, {5, 10}, {7, 2}}
 
-	var expected = []Edge{{0, 3}, {0, 1}, {1, 4}, {1, 8}, {8, 7}, {7, 6}, {1, 2}, {2, 5}}
+	var expected = []Edge{
+		{0, 3}, {0, 1}, {1, 4}, {1, 8}, {8, 7}, {7, 6}, {1, 2}, {2, 5}}
 
 	var ret, err = PrimTree(roads)
 	assert(t, err == nil && isTheSame(ret, expected))
@@ -121,7 +122,8 @@ func Test_PlainPrimTree(t *testing.T) {
 		{0, 0, 0, 0, 6, 0, 1, 0, 2},
 		{0, 4, 14, 0, 0, 10, 0, 2, 0}}
 
-	var expected = []Edge{{0, 3}, {0, 1}, {1, 4}, {1, 8}, {8, 7}, {7, 6}, {1, 2}, {2, 5}}
+	var expected = []Edge{
+		{0, 3}, {0, 1}, {1, 4}, {1, 8}, {8, 7}, {7, 6}, {1, 2}, {2, 5}}
 
 	var ret, err = PlainPrimTree(matrix)
 	assert(t, err == nil && isTheSame(ret, expected))

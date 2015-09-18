@@ -17,7 +17,8 @@ func BenchMark() {
 	var matrix_u = transform(roads_u)
 	var matrix = sAdjMatrix(matrix_u)
 	var size = len(roads)
-	fmt.Printf("Prepare Graph [%d vertexes & %d edges] in %v\n", size, total, time.Since(start))
+	fmt.Printf("Prepare Graph [%d vertexes & %d edges] in %v\n",
+		size, total, time.Since(start))
 
 	start = time.Now()
 	for i := 0; i < size; i++ {

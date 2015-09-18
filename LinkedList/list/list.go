@@ -22,7 +22,8 @@ func Merge(lst1 *Node, lst2 *Node) (list *Node) {
 		if lst2 == nil {
 			return list
 		}
-		for ; lst1 != nil && lst1.Val <= lst2.Val; lst1 = lst1.Next {
+		for ; lst1 != nil &&
+			lst1.Val <= lst2.Val; lst1 = lst1.Next {
 			last = lst1
 		}
 
@@ -30,7 +31,8 @@ func Merge(lst1 *Node, lst2 *Node) (list *Node) {
 		if lst1 == nil {
 			return list
 		}
-		for ; lst2 != nil && lst1.Val > lst2.Val; lst2 = lst2.Next {
+		for ; lst2 != nil &&
+			lst1.Val > lst2.Val; lst2 = lst2.Next {
 			last = lst2
 		}
 	}

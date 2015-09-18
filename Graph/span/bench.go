@@ -57,7 +57,8 @@ func readGraph() (edges []graph.Edge, size int, err error) {
 func transform(edges []graph.Edge, size int) [][]graph.Path {
 	var roads = make([][]graph.Path, size)
 	for _, path := range edges {
-		roads[path.A] = append(roads[path.A], graph.Path{Next: path.B, Dist: path.Dist})
+		roads[path.A] = append(
+			roads[path.A], graph.Path{Next: path.B, Dist: path.Dist})
 	}
 	return roads
 }

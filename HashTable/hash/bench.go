@@ -41,11 +41,13 @@ func TryByFile(filenme string) {
 		fmt.Println()
 	}
 }
-func ShowBucketCounts(msg string, data []string, size uint, fn func([]byte) uint) {
+func ShowBucketCounts(
+	msg string, data []string, size uint, fn func([]byte) uint) {
 	var vec, top = BucketCounts(data, size, fn)
 	fmt.Printf("%s <%d> %v\n", msg, top, vec)
 }
-func BucketCounts(data []string, size uint, fn func([]byte) uint) (vec [6]uint, top uint) {
+func BucketCounts(data []string, size uint, fn func([]byte) uint) (
+	vec [6]uint, top uint) {
 	var book = make([]uint, size)
 	for i := uint(0); i < size; i++ {
 		book[i] = 0

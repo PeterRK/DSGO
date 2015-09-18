@@ -9,7 +9,8 @@ func MergeSort(head *list.Node) *list.Node {
 	head, _ = doMergeSort(head)
 	return head
 }
-func doMergeSort(head *list.Node) (first *list.Node, last *list.Node) { //head != nil
+func doMergeSort(head *list.Node) ( //head != nil
+	first *list.Node, last *list.Node) {
 	first, last = head, list.FakeHead(&first)
 	var size = 0
 	for ; head != nil; size += 2 {

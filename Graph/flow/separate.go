@@ -1,7 +1,8 @@
 package flow
 
 //筛分层次，生成分层残图，复杂度为(V^2)。
-func separate(shadow [][]edge, matrix [][]uint, q *queue, memo []uint) (ok bool) {
+func separate(
+	shadow [][]edge, matrix [][]uint, q *queue, memo []uint) (ok bool) {
 	var size = len(matrix)
 	const FAKE_LEVEL = ^uint(0)
 	for i := 1; i < size; i++ {
@@ -35,7 +36,8 @@ Label_REACH:
 		//shadow[current] = shadow[current][:0]
 		for i := 1; i < size; i++ {
 			if memo[i] == memo[current]+1 && matrix[current][i] != 0 {
-				shadow[current] = append(shadow[current], edge{next: i, val: matrix[current][i]})
+				shadow[current] = append(
+					shadow[current], edge{next: i, val: matrix[current][i]})
 				matrix[current][i] = 0
 			}
 		}

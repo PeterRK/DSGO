@@ -34,7 +34,8 @@ func Test_RadixSort(t *testing.T) {
 	testLinkListSort(t, RadixSort, sz_big, sz_small)
 }
 
-func testLinkListSort(t *testing.T, doit func(*list.Node) *list.Node, sz1 int, sz2 int) {
+func testLinkListSort(t *testing.T,
+	doit func(*list.Node) *list.Node, sz1 int, sz2 int) {
 	defer guard_ut(t)
 
 	var head = ramdomLinkList(sz1)

@@ -31,7 +31,8 @@ func Prim(roads [][]graph.Path) (uint, error) {
 		for _, path := range roads[current.Index] {
 			var peer = &list[path.Next]
 			if peer.Link == FAKE { //未涉及点
-				peer.Index, peer.Link, peer.Dist = path.Next, current.Index, path.Dist
+				peer.Index, peer.Link, peer.Dist =
+					path.Next, current.Index, path.Dist
 				root = graph.Insert(root, peer)
 			} else if peer.Index != FAKE && //外围点
 				path.Dist < peer.Dist { //可更新
@@ -73,7 +74,8 @@ func PrimTree(roads [][]graph.Path) ([]Edge, error) {
 		for _, path := range roads[current.Index] {
 			var peer = &list[path.Next]
 			if peer.Link == FAKE { //未涉及点
-				peer.Index, peer.Link, peer.Dist = path.Next, current.Index, path.Dist
+				peer.Index, peer.Link, peer.Dist =
+					path.Next, current.Index, path.Dist
 				root = graph.Insert(root, peer)
 			} else if peer.Index != FAKE && //外围点
 				path.Dist < peer.Dist { //可更新
