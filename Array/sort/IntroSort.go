@@ -21,3 +21,25 @@ func doIntroSort(list []int, life uint) {
 		doIntroSort(list[line:], life-1)
 	}
 }
+
+func IntroSortY(list []int) {
+	var life = uint(16)
+	for sz := len(list); sz != 0; sz /= 2 {
+		life++
+	}
+	doIntroSortY(list, life)
+}
+func doIntroSortY(list []int, life uint) {
+	if life == 0 {
+		HeapSort(list)
+	} else if len(list) < sz_limit {
+		InsertSort(list)
+	} else {
+		var start, end = triPartition(list)
+		if list[start] != list[end-1] {
+			doIntroSortY(list[start+1:end-1], life-1)
+		}
+		doIntroSortY(list[:start], life-1)
+		doIntroSortY(list[end:], life-1)
+	}
+}

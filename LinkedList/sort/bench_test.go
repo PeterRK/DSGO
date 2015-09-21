@@ -1,54 +1,40 @@
 package sort
 
 import (
+	"LinkedList/list"
 	"testing"
 )
 
 func Benchmark_MergeSort(b *testing.B) {
-	b.StopTimer()
-	var head = ramdomLinkList(b.N)
-	b.StartTimer()
-	MergeSort(head)
+	benchLinkedListSort(b, MergeSort, randLinkedList)
 }
 func Benchmark_QuickSort(b *testing.B) {
-	b.StopTimer()
-	var head = ramdomLinkList(b.N)
-	b.StartTimer()
-	QuickSort(head)
+	benchLinkedListSort(b, QuickSort, randLinkedList)
 }
 func Benchmark_IntroSort(b *testing.B) {
-	b.StopTimer()
-	var head = ramdomLinkList(b.N)
-	b.StartTimer()
-	IntroSort(head)
+	benchLinkedListSort(b, IntroSort, randLinkedList)
 }
 func Benchmark_RadixSort(b *testing.B) {
-	b.StopTimer()
-	var head = ramdomLinkList(b.N)
-	b.StartTimer()
-	RadixSort(head)
+	benchLinkedListSort(b, RadixSort, randLinkedList)
 }
-func Benchmark_ExtremeMergeSort(b *testing.B) {
-	b.StopTimer()
-	var head = stupidLinkList(b.N)
-	b.StartTimer()
-	MergeSort(head)
+
+func Benchmark_DesMergeSort(b *testing.B) {
+	benchLinkedListSort(b, MergeSort, desLinkList)
 }
-func Benchmark_ExtremeQuickSort(b *testing.B) {
-	b.StopTimer()
-	var head = stupidLinkList(b.N)
-	b.StartTimer()
-	QuickSort(head)
+func Benchmark_DesQuickSort(b *testing.B) {
+	benchLinkedListSort(b, QuickSort, desLinkList)
 }
-func Benchmark_ExtremeIntroSort(b *testing.B) {
-	b.StopTimer()
-	var head = stupidLinkList(b.N)
-	b.StartTimer()
-	IntroSort(head)
+func Benchmark_DesIntroSort(b *testing.B) {
+	benchLinkedListSort(b, IntroSort, desLinkList)
 }
-func Benchmark_ExtremeRadixSort(b *testing.B) {
+func Benchmark_DesRadixSort(b *testing.B) {
+	benchLinkedListSort(b, RadixSort, desLinkList)
+}
+
+func benchLinkedListSort(b *testing.B,
+	doit func(*list.Node) *list.Node, make_array func(int) *list.Node) {
 	b.StopTimer()
-	var head = stupidLinkList(b.N)
+	var head = make_array(b.N)
 	b.StartTimer()
-	RadixSort(head)
+	doit(head)
 }

@@ -27,8 +27,14 @@ func Test_MergeSort(t *testing.T) {
 func Test_QuickSort(t *testing.T) {
 	testArraySort(t, QuickSort, sz_big, sz_small)
 }
+func Test_QuickSortY(t *testing.T) {
+	testArraySort(t, QuickSortY, sz_big, sz_small)
+}
 func Test_IntroSort(t *testing.T) {
 	testArraySort(t, IntroSort, sz_big, sz_big)
+}
+func Test_IntroSortY(t *testing.T) {
+	testArraySort(t, IntroSortY, sz_big, sz_big)
 }
 func Test_RadixSort(t *testing.T) {
 	testArraySort(t, RadixSort, sz_big, sz_small)
@@ -48,16 +54,24 @@ func guard_ut(t *testing.T) {
 func testArraySort(t *testing.T, doit func([]int), sz1 int, sz2 int) {
 	defer guard_ut(t)
 
-	var list = ramdomArray(sz1)
+	var list = randArray(sz1)
+	var tips = figureOutTips(list)
 	doit(list)
-	assert(t, checkArrary(list))
+	assert(t, checkArrary(list) && tips == figureOutTips(list))
 
-	list = stupidArray(sz2)
+	list = desArray(sz2)
 	doit(list)
 	assert(t, checkArrary(list))
+	for i := 0; i < len(list); i++ {
+		list[i] = 99
+	}
+	doit(list)
+	for _, num := range list {
+		assert(t, num == 99)
+	}
 
 	for i := 0; i < 6; i++ {
-		list = ramdomArray(i)
+		list = randArray(i)
 		doit(list)
 		assert(t, checkArrary(list))
 	}
@@ -70,8 +84,15 @@ func checkArrary(list []int) bool {
 	}
 	return true
 }
+func figureOutTips(list []int) int {
+	var tips int = 0
+	for _, num := range list {
+		tips ^= num
+	}
+	return tips
+}
 
-func ramdomArray(size int) []int {
+func randArray(size int) []int {
 	rand.Seed(time.Now().Unix())
 	var list = make([]int, size)
 	for i := 0; i < size; i++ {
@@ -79,10 +100,18 @@ func ramdomArray(size int) []int {
 	}
 	return list
 }
-func stupidArray(size int) []int {
+func desArray(size int) []int {
 	var list = make([]int, size)
 	for i := 0; i < size; i++ {
-		list[i] = (size - i) / 2
+		list[i] = size - i
+	}
+	return list
+}
+func constArray(size int) []int {
+	var val = rand.Int()
+	var list = make([]int, size)
+	for i := 0; i < size; i++ {
+		list[i] = val
 	}
 	return list
 }

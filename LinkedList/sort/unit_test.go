@@ -38,16 +38,17 @@ func testLinkListSort(t *testing.T,
 	doit func(*list.Node) *list.Node, sz1 int, sz2 int) {
 	defer guard_ut(t)
 
-	var head = ramdomLinkList(sz1)
+	var head = randLinkedList(sz1)
+	var tips = figureOutTips(head)
 	head = doit(head)
-	assert(t, checkLinkList(head, sz1))
+	assert(t, checkLinkList(head, sz1) && tips == figureOutTips(head))
 
-	head = stupidLinkList(sz2)
+	head = desLinkList(sz2)
 	head = doit(head)
 	assert(t, checkLinkList(head, sz2))
 
 	for i := 0; i < 6; i++ {
-		head = ramdomLinkList(i)
+		head = randLinkedList(i)
 		head = doit(head)
 		assert(t, checkLinkList(head, i))
 	}
@@ -65,8 +66,15 @@ func checkLinkList(head *list.Node, size int) bool {
 	}
 	return cnt == size
 }
+func figureOutTips(head *list.Node) int {
+	var tips int = 0
+	for ; head != nil; head = head.Next {
+		tips ^= head.Val
+	}
+	return tips
+}
 
-func ramdomLinkList(size int) *list.Node {
+func randLinkedList(size int) *list.Node {
 	rand.Seed(time.Now().Unix())
 	var head *list.Node
 	var tail = list.FakeHead(&head)
@@ -78,13 +86,13 @@ func ramdomLinkList(size int) *list.Node {
 	tail.Next = nil
 	return head
 }
-func stupidLinkList(size int) *list.Node {
+func desLinkList(size int) *list.Node {
 	var head *list.Node
 	var tail = list.FakeHead(&head)
 	for i := 0; i < size; i++ {
 		tail.Next = new(list.Node)
 		tail = tail.Next
-		tail.Val = (size - i) / 2
+		tail.Val = size - i
 	}
 	tail.Next = nil
 	return head

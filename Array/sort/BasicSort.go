@@ -47,4 +47,4 @@ func InsertSort(list []int) {
 	}
 }
 
-const sz_limit = 7
+const sz_limit = 8
