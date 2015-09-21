@@ -13,17 +13,12 @@ func QuickSortY(list []int) {
 	}
 }
 
-func findPivotPos(list []int) (m1 int, m2 int) {
-	m1, m2 = len(list)/2-1, len(list)/2
-	if list[m1] > list[m2] {
-		list[m1], list[m2] = list[m2], list[m1]
-	}
-	return m1, m2
-}
-
 func triPartition(list []int) (start int, end int) {
 	var size = len(list)
-	var m1, m2 = findPivotPos(list)
+	var m1, m2 = len(list)/2 - 1, len(list) / 2
+	if list[m1] > list[m2] {
+		m1, m2 = m2, m1
+	}
 	var pivot1, pivot2 = list[m1], list[m2]
 	list[m1], list[m2] = list[0], list[size-1]
 
