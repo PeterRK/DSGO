@@ -9,7 +9,7 @@
 ////////////////////////////////////////////////////////////////////////////
 SkipList::SkipList(void)
 {
-	m_rand = time(NULL);
+	m_rand = static_cast<uint32_t>(time(NULL));
 	m_cnt = 1;
 	m_ceil = FACTOR;
 	m_floor = 1;

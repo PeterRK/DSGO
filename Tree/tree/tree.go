@@ -5,12 +5,6 @@ type BinaryNode struct {
 	left, right *BinaryNode
 }
 
-type Node struct {
-	key   int
-	child *Node
-	peer  *Node
-}
-
 func DepthFirstSearch(root *BinaryNode, doit func(int)) {
 	if root != nil {
 		doit(root.key) //前序
@@ -21,6 +15,12 @@ func DepthFirstSearch(root *BinaryNode, doit func(int)) {
 	}
 }
 
+type Node struct {
+	key   int
+	child *Node
+	peer  *Node
+}
+
 func BreadthFirstSearch(root *Node, doit func(int)) {
 	if root != nil {
 		var q = newQ()
@@ -29,5 +29,66 @@ func BreadthFirstSearch(root *Node, doit func(int)) {
 				q.push(kid)
 			}
 		}
+	}
+}
+
+type TreeNode struct {
+	key         int
+	parent      *TreeNode
+	left, right *TreeNode
+}
+
+func BuildBalanceTree(list []int, parent *TreeNode) *TreeNode {
+	var size = len(list)
+	if size == 0 {
+		return nil
+	}
+	var node = new(TreeNode)
+	node.parent = parent
+	//node.left, node.right = nil, nil
+	var m = size / 2
+	node.key = list[m]
+	if size != 1 {
+		node.left = BuildBalanceTree(list[:m], node)
+		node.right = BuildBalanceTree(list[m+1:], node)
+	}
+	return node
+}
+
+func MoveForward(node *TreeNode) *TreeNode {
+	if node == nil {
+		return nil
+	}
+	if node.right != nil {
+		var kid = node.right
+		for kid.left != nil {
+			kid = kid.left
+		}
+		return kid
+	} else {
+		var parent = node.parent
+		for parent != nil && node == parent.right {
+			node, parent = parent, parent.parent
+		}
+		return parent
+	}
+}
+
+func MoveBackward(node *TreeNode) *TreeNode {
+	if node == nil {
+		return nil
+	}
+	if node.left != nil {
+		var kid = node.left
+		for kid.right != nil {
+			kid = kid.right
+		}
+		return kid
+	} else {
+		var parent = node.parent
+		for parent != nil && node == parent.left {
+			node, parent = parent, parent.parent
+		}
+		return parent
 	}
 }
