@@ -6,8 +6,18 @@ func (tr *Tree) Insert(key int32) bool {
 	if tr.root == nil {
 		tr.root = newNode(key) //默认为红
 		tr.root.black = true
-		return true
+	} else {
+		var root = tr.insert(key)
+		if root == nil {
+			return false
+		}
+		tr.adjustAfterInsert()
 	}
+	return true
+}
+
+//插入节点，root != nil
+func (tr *Tree) insert(key int32) *node {
 	tr.path.clear()
 	for root := tr.root; ; {
 		switch {
@@ -15,23 +25,20 @@ func (tr *Tree) Insert(key int32) bool {
 			tr.path.push(root, true)
 			if root.left == nil {
 				root.left = newNode(key) //默认为红
-				goto Label_DONE
+				return root
 			}
 			root = root.left
 		case key > root.key:
 			tr.path.push(root, false)
 			if root.right == nil {
 				root.right = newNode(key) //默认为红
-				goto Label_DONE
+				return root
 			}
 			root = root.right
 		default: //key == root.key
-			return false
+			return nil
 		}
 	}
-Label_DONE:
-	tr.adjustAfterInsert()
-	return true
 }
 
 //------------红叔模式------------
@@ -112,7 +119,8 @@ func (tr *Tree) adjustAfterInsert() {
 
 func newNode(key int32) (unit *node) {
 	unit = new(node)
-	unit.key, unit.black = key, false
-	unit.left, unit.right = nil, nil
+	unit.key = key
+	//unit.black = false
+	//unit.left, unit.right = nil, nil
 	return unit
 }

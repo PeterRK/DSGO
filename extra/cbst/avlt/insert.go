@@ -5,8 +5,18 @@ package avlt
 func (tr *Tree) Insert(key int32) bool {
 	if tr.root == nil {
 		tr.root = newNode(key)
-		return true
+	} else {
+		var root = tr.insert(key)
+		if root == nil {
+			return false
+		}
+		tr.rebalanceAfterInsert(root, key)
 	}
+	return true
+}
+
+//插入节点，root != nil
+func (tr *Tree) insert(key int32) *node {
 	tr.path.clear()
 	var root = tr.root
 	for {
@@ -15,22 +25,24 @@ func (tr *Tree) Insert(key int32) bool {
 			tr.path.push(root, true)
 			if root.left == nil {
 				root.left = newNode(key)
-				goto Label_DONE
+				return root
 			}
 			root = root.left
 		case key > root.key:
 			tr.path.push(root, false)
 			if root.right == nil {
 				root.right = newNode(key)
-				goto Label_DONE
+				return root
 			}
 			root = root.right
 		default: //key == root.key
-			return false
+			return nil
 		}
 	}
-Label_DONE:
+}
 
+//回溯矫正
+func (tr *Tree) rebalanceAfterInsert(root *node, key int32) {
 	var state, lf = int8(0), false
 	for !tr.path.isEmpty() && state == 0 {
 		root, lf = tr.path.pop()
@@ -44,12 +56,12 @@ Label_DONE:
 			tr.hookSubTree(root)
 		}
 	}
-	return true
 }
 
 func newNode(key int32) (unit *node) {
 	unit = new(node)
-	unit.key, unit.state = key, 0
-	unit.left, unit.right = nil, nil
+	unit.key = key
+	//unit.state = 0
+	//unit.left, unit.right = nil, nil
 	return unit
 }

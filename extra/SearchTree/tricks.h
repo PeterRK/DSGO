@@ -30,9 +30,12 @@ private:
 
 public:
 	Allocator(void)
-		: m_spot(0), m_crrent(new Block), m_head(m_crrent),
-		m_free(nullptr), m_balance(0)
-	{ m_crrent->next = nullptr; }
+		: m_spot(0), m_free(nullptr), m_balance(0)
+	{
+		m_head = m_crrent =
+			reinterpret_cast<Block*>(operator new(sizeof(Block)));
+		m_head->next = nullptr;
+	}
 	~Allocator(void) {
 		while (m_head != nullptr) {
 			m_crrent = m_head;
