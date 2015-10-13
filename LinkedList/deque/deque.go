@@ -107,7 +107,7 @@ func (dq *deque) PopBack() (int, error) {
 	var key = dq.back.pt.space[dq.back.idx]
 	if dq.back.idx == piece_sz-1 {
 		dq.back.idx = -1    //dq.back.idx永远不为(piece_sz-1)
-		dq.back.pt.bw = nil //只保留一块缓冲，因为
+		dq.back.pt.bw = nil //只保留一块缓冲
 		dq.back.pt = dq.back.pt.fw
 	}
 	return key, nil
