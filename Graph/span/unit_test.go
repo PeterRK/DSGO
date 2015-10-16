@@ -85,6 +85,9 @@ func Test_Kruskal(t *testing.T) {
 
 	var dist, err = Kruskal(roads, 9)
 	assert(t, err == nil && dist == 37)
+
+	dist, err = KruskalS(roads, 9)
+	assert(t, err == nil && dist == 37)
 }
 
 func Test_PrimTree(t *testing.T) {
