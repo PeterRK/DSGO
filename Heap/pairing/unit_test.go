@@ -112,6 +112,9 @@ func Test_FloatUpAndRemove(t *testing.T) {
 		heap.PushNode(unit)
 	}
 
+	var super = node.prev
+	heap.FloatUp(node, super.key)
+	assert(t, node.prev == super && node.key == super.key)
 	heap.Remove(node)
 	heap.PushNode(node)
 
@@ -119,7 +122,6 @@ func Test_FloatUpAndRemove(t *testing.T) {
 	heap.FloatUp(node, mark)
 	var key, err = heap.Top()
 	assert(t, err == nil && key == mark && key == node.key)
-
 	heap.Remove(node)
 	heap.PushNode(node)
 

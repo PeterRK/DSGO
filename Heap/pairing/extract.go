@@ -88,15 +88,14 @@ func (hp *Heap) Remove(target *Node) {
 func (hp *Heap) FloatUp(target *Node, value int) {
 	if target != nil && value < target.key {
 		target.key = value
-		if super := target.prev; super != nil { //非根
+		if super := target.prev; super != nil && super.key > value {
 			target.prev = nil
 			if super.next == target { //super为兄
 				super.next, target.next = super.hook(target.next), nil
-				hp.root = merge(hp.root, target)
-			} else if super.key > value { //super为父，但被超越
+			} else { //super为父
 				super.child, target.next = super.hook(target.next), nil
-				hp.root = merge(hp.root, target)
 			}
+			hp.root = merge(hp.root, target)
 		}
 	}
 }

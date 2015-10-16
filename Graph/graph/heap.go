@@ -73,15 +73,14 @@ func Extract(root *node) *node {
 func FloatUp(root *node, target *node, distance uint) *node {
 	if target != nil && distance < target.Dist {
 		target.Dist = distance
-		if super := target.prev; super != nil {
+		if super := target.prev; super != nil && super.Dist > distance {
 			target.prev = nil
-			if super.next == target {
+			if super.next == target { //super为兄
 				super.next, target.next = super.hook(target.next), nil
-				root = merge(root, target)
-			} else if super.Dist > distance {
+			} else { //super为父
 				super.child, target.next = super.hook(target.next), nil
-				root = merge(root, target)
 			}
+			root = merge(root, target)
 		}
 	}
 	return root

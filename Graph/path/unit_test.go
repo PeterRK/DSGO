@@ -41,6 +41,10 @@ func Test_Dijkstra(t *testing.T) {
 	var expected = []int{19, 0, 11, 16, 4}
 	var ret = Dijkstra(roads, 1)
 	assert(t, isTheSame(ret, expected))
+
+	expected = []int{1, 4, 2, 3, 0}
+	var dist, vec = DijkstraPath(roads, 1, 0)
+	assert(t, dist == 19 && isTheSame(vec, expected))
 }
 
 func Test_PlainDijkstra(t *testing.T) {
@@ -58,6 +62,11 @@ func Test_PlainDijkstra(t *testing.T) {
 	if !isTheSame(ret, expected) {
 		t.Fail()
 	}
+
+	expected = []int{1, 4, 2, 3, 0}
+	var dist, vec = PlainDijkstraPath(matrix, 1, 0)
+	assert(t, dist == 19 && isTheSame(vec, expected))
+
 }
 
 func Test_SPFA(t *testing.T) {
@@ -98,34 +107,4 @@ func Test_FloydWarshall(t *testing.T) {
 			assert(t, matrix[i][j] == expected[i][j])
 		}
 	}
-}
-
-func Test_DijkstraPath(t *testing.T) {
-	defer guard_ut(t)
-
-	var roads = make([][]graph.Path, 5)
-	roads[0] = []graph.Path{{1, 1}, {3, 2}}
-	roads[1] = []graph.Path{{4, 4}}
-	roads[2] = []graph.Path{{0, 10}, {3, 5}}
-	roads[3] = []graph.Path{{0, 3}, {1, 9}, {4, 2}}
-	roads[4] = []graph.Path{{1, 6}, {2, 7}}
-
-	var expected = []int{1, 4, 2, 3, 0}
-	var dist, vec = DijkstraPath(roads, 1, 0)
-	assert(t, dist == 19 && isTheSame(vec, expected))
-}
-
-func Test_PlainDijkstraPath(t *testing.T) {
-	defer guard_ut(t)
-
-	var matrix = [][]uint{
-		{0, 1, 0, 2, 0},
-		{0, 0, 0, 0, 4},
-		{10, 0, 0, 5, 0},
-		{3, 9, 0, 0, 2},
-		{0, 6, 7, 0, 0}}
-
-	var expected = []int{1, 4, 2, 3, 0}
-	var dist, vec = PlainDijkstraPath(matrix, 1, 0)
-	assert(t, dist == 19 && isTheSame(vec, expected))
 }

@@ -33,6 +33,7 @@ func BenchMark() {
 	if ret1 != ret2 {
 		fmt.Printf("Kruskal[%d] != Prim[%d]\n", ret1, ret2)
 	} else {
+		fmt.Printf("result = %d\n", ret1)
 		fmt.Println("Kruskal:", tm1)
 		fmt.Println("Prim:   ", tm2)
 	}
