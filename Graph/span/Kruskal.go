@@ -65,28 +65,23 @@ func KruskalS(roads []graph.Edge, size int) (uint, error) {
 	for i := 0; i < size; i++ {
 		list[i].cnt, list[i].super = 1, i
 	}
-	var trace = func(space []memo, id int) (super int, depth uint) {
-		super = space[id].super
-		for depth = uint(0); super != id; depth++ {
-			id, super = super, space[super].super
+	var trace = func(id int) int {
+		for id != list[id].super {
+			id = list[id].super
 		}
-		return super, depth
+		return id
 	}
 
 	var sum = uint(0)
 	for _, path := range roads {
-		var grpA, dpA = trace(list, path.A)
-		var grpB, dpB = trace(list, path.B)
-		if grpA == grpB {
+		var active, another = trace(path.A), trace(path.B)
+		if active == another {
 			continue
 		}
 		sum += path.Dist
 
-		var active, another int
-		if dpA > dpB {
-			active, another = grpA, grpB
-		} else {
-			active, another = grpB, grpA
+		if list[active].cnt < list[another].cnt {
+			active, another = another, active
 		}
 		list[active].cnt += list[another].cnt
 		list[another].super = active
