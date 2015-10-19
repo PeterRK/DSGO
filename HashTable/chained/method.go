@@ -7,15 +7,17 @@ import (
 
 func (tb *hashTable) Search(key []byte) bool {
 	var index = tb.hash(key) % uint(len(tb.bucket))
-	for unit := tb.bucket[index]; unit != nil; unit = unit.next {
-		if bytes.Compare(key, unit.key) == 0 {
+	return search(tb.bucket[index], key)
+}
+func search(head *node, key []byte) bool {
+	for ; head != nil; head = head.next {
+		if bytes.Compare(key, head.key) == 0 {
 			return true
 		}
 	}
 	return false
 }
 
-//成功返回true，没有返回false
 func (tb *hashTable) Remove(key []byte) bool {
 	var index = tb.hash(key) % uint(len(tb.bucket))
 	var list = tb.bucket[index] //直接取对GC不友好，绕一下道
@@ -35,13 +37,10 @@ func fakeHead(spt **node) *node {
 	return (*node)(unsafe.Pointer(base - off))
 }
 
-//成功返回true，冲突返回false
 func (tb *hashTable) Insert(key []byte) bool {
 	var index = tb.hash(key) % uint(len(tb.bucket))
-	for unit := tb.bucket[index]; unit != nil; unit = unit.next {
-		if bytes.Compare(key, unit.key) == 0 {
-			return false
-		}
+	if search(tb.bucket[index], key) {
+		return false
 	}
 	var unit = new(node)
 	unit.key = key
@@ -49,20 +48,20 @@ func (tb *hashTable) Insert(key []byte) bool {
 
 	tb.cnt++
 	if tb.isCrowded() {
-		if newsz, ok := nextSize(uint(len(tb.bucket))); ok {
-			tb.resize(newsz)
-		}
+		tb.expand()
 	}
 	return true
 }
-func (tb *hashTable) resize(size uint) {
-	var old_bucket = tb.bucket
-	tb.bucket = make([]*node, size)
-	for _, unit := range old_bucket {
-		for unit != nil {
-			var current, index = unit, tb.hash(unit.key) % size
-			unit = unit.next
-			current.next, tb.bucket[index] = tb.bucket[index], current
+func (tb *hashTable) expand() {
+	if size, ok := nextSize(uint(len(tb.bucket))); ok {
+		var old_bucket = tb.bucket
+		tb.bucket = make([]*node, size)
+		for _, unit := range old_bucket {
+			for unit != nil {
+				var current, index = unit, tb.hash(unit.key) % size
+				unit = unit.next
+				current.next, tb.bucket[index] = tb.bucket[index], current
+			}
 		}
 	}
 }
