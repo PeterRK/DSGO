@@ -25,8 +25,8 @@ private:
 	Allocator<Node::Pointer[1<<lv], sz> m_ptrPool##lv;	\
 	Node::Pointer* AllocatePtrArray##lv(void);			\
 	void DeallocatePtrArray##lv(Node::Pointer* ptr);
-	ALLOCATEOR(1, 256) ALLOCATEOR(2, 256) ALLOCATEOR(3, 128) ALLOCATEOR(4, 128)
-	ALLOCATEOR(5, 128) ALLOCATEOR(6, 128) ALLOCATEOR(7, 64) ALLOCATEOR(8, 32)
+	ALLOCATEOR(1, 255) ALLOCATEOR(2, 255) ALLOCATEOR(3, 127) ALLOCATEOR(4, 127)
+	ALLOCATEOR(5, 127) ALLOCATEOR(6, 127) ALLOCATEOR(7,  63) ALLOCATEOR(8,  31)
 #undef ALLOCATEOR
 
 	static const AllocatePtrArray ALLOCATE[9];
