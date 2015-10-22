@@ -27,16 +27,16 @@ func TopologicalSort(roads [][]int) ([]int, error) {
 
 	for len(space) != 0 {
 		var last = len(space) - 1
-		var current = space[last]
+		var cur = space[last]
 		space = space[:last]
 
-		for _, next := range roads[current] {
+		for _, next := range roads[cur] {
 			book[next]--
 			if book[next] == 0 {
 				space = append(space, next)
 			}
 		}
-		list = append(list, current)
+		list = append(list, cur)
 	}
 
 	if len(list) != size {

@@ -29,10 +29,10 @@ func SPFA(roads [][]Path, start int) ([]int, error) {
 	q.push(start)
 	dists[start], cnts[start] = 0, -1
 	for !q.isEmpty() {
-		var current = q.pop()
-		cnts[current] = -cnts[current]
-		for _, path := range roads[current] {
-			var distance = dists[current] + path.Dist
+		var cur = q.pop()
+		cnts[cur] = -cnts[cur]
+		for _, path := range roads[cur] {
+			var distance = dists[cur] + path.Dist
 			var peer = path.Next
 			if distance < dists[peer] {
 				dists[peer] = distance

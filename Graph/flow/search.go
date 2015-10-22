@@ -7,33 +7,33 @@ func search(shadow [][]edge, matrix [][]uint, s *stack) uint {
 	for flow, stream := uint(0), uint(0); ; flow += stream {
 		stream = ^uint(0)
 		s.clear()
-		for current := 0; current != size-1; {
-			var sz = len(shadow[current])
+		for cur := 0; cur != size-1; {
+			var sz = len(shadow[cur])
 			if sz != 0 {
-				s.push(current, stream)
-				var path = shadow[current][sz-1]
-				current, stream = path.next, min(stream, path.val)
+				s.push(cur, stream)
+				var path = shadow[cur][sz-1]
+				cur, stream = path.next, min(stream, path.val)
 			} else { //碰壁，退一步
 				if s.isEmpty() { //退无可退
 					return flow
 				}
-				current, stream = s.pop()
-				var last = len(shadow[current]) - 1
-				var path = shadow[current][last]
-				matrix[current][path.next] += path.val
-				shadow[current] = shadow[current][:last]
+				cur, stream = s.pop()
+				var last = len(shadow[cur]) - 1
+				var path = shadow[cur][last]
+				matrix[cur][path.next] += path.val
+				shadow[cur] = shadow[cur][:last]
 			}
 		}
 
 		//该循环的每一轮复杂度为O(V)
 		for !s.isEmpty() { //处理找到的增广路径
-			var current, _ = s.pop()
-			var last = len(shadow[current]) - 1
-			var path = &shadow[current][last]
+			var cur, _ = s.pop()
+			var last = len(shadow[cur]) - 1
+			var path = &shadow[cur][last]
 			path.val -= stream
-			matrix[path.next][current] += stream //逆流，防止贪心断路
+			matrix[path.next][cur] += stream //逆流，防止贪心断路
 			if path.val == 0 {
-				shadow[current] = shadow[current][:last]
+				shadow[cur] = shadow[cur][:last]
 			}
 		}
 	}
@@ -45,4 +45,28 @@ func min(a uint, b uint) uint {
 		return b
 	}
 	return a
+}
+
+type stack struct {
+	space []int
+	spcx  []uint
+	top   int
+}
+
+func (s *stack) bind(space []int, spcx []uint) {
+	s.space, s.spcx = space, spcx
+}
+func (s *stack) clear() {
+	s.top = 0
+}
+func (s *stack) isEmpty() bool {
+	return s.top == 0
+}
+func (s *stack) push(id int, val uint) {
+	s.space[s.top], s.spcx[s.top] = id, val
+	s.top++
+}
+func (s *stack) pop() (id int, val uint) {
+	s.top--
+	return s.space[s.top], s.spcx[s.top]
 }
