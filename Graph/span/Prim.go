@@ -25,22 +25,20 @@ func Prim(roads [][]graph.Path) (uint, error) {
 
 	var cnt int
 	for cnt = 0; root != nil; cnt++ {
-		var current = root
-		root = graph.Extract(root)
-		sum += current.Dist
-		for _, path := range roads[current.Index] {
+		sum += root.Dist
+		var index = root.Index
+		root.Index, root = FAKE, graph.Extract(root) //入围
+		for _, path := range roads[index] {
 			var peer = &list[path.Next]
 			if peer.Link == FAKE { //未涉及点
-				peer.Index, peer.Link, peer.Dist =
-					path.Next, current.Index, path.Dist
+				peer.Index, peer.Link, peer.Dist = path.Next, index, path.Dist
 				root = graph.Insert(root, peer)
 			} else if peer.Index != FAKE && //外围点
 				path.Dist < peer.Dist { //可更新
-				peer.Link = current.Index
+				peer.Link = index
 				root = graph.FloatUp(root, peer, path.Dist)
 			}
 		}
-		current.Index = FAKE //入围
 	}
 	if cnt != size {
 		return sum, errors.New("isolated part exist")
@@ -69,21 +67,19 @@ func PrimTree(roads [][]graph.Path) ([]Edge, error) {
 	var root = graph.Insert(nil, &list[0])
 
 	for {
-		var current = root
-		root = graph.Extract(root)
-		for _, path := range roads[current.Index] {
+		var index = root.Index
+		root.Index, root = FAKE, graph.Extract(root) //入围
+		for _, path := range roads[index] {
 			var peer = &list[path.Next]
 			if peer.Link == FAKE { //未涉及点
-				peer.Index, peer.Link, peer.Dist =
-					path.Next, current.Index, path.Dist
+				peer.Index, peer.Link, peer.Dist = path.Next, index, path.Dist
 				root = graph.Insert(root, peer)
 			} else if peer.Index != FAKE && //外围点
 				path.Dist < peer.Dist { //可更新
-				peer.Link = current.Index
+				peer.Link = index
 				root = graph.FloatUp(root, peer, path.Dist)
 			}
 		}
-		current.Index = FAKE //入围
 		if root == nil {
 			break
 		}

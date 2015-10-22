@@ -43,8 +43,8 @@ func Test_Dijkstra(t *testing.T) {
 	assert(t, isTheSame(ret, expected))
 
 	expected = []int{1, 4, 2, 3, 0}
-	var dist, vec = DijkstraPath(roads, 1, 0)
-	assert(t, dist == 19 && isTheSame(vec, expected))
+	var vec = DijkstraPath(roads, 1, 0)
+	assert(t, isTheSame(vec, expected))
 }
 
 func Test_PlainDijkstra(t *testing.T) {
@@ -64,8 +64,8 @@ func Test_PlainDijkstra(t *testing.T) {
 	}
 
 	expected = []int{1, 4, 2, 3, 0}
-	var dist, vec = PlainDijkstraPath(matrix, 1, 0)
-	assert(t, dist == 19 && isTheSame(vec, expected))
+	var vec = PlainDijkstraPath(matrix, 1, 0)
+	assert(t, isTheSame(vec, expected))
 
 }
 
