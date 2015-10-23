@@ -70,10 +70,10 @@ func Extract(root *node) *node {
 	}
 	return nil
 }
-func FloatUp(root *node, target *node, distance uint) *node {
-	if target != nil && distance < target.Dist {
-		target.Dist = distance
-		if super := target.prev; super != nil && super.Dist > distance {
+func FloatUp(root *node, target *node, diff uint) *node {
+	if target != nil {
+		target.Dist -= diff
+		if super := target.prev; super != nil && super.Dist > target.Dist {
 			target.prev = nil
 			if super.next == target { //super为兄
 				super.next, target.next = super.hook(target.next), nil

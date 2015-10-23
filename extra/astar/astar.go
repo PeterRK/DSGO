@@ -54,8 +54,7 @@ func AStar(roads [][]Path, start int, end int,
 				var distance = dist + path.Dist
 				if distance < peer.dist {
 					root = floatUp(root, peer, peer.dist-distance)
-					peer.dist = distance
-					peer.link = index
+					peer.link, peer.dist = index, distance
 				}
 			}
 		}
