@@ -4,57 +4,45 @@ import (
 	"testing"
 )
 
-func Test_Nothing(t *testing.T) {
-	//Do Nothing
-}
-
-var str = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+var bench_str = []byte("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
 func Benchmark_BKDRhash(b *testing.B) {
-	var data = []byte(str)
 	for i := 0; i < b.N; i++ {
-		BKDRhash(data)
+		BKDRhash(bench_str)
 	}
 }
 func Benchmark_SDBMhash(b *testing.B) {
-	var data = []byte(str)
 	for i := 0; i < b.N; i++ {
-		SDBMhash(data)
+		SDBMhash(bench_str)
 	}
 }
 func Benchmark_DJBhash(b *testing.B) {
-	var data = []byte(str)
 	for i := 0; i < b.N; i++ {
-		DJBhash(data)
+		DJBhash(bench_str)
 	}
 }
 func Benchmark_DJB2hash(b *testing.B) {
-	var data = []byte(str)
 	for i := 0; i < b.N; i++ {
-		DJB2hash(data)
+		DJB2hash(bench_str)
 	}
 }
 func Benchmark_FNVhash(b *testing.B) {
-	var data = []byte(str)
 	for i := 0; i < b.N; i++ {
-		FNVhash(data)
+		FNVhash(bench_str)
 	}
 }
 func Benchmark_RShash(b *testing.B) {
-	var data = []byte(str)
 	for i := 0; i < b.N; i++ {
-		RShash(data)
+		RShash(bench_str)
 	}
 }
 func Benchmark_JShash(b *testing.B) {
-	var data = []byte(str)
 	for i := 0; i < b.N; i++ {
-		JShash(data)
+		JShash(bench_str)
 	}
 }
 func Benchmark_APhash(b *testing.B) {
-	var data = []byte(str)
 	for i := 0; i < b.N; i++ {
-		APhash(data)
+		APhash(bench_str)
 	}
 }

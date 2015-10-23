@@ -21,26 +21,26 @@ func Test_HashTable(t *testing.T) {
 
 	var tpl = []byte("ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
 		"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
-	var book [52]string
+	var book [52][]byte
 	for i := 0; i < 52; i++ {
-		book[i] = string(tpl[i : i+26])
+		book[i] = tpl[i : i+26]
 	}
 
 	var table = NewHashTable(hash.BKDRhash)
 	for i := 0; i < 52; i++ {
-		assert(t, table.Insert([]byte(book[i])))
+		assert(t, table.Insert(book[i]))
 	}
 	assert(t, table.Size() == 52)
-	assert(t, !table.Insert([]byte(book[0])))
+	assert(t, !table.Insert(book[0]))
 	for i := 0; i < 52; i++ {
-		assert(t, table.Search([]byte(book[i])))
+		assert(t, table.Search(book[i]))
 	}
 	for i := 0; i < 52; i++ {
-		assert(t, table.Remove([]byte(book[i])))
+		assert(t, table.Remove(book[i]))
 	}
 	assert(t, table.IsEmpty())
-	assert(t, !table.Search([]byte(book[0])))
-	assert(t, !table.Remove([]byte(book[0])))
+	assert(t, !table.Search(book[0]))
+	assert(t, !table.Remove(book[0]))
 }
 
 func Test_nextSize(t *testing.T) {
