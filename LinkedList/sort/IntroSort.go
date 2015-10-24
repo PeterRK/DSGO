@@ -28,8 +28,7 @@ func IntroSort(head *list.Node) *list.Node {
 	return head
 }
 
-func doIntroSort(head *list.Node, life uint) (
-	first *list.Node, last *list.Node) {
+func doIntroSort(head *list.Node, life uint) (first, last *list.Node) {
 	first, last = sortOnlyTwo(head)
 	if first == nil {
 		if life == 0 {

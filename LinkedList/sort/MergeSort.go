@@ -9,8 +9,7 @@ func MergeSort(head *list.Node) *list.Node {
 	head, _ = doMergeSort(head)
 	return head
 }
-func doMergeSort(head *list.Node) ( //head != nil
-	first *list.Node, last *list.Node) {
+func doMergeSort(head *list.Node) (first, last *list.Node) { //head != nil
 	first, last = head, list.FakeHead(&first)
 	var size = 0
 	for ; head != nil; size += 2 {
@@ -19,13 +18,13 @@ func doMergeSort(head *list.Node) ( //head != nil
 			size++
 			break
 		}
-		var node0, node1 = head, head.Next
-		head = node1.Next
-		if node0.Val > node1.Val {
-			last.Next, node1.Next, node0.Next = node1, node0, head
-			last = node0
+		var nd0, nd1 = head, head.Next
+		head = nd1.Next
+		if nd0.Val > nd1.Val {
+			last.Next, nd1.Next, nd0.Next = nd1, nd0, head
+			last = nd0
 		} else {
-			last = node1
+			last = nd1
 		}
 	}
 
@@ -53,22 +52,22 @@ func cutPeice(head *list.Node, sz int) *list.Node {
 	}
 	return head
 }
-func merge(left *list.Node, right *list.Node) (first *list.Node, last *list.Node) {
+func merge(left, right *list.Node) (first, last *list.Node) {
 	first, last = nil, list.FakeHead(&first)
 	for {
 		last.Next = left
 		if right == nil {
 			break
 		}
-		for ; left != nil && left.Val <= right.Val; left = left.Next {
-			last = left
+		for left != nil && left.Val <= right.Val {
+			last, left = left, left.Next
 		}
 		last.Next = right
 		if left == nil {
 			break
 		}
-		for ; right != nil && left.Val > right.Val; right = right.Next {
-			last = right
+		for right != nil && left.Val > right.Val {
+			last, right = right, right.Next
 		}
 	}
 	for last.Next != nil {
