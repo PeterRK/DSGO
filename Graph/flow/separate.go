@@ -2,101 +2,111 @@ package flow
 
 import (
 	"Graph/graph"
-	"errors"
+	//"fmt"
 )
-
-func flushBack(shadow [][]graph.Path, matrix [][]uint) {
-	var size = len(shadow) //len(shadow) == len(matrix)-1
-	for i := 1; i < size; i++ {
-		if len(shadow[i]) != 0 {
-			for _, path := range shadow[i] {
-				matrix[i][path.Next] += path.Weight
-			}
-			shadow[i] = shadow[i][:0]
-		}
-	}
-}
 
 const fake_level = ^uint(0)
 
-//宽度优先遍历
-func markLevel(matrix [][]uint, q *queue, memo []uint) bool {
-	var last = len(matrix) - 1
-	for i := 1; i <= last; i++ {
-		memo[i] = fake_level
-	}
-	memo[0] = 0
-
-	q.push(0)
-	for !q.isEmpty() {
-		var cur = q.pop()
-		if matrix[cur][last] != 0 {
-			memo[last] = memo[cur] + 1
-			return true
+func (pk *data) flushBack() {
+	for i := 0; i < pk.size; i++ {
+		if len(pk.shadow[i]) != 0 {
+			pk.roads[i] = merge(pk.roads[i], pk.shadow[i])
+			pk.shadow[i] = pk.shadow[i][:0]
 		}
-		for i := 1; i < last; i++ {
-			if memo[i] == fake_level && matrix[cur][i] != 0 {
-				memo[i] = memo[cur] + 1
-				q.push(i)
+		pk.roads[i] = compact(pk.roads[i])
+	}
+}
+func merge(base, part []graph.Path) []graph.Path {
+	var a, b = len(base) - 1, len(part) - 1
+	base = append(base, part...)
+	for c := len(base) - 1; b >= 0; c-- {
+		if a < 0 {
+			for ; b >= 0; b-- {
+				base[b] = part[b]
 			}
+			break
+		}
+		if base[a].Next > part[b].Next {
+			base[c] = base[a]
+			a--
+		} else {
+			base[c] = part[b]
+			b--
+		}
+	}
+	return base
+}
+
+func compact(list []graph.Path) []graph.Path {
+	var size = len(list)
+	if size == 0 {
+		return list
+	}
+	var last = 0
+	for i := 1; i < size; i++ {
+		if list[i].Next == list[last].Next {
+			list[last].Weight += list[i].Weight
+		} else {
+			if list[last].Weight != 0 {
+				last++
+			}
+			list[last] = list[i]
+		}
+	}
+	if list[last].Weight != 0 {
+		last++
+	}
+	return list[:last]
+}
+
+//宽度优先遍历
+func (pk *data) markLevel() bool {
+	for i := 0; i < pk.size; i++ {
+		pk.memo[i] = fake_level
+	}
+
+	pk.memo[pk.start] = 0
+	pk.queue.push(pk.start)
+
+	for !pk.queue.isEmpty() {
+		var cur = pk.queue.pop()
+		for _, path := range pk.roads[cur] {
+			if pk.memo[path.Next] != fake_level {
+				continue
+			}
+			pk.memo[path.Next] = pk.memo[cur] + 1
+			if path.Next == pk.end {
+				return true
+			}
+			pk.queue.push(path.Next)
 		}
 	}
 	return false
 }
 
-//筛分层次，生成分层残图，复杂度为(V^2)。
-func separate(shadow [][]graph.Path, matrix [][]uint, q *queue, memo []uint) bool {
-	q.clear()
-	if !markLevel(matrix, q, memo) {
+//筛分层次，生成分层残图，复杂度为O(E)。
+func (pk *data) separate() bool {
+	pk.queue.clear()
+	if !pk.markLevel() {
 		return false
 	}
 	for { //队列pop出的点并没有实际删除，可回溯遍历所有访问过的点
-		var cur, err = q.traceBack()
+		var cur, err = pk.queue.traceBack()
 		if err != nil {
 			break
 		}
-		//shadow[cur] = shadow[cur][:0]
-		for i := 1; i < len(matrix); i++ {
-			if memo[i] == memo[cur]+1 && matrix[cur][i] != 0 {
-				var path = graph.Path{Next: i, Weight: matrix[cur][i]}
-				shadow[cur] = append(shadow[cur], path)
-				matrix[cur][i] = 0
+		//pk.shadow[cur] = pk.shadow[cur][:0]
+		var paths = pk.roads[cur]
+		for i := 0; i < len(paths); i++ {
+			var next = paths[i].Next
+			if pk.memo[next] == pk.memo[cur]+1 {
+				pk.shadow[cur] = append(pk.shadow[cur], paths[i])
+				paths[i].Weight = 0
 			}
 		}
-		if len(shadow[cur]) == 0 {
-			memo[cur] = fake_level
+		if len(pk.shadow[cur]) == 0 {
+			pk.memo[cur] = fake_level
 		}
 	}
 	return true
-}
-
-type queue struct {
-	space    []int
-	rpt, wpt int
-}
-
-func (q *queue) bind(space []int) {
-	q.space = space
-}
-func (q *queue) clear() {
-	q.rpt, q.wpt = 0, 0
-}
-func (q *queue) isEmpty() bool {
-	return q.rpt == q.wpt
-}
-func (q *queue) push(key int) {
-	q.space[q.wpt] = key
-	q.wpt = (q.wpt + 1) % len(q.space)
-}
-func (q *queue) pop() int {
-	var key = q.space[q.rpt]
-	q.rpt = (q.rpt + 1) % len(q.space)
-	return key
-}
-func (q *queue) traceBack() (int, error) {
-	q.wpt--
-	if q.wpt < 0 {
-		return 0, errors.New("empty")
-	}
-	return q.space[q.wpt], nil
 }
