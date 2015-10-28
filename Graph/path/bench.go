@@ -66,7 +66,7 @@ func uAdjList(roads [][]Path) [][]graph.Path {
 	for i, vec := range roads {
 		var line = make([]graph.Path, len(vec))
 		for j, path := range vec {
-			line[j] = graph.Path{Next: path.Next, Dist: uint(path.Dist)}
+			line[j] = graph.Path{Next: path.Next, Weight: uint(path.Dist)}
 		}
 		out[i] = line
 	}
@@ -79,7 +79,7 @@ func transform(roads [][]graph.Path) [][]uint {
 	for i, vec := range roads {
 		var line = make([]uint, size) //全零
 		for _, path := range vec {
-			line[path.Next] = path.Dist
+			line[path.Next] = path.Weight
 		}
 		matrix[i] = line
 	}

@@ -1,7 +1,11 @@
 package flow
 
+import (
+	"Graph/graph"
+)
+
 //获取增广路径流量，复杂度为O(VE)。
-func search(shadow [][]edge, matrix [][]uint, s *stack) uint {
+func search(shadow [][]graph.Path, matrix [][]uint, s *stack) uint {
 	var size = len(matrix)
 	//每一轮都至少会删除图的一条边
 	for flow, stream := uint(0), uint(0); ; flow += stream {
@@ -12,7 +16,7 @@ func search(shadow [][]edge, matrix [][]uint, s *stack) uint {
 			if sz != 0 {
 				s.push(cur, stream)
 				var path = shadow[cur][sz-1]
-				cur, stream = path.next, min(stream, path.val)
+				cur, stream = path.Next, min(stream, path.Weight)
 			} else { //碰壁，退一步
 				if s.isEmpty() { //退无可退
 					return flow
@@ -20,7 +24,7 @@ func search(shadow [][]edge, matrix [][]uint, s *stack) uint {
 				cur, stream = s.pop()
 				var last = len(shadow[cur]) - 1
 				var path = shadow[cur][last]
-				matrix[cur][path.next] += path.val
+				matrix[cur][path.Next] += path.Weight
 				shadow[cur] = shadow[cur][:last]
 			}
 		}
@@ -30,9 +34,9 @@ func search(shadow [][]edge, matrix [][]uint, s *stack) uint {
 			var cur, _ = s.pop()
 			var last = len(shadow[cur]) - 1
 			var path = &shadow[cur][last]
-			path.val -= stream
-			matrix[path.next][cur] += stream //逆流，防止贪心断路
-			if path.val == 0 {
+			path.Weight -= stream
+			matrix[path.Next][cur] += stream //逆流，防止贪心断路
+			if path.Weight == 0 {
 				shadow[cur] = shadow[cur][:last]
 			}
 		}

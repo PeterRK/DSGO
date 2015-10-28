@@ -34,10 +34,10 @@ func Dijkstra(roads [][]graph.Path, start int) []int {
 			var peer = &list[path.Next]
 			if peer.Link == FAKE { //未涉及点
 				peer.Index, peer.Link = path.Next, index
-				peer.Dist = dist + path.Dist
+				peer.Dist = dist + path.Weight
 				root = graph.Insert(root, peer)
 			} else if peer.Index != FAKE { //外围点
-				var distance = dist + path.Dist
+				var distance = dist + path.Weight
 				if distance < peer.Dist {
 					root = graph.FloatUp(root, peer, peer.Dist-distance)
 					//peer.Link = index
@@ -93,10 +93,10 @@ func DijkstraPath(roads [][]graph.Path, start int, end int) []int {
 			var peer = &list[path.Next]
 			if peer.Link == FAKE { //未涉及点
 				peer.Index, peer.Link = path.Next, index
-				peer.Dist = dist + path.Dist
+				peer.Dist = dist + path.Weight
 				root = graph.Insert(root, peer)
 			} else if peer.Index != FAKE { //外围点
-				var distance = dist + path.Dist
+				var distance = dist + path.Weight
 				if distance < peer.Dist {
 					root = graph.FloatUp(root, peer, peer.Dist-distance)
 					peer.Link = index

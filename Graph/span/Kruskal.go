@@ -11,7 +11,7 @@ func Kruskal(roads []graph.Edge, size int) (uint, error) {
 	if size < 2 || len(roads) < size-1 {
 		return 0, errors.New("illegal input")
 	}
-	graph.Sort(roads)
+	sort(roads)
 
 	type memo struct {
 		cnt   int
@@ -29,7 +29,7 @@ func Kruskal(roads []graph.Edge, size int) (uint, error) {
 		if grpA == grpB {
 			continue
 		}
-		sum += path.Dist
+		sum += path.Weight
 
 		var active, another *memo
 		if list[grpA].cnt > list[grpB].cnt {
@@ -55,7 +55,7 @@ func KruskalS(roads []graph.Edge, size int) (uint, error) {
 	if size < 2 || len(roads) < size-1 {
 		return 0, errors.New("illegal input")
 	}
-	graph.Sort(roads)
+	sort(roads)
 
 	type memo struct {
 		cnt   int
@@ -78,7 +78,7 @@ func KruskalS(roads []graph.Edge, size int) (uint, error) {
 		if active == another {
 			continue
 		}
-		sum += path.Dist
+		sum += path.Weight
 
 		if list[active].cnt < list[another].cnt {
 			active, another = another, active

@@ -31,11 +31,11 @@ func Prim(roads [][]graph.Path) (uint, error) {
 		for _, path := range roads[index] {
 			var peer = &list[path.Next]
 			if peer.Link == FAKE { //未涉及点
-				peer.Index, peer.Link, peer.Dist = path.Next, index, path.Dist
+				peer.Index, peer.Link, peer.Dist = path.Next, index, path.Weight
 				root = graph.Insert(root, peer)
 			} else if peer.Index != FAKE && //外围点
-				path.Dist < peer.Dist { //可更新
-				root = graph.FloatUp(root, peer, peer.Dist-path.Dist)
+				path.Weight < peer.Dist { //可更新
+				root = graph.FloatUp(root, peer, peer.Dist-path.Weight)
 				peer.Link = index
 			}
 		}
@@ -72,12 +72,12 @@ func PrimTree(roads [][]graph.Path) ([]Edge, error) {
 		for _, path := range roads[index] {
 			var peer = &list[path.Next]
 			if peer.Link == FAKE { //未涉及点
-				peer.Index, peer.Link, peer.Dist = path.Next, index, path.Dist
+				peer.Index, peer.Link, peer.Dist = path.Next, index, path.Weight
 				root = graph.Insert(root, peer)
 			} else if peer.Index != FAKE && //外围点
-				path.Dist < peer.Dist { //可更新
+				path.Weight < peer.Dist { //可更新
 				peer.Link = index
-				root = graph.FloatUp(root, peer, peer.Dist-path.Dist)
+				root = graph.FloatUp(root, peer, peer.Dist-path.Weight)
 			}
 		}
 		if root == nil {

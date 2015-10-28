@@ -1,15 +1,16 @@
 package flow
 
 import (
+	"Graph/graph"
 	"errors"
 )
 
-func flushBack(shadow [][]edge, matrix [][]uint) {
+func flushBack(shadow [][]graph.Path, matrix [][]uint) {
 	var size = len(shadow) //len(shadow) == len(matrix)-1
 	for i := 1; i < size; i++ {
 		if len(shadow[i]) != 0 {
 			for _, path := range shadow[i] {
-				matrix[i][path.next] += path.val
+				matrix[i][path.Next] += path.Weight
 			}
 			shadow[i] = shadow[i][:0]
 		}
@@ -44,7 +45,7 @@ func markLevel(matrix [][]uint, q *queue, memo []uint) bool {
 }
 
 //筛分层次，生成分层残图，复杂度为(V^2)。
-func separate(shadow [][]edge, matrix [][]uint, q *queue, memo []uint) bool {
+func separate(shadow [][]graph.Path, matrix [][]uint, q *queue, memo []uint) bool {
 	q.clear()
 	if !markLevel(matrix, q, memo) {
 		return false
@@ -57,8 +58,8 @@ func separate(shadow [][]edge, matrix [][]uint, q *queue, memo []uint) bool {
 		//shadow[cur] = shadow[cur][:0]
 		for i := 1; i < len(matrix); i++ {
 			if memo[i] == memo[cur]+1 && matrix[cur][i] != 0 {
-				shadow[cur] = append(
-					shadow[cur], edge{next: i, val: matrix[cur][i]})
+				var path = graph.Path{Next: i, Weight: matrix[cur][i]}
+				shadow[cur] = append(shadow[cur], path)
 				matrix[cur][i] = 0
 			}
 		}

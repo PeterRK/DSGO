@@ -1,9 +1,8 @@
 package flow
 
-type edge struct {
-	next int
-	val  uint
-}
+import (
+	"Graph/graph"
+)
 
 //输入邻接矩阵，返回头节点到尾顶点见的最大流。
 //复杂度为O(V^2 E)。
@@ -20,7 +19,7 @@ func Dinic(matrix [][]uint) uint {
 	var s stack
 	s.bind(space1, space2)
 
-	var shadow = make([][]edge, size-1) //分层残图
+	var shadow = make([][]graph.Path, size-1) //分层残图
 
 	var flow = uint(0)
 	for separate(shadow, matrix, &q, space2) {
