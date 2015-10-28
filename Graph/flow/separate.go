@@ -2,7 +2,6 @@ package flow
 
 import (
 	"Graph/graph"
-	//"fmt"
 )
 
 const fake_level = ^uint(0)
@@ -13,7 +12,7 @@ func (pk *data) flushBack() {
 			pk.roads[i] = merge(pk.roads[i], pk.shadow[i])
 			pk.shadow[i] = pk.shadow[i][:0]
 		}
-		pk.roads[i] = compact(pk.roads[i])
+		pk.roads[i] = compact(pk.roads[i]) //去重去零
 	}
 }
 func merge(base, part []graph.Path) []graph.Path {
@@ -36,7 +35,6 @@ func merge(base, part []graph.Path) []graph.Path {
 	}
 	return base
 }
-
 func compact(list []graph.Path) []graph.Path {
 	var size = len(list)
 	if size == 0 {

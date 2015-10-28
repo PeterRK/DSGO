@@ -33,11 +33,11 @@ func (pk *data) search() uint {
 			var last = len(pk.shadow[cur]) - 1
 			var path = &pk.shadow[cur][last]
 			path.Weight -= stream
+			pk.roads[path.Next] = patch(pk.roads[path.Next],
+				graph.Path{Next: cur, Weight: stream}) //逆流，防止贪心断路
 			if path.Weight == 0 {
 				pk.shadow[cur] = pk.shadow[cur][:last]
 			}
-			pk.roads[path.Next] = patch(pk.roads[path.Next],
-				graph.Path{Next: cur, Weight: stream}) //逆流，防止贪心断路
 		}
 	}
 	return 0

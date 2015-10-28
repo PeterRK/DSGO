@@ -97,10 +97,10 @@ func (pk *dataM) search() uint {
 			var last = len(pk.shadow[cur]) - 1
 			var path = &pk.shadow[cur][last]
 			path.Weight -= stream
+			pk.matrix[path.Next][cur] += stream //逆流，防止贪心断路
 			if path.Weight == 0 {
 				pk.shadow[cur] = pk.shadow[cur][:last]
 			}
-			pk.matrix[path.Next][cur] += stream //逆流，防止贪心断路
 		}
 	}
 	return 0
