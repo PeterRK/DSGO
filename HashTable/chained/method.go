@@ -24,8 +24,11 @@ func (tb *hashTable) Remove(key []byte) bool {
 	for knot := fakeHead(&list); knot.next != nil; knot = knot.next {
 		if bytes.Compare(key, knot.next.key) == 0 {
 			knot.next = knot.next.next
-			tb.cnt--
 			tb.bucket[index] = list
+			tb.cnt--
+			if tb.isWasteful() {
+				tb.shrink()
+			}
 			return true
 		}
 	}
@@ -52,16 +55,15 @@ func (tb *hashTable) Insert(key []byte) bool {
 	}
 	return true
 }
-func (tb *hashTable) expand() {
-	if size, ok := nextSize(uint(len(tb.bucket))); ok {
-		var old_bucket = tb.bucket
-		tb.bucket = make([]*node, size)
-		for _, unit := range old_bucket {
-			for unit != nil {
-				var current, index = unit, tb.hash(unit.key) % size
-				unit = unit.next
-				current.next, tb.bucket[index] = tb.bucket[index], current
-			}
+
+func (tb *hashTable) resize(size uint) {
+	var old_bucket = tb.bucket
+	tb.bucket = make([]*node, size)
+	for _, unit := range old_bucket {
+		for unit != nil {
+			var current, index = unit, tb.hash(unit.key) % size
+			unit = unit.next
+			current.next, tb.bucket[index] = tb.bucket[index], current
 		}
 	}
 }

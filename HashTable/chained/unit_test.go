@@ -42,18 +42,3 @@ func Test_HashTable(t *testing.T) {
 	assert(t, !table.Search(book[0]))
 	assert(t, !table.Remove(book[0]))
 }
-
-func Test_nextSize(t *testing.T) {
-	defer guard_ut(t)
-
-	var sz, ok = nextSize(primes[0])
-	assert(t, ok && sz == primes[1])
-
-	var last = primes[len(primes)-1]
-	for sz = 1; sz <= last; sz *= 2 {
-		var next, ok = nextSize(sz)
-		assert(t, ok && next > sz)
-	}
-	next, ok := nextSize(sz)
-	assert(t, !ok && next == sz)
-}

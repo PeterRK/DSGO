@@ -23,6 +23,9 @@ func (tb *hashTable) IsEmpty() bool {
 func (tb *hashTable) isCrowded() bool {
 	return tb.cnt*2 > len(tb.bucket)*3
 }
+func (tb *hashTable) isWasteful() bool {
+	return tb.cnt*10 < len(tb.bucket)
+}
 
 func (tb *hashTable) initialize(fn func(str []byte) uint) {
 	tb.cnt, tb.hash = 0, fn
@@ -39,18 +42,33 @@ var primes = []uint{
 	17, 29, 53, 97, 193, 389, 769, 1543, 3079, 6151, 12289, 24593, 49157, 98317, 196613,
 	393241, 786433, 1572869, 3145739, 6291469, 12582917, 25165843, 50331653, 1610612741}
 
-func nextSize(size uint) (newsz uint, ok bool) {
-	var start, end = 0, len(primes)
-	for start < end {
-		var mid = (start + end) / 2
-		if size < primes[mid] {
-			end = mid
-		} else {
-			start = mid + 1
+func (tb *hashTable) expand() {
+	var size = uint(len(tb.bucket))
+	if size != primes[len(primes)-1] {
+		var a, b = 0, len(primes)
+		for a < b {
+			var m = (a + b) / 2
+			if size < primes[m] {
+				b = m
+			} else {
+				a = m + 1
+			}
 		}
+		tb.resize(primes[a])
 	}
-	if start == len(primes) {
-		return size, false
+}
+func (tb *hashTable) shrink() {
+	var size = uint(len(tb.bucket))
+	if size != primes[0] {
+		var a, b = len(primes) - 1, -1
+		for a > b {
+			var m = (a + b + 1) / 2
+			if size > primes[m] {
+				b = m
+			} else {
+				a = m - 1
+			}
+		}
+		tb.resize(primes[a])
 	}
-	return primes[start], true
 }
