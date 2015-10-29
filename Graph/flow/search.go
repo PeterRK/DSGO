@@ -22,7 +22,7 @@ func (pk *data) search() uint {
 				}
 				cur, stream = pk.stack.pop()
 				var last = len(pk.shadow[cur]) - 1
-				pk.roads[cur] = patch(pk.roads[cur], pk.shadow[cur][last])
+				fillBack(pk.origin[cur], pk.shadow[cur][last])
 				pk.shadow[cur] = pk.shadow[cur][:last]
 			}
 		}
@@ -33,7 +33,7 @@ func (pk *data) search() uint {
 			var last = len(pk.shadow[cur]) - 1
 			var path = &pk.shadow[cur][last]
 			path.Weight -= stream
-			pk.roads[path.Next] = patch(pk.roads[path.Next],
+			pk.reflux[path.Next] = append(pk.reflux[path.Next],
 				graph.Path{Next: cur, Weight: stream}) //逆流，防止贪心断路
 			if path.Weight == 0 {
 				pk.shadow[cur] = pk.shadow[cur][:last]
@@ -43,29 +43,17 @@ func (pk *data) search() uint {
 	return 0
 }
 
-func patch(list []graph.Path, path graph.Path) []graph.Path {
-	var spot = binarySearch(list, path.Next)
-	if spot == len(list) || list[spot].Next != path.Next {
-		list = append(list, path)
-		for i := len(list) - 1; i > spot; i-- {
-			list[i] = list[i-1]
-		}
-		list[spot] = path
-	} else {
-		list[spot].Weight += path.Weight
-	}
-	return list
-}
-
-func binarySearch(list []graph.Path, key int) int {
-	var start, end = 0, len(list)
-	for start < end {
-		var mid = (start + end) / 2
-		if key > list[mid].Next {
-			start = mid + 1
-		} else {
-			end = mid
+func fillBack(list []graph.Path, path graph.Path) {
+	for a, b := 0, len(list); a < b; {
+		var m = (a + b) / 2
+		switch {
+		case path.Next > list[m].Next:
+			a = m + 1
+		case path.Next < list[m].Next:
+			b = m
+		default:
+			list[m].Weight += path.Weight
+			return
 		}
 	}
-	return start
 }

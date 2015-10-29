@@ -5,8 +5,9 @@ import (
 )
 
 type data struct {
-	roads  [][]graph.Path
+	origin [][]graph.Path
 	shadow [][]graph.Path
+	reflux [][]graph.Path
 	queue  queue
 	stack  stack
 	memo   []uint
@@ -29,7 +30,8 @@ func Dinic(roads [][]graph.Path, start int, end int) uint {
 
 	var pack = data{
 		shadow: make([][]graph.Path, size), //分层残图
-		roads:  roads, size: size,
+		reflux: make([][]graph.Path, size), //逆流暂存
+		origin: roads, size: size,
 		start: start, end: end}
 	pack.queue.bind(space1)
 	pack.stack.bind(space1, space2)

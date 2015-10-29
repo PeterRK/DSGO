@@ -9,10 +9,16 @@ const fake_level = ^uint(0)
 func (pk *data) flushBack() {
 	for i := 0; i < pk.size; i++ {
 		if len(pk.shadow[i]) != 0 {
-			pk.roads[i] = merge(pk.roads[i], pk.shadow[i])
+			for _, path := range pk.shadow[i] {
+				fillBack(pk.origin[i], path)
+			}
 			pk.shadow[i] = pk.shadow[i][:0]
 		}
-		pk.roads[i] = compact(pk.roads[i]) //去重去零
+		if len(pk.reflux[i]) != 0 {
+			sort(pk.reflux[i])
+			pk.origin[i] = merge(pk.origin[i], pk.reflux[i])
+		}
+		pk.origin[i] = compact(pk.origin[i]) //去重去零
 	}
 }
 func merge(base, part []graph.Path) []graph.Path {
@@ -68,7 +74,7 @@ func (pk *data) markLevel() bool {
 
 	for !pk.queue.isEmpty() {
 		var cur = pk.queue.pop()
-		for _, path := range pk.roads[cur] {
+		for _, path := range pk.origin[cur] {
 			if pk.memo[path.Next] != fake_level {
 				continue
 			}
@@ -93,8 +99,7 @@ func (pk *data) separate() bool {
 		if err != nil {
 			break
 		}
-		//pk.shadow[cur] = pk.shadow[cur][:0]
-		var paths = pk.roads[cur]
+		var paths = pk.origin[cur]
 		for i := 0; i < len(paths); i++ {
 			var next = paths[i].Next
 			if pk.memo[next] == pk.memo[cur]+1 {
