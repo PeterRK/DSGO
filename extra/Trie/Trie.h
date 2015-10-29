@@ -16,7 +16,6 @@ private:
 		};
 	};
 	Allocator<Node> m_pool;
-	static const unsigned SIZE_LIMIT[9];
 
 	typedef Node::Pointer* (Trie::*AllocatePtrArray)(void);
 	typedef void (Trie::*DeallocatePtrArray)(Node::Pointer* ptr);

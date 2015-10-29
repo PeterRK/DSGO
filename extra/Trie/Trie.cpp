@@ -14,9 +14,6 @@
 	}
 ALLOC_IMP(1) ALLOC_IMP(2) ALLOC_IMP(3) ALLOC_IMP(4)
 ALLOC_IMP(5) ALLOC_IMP(6) ALLOC_IMP(7) ALLOC_IMP(8)
-const unsigned Trie::SIZE_LIMIT[9] = {
-	1, 2, 4, 8, 16, 32, 64, 128, 256
-};
 #define FUNCX(lv) &Trie::AllocatePtrArray##lv
 const Trie::AllocatePtrArray Trie::ALLOCATE[9] = {
 	nullptr, FUNCX(1), FUNCX(2), FUNCX(3), FUNCX(4), FUNCX(5), FUNCX(6), FUNCX(7), FUNCX(8)
@@ -27,6 +24,10 @@ const Trie::DeallocatePtrArray Trie::DEALLOCATE[9] = {
 	nullptr, FUNCX(1), FUNCX(2), FUNCX(3), FUNCX(4), FUNCX(5), FUNCX(6), FUNCX(7), FUNCX(8)
 };
 #undef FUNCX
+////////////////////////////////////////////////////////////////////////////
+inline static uint16_t LEVEL_CAPACITY(uint8_t lv) {
+	return 1U << lv;
+}
 ////////////////////////////////////////////////////////////////////////////
 inline Trie::Node* Trie::NewNode(void)
 {
@@ -164,7 +165,7 @@ void Trie::Insert(const std::string& data)
 	Node* root = m_root;
 	uint8_t mk = 0;
 	for (unsigned idx = 0; idx < data.size(); idx++) {
-		if (mk == root->cnt) { //下探
+		if (mk == root->cnt) {	//下探
 			if (root->lv == 0) {
 				if (root->brs == 0) {
 					root->brs = 1;
@@ -181,7 +182,7 @@ void Trie::Insert(const std::string& data)
 				if (spot == root->brs
 					|| root->kids[spot]->key[0] != data[idx]
 				){	//扩展
-					if (root->brs == SIZE_LIMIT[root->lv]) {
+					if (root->brs == LEVEL_CAPACITY(root->lv)) {
 						Node::Pointer* old = root->kids;
 						auto deallocate = DEALLOCATE[root->lv];
 						root->kids = (this->*ALLOCATE[++root->lv])();
@@ -223,11 +224,11 @@ void Trie::Remove(const std::string& data, bool all)
 {
 	if (data.empty()) return;
 	Node* knot = nullptr;
-	uint16_t branch = 0; //记录独苗分支节点
+	uint16_t branch = 0;	//记录独苗分支节点
 	Node* root = m_root;
 	uint8_t mk = 0;
 	for (unsigned idx = 0; idx < data.size(); idx++) {
-		if (mk == root->cnt) { //下探
+		if (mk == root->cnt) {	//下探
 			if (root->brs == 0) return;
 			if (root->lv == 0) {
 				if (root->ref != 0) knot = root;
@@ -256,14 +257,14 @@ void Trie::Remove(const std::string& data, bool all)
 	} else {
 		root->ref--;
 	}
-	if (root->ref == 0 && root->brs == 0) { //删除独苗
+	if (root->ref == 0 && root->brs == 0) {	//删除独苗
 		knot->brs--;
 		Node* tail = nullptr;
 		if (knot->lv == 0) {
 			tail = knot->next;
 		} else {
 			tail = knot->kids[branch];
-			if (knot->brs < SIZE_LIMIT[knot->lv] / 4) {
+			if (knot->brs < LEVEL_CAPACITY(knot->lv) / 4) {	//错级收缩，抗抖动
 				Node::Pointer* old = knot->kids;
 				auto deallocate = DEALLOCATE[knot->lv];
 				knot->kids = (this->*ALLOCATE[--knot->lv])();
