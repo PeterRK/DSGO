@@ -4,7 +4,7 @@ import (
 	"Graph/graph"
 )
 
-//获取增广路径流量，复杂度为O(V^2 E)。
+//获取增广路径流量，复杂度为O(EVlogV)。
 func (pk *data) search() uint {
 	//每一轮都至少会删除图的一条边
 	for flow, stream := uint(0), uint(0); ; flow += stream {
