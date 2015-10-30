@@ -2,16 +2,26 @@ package chained
 
 import (
 	"HashTable/hash"
+	"unsafe"
 )
 
 type node struct {
 	key  []byte
 	next *node
 }
+
+func fakeHead(spt **node) *node {
+	var base = uintptr(unsafe.Pointer(spt))
+	var off = unsafe.Offsetof((*spt).next)
+	return (*node)(unsafe.Pointer(base - off))
+}
+
 type hashTable struct {
-	hash   func(str []byte) uint
-	bucket []*node
-	cnt    int
+	hash       func(str []byte) uint
+	bucket     []*node
+	cnt        int
+	old_bucket []*node //旧表（仅在rehash过程中有内容）
+	next_line  int     //标记待处理的旧表行
 }
 
 func (tb *hashTable) Size() int {
@@ -26,9 +36,15 @@ func (tb *hashTable) isCrowded() bool {
 func (tb *hashTable) isWasteful() bool {
 	return tb.cnt*10 < len(tb.bucket)
 }
+func (tb *hashTable) isMoving() bool {
+	return tb.next_line != -1
+}
+func (tb *hashTable) stopMoving() {
+	tb.next_line = -1
+}
 
 func (tb *hashTable) initialize(fn func(str []byte) uint) {
-	tb.cnt, tb.hash = 0, fn
+	tb.hash, tb.cnt, tb.next_line = fn, 0, -1
 	tb.bucket = make([]*node, primes[0])
 }
 func NewHashTable(fn func(str []byte) uint) hash.HashTable {

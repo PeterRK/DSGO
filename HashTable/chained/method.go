@@ -2,12 +2,20 @@ package chained
 
 import (
 	"bytes"
-	"unsafe"
 )
 
 func (tb *hashTable) Search(key []byte) bool {
-	var index = tb.hash(key) % uint(len(tb.bucket))
-	return search(tb.bucket[index], key)
+	var code = tb.hash(key)
+	var index = code % uint(len(tb.bucket))
+	var found = search(tb.bucket[index], key)
+	if tb.isMoving() {
+		if !found { //尝试从旧表中查找
+			index = code % uint(len(tb.old_bucket))
+			found = search(tb.old_bucket[index], key)
+		}
+		tb.moveLine() //推进rehash过程
+	}
+	return found
 }
 func search(head *node, key []byte) bool {
 	for ; head != nil; head = head.next {
@@ -19,51 +27,73 @@ func search(head *node, key []byte) bool {
 }
 
 func (tb *hashTable) Remove(key []byte) bool {
-	var index = tb.hash(key) % uint(len(tb.bucket))
-	var list = tb.bucket[index] //直接取对GC不友好，绕一下道
-	for knot := fakeHead(&list); knot.next != nil; knot = knot.next {
-		if bytes.Compare(key, knot.next.key) == 0 {
-			knot.next = knot.next.next
-			tb.bucket[index] = list
-			tb.cnt--
-			if tb.isWasteful() {
-				tb.shrink()
-			}
-			return true
+	var code, done = tb.hash(key), false
+	var index = code % uint(len(tb.bucket))
+	tb.bucket[index], done = remove(tb.bucket[index], key)
+	if tb.isMoving() {
+		if !done { //尝试从旧表中删除
+			index = code % uint(len(tb.old_bucket))
+			tb.old_bucket[index], done = remove(tb.old_bucket[index], key)
+		}
+		tb.moveLine()
+	}
+	if done {
+		tb.cnt--
+		if !tb.isMoving() && tb.isWasteful() {
+			tb.shrink()
 		}
 	}
-	return false
+	return done
 }
-func fakeHead(spt **node) *node {
-	var base = uintptr(unsafe.Pointer(spt))
-	var off = unsafe.Offsetof((*spt).next)
-	return (*node)(unsafe.Pointer(base - off))
+func remove(head *node, key []byte) (*node, bool) {
+	for knot := fakeHead(&head); knot.next != nil; knot = knot.next {
+		if bytes.Compare(key, knot.next.key) == 0 {
+			knot.next = knot.next.next
+			return head, true
+		}
+	}
+	return head, false
 }
 
 func (tb *hashTable) Insert(key []byte) bool {
-	var index = tb.hash(key) % uint(len(tb.bucket))
-	if search(tb.bucket[index], key) {
-		return false
+	var code = tb.hash(key)
+	var index = code % uint(len(tb.bucket))
+	var conflict = search(tb.bucket[index], key)
+	if tb.isMoving() {
+		if !conflict {
+			var index = code % uint(len(tb.old_bucket))
+			conflict = search(tb.old_bucket[index], key)
+		}
+		tb.moveLine()
 	}
-	var unit = new(node)
-	unit.key = key
-	unit.next, tb.bucket[index] = tb.bucket[index], unit
-
-	tb.cnt++
-	if tb.isCrowded() {
-		tb.expand()
+	if !conflict {
+		var unit = new(node)
+		unit.key = key
+		unit.next, tb.bucket[index] = tb.bucket[index], unit
+		tb.cnt++
+		if !tb.isMoving() && tb.isCrowded() {
+			tb.expand()
+		}
+		return true
 	}
-	return true
+	return false
 }
 
 func (tb *hashTable) resize(size uint) {
-	var old_bucket = tb.bucket
-	tb.bucket = make([]*node, size)
-	for _, unit := range old_bucket {
-		for unit != nil {
-			var current, index = unit, tb.hash(unit.key) % size
-			unit = unit.next
-			current.next, tb.bucket[index] = tb.bucket[index], current
-		}
+	tb.old_bucket, tb.bucket = tb.bucket, make([]*node, size)
+	tb.next_line = 0
+}
+func (tb *hashTable) moveLine() {
+	var size = uint(len(tb.bucket))
+	for head := tb.old_bucket[tb.next_line]; head != nil; {
+		var unit, index = head, tb.hash(head.key) % size
+		head = head.next
+		unit.next, tb.bucket[index] = tb.bucket[index], unit
+	}
+	tb.old_bucket[tb.next_line] = nil
+	tb.next_line++
+	if tb.next_line == len(tb.old_bucket) {
+		tb.stopMoving()           //rehash完成
+		tb.old_bucket = []*node{} //GC
 	}
 }
