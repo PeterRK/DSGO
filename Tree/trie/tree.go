@@ -1,9 +1,9 @@
 package trie
 
-const capacity = uint8(5)
+const NODE_CAP = uint8(5)
 
 type node struct {
-	key  [capacity]byte
+	key  [NODE_CAP]byte
 	cnt  uint8
 	ref  uint16
 	kids []*node
@@ -40,13 +40,13 @@ func (unit *node) searchKid(ch byte) int {
 }
 
 func (root *node) consume(kid *node) {
-	if root.cnt+kid.cnt > capacity { //半缩
+	if root.cnt+kid.cnt > NODE_CAP { //半缩
 		var j = uint8(0)
-		for i := root.cnt; i < capacity; i++ {
+		for i := root.cnt; i < NODE_CAP; i++ {
 			root.key[i] = kid.key[j]
 			j++
 		}
-		root.cnt = capacity
+		root.cnt = NODE_CAP
 		var i = uint8(0)
 		for ; j < kid.cnt; j++ {
 			kid.key[i] = kid.key[j]
@@ -67,7 +67,7 @@ func (root *node) Search(data []byte) uint16 {
 	var mk = uint8(0)
 	for idx := 0; idx < len(data); idx++ {
 		if mk == root.cnt { //下探
-			if len(root.kids) == 1 && root.ref == 0 && root.cnt < capacity {
+			if len(root.kids) == 1 && root.ref == 0 && root.cnt < NODE_CAP {
 				root.consume(root.kids[0])
 			} else { //单纯下探
 				var spot = root.searchKid(data[idx])
@@ -93,11 +93,11 @@ func (root *node) Search(data []byte) uint16 {
 func createTail(data []byte) *node { //data非空
 	var head = newNode()
 	var last, idx = head, 0
-	for ; idx+int(capacity) < len(data); idx += int(capacity) {
-		for i := 0; i < int(capacity); i++ {
+	for ; idx+int(NODE_CAP) < len(data); idx += int(NODE_CAP) {
+		for i := 0; i < int(NODE_CAP); i++ {
 			last.key[i] = data[idx+i]
 		}
-		last.cnt = capacity
+		last.cnt = NODE_CAP
 		last.kids = append(last.kids, newNode())
 		last = last.kids[0]
 	}

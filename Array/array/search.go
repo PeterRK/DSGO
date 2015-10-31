@@ -2,16 +2,16 @@ package array
 
 //在由小到大的序列中寻找第一个大于key的位置
 func SearchAfter(list []int, key int) int {
-	var start, end = 0, len(list)
-	for start < end {
-		var mid = (start + end) / 2
-		if key < list[mid] {
-			end = mid
+	var a, b = 0, len(list)
+	for a < b {
+		var m = (a + b) / 2
+		if key < list[m] {
+			b = m
 		} else {
-			start = mid + 1
+			a = m + 1
 		}
 	}
-	return start
+	return a
 }
 
 //寻找key的位置(未必是第一个)，没有返回-1
@@ -32,35 +32,35 @@ func Search(list []int, key int) int {
 
 //在由小到大的序列中寻找第一个大于或等于key的位置
 func SearchFirst(list []int, key int) int {
-	var start, end = 0, len(list)
-	for start < end {
-		var mid = (start + end) / 2
-		if key > list[mid] {
-			start = mid + 1
+	var a, b = 0, len(list)
+	for a < b {
+		var m = (a + b) / 2
+		if key > list[m] {
+			a = m + 1
 		} else {
-			end = mid
+			b = m
 		}
 	}
-	return start
+	return a
 }
 
 //在由小到大的序列中寻找最后一个小于或等于key的位置
 func SearchLast(list []int, key int) int {
-	var start, end = len(list) - 1, -1
-	for start > end {
-		//"(start + end + 2) / 2"也可以，但"(start+end)/2 + 1"不行
-		var mid = (start + end + 1) / 2
-		if key < list[mid] {
-			start = mid - 1
+	var a, b = len(list) - 1, -1
+	for a > b {
+		//"(a + b + 2) / 2"也可以，但"(a+b)/2 + 1"不行
+		var m = (a + b + 1) / 2
+		if key < list[m] {
+			a = m - 1
 		} else {
-			end = mid
+			b = m
 		}
 	}
-	return start
+	return a
 }
 
 //在由小到大的序列中寻找目标，找打返回索引范围，没有则返回false
-func SearchRange(list []int, key int) (first int, last int, ok bool) {
+func SearchRange(list []int, key int) (first, last int, ok bool) {
 	last = SearchLast(list, key)
 	if last == -1 || list[last] != key {
 		return -1, -1, false

@@ -4,7 +4,7 @@ package sort
 //复杂度为O(NlogN) & O(N)。
 //其中比较操作是O(NlogN)，但常数小于HeapSort；挪移操作是O(NlogN)，常数与HeapSort相当。
 func MergeSort(list []int) {
-	if len(list) < sz_limit {
+	if len(list) < LOWER_BOUND {
 		InsertSort(list)
 	} else {
 		var shadow = make([]int, len(list))
@@ -15,22 +15,22 @@ func MergeSort(list []int) {
 	}
 }
 func doMergeSort(in []int, out []int) {
-	if len(in) < sz_limit { //内建InsertSort
+	if len(in) < LOWER_BOUND { //内建InsertSort
 		for i := 1; i < len(in); i++ {
-			var start, end = 0, i
 			var key = in[i]
-			for start < end {
-				var mid = (start + end) / 2
-				if key < out[mid] {
-					end = mid
+			var a, b = 0, i
+			for a < b {
+				var m = (a + b) / 2
+				if key < out[m] {
+					b = m
 				} else {
-					start = mid + 1
+					a = m + 1
 				}
 			}
-			for j := i; j > start; j-- {
+			for j := i; j > a; j-- {
 				out[j] = out[j-1]
 			}
-			out[start] = key
+			out[a] = key
 		}
 	} else {
 		var half = len(in) / 2

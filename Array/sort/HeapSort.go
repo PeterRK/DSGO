@@ -4,7 +4,7 @@ package sort
 //复杂度为O(NlogN) & O(1)。
 //其中比较操作是O(NlogN)，挪移操作也是O(NlogN)。
 func HeapSort(list []int) {
-	if len(list) < sz_limit {
+	if len(list) < LOWER_BOUND {
 		InsertSort(list)
 	} else {
 		for idx := len(list)/2 - 1; idx >= 0; idx-- {

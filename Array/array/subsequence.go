@@ -32,7 +32,7 @@ func MaximumIntervalSum(list []int) int {
 	return best
 }
 
-func MaximumIntervalSumX(list []int) (value int, start int, end int) {
+func MaximumIntervalSumX(list []int) (value int, start, end int) {
 	value, start, end = 0, 0, 0
 	var sum, mark = -1, -1
 	for i, num := range list {

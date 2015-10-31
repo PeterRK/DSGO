@@ -4,14 +4,14 @@ import (
 	"crypto/md5"
 )
 
-const vec_size = 1 << 13
+const VEC_SZIE = 1 << 13
 
 func hashToIndex(high byte, low byte) uint {
 	return (uint(high) << 8) | uint(low)
 }
 
 type BloomFliter struct {
-	core [vec_size]byte
+	core [VEC_SZIE]byte
 }
 
 func (tb *BloomFliter) setBit(index uint) {

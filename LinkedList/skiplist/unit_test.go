@@ -43,7 +43,7 @@ func Test_SkipList(t *testing.T) {
 	}
 
 	//遍历
-	mark_ut = -(int(^uint(0) >> 1)) - 1
+	utMark = -(int(^uint(0) >> 1)) - 1
 	dict.Travel(checkNum)
 
 	//删除第一份
@@ -66,12 +66,12 @@ func Test_SkipList(t *testing.T) {
 	assert(t, !dict.Remove(0))
 }
 
-var mark_ut = 0
+var utMark = 0
 
 func checkNum(val int) {
-	if val < mark_ut {
+	if val < utMark {
 		fmt.Println("X")
 		panic(val)
 	}
-	mark_ut = val
+	utMark = val
 }

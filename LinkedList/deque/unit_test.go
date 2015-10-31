@@ -17,7 +17,7 @@ func guard_ut(t *testing.T) {
 
 func Test_Deque(t *testing.T) {
 	defer guard_ut(t)
-	const size = piece_sz + 1
+	const size = PIECE_SIZE + 1
 
 	var con = NewDeque()
 

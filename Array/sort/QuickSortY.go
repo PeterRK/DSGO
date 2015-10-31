@@ -1,7 +1,7 @@
 package sort
 
 func QuickSortY(list []int) {
-	if len(list) < sz_limit {
+	if len(list) < LOWER_BOUND {
 		InsertSort(list)
 	} else {
 		var start, end = triPartition(list)

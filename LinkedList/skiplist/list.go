@@ -14,7 +14,7 @@ type SkipList interface {
 	Travel(doit func(int))
 }
 
-const factor = 3
+const LEVEL_FACTOR = 3
 
 type node struct {
 	next []*node
@@ -36,7 +36,7 @@ func NewSkipList() SkipList {
 func (l *skipList) initialize() {
 	l.rand = NewEasyRand(uint(time.Now().Unix()))
 	l.heads, l.knots = make([]*node, 1), make([]*node, 1)
-	l.level, l.cnt, l.ceil, l.floor = 1, 1, factor, 1
+	l.level, l.cnt, l.ceil, l.floor = 1, 1, LEVEL_FACTOR, 1
 }
 
 func (l *skipList) IsEmpty() bool {
@@ -79,7 +79,7 @@ func (l *skipList) Insert(key int) bool {
 	l.cnt++
 	if l.cnt == l.ceil {
 		l.floor = l.ceil
-		l.ceil *= factor
+		l.ceil *= LEVEL_FACTOR
 		l.level++
 		l.heads = append(l.heads, nil)
 		l.knots = append(l.knots, (*node)(unsafe.Pointer(l)))
@@ -87,7 +87,7 @@ func (l *skipList) Insert(key int) bool {
 
 	var lv = 1
 	for lv < l.level &&
-		l.rand.Next() <= (^uint32(0)/uint32(factor)) {
+		l.rand.Next() <= (^uint32(0)/uint32(LEVEL_FACTOR)) {
 		lv++
 	}
 	target = new(node)
@@ -122,7 +122,7 @@ func (l *skipList) Remove(key int) bool {
 	l.cnt--
 	if l.cnt < l.floor { //注意不能==
 		l.ceil = l.floor
-		l.floor /= factor
+		l.floor /= LEVEL_FACTOR
 		l.level--
 		l.heads = l.heads[:l.level]
 		l.knots = l.knots[:l.level]

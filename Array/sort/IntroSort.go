@@ -13,7 +13,7 @@ func IntroSort(list []int) {
 func doIntroSort(list []int, life uint) {
 	if life == 0 {
 		HeapSort(list)
-	} else if len(list) < sz_limit {
+	} else if len(list) < LOWER_BOUND {
 		InsertSort(list)
 	} else {
 		var line = partition(list)
@@ -32,7 +32,7 @@ func IntroSortY(list []int) {
 func doIntroSortY(list []int, life uint) {
 	if life == 0 {
 		HeapSort(list)
-	} else if len(list) < sz_limit {
+	} else if len(list) < LOWER_BOUND {
 		InsertSort(list)
 	} else {
 		var start, end = triPartition(list)

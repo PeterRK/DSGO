@@ -5,7 +5,7 @@ package sort
 //其中比较操作是O(NlogN)，常数与MergeSort相当；挪移操作是O(NlogN)，常数小于MergeSort。
 //这里采用递归实现，但QuickSort不适合递归实现(有爆栈风险)。
 func QuickSort(list []int) {
-	if len(list) < sz_limit {
+	if len(list) < LOWER_BOUND {
 		InsertSort(list)
 	} else {
 		var line = partition(list)
@@ -41,7 +41,7 @@ func QuickSort(list []int) {
 	tasks.push(0, len(list))
 	for !tasks.isEmpty() {
 		var start, end = tasks.pop()
-		if end-start < sz_limit {
+		if end-start < LOWER_BOUND {
 			InsertSort(list[start:end])
 		} else {
 			var knot = partition(list[start:end]) + start

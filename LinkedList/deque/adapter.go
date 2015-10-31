@@ -13,9 +13,9 @@ type Deque interface {
 }
 
 func NewDeque() Deque {
-	var container = new(deque)
-	container.initialize()
-	return container
+	var con = new(deque)
+	con.initialize()
+	return con
 }
 
 type stack struct {
@@ -31,9 +31,9 @@ type Stack interface {
 }
 
 func NewStack() Stack {
-	var container = new(stack)
-	container.initialize()
-	return container
+	var con = new(stack)
+	con.initialize()
+	return con
 }
 func (s *stack) Push(key int) {
 	s.PushFront(key)
@@ -59,9 +59,9 @@ type Queue interface {
 }
 
 func NewQueue() Queue {
-	var container = new(queue)
-	container.initialize()
-	return container
+	var con = new(queue)
+	con.initialize()
+	return con
 }
 func (q *queue) Push(key int) {
 	q.PushBack(key)

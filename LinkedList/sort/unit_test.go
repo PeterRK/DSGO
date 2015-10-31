@@ -18,20 +18,20 @@ func guard_ut(t *testing.T) {
 	}
 }
 
-const sz_big = 500
-const sz_small = 100
+const bigSize = 500
+const smallSize = 100
 
 func Test_MergeSort(t *testing.T) {
-	testLinkListSort(t, MergeSort, sz_big, sz_small)
+	testLinkListSort(t, MergeSort, bigSize, smallSize)
 }
 func Test_QuickSort(t *testing.T) {
-	testLinkListSort(t, QuickSort, sz_big, sz_small)
+	testLinkListSort(t, QuickSort, bigSize, smallSize)
 }
 func Test_IntroSort(t *testing.T) {
-	testLinkListSort(t, IntroSort, sz_big, sz_big)
+	testLinkListSort(t, IntroSort, bigSize, bigSize)
 }
 func Test_RadixSort(t *testing.T) {
-	testLinkListSort(t, RadixSort, sz_big, sz_small)
+	testLinkListSort(t, RadixSort, bigSize, smallSize)
 }
 
 func testLinkListSort(t *testing.T,

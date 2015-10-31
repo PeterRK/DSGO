@@ -4,7 +4,7 @@ import (
 	"Graph/graph"
 )
 
-const fake_level = ^uint(0)
+const fakeLevel = ^uint(0)
 
 func (pk *data) flushBack() {
 	for i := 0; i < pk.size; i++ {
@@ -66,7 +66,7 @@ func compact(list []graph.Path) []graph.Path {
 //宽度优先遍历
 func (pk *data) markLevel() bool {
 	for i := 0; i < pk.size; i++ {
-		pk.memo[i] = fake_level
+		pk.memo[i] = fakeLevel
 	}
 
 	pk.memo[pk.start] = 0
@@ -75,7 +75,7 @@ func (pk *data) markLevel() bool {
 	for !pk.queue.isEmpty() {
 		var cur = pk.queue.pop()
 		for _, path := range pk.origin[cur] {
-			if pk.memo[path.Next] != fake_level {
+			if pk.memo[path.Next] != fakeLevel {
 				continue
 			}
 			pk.memo[path.Next] = pk.memo[cur] + 1
@@ -108,7 +108,7 @@ func (pk *data) separate() bool {
 			}
 		}
 		if len(pk.shadow[cur]) == 0 {
-			pk.memo[cur] = fake_level
+			pk.memo[cur] = fakeLevel
 		}
 	}
 	return true

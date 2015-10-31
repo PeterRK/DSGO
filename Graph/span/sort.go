@@ -91,18 +91,18 @@ Label_OVER:
 func insertSort(list []graph.Edge) {
 	for i := 1; i < len(list); i++ {
 		var key = list[i]
-		var start, end = 0, i
-		for start < end {
-			var mid = (start + end) / 2
-			if key.Weight < list[mid].Weight {
-				end = mid
+		var a, b = 0, i
+		for a < b {
+			var m = (a + b) / 2
+			if key.Weight < list[m].Weight {
+				b = m
 			} else { //找第一个大于key的位置
-				start = mid + 1
+				a = m + 1
 			}
 		} //不会越界
-		for j := i; j > start; j-- {
+		for j := i; j > a; j-- {
 			list[j] = list[j-1]
 		}
-		list[start] = key
+		list[a] = key
 	}
 }

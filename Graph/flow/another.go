@@ -19,7 +19,7 @@ func (pk *dataM) flushBack() {
 //宽度优先遍历
 func (pk *dataM) markLevel() bool {
 	for i := 0; i < pk.size; i++ {
-		pk.memo[i] = fake_level
+		pk.memo[i] = fakeLevel
 	}
 
 	pk.memo[pk.start] = 0
@@ -32,7 +32,7 @@ func (pk *dataM) markLevel() bool {
 			return true
 		}
 		for i := 0; i < pk.size; i++ {
-			if pk.memo[i] == fake_level && pk.matrix[cur][i] != 0 {
+			if pk.memo[i] == fakeLevel && pk.matrix[cur][i] != 0 {
 				pk.memo[i] = pk.memo[cur] + 1
 				pk.queue.push(i)
 			}
@@ -61,7 +61,7 @@ func (pk *dataM) separate() bool {
 			}
 		}
 		if len(pk.shadow[cur]) == 0 {
-			pk.memo[cur] = fake_level
+			pk.memo[cur] = fakeLevel
 		}
 	}
 	return true

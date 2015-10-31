@@ -40,7 +40,7 @@ func Test_Tree(t *testing.T) {
 		assert(t, !tree.Insert(list[i]))
 	}
 
-	mark_ut = -(int(^uint(0) >> 1)) - 1
+	utMark = -(int(^uint(0) >> 1)) - 1
 	tree.Travel(checkNum)
 
 	for i := 0; i < size; i++ {
@@ -53,11 +53,11 @@ func Test_Tree(t *testing.T) {
 	assert(t, !tree.Remove(0))
 }
 
-var mark_ut = 0
+var utMark = 0
 
 func checkNum(val int) {
-	if val < mark_ut {
+	if val < utMark {
 		panic(val)
 	}
-	mark_ut = val
+	utMark = val
 }

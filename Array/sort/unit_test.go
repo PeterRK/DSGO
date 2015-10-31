@@ -6,38 +6,38 @@ import (
 	"time"
 )
 
-const sz_big = 2000
-const sz_small = 300
+const bigSize = 2000
+const smallSize = 300
 
 func Test_BubleSort(t *testing.T) {
-	testArraySort(t, BubleSort, sz_small, sz_small)
+	testArraySort(t, BubleSort, smallSize, smallSize)
 }
 func Test_SelectSort(t *testing.T) {
-	testArraySort(t, SelectSort, sz_small, sz_small)
+	testArraySort(t, SelectSort, smallSize, smallSize)
 }
 func Test_InsertSort(t *testing.T) {
-	testArraySort(t, InsertSort, sz_small, sz_small)
+	testArraySort(t, InsertSort, smallSize, smallSize)
 }
 func Test_HeapSort(t *testing.T) {
-	testArraySort(t, HeapSort, sz_big, sz_small)
+	testArraySort(t, HeapSort, bigSize, smallSize)
 }
 func Test_MergeSort(t *testing.T) {
-	testArraySort(t, MergeSort, sz_big, sz_small)
+	testArraySort(t, MergeSort, bigSize, smallSize)
 }
 func Test_QuickSort(t *testing.T) {
-	testArraySort(t, QuickSort, sz_big, sz_small)
+	testArraySort(t, QuickSort, bigSize, smallSize)
 }
 func Test_QuickSortY(t *testing.T) {
-	testArraySort(t, QuickSortY, sz_big, sz_small)
+	testArraySort(t, QuickSortY, bigSize, smallSize)
 }
 func Test_IntroSort(t *testing.T) {
-	testArraySort(t, IntroSort, sz_big, sz_big)
+	testArraySort(t, IntroSort, bigSize, bigSize)
 }
 func Test_IntroSortY(t *testing.T) {
-	testArraySort(t, IntroSortY, sz_big, sz_big)
+	testArraySort(t, IntroSortY, bigSize, bigSize)
 }
 func Test_RadixSort(t *testing.T) {
-	testArraySort(t, RadixSort, sz_big, sz_small)
+	testArraySort(t, RadixSort, bigSize, smallSize)
 }
 
 func assert(t *testing.T, state bool) {
