@@ -8,17 +8,19 @@ const fakeLevel = ^uint(0)
 
 func (pk *data) flushBack() {
 	for i := 0; i < pk.size; i++ {
-		if len(pk.shadow[i]) != 0 {
-			for _, path := range pk.shadow[i] {
-				fillBack(pk.origin[i], path)
+		var origin, shadow, reflux = pk.origin[i], pk.shadow[i], pk.reflux[i]
+		if len(shadow) != 0 {
+			var end = len(origin)
+			for j := len(shadow) - 1; j >= 0; j-- {
+				end = fillBackWithHint(origin, end, shadow[j])
 			}
-			pk.shadow[i] = pk.shadow[i][:0]
+			pk.shadow[i] = shadow[:0]
 		}
-		if len(pk.reflux[i]) != 0 {
-			sort(pk.reflux[i])
-			pk.origin[i] = merge(pk.origin[i], pk.reflux[i])
+		if len(reflux) != 0 {
+			sort(reflux)
+			origin = merge(origin, reflux)
 		}
-		pk.origin[i] = compact(pk.origin[i]) //去重去零
+		pk.origin[i] = compact(origin) //去重去零
 	}
 }
 func merge(base, part []graph.Path) []graph.Path {

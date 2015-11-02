@@ -44,7 +44,10 @@ func (pk *data) search() uint {
 }
 
 func fillBack(list []graph.Path, path graph.Path) {
-	for a, b := 0, len(list); a < b; {
+	fillBackWithHint(list, len(list), path)
+}
+func fillBackWithHint(list []graph.Path, size int, path graph.Path) int {
+	for a, b := 0, size; a < b; {
 		var m = (a + b) / 2
 		switch {
 		case path.Next > list[m].Next:
@@ -53,7 +56,8 @@ func fillBack(list []graph.Path, path graph.Path) {
 			b = m
 		default:
 			list[m].Weight += path.Weight
-			return
+			return m
 		}
 	}
+	return 0
 }
