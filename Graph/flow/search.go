@@ -43,21 +43,45 @@ func (pk *data) search() uint {
 	return 0
 }
 
-func fillBack(list []graph.Path, path graph.Path) {
-	fillBackWithHint(list, len(list), path)
+type segment struct {
+	space      []graph.Path
+	start, end int
 }
-func fillBackWithHint(list []graph.Path, size int, path graph.Path) int {
-	for a, b := 0, size; a < b; {
+
+func (s *segment) fill(path graph.Path) int {
+	var a, b = s.start, s.end
+	for a < b {
 		var m = (a + b) / 2
 		switch {
-		case path.Next > list[m].Next:
+		case path.Next > s.space[m].Next:
 			a = m + 1
-		case path.Next < list[m].Next:
+		case path.Next < s.space[m].Next:
 			b = m
 		default:
-			list[m].Weight += path.Weight
+			s.space[m].Weight += path.Weight
 			return m
 		}
 	}
-	return 0
+	panic("no target") //目标必须存在
+}
+func fillBack(list []graph.Path, path graph.Path) {
+	var seg = segment{
+		space: list,
+		start: 0, end: len(list)}
+	seg.fill(path)
+}
+func fillBackVec(list []graph.Path, frag []graph.Path) {
+	var seg = segment{
+		space: list,
+		start: 0, end: len(list)}
+	var a, b = 0, len(frag) - 1
+	for a < b {
+		seg.start = seg.fill(frag[a])
+		a++
+		seg.end = seg.fill(frag[b])
+		b--
+	}
+	if a == b {
+		seg.fill(frag[a])
+	}
 }

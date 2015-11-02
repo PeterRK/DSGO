@@ -10,10 +10,7 @@ func (pk *data) flushBack() {
 	for i := 0; i < pk.size; i++ {
 		var origin, shadow, reflux = pk.origin[i], pk.shadow[i], pk.reflux[i]
 		if len(shadow) != 0 {
-			var end = len(origin)
-			for j := len(shadow) - 1; j >= 0; j-- {
-				end = fillBackWithHint(origin, end, shadow[j])
-			}
+			fillBackVec(origin, shadow)
 			pk.shadow[i] = shadow[:0]
 		}
 		if len(reflux) != 0 {
