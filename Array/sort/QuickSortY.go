@@ -4,16 +4,17 @@ func QuickSortY(list []int) {
 	if len(list) < LOWER_BOUND {
 		InsertSort(list)
 	} else {
-		var start, end = triPartition(list)
-		if list[start] != list[end-1] {
-			QuickSortY(list[start+1 : end-1])
+		var fst, snd = triPartition(list)
+		if list[fst] != list[snd] {
+			QuickSortY(list[fst+1 : snd])
 		}
-		QuickSortY(list[:start])
-		QuickSortY(list[end:])
+		QuickSortY(list[:fst])
+		QuickSortY(list[snd+1:])
 	}
 }
 
-func triPartition(list []int) (start int, end int) {
+//返回两个分界元素的位置
+func triPartition(list []int) (fst int, snd int) {
 	var size = len(list)
 	var m1, m2 = len(list)/2 - 1, len(list) / 2
 	if list[m1] > list[m2] {
@@ -39,5 +40,5 @@ func triPartition(list []int) (start int, end int) {
 
 	list[0], list[left-1] = list[left-1], pivot1
 	list[size-1], list[right+1] = list[right+1], pivot2
-	return left - 1, right + 2
+	return left - 1, right + 1
 }

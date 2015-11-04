@@ -35,11 +35,11 @@ func doIntroSortY(list []int, life uint) {
 	} else if len(list) < LOWER_BOUND {
 		InsertSort(list)
 	} else {
-		var start, end = triPartition(list)
-		if list[start] != list[end-1] {
-			doIntroSortY(list[start+1:end-1], life-1)
+		var fst, snd = triPartition(list)
+		if list[fst] != list[snd] {
+			doIntroSortY(list[fst+1:snd], life-1)
 		}
-		doIntroSortY(list[:start], life-1)
-		doIntroSortY(list[end:], life-1)
+		doIntroSortY(list[:fst], life-1)
+		doIntroSortY(list[snd+1:], life-1)
 	}
 }
