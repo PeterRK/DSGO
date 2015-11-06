@@ -11,54 +11,54 @@ func min(a uint, b uint) uint {
 	return a
 }
 
-type stack struct {
+type arrayStack struct {
 	space []int
 	spcx  []uint
 	top   int
 }
 
-func (s *stack) bind(space []int, spcx []uint) {
+func (s *arrayStack) bind(space []int, spcx []uint) {
 	s.space, s.spcx = space, spcx
 }
-func (s *stack) clear() {
+func (s *arrayStack) clear() {
 	s.top = 0
 }
-func (s *stack) isEmpty() bool {
+func (s *arrayStack) isEmpty() bool {
 	return s.top == 0
 }
-func (s *stack) push(id int, val uint) {
+func (s *arrayStack) push(id int, val uint) {
 	s.space[s.top], s.spcx[s.top] = id, val
 	s.top++
 }
-func (s *stack) pop() (id int, val uint) {
+func (s *arrayStack) pop() (id int, val uint) {
 	s.top--
 	return s.space[s.top], s.spcx[s.top]
 }
 
-type queue struct {
+type arrayQueue struct {
 	space    []int
 	rpt, wpt int
 }
 
-func (q *queue) bind(space []int) {
+func (q *arrayQueue) bind(space []int) {
 	q.space = space
 }
-func (q *queue) clear() {
+func (q *arrayQueue) clear() {
 	q.rpt, q.wpt = 0, 0
 }
-func (q *queue) isEmpty() bool {
+func (q *arrayQueue) isEmpty() bool {
 	return q.rpt == q.wpt
 }
-func (q *queue) push(key int) {
+func (q *arrayQueue) push(key int) {
 	q.space[q.wpt] = key
 	q.wpt = (q.wpt + 1) % len(q.space)
 }
-func (q *queue) pop() int {
+func (q *arrayQueue) pop() int {
 	var key = q.space[q.rpt]
 	q.rpt = (q.rpt + 1) % len(q.space)
 	return key
 }
-func (q *queue) traceBack() (int, error) {
+func (q *arrayQueue) traceBack() (int, error) {
 	q.wpt--
 	if q.wpt < 0 {
 		return 0, errors.New("empty")

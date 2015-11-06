@@ -8,8 +8,8 @@ type data struct {
 	origin [][]graph.Path
 	shadow [][]graph.Path
 	reflux [][]graph.Path
-	queue  queue
-	stack  stack
+	queue  arrayQueue
+	stack  arrayStack
 	memo   []uint
 	size   int
 	start  int
@@ -52,8 +52,8 @@ func Dinic(roads [][]graph.Path, start int, end int) uint {
 type dataM struct {
 	matrix [][]uint
 	shadow [][]graph.Path
-	queue  queue
-	stack  stack
+	queue  arrayQueue
+	stack  arrayStack
 	memo   []uint
 	size   int
 	start  int
