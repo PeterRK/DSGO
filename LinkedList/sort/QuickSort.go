@@ -4,8 +4,8 @@ import (
 	"LinkedList/list"
 )
 
-//快速排序，平均复杂度为O(NlogN) & O(logN)，最坏情况是O(N^2) & O(N)，不具有稳定性。
-//这里采用递归实现，但实际上QuickSort不适合递归实现(有爆栈风险)。
+// 快速排序，平均复杂度为O(NlogN) & O(logN)，最坏情况是O(N^2) & O(N)，不具有稳定性。
+// 这里采用递归实现，但实际上QuickSort不适合递归实现(有爆栈风险)。
 func QuickSort(head *list.Node) *list.Node {
 	if head != nil {
 		head, _ = doQuickSort(head)

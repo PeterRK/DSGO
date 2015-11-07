@@ -12,7 +12,7 @@ func assert(t *testing.T, state bool) {
 		t.Fail()
 	}
 }
-func guard_ut(t *testing.T) {
+func guardUT(t *testing.T) {
 	if err := recover(); err != nil {
 		t.Fail()
 	}
@@ -36,7 +36,7 @@ func Test_RadixSort(t *testing.T) {
 
 func testLinkListSort(t *testing.T,
 	doit func(*list.Node) *list.Node, sz1 int, sz2 int) {
-	defer guard_ut(t)
+	defer guardUT(t)
 
 	var head = randLinkedList(sz1)
 	var tips = figureOutTips(head)
@@ -67,7 +67,7 @@ func checkLinkList(head *list.Node, size int) bool {
 	return cnt == size
 }
 func figureOutTips(head *list.Node) int {
-	var tips int = 0
+	var tips = 0
 	for ; head != nil; head = head.Next {
 		tips ^= head.Val
 	}

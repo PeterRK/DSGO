@@ -1,5 +1,6 @@
 package sort
 
+// 三分快速排序，比二分版本略为复杂
 func QuickSortY(list []int) {
 	if len(list) < LOWER_BOUND {
 		InsertSort(list)
@@ -13,7 +14,7 @@ func QuickSortY(list []int) {
 	}
 }
 
-//返回两个分界元素的位置
+// 返回两个分界元素的位置
 func triPartition(list []int) (fst int, snd int) {
 	var size = len(list)
 	var m1, m2 = len(list)/2 - 1, len(list) / 2

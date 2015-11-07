@@ -10,7 +10,7 @@ func assert(t *testing.T, state bool) {
 		t.Fail()
 	}
 }
-func guard_ut(t *testing.T) {
+func guardUT(t *testing.T) {
 	if err := recover(); err != nil {
 		t.Fail()
 	}
@@ -29,7 +29,7 @@ func isTheSame(vec1 []Edge, vec2 []Edge) bool {
 }
 
 func Test_Prim(t *testing.T) {
-	defer guard_ut(t)
+	defer guardUT(t)
 
 	var roads = make([][]graph.Path, 9)
 	roads[0] = []graph.Path{{1, 8}, {3, 4}, {6, 11}}
@@ -52,7 +52,7 @@ func Test_Prim(t *testing.T) {
 }
 
 func Test_PlainPrim(t *testing.T) {
-	defer guard_ut(t)
+	defer guardUT(t)
 
 	var matrix = [][]uint{
 		{0, 8, 0, 4, 0, 0, 11, 0, 0},
@@ -75,7 +75,7 @@ func Test_PlainPrim(t *testing.T) {
 }
 
 func Test_Kruskal(t *testing.T) {
-	defer guard_ut(t)
+	defer guardUT(t)
 
 	var roads = []graph.Edge{
 		{0, 1, 8},

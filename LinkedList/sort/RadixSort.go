@@ -5,7 +5,7 @@ import (
 	"unsafe"
 )
 
-//基数排序，不依赖比较操作，具有稳定性
+// 基数排序，不依赖比较操作，具有稳定性
 func RadixSort(head *list.Node) *list.Node {
 	const base = -int((^uint(0))>>1) - 1
 	for node := head; node != nil; node = node.Next {

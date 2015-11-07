@@ -4,6 +4,7 @@ import (
 	"errors"
 )
 
+// 环状队列
 type Queue interface {
 	Clear()
 	IsFull() bool
@@ -13,6 +14,7 @@ type Queue interface {
 	Front() (int, error)
 }
 
+// 申请环状队列
 func NewQueue(size int) (Queue, error) {
 	var core = new(queue)
 	var err = core.initialize(size)

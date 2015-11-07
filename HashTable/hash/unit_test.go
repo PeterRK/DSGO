@@ -9,7 +9,7 @@ func assert(t *testing.T, state bool) {
 		t.Fail()
 	}
 }
-func guard_ut(t *testing.T) {
+func guardUT(t *testing.T) {
 	if err := recover(); err != nil {
 		t.Fail()
 	}

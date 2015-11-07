@@ -9,14 +9,14 @@ func assert(t *testing.T, state bool) {
 		t.Fail()
 	}
 }
-func guard_ut(t *testing.T) {
+func guardUT(t *testing.T) {
 	if err := recover(); err != nil {
 		t.Fail()
 	}
 }
 
 func Test_Ring(t *testing.T) {
-	defer guard_ut(t)
+	defer guardUT(t)
 
 	var space [10]NodeX
 	for i := 0; i < 10; i++ {

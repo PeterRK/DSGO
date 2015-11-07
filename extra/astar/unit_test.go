@@ -9,7 +9,7 @@ func assert(t *testing.T, state bool) {
 		t.Fail()
 	}
 }
-func guard_ut(t *testing.T) {
+func guardUT(t *testing.T) {
 	if err := recover(); err != nil {
 		t.Fail()
 	}
@@ -28,7 +28,7 @@ func isTheSame(vec1 []int, vec2 []int) bool {
 }
 
 func Test_AStarAsDijkstra(t *testing.T) {
-	defer guard_ut(t)
+	defer guardUT(t)
 
 	var roads = make([][]Path, 5)
 	roads[0] = []Path{{1, 1}, {3, 2}}
@@ -43,7 +43,7 @@ func Test_AStarAsDijkstra(t *testing.T) {
 }
 
 func Test_AStarNotBest(t *testing.T) {
-	defer guard_ut(t)
+	defer guardUT(t)
 
 	var roads = make([][]Path, 5)
 	roads[0] = []Path{{1, 1}, {2, 2}}

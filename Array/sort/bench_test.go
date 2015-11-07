@@ -75,7 +75,7 @@ func Benchmark_ConstRadixSort(b *testing.B) {
 	benchArraySort(b, RadixSort, constArray)
 }
 
-//	O(1)，Benchmark框架崩溃
+// O(1)，Benchmark框架崩溃
 //func Benchmark_ConstQuickSortY(b *testing.B) {
 //	benchArraySort(b, QuickSortY, constArray)
 //}

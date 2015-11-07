@@ -11,14 +11,14 @@ func assert(t *testing.T, state bool) {
 		t.Fail()
 	}
 }
-func guard_ut(t *testing.T) {
+func guardUT(t *testing.T) {
 	if err := recover(); err != nil {
 		t.Fail()
 	}
 }
 
 func Test_Tree(t *testing.T) {
-	defer guard_ut(t)
+	defer guardUT(t)
 
 	var tree Tree
 	var cnt = 0

@@ -1,9 +1,9 @@
 package sort
 
-//快速排序，改进的冒泡排序，不具有稳定性。
-//平均复杂度为O(NlogN) & O(logN)，最坏情况是O(N^2) & O(N)。
-//其中比较操作是O(NlogN)，常数与MergeSort相当；挪移操作是O(NlogN)，常数小于MergeSort。
-//这里采用递归实现，但QuickSort不适合递归实现(有爆栈风险)。
+// 快速排序，改进的冒泡排序，不具有稳定性。
+// 平均复杂度为O(NlogN) & O(logN)，最坏情况是O(N^2) & O(N)。
+// 其中比较操作是O(NlogN)，常数与MergeSort相当；挪移操作是O(NlogN)，常数小于MergeSort。
+// 这里采用递归实现，但QuickSort不适合递归实现(有爆栈风险)。
 func QuickSort(list []int) {
 	if len(list) < LOWER_BOUND {
 		InsertSort(list)

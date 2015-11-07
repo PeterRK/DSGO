@@ -45,7 +45,7 @@ func (hp *Heap) Push(key int) {
 
 //list是从少到多的，而child相反
 func reverse(list *node) *node {
-	var head *node = nil
+	var head = *node(nil)
 	for list != nil {
 		var current = list
 		list = list.peer

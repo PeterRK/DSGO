@@ -1,7 +1,7 @@
 package sort
 
-//冒泡排序，最原始的排序方法，具有稳定性。
-//比较操作是O(N^2)，挪移是O(N^2)，性能差。
+// 冒泡排序，最原始的排序方法，具有稳定性。
+// 比较操作是O(N^2)，挪移是O(N^2)，性能差。
 func BubleSort(list []int) {
 	for i := 0; i < len(list)-1; i++ {
 		for j := len(list) - 1; j > i; j-- {
@@ -12,8 +12,8 @@ func BubleSort(list []int) {
 	}
 }
 
-//选择排序，不具有稳定性。
-//比较操作是O(N^2)，挪移是O(N)，综合性能不如InsertSort。
+// 选择排序，不具有稳定性。
+// 比较操作是O(N^2)，挪移是O(N)，综合性能不如InsertSort。
 func SelectSort(list []int) {
 	for i := 0; i < len(list)-1; i++ {
 		var pos = i
@@ -26,8 +26,8 @@ func SelectSort(list []int) {
 	}
 }
 
-//插入排序，具有稳定性。
-//比较操作是O(NlogN)，挪移是O(N^2)，综合性能优于SelectSort。
+// 插入排序，具有稳定性。
+// 比较操作是O(NlogN)，挪移是O(N^2)，综合性能优于SelectSort。
 func InsertSort(list []int) {
 	for i := 1; i < len(list); i++ {
 		var key = list[i]

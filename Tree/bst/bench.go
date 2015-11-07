@@ -40,7 +40,7 @@ func mixedArray(size int) []int32 {
 
 	const bits_of_int = uint(unsafe.Sizeof(list[0])) * 8
 	var tmp = uint(size)
-	var cnt uint = 0
+	var cnt = uint(0)
 	for cnt < bits_of_int && tmp != 0 {
 		cnt++
 		tmp >>= 1

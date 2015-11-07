@@ -4,8 +4,8 @@ import (
 	"unsafe"
 )
 
-//基数排序，不依赖比较操作，具有稳定性
-//复杂度为 O((w/m)N) & O(N+2^m)
+// 基数排序，不依赖比较操作，具有稳定性
+// 复杂度为 O((w/m)N) & O(N+2^m)
 func RadixSort(list []int) {
 	const base = -int((^uint(0))>>1) - 1
 	var size = len(list)

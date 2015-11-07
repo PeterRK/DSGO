@@ -9,14 +9,14 @@ func assert(t *testing.T, state bool) {
 		t.Fail()
 	}
 }
-func guard_ut(t *testing.T) {
+func guardUT(t *testing.T) {
 	if err := recover(); err != nil {
 		t.Fail()
 	}
 }
 
 func Test_BinarySearch(t *testing.T) {
-	defer guard_ut(t)
+	defer guardUT(t)
 	var list = []int{2, 2, 4, 6, 6, 6, 8, 8}
 
 	assert(t, SearchFirst(list, 1) == 0)
@@ -32,7 +32,7 @@ func Test_BinarySearch(t *testing.T) {
 }
 
 func Test_CyclicQueue(t *testing.T) {
-	defer guard_ut(t)
+	defer guardUT(t)
 
 	var queue, _ = NewQueue(5)
 	for i := 1; i < 8; i++ {

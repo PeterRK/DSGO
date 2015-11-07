@@ -10,7 +10,7 @@ func assert(t *testing.T, state bool) {
 		t.Fail()
 	}
 }
-func guard_ut(t *testing.T) {
+func guardUT(t *testing.T) {
 	if err := recover(); err != nil {
 		t.Fail()
 	}
@@ -19,7 +19,7 @@ func guard_ut(t *testing.T) {
 //seperate & search ?
 
 func Test_DinicM(t *testing.T) {
-	defer guard_ut(t)
+	defer guardUT(t)
 
 	var matrix = [][]uint{
 		{0, 8, 0, 4, 0, 0, 11, 0, 0},
@@ -53,7 +53,7 @@ func Test_DinicM(t *testing.T) {
 }
 
 func Test_Dinic(t *testing.T) {
-	defer guard_ut(t)
+	defer guardUT(t)
 
 	var roads = make([][]graph.Path, 9)
 	roads[0] = []graph.Path{{1, 8}, {3, 4}, {6, 11}}

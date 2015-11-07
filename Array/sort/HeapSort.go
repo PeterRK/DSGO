@@ -1,8 +1,8 @@
 package sort
 
-//堆排序，改进的选择排序，不具备稳定性。
-//复杂度为O(NlogN) & O(1)。
-//其中比较操作是O(NlogN)，挪移操作也是O(NlogN)。
+// 堆排序，改进的选择排序，不具备稳定性。
+// 复杂度为O(NlogN) & O(1)。
+// 其中比较操作是O(NlogN)，挪移操作也是O(NlogN)。
 func HeapSort(list []int) {
 	if len(list) < LOWER_BOUND {
 		InsertSort(list)

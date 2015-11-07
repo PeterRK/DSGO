@@ -6,6 +6,7 @@ import (
 	"time"
 )
 
+// 选取第k大数
 func Pick(list []int, k int) (int, error) {
 	if k <= 0 || k > len(list) {
 		return 0, errors.New("out of range")
@@ -36,6 +37,7 @@ func Pick(list []int, k int) (int, error) {
 	return list[k-1], nil
 }
 
+// 随机排列
 func Randomize(list []int) {
 	rand.Seed(time.Now().Unix())
 	for i := 1; i < len(list); i++ {
@@ -44,6 +46,7 @@ func Randomize(list []int) {
 	}
 }
 
+// 随机组合，前n项为结果
 func RandomPart(list []int, n int) {
 	var size = len(list)
 	if n > 0 && n < size {

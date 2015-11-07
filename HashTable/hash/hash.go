@@ -13,7 +13,7 @@ type HashTable interface {
 //by Brian Kernighan & Dennis Ritchie
 func BKDRhash(str []byte) uint {
 	const factor uint = 131 //31、131、1313、 13131、131313
-	var code uint = 0
+	var code = uint(0)
 	for _, ch := range str {
 		code = code*factor + uint(ch)
 	}
@@ -22,7 +22,7 @@ func BKDRhash(str []byte) uint {
 
 //from SDBM
 func SDBMhash(str []byte) uint {
-	var code uint = 0
+	var code = uint(0)
 	for _, ch := range str {
 		code = code*65599 + uint(ch)
 	}
@@ -31,14 +31,14 @@ func SDBMhash(str []byte) uint {
 
 //by Daniel J. Bernstein
 func DJBhash(str []byte) uint {
-	var code uint = 5381
+	var code = uint(5381)
 	for _, ch := range str {
 		code = code*33 + uint(ch)
 	}
 	return code
 }
 func DJB2hash(str []byte) uint {
-	var code uint = 5381
+	var code = uint(5381)
 	for _, ch := range str {
 		code = code*33 ^ uint(ch)
 	}
@@ -47,7 +47,7 @@ func DJB2hash(str []byte) uint {
 
 //from Unix
 func FNVhash(str []byte) uint {
-	var code uint = 2166136261
+	var code = uint(2166136261)
 	for _, ch := range str {
 		code = code*16777619 ^ uint(ch)
 	}
@@ -56,7 +56,7 @@ func FNVhash(str []byte) uint {
 
 //Robert Sedgwicks
 func RShash(str []byte) uint {
-	var magic uint = 63689
+	var magic = uint(63689)
 	var code uint = 0
 	for _, ch := range str {
 		code = code*magic + uint(ch)
@@ -67,7 +67,7 @@ func RShash(str []byte) uint {
 
 //by Justin Sobel
 func JShash(str []byte) uint {
-	var code uint = 1315423911
+	var code = uint(1315423911)
 	for _, ch := range str {
 		code ^= (code << 5) + uint(ch) + (code >> 2)
 	}
@@ -76,7 +76,7 @@ func JShash(str []byte) uint {
 
 //by Arash Partow
 func APhash(str []byte) uint {
-	var code uint = 0
+	var code = uint(0)
 	var tick = true
 	for _, ch := range str {
 		if tick {

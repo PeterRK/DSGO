@@ -10,7 +10,7 @@ func assert(t *testing.T, state bool) {
 		t.Fail()
 	}
 }
-func guard_ut(t *testing.T) {
+func guardUT(t *testing.T) {
 	if err := recover(); err != nil {
 		t.Fail()
 	}
@@ -29,7 +29,7 @@ func isTheSame(vec1 []int, vec2 []int) bool {
 }
 
 func Test_Dijkstra(t *testing.T) {
-	defer guard_ut(t)
+	defer guardUT(t)
 
 	var roads = make([][]graph.Path, 5)
 	roads[0] = []graph.Path{{1, 1}, {3, 2}}
@@ -48,7 +48,7 @@ func Test_Dijkstra(t *testing.T) {
 }
 
 func Test_PlainDijkstra(t *testing.T) {
-	defer guard_ut(t)
+	defer guardUT(t)
 
 	var matrix = [][]uint{
 		{0, 1, 0, 2, 0},
@@ -70,7 +70,7 @@ func Test_PlainDijkstra(t *testing.T) {
 }
 
 func Test_SPFA(t *testing.T) {
-	defer guard_ut(t)
+	defer guardUT(t)
 
 	var roads = make([][]Path, 5)
 	roads[0] = []Path{{1, 1}, {3, 2}}
@@ -85,7 +85,7 @@ func Test_SPFA(t *testing.T) {
 }
 
 func Test_FloydWarshall(t *testing.T) {
-	defer guard_ut(t)
+	defer guardUT(t)
 
 	var matrix = [][]int{
 		{0, 1, MAX_DIST, 2, MAX_DIST},

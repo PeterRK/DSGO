@@ -9,14 +9,14 @@ func assert(t *testing.T, state bool) {
 		t.Fail()
 	}
 }
-func guard_ut(t *testing.T) {
+func guardUT(t *testing.T) {
 	if err := recover(); err != nil {
 		t.Fail()
 	}
 }
 
 func Test_Deque(t *testing.T) {
-	defer guard_ut(t)
+	defer guardUT(t)
 	const size = PIECE_SIZE + 1
 
 	var con = NewDeque()
@@ -91,7 +91,7 @@ func Test_Deque(t *testing.T) {
 }
 
 func Test_Stack(t *testing.T) {
-	defer guard_ut(t)
+	defer guardUT(t)
 	const size = 200
 	var con = NewStack()
 	for i := 0; i < size; i++ {
@@ -107,7 +107,7 @@ func Test_Stack(t *testing.T) {
 }
 
 func Test_Queue(t *testing.T) {
-	defer guard_ut(t)
+	defer guardUT(t)
 	const size = 20
 	var con = NewQueue()
 	for i := 0; i < size; i++ {

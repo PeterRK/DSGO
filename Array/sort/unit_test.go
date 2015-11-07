@@ -45,14 +45,14 @@ func assert(t *testing.T, state bool) {
 		t.Fail()
 	}
 }
-func guard_ut(t *testing.T) {
+func guardUT(t *testing.T) {
 	if err := recover(); err != nil {
 		t.Fail()
 	}
 }
 
 func testArraySort(t *testing.T, doit func([]int), sz1 int, sz2 int) {
-	defer guard_ut(t)
+	defer guardUT(t)
 
 	var list = randArray(sz1)
 	var tips = figureOutTips(list)
@@ -85,7 +85,7 @@ func checkArrary(list []int) bool {
 	return true
 }
 func figureOutTips(list []int) int {
-	var tips int = 0
+	var tips = 0
 	for _, num := range list {
 		tips ^= num
 	}

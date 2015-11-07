@@ -65,13 +65,12 @@ func MoveForward(node *TreeNode) *TreeNode {
 			kid = kid.left
 		}
 		return kid
-	} else {
-		var parent = node.parent
-		for parent != nil && node == parent.right {
-			node, parent = parent, parent.parent
-		}
-		return parent
 	}
+	var parent = node.parent
+	for parent != nil && node == parent.right {
+		node, parent = parent, parent.parent
+	}
+	return parent
 }
 
 func MoveBackward(node *TreeNode) *TreeNode {
@@ -84,11 +83,10 @@ func MoveBackward(node *TreeNode) *TreeNode {
 			kid = kid.right
 		}
 		return kid
-	} else {
-		var parent = node.parent
-		for parent != nil && node == parent.left {
-			node, parent = parent, parent.parent
-		}
-		return parent
 	}
+	var parent = node.parent
+	for parent != nil && node == parent.left {
+		node, parent = parent, parent.parent
+	}
+	return parent
 }

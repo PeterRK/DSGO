@@ -1,6 +1,6 @@
 package array
 
-//最长递增子序列
+// 最长递增子序列
 func LongestIncreasingSubsequence(src []int) []int {
 	var size = len(src)
 	if size == 0 {
@@ -18,7 +18,7 @@ func LongestIncreasingSubsequence(src []int) []int {
 	return result
 }
 
-//最大子段和，全为负数时，最佳为空子段
+// 最大子段和，全为负数时，最佳为空子段
 func MaximumIntervalSum(list []int) int {
 	var best, sum = 0, 0
 	for _, num := range list {
@@ -32,6 +32,7 @@ func MaximumIntervalSum(list []int) int {
 	return best
 }
 
+// 最大子段和及对应区间
 func MaximumIntervalSumX(list []int) (value int, start, end int) {
 	value, start, end = 0, 0, 0
 	var sum, mark = -1, -1

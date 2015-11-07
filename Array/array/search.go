@@ -1,6 +1,6 @@
 package array
 
-//在由小到大的序列中寻找第一个大于key的位置
+// 在由小到大的序列中寻找第一个大于key的位置
 func SearchAfter(list []int, key int) int {
 	var a, b = 0, len(list)
 	for a < b {
@@ -14,7 +14,7 @@ func SearchAfter(list []int, key int) int {
 	return a
 }
 
-//寻找key的位置(未必是第一个)，没有返回-1
+// 寻找key的位置(未必是第一个)，没有返回-1
 func Search(list []int, key int) int {
 	for a, b := 0, len(list); a < b; {
 		var m = (a + b) / 2
@@ -30,7 +30,7 @@ func Search(list []int, key int) int {
 	return -1
 }
 
-//在由小到大的序列中寻找第一个大于或等于key的位置
+// 在由小到大的序列中寻找第一个大于或等于key的位置
 func SearchFirst(list []int, key int) int {
 	var a, b = 0, len(list)
 	for a < b {
@@ -44,7 +44,7 @@ func SearchFirst(list []int, key int) int {
 	return a
 }
 
-//在由小到大的序列中寻找最后一个小于或等于key的位置
+// 在由小到大的序列中寻找最后一个小于或等于key的位置
 func SearchLast(list []int, key int) int {
 	var a, b = len(list) - 1, -1
 	for a > b {
@@ -59,7 +59,7 @@ func SearchLast(list []int, key int) int {
 	return a
 }
 
-//在由小到大的序列中寻找目标，找打返回索引范围，没有则返回false
+// 在由小到大的序列中寻找目标，找打返回索引范围，没有则返回false
 func SearchRange(list []int, key int) (first, last int, ok bool) {
 	last = SearchLast(list, key)
 	if last == -1 || list[last] != key {
@@ -69,6 +69,7 @@ func SearchRange(list []int, key int) (first, last int, ok bool) {
 	return first, last, true
 }
 
+// 向有序数组插入值
 func Insert(list []int, key int) []int {
 	var spot = SearchAfter(list, key)
 	list = append(list, 0)
