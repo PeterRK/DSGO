@@ -14,7 +14,7 @@ func RadixSort(list []int) {
 	}
 
 	var shadow = make([]int, size)
-	var book [256]uint
+	var book = new([256]uint)
 
 	const UINT_LEN = uint(unsafe.Sizeof(uint(0))) * 8
 	for step := uint(0); step < UINT_LEN; step += 8 {

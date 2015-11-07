@@ -37,7 +37,7 @@ func Merge(lst1 *Node, lst2 *Node) (list *Node) {
 }
 
 func Reverse(list *Node) *Node {
-	var head = *Node(nil)
+	var head = (*Node)(nil)
 	for list != nil {
 		var node = list
 		list = list.Next
