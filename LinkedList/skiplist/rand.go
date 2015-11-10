@@ -56,3 +56,26 @@ func (mt *mt19937) Next() uint32 {
 	num ^= num >> 18
 	return num
 }
+
+//Xorshift参考维基百科
+type xorshift struct {
+	x, y, z, w uint32
+}
+
+func (xs *xorshift) initialize(seed uint32) {
+	xs.x, xs.y, xs.z = 0x6c078965, 0x9908b0df, 0x9d2c5680
+	xs.w = seed
+}
+
+func NewXorshift(seed uint) Random {
+	var xs = new(xorshift)
+	xs.initialize(uint32(seed))
+	return xs
+}
+
+func (xs *xorshift) Next() uint32 {
+	var t = xs.x ^ (xs.x << 11)
+	xs.x, xs.y, xs.z = xs.y, xs.z, xs.w
+	xs.w ^= (xs.w >> 19) ^ t ^ (t >> 8)
+	return xs.w
+}
