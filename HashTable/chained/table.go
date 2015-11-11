@@ -37,14 +37,16 @@ func (tb *hashTable) isWasteful() bool {
 	return tb.cnt*10 < len(tb.bucket)
 }
 func (tb *hashTable) isMoving() bool {
-	return tb.next_line != -1
+	return len(tb.old_bucket) != 0
 }
 func (tb *hashTable) stopMoving() {
-	tb.next_line = -1
+	tb.next_line = 0
+	tb.old_bucket = []*node{} //GC
 }
 
 func (tb *hashTable) initialize(fn func(str []byte) uint) {
-	tb.hash, tb.cnt, tb.next_line = fn, 0, -1
+	tb.hash = fn
+	//tb.cnt, tb.next_line = 0, 0
 	tb.bucket = make([]*node, primes[0])
 }
 func NewHashTable(fn func(str []byte) uint) hash.HashTable {

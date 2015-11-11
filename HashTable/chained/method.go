@@ -79,9 +79,8 @@ func (tb *hashTable) Insert(key []byte) bool {
 	return false
 }
 
-func (tb *hashTable) resize(size uint) {
+func (tb *hashTable) resize(size uint) { //size != 0
 	tb.old_bucket, tb.bucket = tb.bucket, make([]*node, size)
-	tb.next_line = 0
 }
 func (tb *hashTable) moveLine() {
 	var size = uint(len(tb.bucket))
@@ -93,7 +92,6 @@ func (tb *hashTable) moveLine() {
 	tb.old_bucket[tb.next_line] = nil
 	tb.next_line++
 	if tb.next_line == len(tb.old_bucket) {
-		tb.stopMoving()           //rehash完成
-		tb.old_bucket = []*node{} //GC
+		tb.stopMoving() //rehash完成
 	}
 }
