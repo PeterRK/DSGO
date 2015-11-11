@@ -4,16 +4,16 @@ import (
 	"bytes"
 )
 
-func hashToIndex(code uint, bucket []*node) uint {
-	//return code % uint(len(bucket))
-	return code & (uint(len(bucket)) - 1)
+func mod(code uint, bucket_size int) uint {
+	//return code % uint(bucket_size)
+	return code & (uint(bucket_size) - 1) //bucket_size == 2^n
 }
 func (tb *hashTable) findAndKill(key []byte, kill bool) bool {
 	for i := 0; i < WAYS; i++ {
 		var idx = (tb.idx + i) % WAYS
 		var table = &tb.core[idx]
 		var code = table.hash(key)
-		var index = hashToIndex(code, table.bucket)
+		var index = mod(code, len(table.bucket))
 		var target = table.bucket[index]
 		if target != nil &&
 			target.code[idx] == code &&
@@ -51,7 +51,7 @@ func (tb *hashTable) Insert(key []byte) bool {
 		for obj, age := unit, 0; ; age++ {
 			for idx, trys := tb.idx, 0; trys < WAYS; idx = (idx + 1) % WAYS {
 				var table = &tb.core[idx]
-				var index = hashToIndex(obj.code[idx], table.bucket)
+				var index = mod(obj.code[idx], len(table.bucket))
 				if table.bucket[index] == nil {
 					table.bucket[index] = obj
 					return true
@@ -78,7 +78,7 @@ func (tb *hashTable) expand() {
 	table.bucket = make([]*node, len(old_bucket)<<WAYS)
 	for _, u := range old_bucket {
 		if u != nil {
-			var index = hashToIndex(u.code[tb.idx], table.bucket)
+			var index = mod(u.code[tb.idx], len(table.bucket))
 			table.bucket[index] = u //倍扩，绝对不会冲突
 		}
 	}
