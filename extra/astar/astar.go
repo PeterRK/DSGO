@@ -34,7 +34,7 @@ func AStar(roads [][]Path, start int, end int,
 	}
 
 	list[start].index, list[start].link = start, start
-	list[start].dist, list[start].weight = 0, evaluate(start)
+	list[start].dist = 0
 	var root = insert(nil, &list[start])
 	for root != nil && root.dist != MaxDistance {
 		var index, dist = root.index, root.dist
@@ -48,6 +48,7 @@ func AStar(roads [][]Path, start int, end int,
 			if peer.link == FAKE { //未涉及点
 				peer.index, peer.link = path.Next, index
 				peer.dist = dist + path.Dist
+				//dist记录了起点到当前点的距离，evaluate评估当前点到终点的距离
 				peer.weight = peer.dist + evaluate(peer.index)
 				root = insert(root, peer)
 			} else if peer.index != FAKE { //外围点
