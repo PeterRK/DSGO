@@ -14,37 +14,41 @@ func Kruskal(roads []graph.Edge, size int) (uint, error) {
 	sort(roads)
 
 	type memo struct {
-		cnt   int
-		group int
-		next  *memo
+		mark int //正数表示归属，负数表示个数（仅首领项）
+		next *memo
 	}
 	var list = make([]memo, size)
 	for i := 0; i < size; i++ {
-		list[i].cnt, list[i].group, list[i].next = 1, i, &list[i]
+		list[i].mark, list[i].next = -1, &list[i]
+	}
+	var trace = func(id int) int {
+		if list[id].mark < 0 {
+			return id
+		} else {
+			return list[id].mark
+		}
 	}
 
 	var sum = uint(0)
 	for _, path := range roads {
-		var grpA, grpB = list[path.A].group, list[path.B].group
-		if grpA == grpB {
+		var active, another = trace(path.A), trace(path.B)
+		if active == another {
 			continue
 		}
 		sum += path.Weight
 
-		var active, another *memo
-		if list[grpA].cnt > list[grpB].cnt {
-			active, another = &list[grpA], &list[grpB]
-		} else {
-			active, another = &list[grpB], &list[grpA]
+		if -list[active].mark < -list[another].mark {
+			active, another = another, active
 		}
-		active.cnt += another.cnt
-		var tail = active.next
-		active.next, another.next = another.next, tail
-		for another = active.next; another != tail; another = another.next {
-			another.group = active.group
+		list[active].mark += list[another].mark
+
+		var tail = list[active].next
+		list[active].next, list[another].next = list[another].next, tail
+		for u := list[active].next; u != tail; u = u.next {
+			u.mark = active
 		}
 
-		if active.cnt == size {
+		if -list[active].mark == size {
 			return sum, nil
 		}
 	}
@@ -57,17 +61,13 @@ func KruskalS(roads []graph.Edge, size int) (uint, error) {
 	}
 	sort(roads)
 
-	type memo struct {
-		cnt   int
-		super int
-	}
-	var list = make([]memo, size)
+	var list = make([]int, size)
 	for i := 0; i < size; i++ {
-		list[i].cnt, list[i].super = 1, i
+		list[i] = -1 //正数表示归属，负数表示个数（仅首领项）
 	}
 	var trace = func(id int) int {
-		for id != list[id].super {
-			id = list[id].super
+		for list[id] >= 0 {
+			id = list[id]
 		}
 		return id
 	}
@@ -80,13 +80,13 @@ func KruskalS(roads []graph.Edge, size int) (uint, error) {
 		}
 		sum += path.Weight
 
-		if list[active].cnt < list[another].cnt {
+		if -list[active] < -list[another] {
 			active, another = another, active
 		}
-		list[active].cnt += list[another].cnt
-		list[another].super = active
+		list[active] += list[another]
+		list[another] = active
 
-		if list[active].cnt == size {
+		if -list[active] == size {
 			return sum, nil
 		}
 	}
