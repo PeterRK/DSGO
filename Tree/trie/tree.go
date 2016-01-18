@@ -9,9 +9,9 @@ type node struct {
 	kids []*node
 }
 type Trie interface {
-	Search(data []byte) uint16
-	Insert(data []byte)
-	Remove(data []byte, all bool)
+	Search(key string) uint16
+	Insert(key string)
+	Remove(key string, all bool)
 }
 
 func newNode() *node {
@@ -63,15 +63,15 @@ func (root *node) consume(kid *node) {
 }
 
 //除了查找，还要尝试节缩
-func (root *node) Search(data []byte) uint16 {
+func (root *node) Search(key string) uint16 {
 	var mk = uint8(0)
-	for idx := 0; idx < len(data); idx++ {
+	for idx := 0; idx < len(key); idx++ {
 		if mk == root.cnt { //下探
 			if len(root.kids) == 1 && root.ref == 0 && root.cnt < NODE_CAP {
 				root.consume(root.kids[0])
 			} else { //单纯下探
-				var spot = root.searchKid(data[idx])
-				if spot == len(root.kids) || root.kids[spot].key[0] != data[idx] {
+				var spot = root.searchKid(key[idx])
+				if spot == len(root.kids) || root.kids[spot].key[0] != key[idx] {
 					return 0
 				}
 				root = root.kids[spot]
@@ -79,7 +79,7 @@ func (root *node) Search(data []byte) uint16 {
 				continue
 			}
 		}
-		if data[idx] != root.key[mk] {
+		if key[idx] != root.key[mk] {
 			return 0
 		}
 		mk++
@@ -90,19 +90,19 @@ func (root *node) Search(data []byte) uint16 {
 	return root.ref
 }
 
-func createTail(data []byte) *node { //data非空
+func createTail(str string) *node { //data非空
 	var head = newNode()
 	var last, idx = head, 0
-	for ; idx+int(NODE_CAP) < len(data); idx += int(NODE_CAP) {
+	for ; idx+int(NODE_CAP) < len(str); idx += int(NODE_CAP) {
 		for i := 0; i < int(NODE_CAP); i++ {
-			last.key[i] = data[idx+i]
+			last.key[i] = str[idx+i]
 		}
 		last.cnt = NODE_CAP
 		last.kids = append(last.kids, newNode())
 		last = last.kids[0]
 	}
-	for ; idx < len(data); idx++ {
-		last.key[last.cnt] = data[idx]
+	for ; idx < len(str); idx++ {
+		last.key[last.cnt] = str[idx]
 		last.cnt++
 	}
 	last.ref = 1
@@ -118,28 +118,28 @@ func (unit *node) split(mk uint8) {
 	}
 	unit.cnt = mk
 }
-func (root *node) Insert(data []byte) {
-	if len(data) == 0 {
+func (root *node) Insert(key string) {
+	if len(key) == 0 {
 		return
 	}
 	var mk = uint8(0)
-	for idx := 0; idx < len(data); idx++ {
+	for idx := 0; idx < len(key); idx++ {
 		if mk == root.cnt { //下探
-			var spot = root.searchKid(data[idx])
-			if spot == len(root.kids) || root.kids[spot].key[0] != data[idx] {
+			var spot = root.searchKid(key[idx])
+			if spot == len(root.kids) || root.kids[spot].key[0] != key[idx] {
 				root.kids = append(root.kids, nil)
 				for i := len(root.kids) - 1; i > spot; i-- {
 					root.kids[i] = root.kids[i-1]
 				}
-				root.kids[spot] = createTail(data[idx:])
+				root.kids[spot] = createTail(key[idx:])
 				return
 			}
 			root = root.kids[spot]
 			mk = 1
 		} else {
-			if root.key[mk] != data[idx] {
+			if root.key[mk] != key[idx] {
 				root.split(mk)
-				root.kids = append(root.kids, createTail(data[idx:]))
+				root.kids = append(root.kids, createTail(key[idx:]))
 				if root.kids[0].key[0] > root.kids[1].key[0] {
 					root.kids[0], root.kids[1] = root.kids[1], root.kids[0]
 				}
@@ -155,16 +155,16 @@ func (root *node) Insert(data []byte) {
 }
 
 //清除标记，删除独苗分支，暂时不节缩
-func (root *node) Remove(data []byte, all bool) {
-	if len(data) == 0 {
+func (root *node) Remove(key string, all bool) {
+	if len(key) == 0 {
 		return
 	}
 	var knot, branch = (*node)(nil), 0 //记录独苗分支节点
 	var mk = uint8(0)
-	for idx := 0; idx < len(data); idx++ {
+	for idx := 0; idx < len(key); idx++ {
 		if mk == root.cnt { //下探
-			var spot = root.searchKid(data[idx])
-			if spot == len(root.kids) || root.kids[spot].key[0] != data[idx] {
+			var spot = root.searchKid(key[idx])
+			if spot == len(root.kids) || root.kids[spot].key[0] != key[idx] {
 				return
 			}
 			if root.ref != 0 || len(root.kids) > 1 {
@@ -173,7 +173,7 @@ func (root *node) Remove(data []byte, all bool) {
 			root = root.kids[spot]
 			mk = 1
 		} else {
-			if root.key[mk] != data[idx] {
+			if root.key[mk] != key[idx] {
 				return
 			}
 			mk++
