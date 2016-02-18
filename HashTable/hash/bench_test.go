@@ -4,45 +4,36 @@ import (
 	"testing"
 )
 
-var bench_str = []byte("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
-
 func Benchmark_BKDRhash(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		BKDRhash(bench_str)
-	}
+	hashBenchmark(b, bench_data, BKDRhash)
 }
 func Benchmark_SDBMhash(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		SDBMhash(bench_str)
-	}
+	hashBenchmark(b, bench_data, SDBMhash)
 }
 func Benchmark_DJBhash(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		DJBhash(bench_str)
-	}
+	hashBenchmark(b, bench_data, DJBhash)
 }
 func Benchmark_DJB2hash(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		DJB2hash(bench_str)
-	}
+	hashBenchmark(b, bench_data, DJB2hash)
 }
 func Benchmark_FNVhash(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		FNVhash(bench_str)
-	}
+	hashBenchmark(b, bench_data, FNVhash)
 }
 func Benchmark_RShash(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		RShash(bench_str)
-	}
+	hashBenchmark(b, bench_data, RShash)
 }
 func Benchmark_JShash(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		JShash(bench_str)
-	}
+	hashBenchmark(b, bench_data, JShash)
 }
 func Benchmark_APhash(b *testing.B) {
+	hashBenchmark(b, bench_data, APhash)
+}
+
+var bench_data = []byte("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+
+func hashBenchmark(b *testing.B, str []byte, hash func(str []byte) uint) {
+	b.SetBytes(int64(len(str)))
 	for i := 0; i < b.N; i++ {
-		APhash(bench_str)
+		hash(str)
 	}
 }
