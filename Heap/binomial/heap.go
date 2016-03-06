@@ -59,13 +59,11 @@ func (hp *Heap) Pop() (int, error) {
 	}
 	var key = hp.top.key
 
-	var hp_list = hp.list //直接取对GC不友好，绕一下道
-	var knot = fakeHead(&hp_list)
+	var knot = fakeHead(&hp.list)
 	for knot.peer != hp.top {
 		knot = knot.peer
 	}
 	knot.peer = knot.peer.peer
-	hp.list = hp_list
 
 	hp.merge(reverse(hp.top.child))
 	hp.top = hp.list
