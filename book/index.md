@@ -12,6 +12,7 @@
 * 三、[栈和队列](pages/03.md)
  - 3.1 [栈与递归](pages/03-A.md)
  - 3.2 [环状队列](pages/03-B.md)
+ - 3.3 [日志栈](pages/03-C.md)
 * 四、[Hash表](pages/04.md)
  - 4.1 [开链式Hash表](pages/04-A.md)
  - 4.2 [多路Hash表](pages/04-B.md)
