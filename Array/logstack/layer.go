@@ -5,7 +5,7 @@ import (
 	"unsafe"
 )
 
-type usec uint8
+type usec uint
 
 const USSZ = uint(unsafe.Sizeof(usec(0)) * 8)
 

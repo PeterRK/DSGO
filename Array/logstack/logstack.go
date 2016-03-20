@@ -21,11 +21,14 @@ func NewLogStack(limit uint) LogStack {
 	return ls
 }
 
+func (ls *logStack) push() {
+	ls.stack = append(ls.stack, ls.cache)
+	ls.cache.reset()
+}
 func (ls *logStack) change(key int, mark bool) {
 	ls.cache.change(key, mark)
 	if ls.cache.size() == ls.limit {
-		ls.stack = append(ls.stack, ls.cache)
-		ls.cache.reset()
+		ls.push()
 	}
 }
 func (ls *logStack) Insert(key int) {
@@ -35,15 +38,25 @@ func (ls *logStack) Delete(key int) {
 	ls.change(key, false)
 }
 
+func (ls *logStack) top() *layer {
+	return &ls.stack[len(ls.stack)-1]
+}
+func (ls *logStack) pop() *layer {
+	var last = len(ls.stack) - 1
+	var vict = &ls.stack[last]
+	ls.stack = ls.stack[:last]
+	return vict
+}
 func (ls *logStack) Search(key int) bool {
 	var found = ls.cache.search(key)
 	if found == 0 && len(ls.stack) != 0 {
-		found = ls.stack[len(ls.stack)-1].search(key)
+		found = ls.top().search(key)
 	}
 	for found == 0 && len(ls.stack) > 1 {
-		found = ls.stack[len(ls.stack)-2].search(key)
-		ls.stack[len(ls.stack)-2].merge(&ls.stack[len(ls.stack)-1])
-		ls.stack = ls.stack[:len(ls.stack)-1]
+		var last = ls.pop()
+		var curr = ls.top()
+		found = curr.search(key)
+		curr.merge(last)
 	}
 	if len(ls.stack) == 1 {
 		ls.stack[0].compact()
