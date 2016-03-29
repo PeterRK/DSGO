@@ -4,11 +4,11 @@ package sort
 // 复杂度为O(NlogN) & O(logN)。
 // 主要限制了QuickSort的最坏情况，适合递归实现(没有爆栈风险)。
 func IntroSort(list []int) {
-	var life = uint(12)
+	var lv = uint(1)
 	for sz := len(list); sz != 0; sz /= 2 {
-		life++
+		lv++
 	}
-	doIntroSort(list, life)
+	doIntroSort(list, lv*2)
 }
 func doIntroSort(list []int, life uint) {
 	if len(list) < LOWER_BOUND {
@@ -24,11 +24,11 @@ func doIntroSort(list []int, life uint) {
 
 // 三分内省排序
 func IntroSortY(list []int) {
-	var life = uint(10)
+	var lv = uint(1)
 	for sz := len(list); sz != 0; sz /= 2 {
-		life++
+		lv++
 	}
-	doIntroSortY(list, life)
+	doIntroSortY(list, lv*3/2)
 }
 func doIntroSortY(list []int, life uint) {
 	if len(list) < LOWER_BOUND_Y {

@@ -27,7 +27,6 @@ func partition(list []int) int {
 		if a >= b {
 			break
 		}
-		//以下的交换操作是主要开销所在
 		list[a], list[b] = list[b], list[a]
 		a++
 		b--

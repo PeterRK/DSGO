@@ -69,3 +69,4 @@ func SimpleSort(list []int) {
 }
 
 const LOWER_BOUND = 16
+const LOWER_BOUND_Y = 20

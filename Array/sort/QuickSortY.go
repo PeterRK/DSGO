@@ -1,7 +1,5 @@
 package sort
 
-const LOWER_BOUND_Y = LOWER_BOUND * 3 / 2
-
 // 三分快速排序，比二分版本略为复杂
 func QuickSortY(list []int) {
 	if len(list) < LOWER_BOUND_Y {
