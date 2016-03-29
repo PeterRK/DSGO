@@ -15,22 +15,24 @@ func MergeSort(list []int) {
 	}
 }
 func doMergeSort(in []int, out []int) {
-	if len(in) < LOWER_BOUND { //内建InsertSort
+	if len(in) < LOWER_BOUND {
+		if len(in) < 2 {
+			return
+		}
+		var best = 0
 		for i := 1; i < len(in); i++ {
-			var key = in[i]
-			var a, b = 0, i
-			for a < b {
-				var m = (a + b) / 2
-				if key < out[m] {
-					b = m
-				} else {
-					a = m + 1
-				}
+			if in[i] < in[best] {
+				best = i
 			}
-			for j := i; j > a; j-- {
-				out[j] = out[j-1]
+		}
+		out[0], in[best] = in[best], in[0]
+		for i := 1; i < len(in); i++ {
+			var key, pos = in[i], i
+			for out[pos-1] > key {
+				out[pos] = out[pos-1]
+				pos--
 			}
-			out[a] = key
+			out[pos] = key
 		}
 	} else {
 		var half = len(in) / 2

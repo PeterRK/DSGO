@@ -47,4 +47,25 @@ func InsertSort(list []int) {
 	}
 }
 
-const LOWER_BOUND = 8
+func SimpleSort(list []int) {
+	if len(list) < 2 {
+		return
+	}
+	var best = 0
+	for i := 1; i < len(list); i++ {
+		if list[i] < list[best] {
+			best = i
+		}
+	}
+	list[0], list[best] = list[best], list[0]
+	for i := 1; i < len(list); i++ {
+		var key, pos = list[i], i
+		for list[pos-1] > key {
+			list[pos] = list[pos-1]
+			pos--
+		}
+		list[pos] = key
+	}
+}
+
+const LOWER_BOUND = 16

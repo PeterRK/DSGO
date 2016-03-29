@@ -5,17 +5,17 @@ import (
 )
 
 func sort(list []graph.Path) {
-	var life = uint(12)
+	var life = uint(10)
 	for sz := len(list); sz != 0; sz /= 2 {
 		life++
 	}
 	doIntroSort(list, life)
 }
 func doIntroSort(list []graph.Path, life uint) {
-	if life == 0 {
+	if len(list) < 24 {
+		simpleSort(list)
+	} else if life == 0 {
 		heapSort(list)
-	} else if len(list) < 8 {
-		insertSort(list)
 	} else {
 		var start, end = partition(list)
 		if list[start] != list[end-1] {
@@ -88,21 +88,23 @@ Label_OVER:
 	list[spot] = key
 }
 
-func insertSort(list []graph.Path) {
+func simpleSort(list []graph.Path) {
+	if len(list) < 2 {
+		return
+	}
+	var best = 0
 	for i := 1; i < len(list); i++ {
-		var key = list[i]
-		var a, b = 0, i
-		for a < b {
-			var m = (a + b) / 2
-			if key.Next < list[m].Next {
-				b = m
-			} else { //找第一个大于key的位置
-				a = m + 1
-			}
-		} //不会越界
-		for j := i; j > a; j-- {
-			list[j] = list[j-1]
+		if list[i].Next < list[best].Next {
+			best = i
 		}
-		list[a] = key
+	}
+	list[0], list[best] = list[best], list[0]
+	for i := 1; i < len(list); i++ {
+		var key, pos = list[i], i
+		for list[pos-1].Next > key.Next {
+			list[pos] = list[pos-1]
+			pos--
+		}
+		list[pos] = key
 	}
 }

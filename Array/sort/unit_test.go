@@ -18,6 +18,9 @@ func Test_SelectSort(t *testing.T) {
 func Test_InsertSort(t *testing.T) {
 	testArraySort(t, InsertSort, smallSize, smallSize)
 }
+func Test_SimpleSort(t *testing.T) {
+	testArraySort(t, SimpleSort, smallSize, smallSize)
+}
 func Test_HeapSort(t *testing.T) {
 	testArraySort(t, HeapSort, bigSize, smallSize)
 }

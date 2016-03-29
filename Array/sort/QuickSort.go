@@ -6,7 +6,7 @@ package sort
 // 这里采用递归实现，但QuickSort不适合递归实现(有爆栈风险)。
 func QuickSort(list []int) {
 	if len(list) < LOWER_BOUND {
-		InsertSort(list)
+		SimpleSort(list)
 	} else {
 		var line = partition(list)
 		QuickSort(list[:line])
@@ -42,7 +42,7 @@ func QuickSort(list []int) {
 	for !tasks.isEmpty() {
 		var start, end = tasks.pop()
 		if end-start < LOWER_BOUND {
-			InsertSort(list[start:end])
+			SimpleSort(list[start:end])
 		} else {
 			var knot = partition(list[start:end]) + start
 			tasks.push(knot, end)
