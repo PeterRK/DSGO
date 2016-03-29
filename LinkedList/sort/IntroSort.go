@@ -4,6 +4,14 @@ import (
 	"LinkedList/list"
 )
 
+func log2ceil(num uint) uint {
+	var ceil uint
+	for ceil = 1; num != 0; ceil++ {
+		num /= 2
+	}
+	return ceil
+}
+
 // 内省排序，基于快速排序的一种混合排序算法，不具有稳定性。
 // 主要限制了QuickSort的最坏情况，适合递归实现(没有爆栈风险)。
 func IntroSort(head *list.Node) *list.Node {
@@ -15,11 +23,7 @@ func IntroSort(head *list.Node) *list.Node {
 	}
 
 	var left, center, right, size = partition(head)
-
-	var life uint
-	for life = 12; size != 0; life++ {
-		size /= 2
-	}
+	var life = log2ceil(uint(size)) * 2
 
 	var knot *list.Node
 	head, knot = doIntroSort(left, life)
