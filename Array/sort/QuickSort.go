@@ -8,9 +8,9 @@ func QuickSort(list []int) {
 	if len(list) < LOWER_BOUND {
 		SimpleSort(list)
 	} else {
-		var line = partition(list)
-		QuickSort(list[:line])
-		QuickSort(list[line:])
+		var m = partition(list)
+		QuickSort(list[:m])
+		QuickSort(list[m:])
 	}
 }
 

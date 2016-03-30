@@ -1,25 +1,20 @@
 package binary
 
 func (hp *Heap) adjustDown(spot int) {
-	var size = len(hp.core)
 	var key = hp.core[spot]
-	var left, right = spot*2 + 1, spot*2 + 2
-	for right < size {
-		var kid = 0
-		if hp.core[left] < hp.core[right] {
-			kid = left
-		} else {
-			kid = right
+	var kid, last = spot*2 + 1, len(hp.core) - 1
+	for kid < last {
+		if hp.core[kid+1] < hp.core[kid] {
+			kid++
 		}
 		if key <= hp.core[kid] {
 			goto Label_OVER
 		}
 		hp.core[spot] = hp.core[kid]
-		spot, left, right = kid, kid*2+1, kid*2+2
+		spot, kid = kid, kid*2+1
 	}
-	if right == size && key > hp.core[left] {
-		hp.core[spot], hp.core[left] = hp.core[left], key
-		return
+	if kid == last && key > hp.core[kid] {
+		hp.core[spot], spot = hp.core[kid], kid
 	}
 Label_OVER:
 	hp.core[spot] = key

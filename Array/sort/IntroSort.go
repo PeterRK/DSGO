@@ -13,9 +13,9 @@ func doIntroSort(list []int, life uint) {
 	} else if life == 0 {
 		HeapSort(list)
 	} else {
-		var line = partition(list)
-		doIntroSort(list[:line], life-1)
-		doIntroSort(list[line:], life-1)
+		var m = partition(list)
+		doIntroSort(list[:m], life-1)
+		doIntroSort(list[m:], life-1)
 	}
 }
 
@@ -33,16 +33,19 @@ func IntroSortY(list []int) {
 	doIntroSortY(list, life)
 }
 func doIntroSortY(list []int, life uint) {
-	if len(list) < LOWER_BOUND_Y {
-		SimpleSort(list)
-	} else if life == 0 {
-		HeapSort(list)
-	} else {
-		var fst, snd = triPartition(list)
-		if list[fst] != list[snd] {
-			doIntroSortY(list[fst+1:snd], life-1)
+	for len(list) > LOWER_BOUND_Y {
+		if life == 0 {
+			HeapSort(list)
+			return
 		}
-		doIntroSortY(list[:fst], life-1)
-		doIntroSortY(list[snd+1:], life-1)
+		life--
+		var fst, snd = triPartition(list)
+		doIntroSortY(list[:fst], life)
+		doIntroSortY(list[snd+1:], life)
+		if list[fst] == list[snd] {
+			return
+		}
+		list = list[fst+1 : snd]
 	}
+	SimpleSort(list)
 }

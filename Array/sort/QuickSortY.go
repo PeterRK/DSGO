@@ -2,16 +2,16 @@ package sort
 
 // 三分快速排序，比二分版本略为复杂
 func QuickSortY(list []int) {
-	if len(list) < LOWER_BOUND_Y {
-		SimpleSort(list)
-	} else {
+	for len(list) > LOWER_BOUND_Y {
 		var fst, snd = triPartition(list)
-		if list[fst] != list[snd] {
-			QuickSortY(list[fst+1 : snd])
-		}
 		QuickSortY(list[:fst])
 		QuickSortY(list[snd+1:])
+		if list[fst] == list[snd] {
+			return
+		}
+		list = list[fst+1 : snd]
 	}
+	SimpleSort(list)
 }
 
 // 返回两个分界元素的位置
