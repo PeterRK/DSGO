@@ -15,7 +15,9 @@ func QuickSort(list []int) {
 }
 
 func partition(list []int) int {
-	var pivot = list[len(list)/2] //该选择影响后面是否可能发生越界
+	//谨慎处理，以防越界
+	var pivot = list[len(list)/2]
+
 	var a, b = 0, len(list) - 1
 	for { //注意对称性
 		for list[a] < pivot {
@@ -32,6 +34,27 @@ func partition(list []int) int {
 		b--
 	}
 	return a
+}
+
+//三点取中不一定很有用
+func median(a, b, c int) int {
+	if a > b {
+		if b > c {
+			return b //a b c
+		} else if a > c {
+			return c //a c b
+		} else {
+			return a //c a b
+		}
+	} else {
+		if a > c {
+			return a //b a c
+		} else if b > c {
+			return c //b c a
+		} else {
+			return b //c b a
+		}
+	}
 }
 
 /*

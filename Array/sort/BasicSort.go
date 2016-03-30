@@ -33,7 +33,8 @@ func InsertSort(list []int) {
 		var key = list[i]
 		var a, b = 0, i
 		for a < b {
-			var m = (a + b) / 2
+			//var m = (a + b) / 2
+			var m = a + (b-a)/2
 			if key < list[m] {
 				b = m
 			} else { //找第一个大于key的位置

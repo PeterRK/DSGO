@@ -4,7 +4,8 @@ package array
 func SearchAfter(list []int, key int) int {
 	var a, b = 0, len(list)
 	for a < b {
-		var m = (a + b) / 2
+		//var m = (a + b) / 2
+		var m = a + (b-a)/2
 		if key < list[m] {
 			b = m
 		} else {
@@ -17,7 +18,8 @@ func SearchAfter(list []int, key int) int {
 // 寻找key的位置(未必是第一个)，没有返回-1
 func Search(list []int, key int) int {
 	for a, b := 0, len(list); a < b; {
-		var m = (a + b) / 2
+		//var m = (a + b) / 2
+		var m = a + (b-a)/2
 		switch {
 		case key > list[m]:
 			a = m + 1
@@ -34,7 +36,8 @@ func Search(list []int, key int) int {
 func SearchFirst(list []int, key int) int {
 	var a, b = 0, len(list)
 	for a < b {
-		var m = (a + b) / 2
+		//var m = (a + b) / 2
+		var m = a + (b-a)/2
 		if key > list[m] {
 			a = m + 1
 		} else {
@@ -49,7 +52,8 @@ func SearchLast(list []int, key int) int {
 	var a, b = len(list) - 1, -1
 	for a > b {
 		//"(a + b + 2) / 2"也可以，但"(a+b)/2 + 1"不行
-		var m = (a + b + 1) / 2
+		//var m = (a + b + 1) / 2
+		var m = a + (b-a+1)/2
 		if key < list[m] {
 			a = m - 1
 		} else {
