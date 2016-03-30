@@ -16,30 +16,30 @@ func QuickSortY(list []int) {
 
 // 返回两个分界元素的位置
 func triPartition(list []int) (fst int, snd int) {
-	var size = len(list)
-	var m1, m2 = len(list)/2 - 1, len(list) / 2
-	if list[m1] > list[m2] {
-		m1, m2 = m2, m1
+	var sz = len(list)
+	var a, b = sz/2 - 1, sz / 2
+	if list[a] > list[b] {
+		a, b = b, a
 	}
-	var pivot1, pivot2 = list[m1], list[m2]
-	list[m1], list[m2] = list[0], list[size-1]
+	var pivot1, pivot2 = list[a], list[b]
+	list[a], list[b] = list[0], list[sz-1]
 
-	var left, right = 1, size - 2
-	for k := left; k <= right; k++ {
+	a, b = 1, sz-2
+	for k := a; k <= b; k++ {
 		if list[k] > pivot2 {
-			for k < right && list[right] > pivot2 {
-				right--
+			for k < b && list[b] > pivot2 {
+				b--
 			}
-			list[k], list[right] = list[right], list[k]
-			right--
+			list[k], list[b] = list[b], list[k]
+			b--
 		}
 		if list[k] < pivot1 {
-			list[k], list[left] = list[left], list[k]
-			left++
+			list[k], list[a] = list[a], list[k]
+			a++
 		}
 	}
 
-	list[0], list[left-1] = list[left-1], pivot1
-	list[size-1], list[right+1] = list[right+1], pivot2
-	return left - 1, right + 1
+	list[0], list[a-1] = list[a-1], pivot1
+	list[sz-1], list[b+1] = list[b+1], pivot2
+	return a - 1, b + 1
 }
