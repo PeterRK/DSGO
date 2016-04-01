@@ -27,6 +27,9 @@ func Benchmark_QuickSort(b *testing.B) {
 func Benchmark_QuickSortY(b *testing.B) {
 	benchArraySort(b, QuickSortY, randArray)
 }
+func Benchmark_QuickSortZ(b *testing.B) {
+	benchArraySort(b, QuickSortZ, randArray)
+}
 func Benchmark_IntroSort(b *testing.B) {
 	benchArraySort(b, IntroSort, randArray)
 }
@@ -49,6 +52,9 @@ func Benchmark_DesQuickSort(b *testing.B) {
 func Benchmark_DesQuickSortY(b *testing.B) {
 	benchArraySort(b, QuickSortY, desArray)
 }
+func Benchmark_DesQuickSortZ(b *testing.B) {
+	benchArraySort(b, QuickSortZ, desArray)
+}
 func Benchmark_DesIntroSort(b *testing.B) {
 	benchArraySort(b, IntroSort, desArray)
 }
@@ -68,6 +74,9 @@ func Benchmark_ConstMergeSort(b *testing.B) {
 func Benchmark_ConstQuickSort(b *testing.B) {
 	benchArraySort(b, QuickSort, constArray)
 }
+func Benchmark_ConstQuickSortZ(b *testing.B) {
+	benchArraySort(b, QuickSortZ, constArray)
+}
 func Benchmark_ConstIntroSort(b *testing.B) {
 	benchArraySort(b, IntroSort, constArray)
 }
@@ -75,7 +84,7 @@ func Benchmark_ConstRadixSort(b *testing.B) {
 	benchArraySort(b, RadixSort, constArray)
 }
 
-// O(1)，Benchmark框架崩溃
+// 太快，Benchmark框架崩溃
 //func Benchmark_ConstQuickSortY(b *testing.B) {
 //	benchArraySort(b, QuickSortY, constArray)
 //}

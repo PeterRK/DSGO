@@ -33,6 +33,9 @@ func Test_QuickSort(t *testing.T) {
 func Test_QuickSortY(t *testing.T) {
 	testArraySort(t, QuickSortY, bigSize, smallSize)
 }
+func Test_QuickSortZ(t *testing.T) {
+	testArraySort(t, QuickSortZ, bigSize, smallSize)
+}
 func Test_IntroSort(t *testing.T) {
 	testArraySort(t, IntroSort, bigSize, bigSize)
 }
