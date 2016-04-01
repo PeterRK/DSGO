@@ -1,7 +1,7 @@
 package cuckoo
 
 import (
-	"HashTable/hash"
+	"DSGO/HashTable/hash"
 )
 
 const WAYS = 3

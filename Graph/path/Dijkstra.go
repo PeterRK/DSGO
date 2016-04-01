@@ -1,7 +1,7 @@
 package path
 
 import (
-	"Graph/graph"
+	"DSGO/Graph/graph"
 )
 
 //输入邻接表，返回某点到各点的最短路径的长度(-1指不通)。

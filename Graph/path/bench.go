@@ -1,7 +1,7 @@
 package path
 
 import (
-	"Graph/graph"
+	"DSGO/Graph/graph"
 	"fmt"
 	"time"
 )

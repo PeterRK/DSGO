@@ -1,7 +1,7 @@
 package chained
 
 import (
-	"HashTable/hash"
+	"DSGO/HashTable/hash"
 	"testing"
 )
 

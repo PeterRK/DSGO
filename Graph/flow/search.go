@@ -1,7 +1,7 @@
 package flow
 
 import (
-	"Graph/graph"
+	"DSGO/Graph/graph"
 )
 
 //获取增广路径流量，复杂度为O(EVlogV)。

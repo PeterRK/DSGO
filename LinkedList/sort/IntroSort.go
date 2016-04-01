@@ -1,7 +1,7 @@
 package sort
 
 import (
-	"LinkedList/list"
+	"DSGO/LinkedList/list"
 )
 
 func log2ceil(num uint) uint {

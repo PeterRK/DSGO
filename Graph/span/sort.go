@@ -1,7 +1,7 @@
 package span
 
 import (
-	"Graph/graph"
+	"DSGO/Graph/graph"
 )
 
 func sort(list []graph.Edge) {

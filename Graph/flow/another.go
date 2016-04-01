@@ -1,7 +1,7 @@
 package flow
 
 import (
-	"Graph/graph"
+	"DSGO/Graph/graph"
 )
 
 func (pk *dataM) flushBack() {

@@ -1,10 +1,10 @@
 package cbst
 
 import (
-	"Tree/bst/avltree"
-	"Tree/bst/rbtree"
-	"cbst/avlt"
-	"cbst/rbt"
+	"DSGO/Tree/bst/avltree"
+	"DSGO/Tree/bst/rbtree"
+	"DSGO/extra/cbst/avlt"
+	"DSGO/extra/cbst/rbt"
 	"fmt"
 	"math/rand"
 	"time"

@@ -1,7 +1,7 @@
 package sort
 
 import (
-	"LinkedList/list"
+	"DSGO/LinkedList/list"
 )
 
 // 归并排序，复杂度为O(2NlogN) & O(1)，具有稳定性。
