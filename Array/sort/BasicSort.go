@@ -48,7 +48,7 @@ func InsertSort(list []int) {
 	}
 }
 
-func SimpleSort(list []int) {
+func SimpleSortX(list []int) {
 	if len(list) < 2 {
 		return
 	}
@@ -66,6 +66,27 @@ func SimpleSort(list []int) {
 			pos--
 		}
 		list[pos] = key
+	}
+}
+func SimpleSort(list []int) {
+	if len(list) < 2 {
+		return
+	}
+	for i := 1; i < len(list); i++ {
+		var key = list[i]
+		if key < list[0] {
+			for j := i; j > 0; j-- {
+				list[j] = list[j-1]
+			}
+			list[0] = key
+		} else {
+			var pos = i
+			for list[pos-1] > key {
+				list[pos] = list[pos-1]
+				pos--
+			}
+			list[pos] = key
+		}
 	}
 }
 
