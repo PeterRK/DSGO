@@ -15,9 +15,10 @@ func QuickSortY(list []int) {
 }
 
 // 返回两个分界元素的位置
-func triPartition(list []int) (fst int, snd int) {
+func triPartition(list []int) (fst, snd int) {
 	var sz = len(list)
-	var a, b = sz/2 - 1, sz / 2
+	var m, s = sz / 2, sz / 8
+	var a, b = m - s, m + s
 	if list[a] > list[b] {
 		a, b = b, a
 	}
@@ -45,15 +46,11 @@ func triPartition(list []int) (fst int, snd int) {
 }
 
 /*
-func triPartition(list []int) (fst int, snd int) {
+func triPartition(list []int) (fst, snd int) {
 	var sz = len(list)
-
+	var m, s = sz / 2, sz / 8
+	moveMedianTwo(list, m-s, 0, sz-1, m+s)
 	var pivot1, pivot2 = list[0], list[sz-1]
-	if pivot1 > pivot2 {
-		pivot1, pivot2 = pivot2, pivot1
-		list[0] = pivot1
-		//list[sz-1] = pivot2
-	}
 
 	var a, b = 1, sz - 2
 	for k := a; k <= b; k++ {
@@ -77,10 +74,22 @@ func triPartition(list []int) (fst int, snd int) {
 	list[sz-1], list[b+1] = list[b+1], pivot2
 	return a - 1, b + 1
 }
+
+func moveMedianTwo(list []int, a, b, c, d int) {
+	if list[a] > list[b] { //保证b非最小
+		list[a], list[b] = list[b], list[a]
+	}
+	if list[c] < list[d] { //保证c非最大
+		list[c], list[d] = list[d], list[c]
+	}
+	if list[b] > list[c] { //保证b<=c
+		list[b], list[c] = list[c], list[b]
+	}
+}
 */
 
 /*
-func triPartition(list []int) (fst int, snd int) {
+func triPartition(list []int) (fst, snd int) {
 	var sz = len(list)
 
 	var pivot1, pivot2 = list[0], list[sz-1]

@@ -16,7 +16,9 @@ func QuickSort(list []int) {
 
 func partition(list []int) int {
 	//谨慎处理，以防越界
-	var pivot = list[len(list)/2]
+	//var pivot = list[len(list)/2]
+	var pivot = median(list[0],
+		list[len(list)/2], list[len(list)-1])
 
 	var a, b = 0, len(list) - 1
 	for { //注意对称性
