@@ -17,9 +17,9 @@ func doIntroSort(list []graph.Path, life uint) {
 	} else if life == 0 {
 		heapSort(list)
 	} else {
-		var line = partition(list)
-		doIntroSort(list[:line], life-1)
-		doIntroSort(list[line:], life-1)
+		var m = partition(list)
+		doIntroSort(list[:m], life-1)
+		doIntroSort(list[m:], life-1)
 	}
 }
 
@@ -52,28 +52,23 @@ func heapSort(list []graph.Path) {
 		down(list[:sz], 0)
 	}
 }
-func down(list []graph.Path, spot int) {
-	var key = list[spot]
-	var left, right = spot*2 + 1, spot*2 + 2
-	for right < len(list) {
-		var kid int
-		if list[left].Next > list[right].Next {
-			kid = left
-		} else {
-			kid = right
+func down(list []graph.Path, root int) {
+	var key = list[root]
+	var kid, last = root*2 + 1, len(list) - 1
+	for kid < last {
+		if list[kid+1].Next > list[kid].Next {
+			kid++
 		}
 		if key.Next >= list[kid].Next {
-			goto Label_OVER
+			break
 		}
-		list[spot] = list[kid]
-		spot, left, right = kid, kid*2+1, kid*2+2
+		list[root] = list[kid]
+		root, kid = kid, kid*2+1
 	}
-	if right == len(list) && key.Next < list[left].Next {
-		list[spot], list[left] = list[left], key
-		return
+	if kid == last && key.Next < list[kid].Next {
+		list[root], root = list[kid], kid
 	}
-Label_OVER:
-	list[spot] = key
+	list[root] = key
 }
 
 func simpleSort(list []graph.Path) {

@@ -44,7 +44,6 @@ func (hp *Heap) Pop() (int, error) {
 	if size == 0 {
 		return 0, errors.New("empty")
 	}
-
 	var key = hp.core[0]
 	if size == 1 {
 		hp.core = hp.core[:0]

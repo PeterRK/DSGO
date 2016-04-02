@@ -21,7 +21,7 @@ func down(list []int, root int) {
 			kid++
 		}
 		if key >= list[kid] {
-			goto Label_OVER
+			break
 		}
 		list[root] = list[kid]
 		root, kid = kid, kid*2+1
@@ -29,6 +29,5 @@ func down(list []int, root int) {
 	if kid == last && key < list[kid] {
 		list[root], root = list[kid], kid
 	}
-Label_OVER:
 	list[root] = key
 }

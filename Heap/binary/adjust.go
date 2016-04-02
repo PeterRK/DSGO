@@ -8,7 +8,7 @@ func (hp *Heap) adjustDown(spot int) {
 			kid++
 		}
 		if key <= hp.core[kid] {
-			goto Label_OVER
+			break
 		}
 		hp.core[spot] = hp.core[kid]
 		spot, kid = kid, kid*2+1
@@ -16,7 +16,6 @@ func (hp *Heap) adjustDown(spot int) {
 	if kid == last && key > hp.core[kid] {
 		hp.core[spot], spot = hp.core[kid], kid
 	}
-Label_OVER:
 	hp.core[spot] = key
 }
 
