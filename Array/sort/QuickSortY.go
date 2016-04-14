@@ -26,6 +26,9 @@ func triPartition(list []int) (fst, snd int) {
 	list[a], list[b] = list[0], list[sz-1]
 
 	a, b = 1, sz-2
+	for a <= b && list[a] < pivot1 {
+		a++
+	}
 	for k := a; k <= b; k++ {
 		if list[k] > pivot2 {
 			for k < b && list[b] > pivot2 {
@@ -53,6 +56,9 @@ func triPartition(list []int) (fst, snd int) {
 	var pivot1, pivot2 = list[0], list[sz-1]
 
 	var a, b = 1, sz - 2
+	for list[a] < pivot1 {
+		a++
+	}
 	for k := a; k <= b; k++ {
 		if list[k] > pivot2 {
 			for list[b] > pivot2 {
