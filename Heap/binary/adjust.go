@@ -1,8 +1,8 @@
 package binary
 
-func (hp *Heap) adjustDown(spot int) {
-	var key = hp.core[spot]
-	var kid, last = spot*2 + 1, len(hp.core) - 1
+func (hp *Heap) adjustDown(root int) {
+	var key = hp.core[root]
+	var kid, last = root*2 + 1, len(hp.core) - 1
 	for kid < last {
 		if hp.core[kid+1] < hp.core[kid] {
 			kid++
@@ -10,23 +10,23 @@ func (hp *Heap) adjustDown(spot int) {
 		if key <= hp.core[kid] {
 			break
 		}
-		hp.core[spot] = hp.core[kid]
-		spot, kid = kid, kid*2+1
+		hp.core[root] = hp.core[kid]
+		root, kid = kid, kid*2+1
 	}
 	if kid == last && key > hp.core[kid] {
-		hp.core[spot], spot = hp.core[kid], kid
+		hp.core[root], root = hp.core[kid], kid
 	}
-	hp.core[spot] = key
+	hp.core[root] = key
 }
 
-func (hp *Heap) adjustUp(spot int) {
-	var key = hp.core[spot]
-	for spot > 0 {
-		var parent = (spot - 1) / 2
+func (hp *Heap) adjustUp(root int) {
+	var key = hp.core[root]
+	for root > 0 {
+		var parent = (root - 1) / 2
 		if hp.core[parent] <= key {
 			break
 		}
-		hp.core[spot], spot = hp.core[parent], parent
+		hp.core[root], root = hp.core[parent], parent
 	}
-	hp.core[spot] = key
+	hp.core[root] = key
 }
