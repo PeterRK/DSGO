@@ -49,7 +49,7 @@ func PlainDijkstra(matrix [][]uint, start int) []int {
 }
 
 //输入邻接矩阵(0指不通)，返回两点间的最短路径及其长度(-1指不通)。
-func PlainDijkstraPath(matrix [][]uint, start int, end int) []int {
+func PlainDijkstraPath(matrix [][]uint, start, end int) []int {
 	var size = len(matrix)
 	if start < 0 || end < 0 || start >= size || end >= size {
 		return []int{}

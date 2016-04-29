@@ -7,7 +7,7 @@ import (
 const fakeLevel = ^uint(0)
 
 func (pk *data) flushBack() {
-	for i := 0; i < pk.size; i++ {
+	for i := 0; i < len(pk.origin); i++ {
 		var origin, shadow, reflux = pk.origin[i], pk.shadow[i], pk.reflux[i]
 		if len(shadow) != 0 {
 			fillBackVec(origin, shadow)
@@ -64,7 +64,7 @@ func compact(list []graph.Path) []graph.Path {
 
 //宽度优先遍历
 func (pk *data) markLevel() bool {
-	for i := 0; i < pk.size; i++ {
+	for i := 0; i < len(pk.memo); i++ {
 		pk.memo[i] = fakeLevel
 	}
 

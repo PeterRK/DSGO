@@ -5,7 +5,7 @@ import (
 )
 
 func (pk *dataM) flushBack() {
-	for i := 0; i < pk.size; i++ {
+	for i := 0; i < len(pk.matrix); i++ {
 		if len(pk.shadow[i]) == 0 {
 			continue
 		}
@@ -18,7 +18,7 @@ func (pk *dataM) flushBack() {
 
 //宽度优先遍历
 func (pk *dataM) markLevel() bool {
-	for i := 0; i < pk.size; i++ {
+	for i := 0; i < len(pk.memo); i++ {
 		pk.memo[i] = fakeLevel
 	}
 
@@ -31,7 +31,7 @@ func (pk *dataM) markLevel() bool {
 			pk.memo[pk.end] = pk.memo[cur] + 1
 			return true
 		}
-		for i := 0; i < pk.size; i++ {
+		for i := 0; i < len(pk.memo); i++ {
 			if pk.memo[i] == fakeLevel && pk.matrix[cur][i] != 0 {
 				pk.memo[i] = pk.memo[cur] + 1
 				pk.queue.push(i)
@@ -53,7 +53,7 @@ func (pk *dataM) separate() bool {
 			break
 		}
 		//pk.shadow[cur] = pk.shadow[cur][:0]
-		for i := 0; i < pk.size; i++ {
+		for i := 0; i < len(pk.memo); i++ {
 			if pk.memo[i] == pk.memo[cur]+1 && pk.matrix[cur][i] != 0 {
 				var path = graph.Path{Next: i, Weight: pk.matrix[cur][i]}
 				pk.shadow[cur] = append(pk.shadow[cur], path)
