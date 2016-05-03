@@ -26,7 +26,7 @@ type data struct {
 	parts [][]int
 }
 
-func (pk *data) dfs(doit func(int), curr int) {
+func doDFS(doit func(*data, int), pk *data, curr int) {
 	var node = &pk.book[curr]
 	node.id = FakeID
 	node.prev.next, node.next.prev = node.next, node.prev
@@ -35,21 +35,27 @@ func (pk *data) dfs(doit func(int), curr int) {
 	for i := 0; i < len(nexts); i++ {
 		var peer = nexts[i]
 		if pk.book[peer].id != FakeID {
-			doit(peer)
+			doit(pk, peer)
 		}
 	}
 }
-
-func (pk *data) dfsX(curr int) {
-	pk.dfs(pk.dfsX, curr)
+func doDFSX(pk *data, curr int) {
+	doDFS(doDFSX, pk, curr)
 	var node = &pk.book[curr]
 	pk.knot.next.prev, node.next = node, pk.knot.next
 	pk.knot.next, node.prev = node, pk.knot
 }
-func (pk *data) dfsY(curr int) {
-	pk.dfs(pk.dfsY, curr)
+func doDFSY(pk *data, curr int) {
+	doDFS(doDFSY, pk, curr)
 	var last = len(pk.parts) - 1
 	pk.parts[last] = append(pk.parts[last], curr)
+}
+
+func (pk *data) dfsX(id int) {
+	doDFSX(pk, id)
+}
+func (pk *data) dfsY(id int) {
+	doDFSY(pk, id)
 }
 
 //分解强联通分量
