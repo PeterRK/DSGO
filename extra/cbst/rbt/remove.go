@@ -17,7 +17,7 @@ func (tr *Tree) Remove(key int32) bool {
 	} else {
 		tr.hookSubTree(orphan)
 		if victim.black { //红victim随便删，黑的要考虑
-			if orphan != nil && !orphan.black {
+			if !orphan.isBlack() {
 				orphan.black = true //红子变黑顶上
 			} else {
 				tr.adjustAfterDelete()
@@ -104,8 +104,8 @@ func (tr *Tree) adjustAfterDelete() {
 				tr.path.push(U, lf)
 				continue //变出黑U后再行解决
 			} else {
-				if L == nil || L.black {
-					if R == nil || R.black { //双黑，变色解决
+				if L.isBlack() {
+					if R.isBlack() { //双黑，变色解决
 						U.black = false
 						if G.black && !tr.path.isEmpty() {
 							G, lf = tr.path.pop()
@@ -134,8 +134,8 @@ func (tr *Tree) adjustAfterDelete() {
 				tr.path.push(U, lf)
 				continue //变出黑U后再行解决
 			} else {
-				if R == nil || R.black {
-					if L == nil || L.black { //双黑，变色解决
+				if R.isBlack() {
+					if L.isBlack() { //双黑，变色解决
 						U.black = false
 						if G.black && !tr.path.isEmpty() {
 							G, lf = tr.path.pop()

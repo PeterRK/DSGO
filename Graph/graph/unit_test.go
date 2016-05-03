@@ -30,20 +30,20 @@ func isTheSame(vec1 []int, vec2 []int) bool {
 func Test_TopologicalSort(t *testing.T) {
 	defer guardUT(t)
 
-	var roads = make([][]int, 13)
-	roads[0] = []int{1, 5, 6}
-	roads[1] = []int{}
-	roads[2] = []int{0, 3}
-	roads[3] = []int{5}
-	roads[4] = []int{}
-	roads[5] = []int{4}
-	roads[6] = []int{4, 9}
-	roads[7] = []int{6}
-	roads[8] = []int{7}
-	roads[9] = []int{10, 11, 12}
-	roads[10] = []int{}
-	roads[11] = []int{12}
-	roads[12] = []int{}
+	var roads = [][]int{
+		{1, 5, 6},    //0
+		{},           //1
+		{0, 3},       //2
+		{5},          //3
+		{},           //4
+		{4},          //5
+		{4, 9},       //6
+		{6},          //7
+		{7},          //8
+		{10, 11, 12}, //9
+		{},           //10
+		{12},         //11
+		{}}           //12
 
 	var expected = []int{8, 7, 2, 3, 0, 6, 9, 11, 12, 10, 5, 4, 1}
 	var vec, err = TopologicalSort(roads)
@@ -54,18 +54,18 @@ func Test_SplitDirectedGraph(t *testing.T) {
 	defer guardUT(t)
 
 	var roads = [][]int{
-		{1},
-		{2, 3, 4},
-		{5},
-		{},
-		{1, 5, 6},
-		{2, 7},
-		{7, 9},
-		{10},
-		{6},
-		{8},
-		{11},
-		{9}}
+		{1},       //0
+		{2, 3, 4}, //1
+		{5},       //2
+		{},        //3
+		{1, 5, 6}, //4
+		{2, 7},    //5
+		{7, 9},    //6
+		{10},      //7
+		{6},       //8
+		{8},       //9
+		{11},      //10
+		{9}}       //11
 
 	var expected = [][]int{{0}, {4, 1}, {3}, {5, 2}, {10, 11, 9, 8, 6, 7}}
 	var parts = SplitDirectedGraph(roads)

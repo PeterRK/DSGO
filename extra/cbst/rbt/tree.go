@@ -13,6 +13,10 @@ type Tree struct {
 	path stack
 }
 
+func (u *node) isBlack() bool {
+	return u == nil || u.black
+}
+
 func (tr *Tree) IsEmpty() bool {
 	return tr.root == nil
 }

@@ -31,16 +31,16 @@ func isTheSame(vec1 []Edge, vec2 []Edge) bool {
 func Test_Prim(t *testing.T) {
 	defer guardUT(t)
 
-	var roads = make([][]graph.Path, 9)
-	roads[0] = []graph.Path{{1, 8}, {3, 4}, {6, 11}}
-	roads[1] = []graph.Path{{0, 8}, {2, 7}, {4, 2}, {8, 4}}
-	roads[2] = []graph.Path{{1, 7}, {5, 9}, {8, 14}}
-	roads[3] = []graph.Path{{0, 4}, {6, 8}}
-	roads[4] = []graph.Path{{1, 2}, {6, 7}, {7, 6}}
-	roads[5] = []graph.Path{{2, 9}, {8, 10}}
-	roads[6] = []graph.Path{{0, 11}, {3, 8}, {4, 7}, {7, 1}}
-	roads[7] = []graph.Path{{4, 6}, {6, 1}, {8, 2}}
-	roads[8] = []graph.Path{{1, 4}, {2, 14}, {5, 10}, {7, 2}}
+	var roads = [][]graph.Path{
+		{{1, 8}, {3, 4}, {6, 11}},          //0
+		{{0, 8}, {2, 7}, {4, 2}, {8, 4}},   //1
+		{{1, 7}, {5, 9}, {8, 14}},          //2
+		{{0, 4}, {6, 8}},                   //3
+		{{1, 2}, {6, 7}, {7, 6}},           //4
+		{{2, 9}, {8, 10}},                  //5
+		{{0, 11}, {3, 8}, {4, 7}, {7, 1}},  //6
+		{{4, 6}, {6, 1}, {8, 2}},           //7
+		{{1, 4}, {2, 14}, {5, 10}, {7, 2}}} //8
 
 	dist, err := Prim(roads)
 	assert(t, err == nil && dist == 37)

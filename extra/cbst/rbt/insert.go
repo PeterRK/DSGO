@@ -70,7 +70,7 @@ func (tr *Tree) adjustAfterInsert() {
 		var G, plf = tr.path.pop() //必然存在，根为黑，P非根
 		if plf {
 			var U = G.right
-			if U != nil && !U.black { //红叔模式，变色解决
+			if !U.isBlack() { //红叔模式，变色解决
 				P.black, U.black = true, true
 				if !tr.path.isEmpty() {
 					G.black = false
@@ -92,7 +92,7 @@ func (tr *Tree) adjustAfterInsert() {
 			}
 		} else {
 			var U = G.left
-			if U != nil && !U.black { //红叔模式，变色解决
+			if !U.isBlack() { //红叔模式，变色解决
 				P.black, U.black = true, true
 				if !tr.path.isEmpty() {
 					G.black = false

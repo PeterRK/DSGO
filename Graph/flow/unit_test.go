@@ -55,31 +55,33 @@ func Test_DinicM(t *testing.T) {
 func Test_Dinic(t *testing.T) {
 	defer guardUT(t)
 
-	var roads = make([][]graph.Path, 9)
-	roads[0] = []graph.Path{{1, 8}, {3, 4}, {6, 11}}
-	roads[1] = []graph.Path{{0, 8}, {2, 7}, {4, 2}, {8, 4}}
-	roads[2] = []graph.Path{{1, 7}, {5, 9}, {8, 14}}
-	roads[3] = []graph.Path{{0, 4}, {6, 8}}
-	roads[4] = []graph.Path{{1, 2}, {6, 7}, {7, 6}}
-	roads[5] = []graph.Path{{2, 9}, {8, 10}}
-	roads[6] = []graph.Path{{0, 11}, {3, 8}, {4, 7}, {7, 1}}
-	roads[7] = []graph.Path{{4, 6}, {6, 1}, {8, 2}}
-	roads[8] = []graph.Path{{1, 4}, {2, 14}, {5, 10}, {7, 2}}
+	var roads = [][]graph.Path{
+		{{1, 8}, {3, 4}, {6, 11}},          //0
+		{{0, 8}, {2, 7}, {4, 2}, {8, 4}},   //1
+		{{1, 7}, {5, 9}, {8, 14}},          //2
+		{{0, 4}, {6, 8}},                   //3
+		{{1, 2}, {6, 7}, {7, 6}},           //4
+		{{2, 9}, {8, 10}},                  //5
+		{{0, 11}, {3, 8}, {4, 7}, {7, 1}},  //6
+		{{4, 6}, {6, 1}, {8, 2}},           //7
+		{{1, 4}, {2, 14}, {5, 10}, {7, 2}}} //8
 	assert(t, Dinic(roads, 8, 0) == 12)
 
-	roads = make([][]graph.Path, 6)
-	roads[0] = []graph.Path{{1, 16}, {2, 13}}
-	roads[1] = []graph.Path{{3, 12}}
-	roads[2] = []graph.Path{{1, 4}, {4, 14}}
-	roads[3] = []graph.Path{{5, 20}}
-	roads[4] = []graph.Path{{3, 7}, {5, 4}}
+	roads = [][]graph.Path{
+		{{1, 16}, {2, 13}}, //0
+		{{3, 12}},          //1
+		{{1, 4}, {4, 14}},  //2
+		{{5, 20}},          //3
+		{{3, 7}, {5, 4}},   //4
+		{}}                 //5
 	assert(t, Dinic(roads, 0, 5) == 23)
 
-	roads = make([][]graph.Path, 6)
-	roads[0] = []graph.Path{{1, 1}, {2, 1}}
-	roads[1] = []graph.Path{{4, 1}}
-	roads[2] = []graph.Path{{3, 1}, {4, 1}}
-	roads[3] = []graph.Path{{5, 1}}
-	roads[4] = []graph.Path{{5, 1}}
+	roads = [][]graph.Path{
+		{{1, 1}, {2, 1}}, //0
+		{{4, 1}},         //1
+		{{3, 1}, {4, 1}}, //2
+		{{5, 1}},         //3
+		{{5, 1}},         //4
+		{}}               //5
 	assert(t, Dinic(roads, 0, 5) == 2)
 }

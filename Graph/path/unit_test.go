@@ -31,12 +31,12 @@ func isTheSame(vec1 []int, vec2 []int) bool {
 func Test_Dijkstra(t *testing.T) {
 	defer guardUT(t)
 
-	var roads = make([][]graph.Path, 5)
-	roads[0] = []graph.Path{{1, 1}, {3, 2}}
-	roads[1] = []graph.Path{{4, 4}}
-	roads[2] = []graph.Path{{0, 10}, {3, 5}}
-	roads[3] = []graph.Path{{0, 3}, {1, 9}, {4, 2}}
-	roads[4] = []graph.Path{{1, 6}, {2, 7}}
+	var roads = [][]graph.Path{
+		{{1, 1}, {3, 2}},         //0
+		{{4, 4}},                 //1
+		{{0, 10}, {3, 5}},        //2
+		{{0, 3}, {1, 9}, {4, 2}}, //3
+		{{1, 6}, {2, 7}}}         //4
 
 	var expected = []int{19, 0, 11, 16, 4}
 	var ret = Dijkstra(roads, 1)
@@ -72,12 +72,12 @@ func Test_PlainDijkstra(t *testing.T) {
 func Test_SPFA(t *testing.T) {
 	defer guardUT(t)
 
-	var roads = make([][]Path, 5)
-	roads[0] = []Path{{1, 1}, {3, 2}}
-	roads[1] = []Path{{4, 4}}
-	roads[2] = []Path{{0, 10}, {3, 5}}
-	roads[3] = []Path{{0, 3}, {1, 9}, {4, 2}}
-	roads[4] = []Path{{1, 6}, {2, 7}}
+	var roads = [][]Path{
+		{{1, 1}, {3, 2}},         //0
+		{{4, 4}},                 //1
+		{{0, 10}, {3, 5}},        //2
+		{{0, 3}, {1, 9}, {4, 2}}, //3
+		{{1, 6}, {2, 7}}}         //4
 
 	var expected = []int{19, 0, 11, 16, 4}
 	var dists, err = SPFA(roads, 1)
