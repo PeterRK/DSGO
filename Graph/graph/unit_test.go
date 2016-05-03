@@ -49,3 +49,28 @@ func Test_TopologicalSort(t *testing.T) {
 	var vec, err = TopologicalSort(roads)
 	assert(t, err == nil && isTheSame(vec, expected))
 }
+
+func Test_SplitDirectedGraph(t *testing.T) {
+	defer guardUT(t)
+
+	var roads = [][]int{
+		{1},
+		{2, 3, 4},
+		{5},
+		{},
+		{1, 5, 6},
+		{2, 7},
+		{7, 9},
+		{10},
+		{6},
+		{8},
+		{11},
+		{9}}
+
+	var expected = [][]int{{0}, {4, 1}, {3}, {5, 2}, {10, 11, 9, 8, 6, 7}}
+	var parts = SplitDirectedGraph(roads)
+	assert(t, len(parts) == len(expected))
+	for i := 0; i < len(parts); i++ {
+		assert(t, isTheSame(parts[i], expected[i]))
+	}
+}
