@@ -71,12 +71,31 @@ func Test_Rank(t *testing.T) {
 	for i := 0; i < size; i++ {
 		list[i] = i + 1
 	}
-
 	randomize(list)
-	for i := 0; i < size; i++ {
-		assert(t, tree.Insert(list[i]) > 0)
+
+	assert(t, tree.Insert(list[0]) == 1)
+	for i := 1; i < size; i++ {
+		var rank = tree.Insert(list[i])
+
+		var key = list[i]
+		var a, b = 0, i
+		for a < b {
+			var m = a + (b-a)/2
+			if key < list[m] {
+				b = m
+			} else {
+				a = m + 1
+			}
+		}
+		for j := i; j > a; j-- {
+			list[j] = list[j-1]
+		}
+		list[a] = key
+
+		assert(t, rank == a+1)
 	}
+
 	for i := 0; i < size; i++ {
-		assert(t, tree.Search(list[i]) == list[i])
+		assert(t, tree.Search(i+1) == i+1)
 	}
 }
