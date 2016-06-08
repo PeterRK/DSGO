@@ -7,7 +7,7 @@
 bool AVLtree::search(int key)
 const {
 	Node* root = m_root;
-	while (root != NULL) {
+	while (root != nullptr) {
 		if (key == root->key) {
 			return true;
 		}
@@ -22,8 +22,8 @@ inline AVLtree::Node* AVLtree::newNode(AVLtree::Node* parent, int key)
 	node->key = key;
 	node->state = 0;
 	node->parent = parent;
-	node->left = NULL;
-	node->right = NULL;
+	node->left = nullptr;
+	node->right = nullptr;
 	return node;
 }
 ////////////////////////////////////////////////////////////////////////////
@@ -48,15 +48,15 @@ AVLtree::Node* AVLtree::Rotate(Node* G, bool& stop)
 {
 	//assert(G->state == 2 || G->state == -2);
 	stop = false;
-	Node* root = NULL;
+	Node* root = nullptr;
 	if (G->state == 2) { //左倾右旋
 		Node* P = G->left;
 		if (P->state == -1) { //LR
-			Node* C = P->right; //一定非NULL
-			P->right = P->tryHook(C->left);
-			G->left = G->tryHook(C->right);
-			C->left = C->hook(P);
-			C->right = C->hook(G);
+			Node* C = P->right; //一定非nullptr
+			P->hookRight(C->left, nullptr);
+			G->hookLeft(C->right, nullptr);
+			C->hookLeft(P);
+			C->hookRight(G);
 			switch (C->state) {
 			case 1:
 				G->state = -1;
@@ -74,8 +74,8 @@ AVLtree::Node* AVLtree::Rotate(Node* G, bool& stop)
 			C->state = 0;
 			root = C;
 		} else { //LL
-			G->left = G->tryHook(P->right);
-			P->right = P->hook(G);
+			G->hookLeft(P->right, nullptr);
+			P->hookRight(G);
 			if (P->state == 0) { //不降高旋转
 				G->state = 1;
 				P->state = -1;
@@ -90,11 +90,11 @@ AVLtree::Node* AVLtree::Rotate(Node* G, bool& stop)
 	else { //右倾左旋(P->state==-2)
 		Node* P = G->right;
 		if (P->state == 1) { //RL
-			Node* C = P->left; //一定非NULL
-			P->left = P->tryHook(C->right);
-			G->right = G->tryHook(C->left);
-			C->right = C->hook(P);
-			C->left = C->hook(G);
+			Node* C = P->left; //一定非nullptr
+			P->hookLeft(C->right, nullptr);
+			G->hookRight(C->left, nullptr);
+			C->hookRight(P);
+			C->hookLeft(G);
 			switch (C->state) {
 				case -1:
 					G->state = 1;
@@ -112,8 +112,8 @@ AVLtree::Node* AVLtree::Rotate(Node* G, bool& stop)
 			C->state = 0;
 			root = C;
 		} else { //RR
-			G->right = G->tryHook(P->left);
-			P->left = P->hook(G);
+			G->hookRight(P->left, nullptr);
+			P->hookLeft(G);
 			if (P->state == 0) { //不降高旋转
 				G->state = -1;
 				P->state = 1;
@@ -130,21 +130,21 @@ AVLtree::Node* AVLtree::Rotate(Node* G, bool& stop)
 ////////////////////////////////////////////////////////////////////////////
 bool AVLtree::insert(int key)
 {
-	if (m_root == NULL) {
-		m_root = newNode(NULL, key);
+	if (m_root == nullptr) {
+		m_root = newNode(nullptr, key);
 		return true;
 	}
 
 	Node* root = m_root;
 	while(true) {
 		if (key < root->key) {
-			if (root->left == NULL) {
+			if (root->left == nullptr) {
 				root->left = newNode(root, key);
 				break;
 			}
 			root = root->left;
 		} else if (key > root->key) {
-			if (root->right == NULL) {
+			if (root->right == nullptr) {
 				root->right = newNode(root, key);
 				break;
 			}
@@ -157,7 +157,7 @@ bool AVLtree::insert(int key)
 	while(true) {
 		int8_t state = root->state;
 		root->state += (key < root->key)? 1 : -1;
-		if (state == 0 && root->parent != NULL) {
+		if (state == 0 && root->parent != nullptr) {
 			root = root->parent;
 			continue;
 		}
@@ -165,13 +165,14 @@ bool AVLtree::insert(int key)
 			Node* super = root->parent;
 			bool stop;
 			root = Rotate(root, stop);
-			if (super == NULL) {
-				m_root = super->hook(root);
+			if (super == nullptr) {
+				root->parent = nullptr;
+				m_root = root;
 			} else {
 				if (key < super->key) {
-					super->left = super->hook(root);
+					super->hookLeft(root);
 				} else {
-					super->right = super->hook(root);
+					super->hookRight(root);
 				}
 			}
 		}
@@ -183,33 +184,33 @@ bool AVLtree::insert(int key)
 bool AVLtree::remove(int key)
 {
 	Node* target = m_root;
-	while (target != NULL && key != target->key) {
+	while (target != nullptr && key != target->key) {
 		if (key < target->key) {
 			target = target->left;
 		} else {
 			target = target->right;
 		}
 	}
-	if (target == NULL) return false;
+	if (target == nullptr) return false;
 
-	Node* victim = NULL;
-	Node* orphan = NULL;
-	if (target->left == NULL) {
+	Node* victim = nullptr;
+	Node* orphan = nullptr;
+	if (target->left == nullptr) {
 		victim = target;
 		orphan = target->right;
-	} else if (target->right == NULL) {
+	} else if (target->right == nullptr) {
 		victim = target;
 		orphan = target->left;
 	} else {
 		if (target->state == 1) {
 			victim = target->left;
-			while (victim->right != NULL) {
+			while (victim->right != nullptr) {
 				victim = victim->right;
 			}
 			orphan = victim->left;
 		} else {
 			victim = target->right;
-			while (victim->left != NULL) {
+			while (victim->left != nullptr) {
 				victim = victim->left;
 			}
 			orphan = victim->right;
@@ -217,35 +218,39 @@ bool AVLtree::remove(int key)
 	}
 
 	Node* root = victim->parent;
-	if (root == NULL) { //此时victim==target
-		m_root = root->tryHook(orphan);
+	if (root == nullptr) { //此时victim==target
+		if (orphan != nullptr) {
+			orphan->parent = nullptr;
+		}
+		m_root = orphan;
 	} else {
 		key = victim->key;
 		int8_t state = root->state;
 		if (key < root->key) {
-			root->left = root->tryHook(orphan);
+			root->hookLeft(orphan, nullptr);
 			root->state--;
 		} else {
-			root->right = root->tryHook(orphan);
+			root->hookRight(orphan, nullptr);
 			root->state++;
 		}
 
 		while (state != 0) { //如果原平衡因子为0则子树高度不变
 			bool stop;
 			Node* super = root->parent;
-			if (super == NULL) {
+			if (super == nullptr) {
 				if (root->state != 0) { //2 || -2
 					root = Rotate(root, stop);
-					m_root = super->hook(root);
+					root->parent = nullptr;
+					m_root = root;
 				}
 				break;
 			} else {
 				if (root->state != 0) { //2 || -2
 					root = Rotate(root, stop);
 					if (key < super->key) {
-						super->left = super->hook(root);
+						super->hookLeft(root);
 					} else {
-						super->right = super->hook(root);
+						super->hookRight(root);
 					}
 					if (stop) break;
 				}
@@ -260,5 +265,3 @@ bool AVLtree::remove(int key)
 	return true;
 }
 ////////////////////////////////////////////////////////////////////////////
-
-

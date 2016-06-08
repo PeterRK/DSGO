@@ -15,15 +15,17 @@ private:
 			_parent = ((uintptr_t)pt) >> 1;
 		}
 
-		Node* hook(Node* child) {
-			child->parent(this);
-			return child;
-		}
-		Node* tryHook(Node* child) {
-			if (child != NULL) {
+		void hookLeft(Node* child, void* hint = (void*)-1) {
+			if (hint != nullptr || child != nullptr) {
 				child->parent(this);
 			}
-			return child;
+			this->left = child;
+		}
+		void hookRight(Node* child, void* hint = (void*)-1) {
+			if (hint != nullptr || child != nullptr) {
+				child->parent(this);
+			}
+			this->right = child;
 		}
 	};
 	Node* m_root;
@@ -33,9 +35,9 @@ private:
 	void adjustAfterDelete(Node* G, int key);
 
 public:
-	RBtree(void) : m_root(NULL) {}
+	RBtree(void) : m_root(nullptr) {}
 
-	bool isEmpty(void) const { return m_root == NULL; }
+	bool isEmpty(void) const { return m_root == nullptr; }
 	bool search(int key) const;
 	bool insert(int key);
 	bool remove(int key);

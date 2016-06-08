@@ -48,11 +48,11 @@ public:
 	std::vector<int>	m_nstack;
 
 public:
-	BplusTree(void) : m_root(NULL), m_head(NULL) {}
+	BplusTree(void) : m_root(nullptr), m_head(nullptr) {}
 	typedef void Func(int);
 
 	void travel(Func func) const;
-	bool isEmpty(void) const { return m_root == NULL; }
+	bool isEmpty(void) const { return m_root == nullptr; }
 	bool search(int key) const;
 	bool insert(int key);
 	bool remove(int key);

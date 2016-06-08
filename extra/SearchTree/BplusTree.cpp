@@ -22,7 +22,7 @@ const {
 ////////////////////////////////////////////////////////////////////////////
 bool BplusTree::search(int key)
 const {
-	if (m_root == NULL || key > m_root->ceil()) {
+	if (m_root == nullptr || key > m_root->ceil()) {
 		return false;
 	}
 	Index* target = m_root;
@@ -37,7 +37,7 @@ const {
 }
 void BplusTree::travel(Func func) 
 const {
-	for (auto unit = m_head; unit != NULL; unit = unit->next) {
+	for (auto unit = m_head; unit != nullptr; unit = unit->next) {
 		for (int i  = 0; i < unit->cnt; i++) {
 			func(unit->data[i]);
 		}
@@ -60,7 +60,7 @@ inline void BplusTree::Index::remove(int place)
 }
 BplusTree::Index* BplusTree::Index::insert(
 	int place, Index* kid, Allocator<Index>& pool
-){	//peer为分裂项，peer为NULL时表示不分裂
+){	//peer为分裂项，peer为nullptr时表示不分裂
 	if (cnt < FULL_SZ) {
 		for (int i = cnt; i > place; i--) {
 			data[i] = data[i - 1];
@@ -69,7 +69,7 @@ BplusTree::Index* BplusTree::Index::insert(
 		data[place] = kid->ceil();
 		kids[place] = kid;
 		cnt++;
-		return NULL;
+		return nullptr;
 	}
 
 	Index* peer = NewNode(pool);
@@ -158,14 +158,14 @@ inline void BplusTree::Leaf::remove(int place)
 }
 BplusTree::Leaf* BplusTree::Leaf::insert(
 	int place, int key, Allocator<Leaf>& pool
-){	//peer为分裂项，peer为NULL时表示不分裂
+){	//peer为分裂项，peer为nullptr时表示不分裂
 	if (cnt < FULL_SZ) {
 		for (int i = cnt; i > place; i--) {
 			data[i] = data[i - 1];
 		}
 		data[place] = key;
 		cnt++;
-		return NULL;
+		return nullptr;
 	}
 
 	Leaf* peer = NewNode(pool);
@@ -232,11 +232,11 @@ bool BplusTree::Leaf::combine(
 ////////////////////////////////////////////////////////////////////////////
 bool BplusTree::insert(int key)
 {
-	if (m_root == NULL) {
+	if (m_root == nullptr) {
 		m_head = Leaf::NewNode(m_lpool);
 		m_head->cnt = 1;
 		m_head->data[0] = key;
-		m_head->next = NULL;
+		m_head->next = nullptr;
 		m_root = reinterpret_cast<Index*>(m_head);
 		return true;
 	}
@@ -271,7 +271,7 @@ bool BplusTree::insert(int key)
 	}
 
 	Index* peer = reinterpret_cast<Index*>(leaf->insert(place, key, m_lpool));
-	while (peer != NULL) {
+	while (peer != nullptr) {
 		if (m_pstack.empty()) {
 			Index* unit = Index::NewNode(m_ipool);
 			unit->cnt = 2;
@@ -294,7 +294,7 @@ bool BplusTree::insert(int key)
 ////////////////////////////////////////////////////////////////////////////
 bool BplusTree::remove(int key)
 {
-	if (m_root == NULL || key > m_root->ceil()) return false;
+	if (m_root == nullptr || key > m_root->ceil()) return false;
 	m_pstack.clear();
 	m_nstack.clear();
 
@@ -312,8 +312,8 @@ bool BplusTree::remove(int key)
 	leaf->remove(place);
 	if (m_pstack.empty()) {
 		if (leaf->cnt == 0) {
-			m_root = NULL;
-			m_head = NULL;
+			m_root = nullptr;
+			m_head = nullptr;
 			m_lpool.deallocate(leaf);
 		}
 		return true;

@@ -9,7 +9,7 @@
 ////////////////////////////////////////////////////////////////////////////
 SkipList::SkipList(void)
 {
-	m_rand = static_cast<uint32_t>(time(NULL));
+	m_rand = time(nullptr);
 	m_cnt = 1;
 	m_ceil = FACTOR;
 	m_floor = 1;
@@ -17,11 +17,11 @@ SkipList::SkipList(void)
 	m_cap = 10;
 	m_heads = new Node*[m_cap];
 	m_knots = new Node*[m_cap];
-	m_heads[0] = NULL;
+	m_heads[0] = nullptr;
 }
 SkipList::~SkipList(void) {
 	Node* node = m_heads[0];
-	while (node != NULL) {
+	while (node != nullptr) {
 		Node* tmp = node;
 		node = node->next[0];
 		delete tmp;
@@ -46,16 +46,16 @@ bool SkipList::search(int key)
 const{
 	Node* knot = shadow();
 	for (int i  = m_level - 1; i >= 0; i--) {
-		while (knot->next[i] != NULL && knot->next[i]->key < key) {
+		while (knot->next[i] != nullptr && knot->next[i]->key < key) {
 			knot = knot->next[i];
 		}
 	}
 	Node* target = knot->next[0];
-	return target != NULL && target->key == key;
+	return target != nullptr && target->key == key;
 }
 void SkipList::travel(Func func)
 const{
-	for (Node* pt = m_heads[0]; pt != NULL; pt = pt->next[0]) {
+	for (Node* pt = m_heads[0]; pt != nullptr; pt = pt->next[0]) {
 		func(pt->key);
 	}
 }
@@ -75,18 +75,18 @@ bool SkipList::insert(int key)
 
 	Node* knot = shadow();
 	for (int i = m_level - 1; i >= 0; i--) {
-		while (knot->next[i] != NULL && knot->next[i]->key < key) {
+		while (knot->next[i] != nullptr && knot->next[i]->key < key) {
 			knot = knot->next[i];
 		}
 		m_knots[i] = knot;
 	}
 	Node* target = knot->next[0];
-	if (target != NULL && target->key == key) return false;
+	if (target != nullptr && target->key == key) return false;
 
 	if (++m_cnt == m_ceil) {
 		m_floor = m_ceil;
 		m_ceil *= FACTOR;
-		m_heads[m_level] = NULL;
+		m_heads[m_level] = nullptr;
 		m_knots[m_level] = shadow();
 		m_level++;
 	}
@@ -110,13 +110,13 @@ bool SkipList::remove(int key)
 {
 	Node* knot = shadow();
 	for (int i = m_level - 1; i >= 0; i--) {
-		while (knot->next[i] != NULL && knot->next[i]->key < key) {
+		while (knot->next[i] != nullptr && knot->next[i]->key < key) {
 			knot = knot->next[i];
 		}
 		m_knots[i] = knot;
 	}
 	Node* target = knot->next[0];
-	if (target == NULL || target->key != key) return false;
+	if (target == nullptr || target->key != key) return false;
 
 	int lv = std::min(target->size, m_level);
 	for (int i = 0; i < lv; i++) {

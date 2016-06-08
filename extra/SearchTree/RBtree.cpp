@@ -7,7 +7,7 @@
 bool RBtree::search(int key)
 const {
 	Node* root = m_root;
-	while (root != NULL) {
+	while (root != nullptr) {
 		if (key == root->key) {
 			return true;
 		}
@@ -17,13 +17,14 @@ const {
 }
 ////////////////////////////////////////////////////////////////////////////
 inline void RBtree::hookSubTree(Node* super, Node* root) {
-	if (super == NULL) {
-		m_root = super->hook(root);
+	if (super == nullptr) {
+		root->parent(nullptr);
+		m_root = root;
 	} else {
 		if (root->key < super->key) {
-			super->left = super->hook(root);
+			super->hookLeft(root);
 		} else {
-			super->right = super->hook(root);
+			super->hookRight(root);
 		}
 	}
 }
@@ -33,15 +34,15 @@ inline RBtree::Node* RBtree::newNode(RBtree::Node* parent, int key)
 	node->key = key;
 	node->black = false;
 	node->parent(parent);
-	node->left = NULL;
-	node->right = NULL;
+	node->left = nullptr;
+	node->right = nullptr;
 	return node;
 }
 ////////////////////////////////////////////////////////////////////////////
 bool RBtree::insert(int key)
 {
-	if (m_root == NULL) {
-		m_root = newNode(NULL, key);
+	if (m_root == nullptr) {
+		m_root = newNode(nullptr, key);
 		m_root->black = true;
 		return true;
 	}
@@ -49,13 +50,13 @@ bool RBtree::insert(int key)
 	Node* root = m_root;
 	while(true) {
 		if (key < root->key) {
-			if (root->left == NULL) {
+			if (root->left == nullptr) {
 				root->left = newNode(root, key);
 				break;
 			}
 			root = root->left;
 		} else if (key > root->key) {
-			if (root->right == NULL) {
+			if (root->right == nullptr) {
 				root->right = newNode(root, key);
 				break;
 			}
@@ -94,27 +95,27 @@ bool RBtree::insert(int key)
 		Node* super = G->parent();
 		if (key < G->key) {
 			Node* U = G->right;
-			if (U != NULL && !U->black) { //红叔模式，变色解决
+			if (U != nullptr && !U->black) { //红叔模式，变色解决
 				P->black = true;
 				U->black = true;
-				if (super != NULL) {
+				if (super != nullptr) {
 					G->black = false;
 					P = G->parent();
 					continue; //上溯，检查双红禁
 				} //遇根终止
 			} else { //黑叔模式，旋转解决
 				if (key < P->key) { //LL
-					G->left = G->tryHook(P->right);
-					P->right = P->hook(G);
+					G->hookLeft(P->right, nullptr);
+					P->hookRight(G);
 					G->black = false;
 					P->black = true;
 					hookSubTree(super, P);
 				} else { //LR
 					Node* C = P->right;
-					P->right = P->tryHook(C->left);
-					G->left = G->tryHook(C->right);
-					C->left = C->hook(P);
-					C->right = C->hook(G);
+					P->hookRight(C->left, nullptr);
+					G->hookLeft(C->right, nullptr);
+					C->hookLeft(P);
+					C->hookRight(G);
 					G->black = false;
 					C->black = true;
 					hookSubTree(super, C);
@@ -122,27 +123,27 @@ bool RBtree::insert(int key)
 			}
 		} else {
 			Node* U = G->left;
-			if (U != NULL && !U->black) { //红叔模式，变色解决
+			if (U != nullptr && !U->black) { //红叔模式，变色解决
 				P->black = true;
 				U->black = true;
-				if (super != NULL) {
+				if (super != nullptr) {
 					G->black = false;
 					P = G->parent();
 					continue; //上溯，检查双红禁
 				} //遇根终止
 			} else { //黑叔模式，旋转解决
 				if (key > P->key) { //RR
-					G->right = G->tryHook(P->left);
-					P->left = P->hook(G);
+					G->hookRight(P->left, nullptr);
+					P->hookLeft(G);
 					G->black = false;
 					P->black = true;
 					hookSubTree(super, P);
 				} else { //RL
 					Node* C = P->left;
-					P->left = P->tryHook(C->right);
-					G->right = G->tryHook(C->left);
-					C->right = C->hook(P);
-					C->left = C->hook(G);
+					P->hookLeft(C->right, nullptr);
+					G->hookRight(C->left, nullptr);
+					C->hookRight(P);
+					C->hookLeft(G);
 					G->black = false;
 					C->black = true;
 					hookSubTree(super, C);
@@ -157,46 +158,49 @@ bool RBtree::insert(int key)
 bool RBtree::remove(int key)
 {
 	Node* target = m_root;
-	while (target != NULL && key != target->key) {
+	while (target != nullptr && key != target->key) {
 		if (key < target->key) {
 			target = target->left;
 		} else {
 			target = target->right;
 		}
 	}
-	if (target == NULL) return false;
+	if (target == nullptr) return false;
 
-	Node* victim = NULL;
-	Node* orphan = NULL;
-	if (target->left == NULL) {
+	Node* victim = nullptr;
+	Node* orphan = nullptr;
+	if (target->left == nullptr) {
 		victim = target;
 		orphan = target->right;
 	}
-	else if (target->right == NULL) {
+	else if (target->right == nullptr) {
 		victim = target;
 		orphan = target->left;
 	} else {
 		victim = target->right;
-		while (victim->left != NULL) {
+		while (victim->left != nullptr) {
 			victim = victim->left;
 		}
 		orphan = victim->right;
 	}
 
 	Node* root = victim->parent();
-	if (root == NULL) { //此时victim==target
-		m_root = root->tryHook(orphan);
-		if (m_root != NULL) {
+	if (root == nullptr) { //此时victim==target
+		if (orphan != nullptr) {
+			orphan->parent(nullptr);
+		}
+		m_root = orphan;
+		if (m_root != nullptr) {
 			m_root->black = true;
 		}
 	} else {
 		if (key < root->key) {
-			root->left = root->tryHook(orphan);
+			root->hookLeft(orphan, nullptr);
 		} else {
-			root->right = root->tryHook(orphan);
+			root->hookRight(orphan, nullptr);
 		}
 		if (victim->black) { //红victim随便删，黑的要考虑
-			if (orphan != NULL && !orphan->black) {
+			if (orphan != nullptr && !orphan->black) {
 				orphan->black = true; //红子变黑顶上
 			} else {
 				adjustAfterDelete(root, victim->key);
@@ -212,76 +216,76 @@ void RBtree::adjustAfterDelete(Node* G, int key)
 	while(true) { //剩下情况：victim黑，orphan也黑，此时victim(orphan顶替)的兄弟必然存在
 		Node* super = G->parent();
 		if (key < G->key) {
-			Node* U = G->right; //U != NULL
+			Node* U = G->right; //U != nullptr
 			Node* L = U->left;
 			Node* R = U->right;
 			if (!U->black) { //红U下必是两个实体黑，以保证每条支路至少双黑（与victim和orphan也黑双黑匹配）
-				G->right = G->hook(L);
-				U->left = U->hook(G);
+				G->hookRight(L);
+				U->hookLeft(G);
 				U->black = true;
 				G->black = false;
 				hookSubTree(super, U);
 				continue; //变出黑U后再行解决
 			} else {
-				if (L == NULL || L->black) {
-					if (R == NULL || R->black) { //双黑，变色解决
+				if (L == nullptr || L->black) {
+					if (R == nullptr || R->black) { //双黑，变色解决
 						U->black = false;
-						if (G->black && super != NULL) {
+						if (G->black && super != nullptr) {
 							G = super;
 							continue; //上溯
 						}
 						G->black = true;
 					} else { //中黑外红
-						G->right = G->tryHook(L);
-						U->left = U->hook(G);
+						G->hookRight(L, nullptr);
+						U->hookLeft(G);
 						U->black = G->black;
 						G->black = true;
 						R->black = true;
 						hookSubTree(super, U);
 					}
 				} else { //中红
-					U->left = U->tryHook(L->right);
-					G->right = G->tryHook(L->left);
-					L->right = L->hook(U);
-					L->left = L->hook(G);
+					U->hookLeft(L->right, nullptr);
+					G->hookRight(L->left, nullptr);
+					L->hookRight(U);
+					L->hookLeft(G);
 					L->black = G->black;
 					G->black = true;
 					hookSubTree(super, L);
 				}
 			}
 		} else {
-			Node* U = G->left; //U != NULL
+			Node* U = G->left; //U != nullptr
 			Node* R = U->right;
 			Node* L = U->left;
 			if (!U->black) { //红U下必是两个实体黑，以保证每条支路至少双黑（与victim和orphan也黑双黑匹配）
-				G->left = G->hook(R);
-				U->right = U->hook(G);
+				G->hookLeft(R);
+				U->hookRight(G);
 				U->black = true;
 				G->black = false;
 				hookSubTree(super, U);
 				continue; //变出黑U后再行解决
 			} else {
-				if (R == NULL || R->black) {
-					if (L == NULL || L->black) { //双黑，变色解决
+				if (R == nullptr || R->black) {
+					if (L == nullptr || L->black) { //双黑，变色解决
 						U->black = false;
-						if (G->black && super != NULL) {
+						if (G->black && super != nullptr) {
 							G = super;
 							continue; //上溯
 						}
 						G->black = true;
 					} else { //中黑外红
-						G->left = G->tryHook(R);
-						U->right = U->hook(G);
+						G->hookLeft(R, nullptr);
+						U->hookRight(G);
 						U->black = G->black;
 						G->black = true;
 						L->black = true;
 						hookSubTree(super, U);
 					}
 				} else { //中红
-					U->right = U->tryHook(R->left);
-					G->left = G->tryHook(R->right);
-					R->left = R->hook(U);
-					R->right = R->hook(G);
+					U->hookRight(R->left, nullptr);
+					G->hookLeft(R->right, nullptr);
+					R->hookLeft(U);
+					R->hookRight(G);
 					R->black = G->black;
 					G->black = true;
 					hookSubTree(super, R);

@@ -9,15 +9,17 @@ private:
 		Node*	left;
 		Node*	right;
 
-		Node* hook(Node* child) {
-			child->parent = this;
-			return child;
-		}
-		Node* tryHook(Node* child) {
-			if (child != NULL) {
+		void hookLeft(Node* child, void* hint=(void*)-1) {
+			if (hint != nullptr || child != nullptr) {
 				child->parent = this;
 			}
-			return child;
+			this->left = child;
+		}
+		void hookRight(Node* child, void* hint = (void*)-1) {
+			if (hint != nullptr || child != nullptr) {
+				child->parent = this;
+			}
+			this->right = child;
 		}
 	};
 	Node* m_root;
@@ -26,11 +28,10 @@ private:
 	static Node* Rotate(Node* G, bool& stop);
 
 public:
-	AVLtree(void) : m_root(NULL) {}
+	AVLtree(void) : m_root(nullptr) {}
 
-	bool isEmpty(void) const { return m_root == NULL; }
+	bool isEmpty(void) const { return m_root == nullptr; }
 	bool search(int key) const;
 	bool insert(int key);
 	bool remove(int key);
 };
-
