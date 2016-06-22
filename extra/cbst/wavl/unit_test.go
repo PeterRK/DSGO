@@ -73,30 +73,54 @@ func Test_Rank(t *testing.T) {
 		list[i] = i + 1
 	}
 	randomize(list)
+	var shadow = make([]int, size)
+	for i := 0; i < size; i++ {
+		shadow[i] = list[i]
+	}
 
-	assert(t, tree.Insert(list[0]) == 1)
+	assert(t, tree.Insert(shadow[0]) == 1)
 	for i := 1; i < size; i++ {
-		var rank = tree.Insert(list[i])
+		var rank = tree.Insert(shadow[i])
 
-		var key = list[i]
+		var key = shadow[i]
 		var a, b = 0, i
 		for a < b {
 			var m = a + (b-a)/2
-			if key < list[m] {
+			if key < shadow[m] {
 				b = m
 			} else {
 				a = m + 1
 			}
 		}
 		for j := i; j > a; j-- {
-			list[j] = list[j-1]
+			shadow[j] = shadow[j-1]
 		}
-		list[a] = key
+		shadow[a] = key
 
 		assert(t, rank == a+1)
 	}
 
 	for i := 0; i < size; i++ {
 		assert(t, tree.Search(i+1) == i+1)
+	}
+
+	for i := 0; i < size; i++ {
+		var rank = tree.Remove(list[i])
+
+		var key = list[i]
+		var a, b = 0, size - i
+		for a < b {
+			var m = a + (b-a)/2
+			if key < shadow[m] {
+				b = m
+			} else {
+				a = m + 1
+			}
+		}
+
+		for j := a; j < size-i; j++ {
+			shadow[j-1] = shadow[j]
+		}
+		assert(t, rank == a)
 	}
 }

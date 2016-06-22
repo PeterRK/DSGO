@@ -301,6 +301,6 @@ int WeightedAVL::remove(int key)
 		target->key = key;
 	}
 	m_pool.deallocate(victim);
-	return true;
+	return rank;
 }
 ////////////////////////////////////////////////////////////////////////////

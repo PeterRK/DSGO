@@ -119,31 +119,52 @@ void DebugRank(void)
 		unsigned j = rand() % (i + 1);
 		std::swap(list[i], list[j]);
 	}
+	std::vector<int> shadow(list);
 
 	WeightedAVL tree;
-	assert(tree.insert(list[0]) == 1);
+	assert(tree.insert(shadow[0]) == 1);
 	for (unsigned i = 1; i < size; i++) {
-		int rank = tree.insert(list[i]);
+		int rank = tree.insert(shadow[i]);
 
-		int key = list[i];
+		int key = shadow[i];
 		unsigned a = 0, b = i;
 		while (a < b) {
 			unsigned m = a + (b - a) / 2;
-			if (key < list[m]) {
+			if (key < shadow[m]) {
 				b = m;
 			} else {
 				a = m + 1;
 			}
 		}
 		for (unsigned j = i; j > a; j--)
-			list[j] = list[j - 1];
-		list[a] = key;
+			shadow[j] = shadow[j - 1];
+		shadow[a] = key;
 
 		assert(rank == (int)(a + 1));
 	}
 
 	for (unsigned i = 0; i < size; i++) {
 		assert(tree.search(i + 1) == (int)(i + 1));
+	}
+
+	for (unsigned i = 0; i < size; i++) {
+		int rank = tree.remove(list[i]);
+
+		int key = list[i];
+		unsigned a = 0, b = size - i;
+		while (a < b) {
+			unsigned m = a + (b - a) / 2;
+			if (key < shadow[m]) {
+				b = m;
+			} else {
+				a = m + 1;
+			}
+		}
+
+		for (unsigned j = a; j < size - i; j++) {
+			shadow[j - 1] = shadow[j];
+		}
+		assert(rank == (int)a);
 	}
 }
 
