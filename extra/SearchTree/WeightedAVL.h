@@ -1,44 +1,45 @@
 #pragma once
 
-class RBtree : NonCopyable {
+class WeightedAVL : NonCopyable {
 private:
 	struct Node {
 		int			key;
+		unsigned 	weight : sizeof(unsigned)*8 - 3;
+		int			state : 3;
+		Node*		parent;
 		Node*		left;
 		Node*		right;
-		uintptr_t	black : 1;
-		uintptr_t	_parent : sizeof(uintptr_t)*8 - 1;
-		Node* parent() const {
-			return (Node*)(_parent << 1);
-		}
-		void parent(Node* pt) {
-			_parent = ((uintptr_t)pt) >> 1;
-		}
 
 		void hookLeft(Node* child, void* hint = (void*)-1) {
 			if (hint != nullptr || child != nullptr) {
-				child->parent(this);
+				child->parent = this;
 			}
 			this->left = child;
 		}
 		void hookRight(Node* child, void* hint = (void*)-1) {
 			if (hint != nullptr || child != nullptr) {
-				child->parent(this);
+				child->parent = this;
 			}
 			this->right = child;
+		}
+
+		unsigned realWeight(void) {
+			return this == nullptr ? 0 : weight;
+		}
+		unsigned subRank(void) {
+			return left->realWeight() + 1;
 		}
 	};
 	Node* m_root;
 	Allocator<Node> m_pool;
 	Node* newNode(Node* parent, int key);
-	void hookSubTree(Node* super, Node* root);
-	void adjustAfterDelete(Node* G, int key);
+	static Node* Rotate(Node* G, bool& stop);
 
 public:
-	RBtree(void) : m_root(nullptr) {}
+	WeightedAVL(void) : m_root(nullptr) {}
 
 	bool isEmpty(void) const { return m_root == nullptr; }
-	bool search(int key) const;
-	bool insert(int key);
-	bool remove(int key);
+	int search(int key) const;
+	int insert(int key);
+	int remove(int key);
 };

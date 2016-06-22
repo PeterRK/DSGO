@@ -1,15 +1,17 @@
-﻿#include <cstdint>
-//#include <cstdlib>
+#include <cstdint>
+#include <cassert>
 #include <ctime>
 #include <cstdio>
+#include <iostream>
 #include <vector>
 #include <random>
 #include <functional>
 #include "tricks.h"
+#include "RBtree.h"
 #include "AVLtree.h"
 #include "BplusTree.h"
-#include "RBtree.h"
 #include "SkipList.h"
+#include "WeightedAVL.h"
 
 template<class T>
 void BenchMark(std::vector<int>& list)
@@ -23,45 +25,134 @@ void BenchMark(std::vector<int>& list)
 		dict.insert(list[i]);
 	}
 	end = clock();
-	printf("[insert] %.3fs\n", (end - start) / (double)CLOCKS_PER_SEC);
+	std::cout << "[insert] " << (end - start) / (double)CLOCKS_PER_SEC << "s" << std::endl;
 	start = clock();
 	for (unsigned i = 0; i < size; i++) {
 		dict.search(list[i]);
 	}
 	end = clock();
-	printf("[search] %.3fs\n", (end - start) / (double)CLOCKS_PER_SEC);
+	std::cout << "[search] " << (end - start) / (double)CLOCKS_PER_SEC << "s" << std::endl;
 	start = clock();
 	for (unsigned i = 0; i < size; i++) {
 		dict.remove(list[i]);
 	}
 	end = clock();
-	printf("[remove] %.3fs\n", (end - start) / (double)CLOCKS_PER_SEC);
+	std::cout << "[remove] " << (end - start) / (double)CLOCKS_PER_SEC << "s" << std::endl;
 }
 
-int main(int argc, char* argv[])
+void RunAllBenchmark(void)
 {
-//	srand((unsigned)time(NULL));
+	auto rand_int = std::bind(
+		std::uniform_int_distribution<int>(), std::default_random_engine(std::random_device()())
+	);
+	std::ios_base::sync_with_stdio(false);
+
+	const unsigned size = 1000000;
+	std::vector<int> list(size);
+	for (unsigned i = 0; i < size; i++) {
+		list[i] = rand_int();
+	}
+
+	std::cout << "SkipList" << std::endl;
+	BenchMark<SkipList>(list);
+
+	std::cout << "AVL Tree" << std::endl;
+	BenchMark<AVLtree>(list);
+
+	std::cout << "WeightedAVL" << std::endl;
+	BenchMark<WeightedAVL>(list);
+
+	std::cout << "Red-Black Tree" << std::endl;
+	BenchMark<RBtree>(list);
+
+	std::cout << "B+ Tree" << std::endl;
+	BenchMark<BplusTree>(list);
+}
+
+void DebugAVL(void)
+{
 	auto rand = std::bind(
 		std::uniform_int_distribution<int>(), std::default_random_engine(std::random_device()())
 	);
 
-	const unsigned size = 5000000;
+	const unsigned size = 200;
 	std::vector<int> list(size);
 	for (unsigned i = 0; i < size; i++) {
 		list[i] = rand();
 	}
 
-	puts("B+ Tree");
-	BenchMark<BplusTree>(list);
+	WeightedAVL tree;
+	unsigned cnt = 0;
 
-	puts("AVL Tree");
-	BenchMark<AVLtree>(list);
+	for (unsigned i = 0; i < size; i++) {
+		if (tree.insert(list[i]) > 0)
+			cnt++;
+	}
 
-	puts("Red-Black Tree");
-	BenchMark<RBtree>(list);
+	for (unsigned i = 0; i < size; i++) {
+		assert(tree.search(list[i]) != -1);
+		assert(tree.insert(list[i]) < 0);
+	}
 
-	puts("SkipList");
-	BenchMark<SkipList>(list);
+	for (unsigned i = 0; i < size; i++) {
+		if (tree.remove(list[i]) > 0)
+			cnt--;
+		assert(tree.search(list[i]) == -1);
+	}
 
+	assert(tree.isEmpty() && cnt == 0);
+	assert(tree.remove(0) < 0);
+}
+
+void DebugRank(void)
+{
+	auto rand = std::bind(
+		std::uniform_int_distribution<unsigned>(), std::default_random_engine(std::random_device()())
+	);
+
+	const unsigned size = 200;
+	std::vector<int> list(size);
+	for (unsigned i = 0; i < size; i++) {
+		list[i] = i + 1;
+	}
+	for (unsigned i = 1; i < size; i++) {
+		unsigned j = rand() % (i + 1);
+		std::swap(list[i], list[j]);
+	}
+
+	WeightedAVL tree;
+	assert(tree.insert(list[0]) == 1);
+	for (unsigned i = 1; i < size; i++) {
+		int rank = tree.insert(list[i]);
+
+		int key = list[i];
+		unsigned a = 0, b = i;
+		while (a < b) {
+			unsigned m = a + (b - a) / 2;
+			if (key < list[m]) {
+				b = m;
+			} else {
+				a = m + 1;
+			}
+		}
+		for (unsigned j = i; j > a; j--)
+			list[j] = list[j - 1];
+		list[a] = key;
+
+		assert(rank == (int)(a + 1));
+	}
+
+	for (unsigned i = 0; i < size; i++) {
+		assert(tree.search(i + 1) == (int)(i + 1));
+	}
+}
+
+int main(void)
+{
+//	DebugAVL();
+//	DebugRank();
+//	std::cout << "pass test" << std::endl;
+
+	RunAllBenchmark();
 	return 0;
 }
