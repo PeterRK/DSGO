@@ -9,7 +9,7 @@ import (
 func PlainDijkstra(matrix [][]uint, start int) []int {
 	var size = len(matrix)
 	if size == 0 || start < 0 || start >= size {
-		return []int{}
+		return nil
 	}
 	var result = make([]int, size)
 
@@ -52,7 +52,7 @@ func PlainDijkstra(matrix [][]uint, start int) []int {
 func PlainDijkstraPath(matrix [][]uint, start, end int) []int {
 	var size = len(matrix)
 	if start < 0 || end < 0 || start >= size || end >= size {
-		return []int{}
+		return nil
 	}
 	if start == end {
 		return []int{start}
@@ -98,5 +98,5 @@ func PlainDijkstraPath(matrix [][]uint, start, end int) []int {
 		}
 		list[best], list[last-1] = list[last-1], list[best]
 	}
-	return []int{}
+	return nil
 }

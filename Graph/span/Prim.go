@@ -54,7 +54,7 @@ type Edge struct {
 func PrimTree(roads [][]graph.Path) ([]Edge, error) {
 	var size = len(roads)
 	if size < 2 {
-		return []Edge{}, errors.New("illegal input")
+		return nil, errors.New("illegal input")
 	}
 	var edges = make([]Edge, 0, size-1)
 

@@ -40,7 +40,7 @@ func TopologicalSort(roads [][]int) ([]int, error) {
 	}
 
 	if len(list) != size {
-		return []int{}, errors.New("loops exist")
+		return nil, errors.New("loops exist")
 	}
 	return list, nil
 }

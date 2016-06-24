@@ -32,18 +32,18 @@ func Test_TopologicalSort(t *testing.T) {
 
 	var roads = [][]int{
 		{1, 5, 6},    //0
-		{},           //1
+		nil,          //1
 		{0, 3},       //2
 		{5},          //3
-		{},           //4
+		nil,          //4
 		{4},          //5
 		{4, 9},       //6
 		{6},          //7
 		{7},          //8
 		{10, 11, 12}, //9
-		{},           //10
+		nil,          //10
 		{12},         //11
-		{}}           //12
+		nil}          //12
 
 	var expected = []int{8, 7, 2, 3, 0, 6, 9, 11, 12, 10, 5, 4, 1}
 	var vec, err = TopologicalSort(roads)
@@ -57,7 +57,7 @@ func Test_SplitDirectedGraph(t *testing.T) {
 		{1},       //0
 		{2, 3, 4}, //1
 		{5},       //2
-		{},        //3
+		nil,       //3
 		{1, 5, 6}, //4
 		{2, 7},    //5
 		{7, 9},    //6

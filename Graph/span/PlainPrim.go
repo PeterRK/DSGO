@@ -45,7 +45,7 @@ func PlainPrim(matrix [][]uint) (uint, error) {
 func PlainPrimTree(matrix [][]uint) ([]Edge, error) {
 	var size = len(matrix)
 	if size < 2 {
-		return []Edge{}, errors.New("illegal input")
+		return nil, errors.New("illegal input")
 	}
 	var edges = make([]Edge, 0, size-1)
 
@@ -69,7 +69,7 @@ func PlainPrimTree(matrix [][]uint) ([]Edge, error) {
 			}
 		}
 		if list[best].Dist == graph.MaxDistance {
-			return []Edge{}, errors.New("isolated part exist")
+			return nil, errors.New("isolated part exist")
 		}
 		edges = append(edges, Edge{list[best].Link, list[best].Index})
 		list[best], list[last-1] = list[last-1], list[best]

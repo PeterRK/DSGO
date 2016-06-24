@@ -62,7 +62,7 @@ func (pk *data) dfsY(id int) {
 func SplitDirectedGraph(roads [][]int) [][]int {
 	var size = len(roads)
 	if size < 1 {
-		return [][]int{}
+		return nil
 	}
 	if size == 1 {
 		return [][]int{{0}}
@@ -92,7 +92,7 @@ func SplitDirectedGraph(roads [][]int) [][]int {
 	pack.roads = shadowGraph(roads)
 	knot = pack.knot
 	for knot.next != knot {
-		pack.parts = append(pack.parts, []int{})
+		pack.parts = append(pack.parts, nil)
 		pack.dfsY(knot.next.id)
 	}
 	return pack.parts

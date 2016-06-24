@@ -29,8 +29,8 @@ func changeMark(bitvec []usec, place uint, mk bool) {
 }
 
 func (ly *layer) reset() {
-	ly.data = []int{}
-	ly.mark = []usec{}
+	ly.data = nil
+	ly.mark = nil
 }
 
 func (ly *layer) size() uint {

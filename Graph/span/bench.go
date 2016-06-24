@@ -43,13 +43,13 @@ func readGraph() (edges []graph.Edge, size int, err error) {
 	var total int
 	_, err = fmt.Scan(&size, &total)
 	if err != nil || size < 2 || size > total {
-		return []graph.Edge{}, 0, err
+		return nil, 0, err
 	}
 	edges = make([]graph.Edge, total)
 	for i := 0; i < total; i++ {
 		_, err = fmt.Scan(&edges[i].A, &edges[i].B, &edges[i].Weight)
 		if err != nil {
-			return []graph.Edge{}, 0, err
+			return nil, 0, err
 		}
 	}
 	return edges, size, nil

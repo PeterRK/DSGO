@@ -47,14 +47,14 @@ func readGraph() (roads [][]Path, total int, err error) {
 	var size int
 	_, err = fmt.Scan(&size, &total)
 	if err != nil || size < 2 || size > total {
-		return [][]Path{}, 0, err
+		return nil, 0, err
 	}
 	roads = make([][]Path, size)
 	var a, b, dist int
 	for i := 0; i < total; i++ {
 		_, err = fmt.Scan(&a, &b, &dist)
 		if err != nil {
-			return [][]Path{}, 0, err
+			return nil, 0, err
 		}
 		roads[a] = append(roads[a], Path{Next: b, Dist: dist})
 	}

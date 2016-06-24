@@ -16,7 +16,7 @@ const MAX_DIST = int((^uint(0)) >> 1)
 func SPFA(roads [][]Path, start int) ([]int, error) {
 	var size = len(roads)
 	if size == 0 || start < 0 || start >= size {
-		return []int{}, errors.New("illegal input")
+		return nil, errors.New("illegal input")
 	}
 
 	var q = newQueue(size)
@@ -40,7 +40,7 @@ func SPFA(roads [][]Path, start int) ([]int, error) {
 					q.push(peer)
 					cnts[peer]++
 					if cnts[peer] > size { //负回路
-						return []int{}, errors.New("bad loops exist")
+						return nil, errors.New("bad loops exist")
 					}
 					cnts[peer] = -cnts[peer] //入队
 				}

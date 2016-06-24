@@ -4,7 +4,7 @@ package array
 func LongestIncreasingSubsequence(src []int) []int {
 	var size = len(src)
 	if size == 0 {
-		return []int{}
+		return nil
 	} //result[i]记录某个长度为(i+1)的递增串的可能的最小尾数
 	var result = []int{src[0]}
 	for i := 1; i < size; i++ {

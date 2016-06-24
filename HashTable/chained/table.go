@@ -41,7 +41,7 @@ func (tb *hashTable) isMoving() bool {
 }
 func (tb *hashTable) stopMoving() {
 	tb.next_line = 0
-	tb.old_bucket = []*node{} //GC
+	tb.old_bucket = nil //GC
 }
 
 func (tb *hashTable) initialize(fn func(str []byte) uint) {

@@ -73,7 +73,7 @@ func Test_Dinic(t *testing.T) {
 		{{1, 4}, {4, 14}},  //2
 		{{5, 20}},          //3
 		{{3, 7}, {5, 4}},   //4
-		{}}                 //5
+		nil}                //5
 	assert(t, Dinic(roads, 0, 5) == 23)
 
 	roads = [][]graph.Path{
@@ -82,6 +82,6 @@ func Test_Dinic(t *testing.T) {
 		{{3, 1}, {4, 1}}, //2
 		{{5, 1}},         //3
 		{{5, 1}},         //4
-		{}}               //5
+		nil}              //5
 	assert(t, Dinic(roads, 0, 5) == 2)
 }

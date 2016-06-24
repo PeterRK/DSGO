@@ -12,7 +12,7 @@ func AStar(roads [][]Path, start int, end int,
 	evaluate func(int) uint) []int {
 	var size = len(roads)
 	if start < 0 || end < 0 || start >= size || end >= size {
-		return []int{}
+		return nil
 	}
 	if start == end {
 		return []int{start}
@@ -60,7 +60,7 @@ func AStar(roads [][]Path, start int, end int,
 			}
 		}
 	}
-	return []int{}
+	return nil
 }
 func reverse(list []int) {
 	for left, right := 0, len(list)-1; left < right; {

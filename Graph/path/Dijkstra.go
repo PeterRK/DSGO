@@ -10,7 +10,7 @@ import (
 func Dijkstra(roads [][]graph.Path, start int) []int {
 	var size = len(roads)
 	if size == 0 || start < 0 || start >= size {
-		return []int{}
+		return nil
 	}
 
 	var result = make([]int, size)
@@ -60,7 +60,7 @@ func Dijkstra(roads [][]graph.Path, start int) []int {
 func DijkstraPath(roads [][]graph.Path, start, end int) []int {
 	var size = len(roads)
 	if start < 0 || end < 0 || start >= size || end >= size {
-		return []int{}
+		return nil
 	}
 	if start == end {
 		return []int{start}
@@ -104,7 +104,7 @@ func DijkstraPath(roads [][]graph.Path, start, end int) []int {
 			}
 		}
 	}
-	return []int{}
+	return nil
 }
 
 func reverse(list []int) {
