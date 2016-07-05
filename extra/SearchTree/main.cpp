@@ -11,7 +11,6 @@
 #include "AVLtree.h"
 #include "BplusTree.h"
 #include "SkipList.h"
-#include "WeightedAVL.h"
 
 template<class T>
 void BenchMark(std::vector<int>& list)
@@ -59,9 +58,6 @@ void RunAllBenchmark(void)
 	std::cout << "AVL Tree" << std::endl;
 	BenchMark<AVLtree>(list);
 
-	std::cout << "WeightedAVL" << std::endl;
-	BenchMark<WeightedAVL>(list);
-
 	std::cout << "Red-Black Tree" << std::endl;
 	BenchMark<RBtree>(list);
 
@@ -81,7 +77,7 @@ void DebugAVL(void)
 		list[i] = rand();
 	}
 
-	WeightedAVL tree;
+	AVLtree tree;
 	unsigned cnt = 0;
 
 	for (unsigned i = 0; i < size; i++) {
@@ -121,7 +117,7 @@ void DebugRank(void)
 	}
 	std::vector<int> shadow(list);
 
-	WeightedAVL tree;
+	AVLtree tree;
 	assert(tree.insert(shadow[0]) == 1);
 	for (unsigned i = 1; i < size; i++) {
 		int rank = tree.insert(shadow[i]);

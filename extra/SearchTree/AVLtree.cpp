@@ -1,25 +1,33 @@
-#include <cstdint>
 #include <cstddef>
 #include <new>
 #include "tricks.h"
 #include "AVLtree.h"
 ////////////////////////////////////////////////////////////////////////////
-bool AVLtree::search(int key)
+int AVLtree::search(int key)
 const {
-	Node* root = m_root;
-	while (root != nullptr) {
-		if (key == root->key) {
-			return true;
+	unsigned base = 0;
+	Node* target = m_root;
+	while (target != nullptr) {
+		if (key == target->key)
+			return base + target->subRank();
+
+		if (key < target->key) {
+			target = target->left;
+		} else {
+			base += target->subRank();
+			target = target->right;
 		}
-		root = (key < root->key) ? root->left : root->right;
 	}
-	return false;
+	return -1;
 }
 ////////////////////////////////////////////////////////////////////////////
 inline AVLtree::Node* AVLtree::newNode(AVLtree::Node* parent, int key)
 {
 	Node* node = m_pool.allocate();
 	node->key = key;
+#ifdef WEIGHTED_AVL
+	node->weight = 1;
+#endif
 	node->state = 0;
 	node->parent = parent;
 	node->left = nullptr;
@@ -53,10 +61,14 @@ AVLtree::Node* AVLtree::Rotate(Node* G, bool& stop)
 		Node* P = G->left;
 		if (P->state == -1) { //LR
 			Node* C = P->right; //一定非nullptr
+#ifdef WEIGHTED_AVL
+			unsigned v = C->right->realWeight();
+#endif
 			P->hookRight(C->left, nullptr);
 			G->hookLeft(C->right, nullptr);
 			C->hookLeft(P);
 			C->hookRight(G);
+
 			switch (C->state) {
 			case 1:
 				G->state = -1;
@@ -72,10 +84,19 @@ AVLtree::Node* AVLtree::Rotate(Node* G, bool& stop)
 				break;
 			}
 			C->state = 0;
+#ifdef WEIGHTED_AVL
+			C->weight = G->weight;
+			G->weight -= P->weight - v;
+			P->weight -= v + 1;
+#endif
 			root = C;
 		} else { //LL
+#ifdef WEIGHTED_AVL
+			unsigned x = P->right->realWeight();
+#endif
 			G->hookLeft(P->right, nullptr);
 			P->hookRight(G);
+
 			if (P->state == 0) { //不降高旋转
 				G->state = 1;
 				P->state = -1;
@@ -84,36 +105,53 @@ AVLtree::Node* AVLtree::Rotate(Node* G, bool& stop)
 				G->state = 0;
 				P->state = 0;
 			}
+#ifdef WEIGHTED_AVL
+			unsigned p = P->weight;
+			P->weight = G->weight;
+			G->weight -= p - x;
+#endif
 			root = P;
 		}
-	}
-	else { //右倾左旋(P->state==-2)
+	} else { //右倾左旋(P->state==-2)
 		Node* P = G->right;
 		if (P->state == 1) { //RL
 			Node* C = P->left; //一定非nullptr
+#ifdef WEIGHTED_AVL
+			unsigned v = C->left->realWeight();
+#endif
 			P->hookLeft(C->right, nullptr);
 			G->hookRight(C->left, nullptr);
 			C->hookRight(P);
 			C->hookLeft(G);
+
 			switch (C->state) {
-				case -1:
-					G->state = 1;
-					P->state = 0;
-					break;
-				case 1:
-					G->state = 0;
-					P->state = -1;
-					break;
-				default:
-					G->state = 0;
-					P->state = 0;
-					break;
+			case -1:
+				G->state = 1;
+				P->state = 0;
+				break;
+			case 1:
+				G->state = 0;
+				P->state = -1;
+				break;
+			default:
+				G->state = 0;
+				P->state = 0;
+				break;
 			}
+#ifdef WEIGHTED_AVL
+			C->weight = G->weight;
+			G->weight -= P->weight - v;
+			P->weight -= v + 1;
+#endif
 			C->state = 0;
 			root = C;
 		} else { //RR
+#ifdef WEIGHTED_AVL
+			unsigned x = P->left->realWeight();
+#endif
 			G->hookRight(P->left, nullptr);
 			P->hookLeft(G);
+
 			if (P->state == 0) { //不降高旋转
 				G->state = -1;
 				P->state = 1;
@@ -122,21 +160,30 @@ AVLtree::Node* AVLtree::Rotate(Node* G, bool& stop)
 				G->state = 0;
 				P->state = 0;
 			}
+#ifdef WEIGHTED_AVL
+			unsigned p = P->weight;
+			P->weight = G->weight;
+			G->weight -= p - x;
+#endif
 			root = P;
 		}
 	}
 	return root;
 }
 ////////////////////////////////////////////////////////////////////////////
-bool AVLtree::insert(int key)
+int AVLtree::insert(int key)
 {
 	if (m_root == nullptr) {
 		m_root = newNode(nullptr, key);
-		return true;
+		return 1;
 	}
 
+	unsigned base = 0;
 	Node* root = m_root;
-	while(true) {
+	while (true) {
+#ifdef WEIGHTED_AVL
+		root->weight++;
+#endif
 		if (key < root->key) {
 			if (root->left == nullptr) {
 				root->left = newNode(root, key);
@@ -144,19 +191,21 @@ bool AVLtree::insert(int key)
 			}
 			root = root->left;
 		} else if (key > root->key) {
+			base += root->subRank();
 			if (root->right == nullptr) {
 				root->right = newNode(root, key);
 				break;
 			}
 			root = root->right;
 		} else { //key == root->key
-			return false;
+			return -(int)(base + root->subRank());
 		}
 	}
+	unsigned rank = base + 1;
 
-	while(true) {
-		int8_t state = root->state;
-		root->state += (key < root->key)? 1 : -1;
+	while (true) {
+		int state = root->state;
+		root->state += (key < root->key) ? 1 : -1;
 		if (state == 0 && root->parent != nullptr) {
 			root = root->parent;
 			continue;
@@ -178,20 +227,29 @@ bool AVLtree::insert(int key)
 		}
 		break;
 	}
-	return true;
+	return rank;
 }
 ////////////////////////////////////////////////////////////////////////////
-bool AVLtree::remove(int key)
+int AVLtree::remove(int key)
 {
+	unsigned base = 0;
 	Node* target = m_root;
 	while (target != nullptr && key != target->key) {
 		if (key < target->key) {
 			target = target->left;
 		} else {
+			base += target->subRank();
 			target = target->right;
 		}
 	}
-	if (target == nullptr) return false;
+	if (target == nullptr)
+		return -1;
+	unsigned rank = base + target->subRank();
+#ifdef WEIGHTED_AVL
+	for (Node* node = target->parent;
+		node != nullptr; node = node->parent
+	) node->weight--;
+#endif
 
 	Node* victim = nullptr;
 	Node* orphan = nullptr;
@@ -202,15 +260,24 @@ bool AVLtree::remove(int key)
 		victim = target;
 		orphan = target->left;
 	} else {
+#ifdef WEIGHTED_AVL
+		target->weight--;
+#endif
 		if (target->state == 1) {
 			victim = target->left;
 			while (victim->right != nullptr) {
+#ifdef WEIGHTED_AVL
+				victim->weight--;
+#endif
 				victim = victim->right;
 			}
 			orphan = victim->left;
 		} else {
 			victim = target->right;
 			while (victim->left != nullptr) {
+#ifdef WEIGHTED_AVL
+				victim->weight--;
+#endif
 				victim = victim->left;
 			}
 			orphan = victim->right;
@@ -225,7 +292,7 @@ bool AVLtree::remove(int key)
 		m_root = orphan;
 	} else {
 		key = victim->key;
-		int8_t state = root->state;
+		int state = root->state;
 		if (key < root->key) {
 			root->hookLeft(orphan, nullptr);
 			root->state--;
@@ -262,6 +329,6 @@ bool AVLtree::remove(int key)
 		target->key = key;
 	}
 	m_pool.deallocate(victim);
-	return true;
+	return rank;
 }
 ////////////////////////////////////////////////////////////////////////////
