@@ -19,18 +19,14 @@ func NewBinaryHeap(size int) *binaryHeap {
 	return hp
 }
 
-func (hp *binaryHeap) Size() int {
-	return len(hp.core)
-}
 func (hp *binaryHeap) IsEmpty() bool {
 	return len(hp.core) == 0
 }
 
-func (hp *binaryHeap) ShiftUp(unit *memo, dist uint) {
+func (hp *binaryHeap) FloatUp(unit *memo, dist uint) {
 	unit.Dist = dist
 	hp.shiftUp(unit.off)
 }
-
 func (hp *binaryHeap) shiftUp(pos int) {
 	var unit = hp.core[pos]
 	for pos > 0 {
@@ -39,24 +35,23 @@ func (hp *binaryHeap) shiftUp(pos int) {
 			break
 		}
 		hp.core[pos] = hp.core[parent]
-		hp.core[pos].off = pos
-		pos = parent
+		hp.core[pos].off, pos = pos, parent
 	}
 	hp.core[pos], unit.off = unit, pos
 }
 
 func (hp *binaryHeap) Push(unit *memo) {
-	var place = len(hp.core)
+	var pos = len(hp.core)
 	hp.core = append(hp.core, unit)
-	unit.off = place
-	hp.shiftUp(place)
+	//	unit.off = pos
+	hp.shiftUp(pos)
 }
 
 func (hp *binaryHeap) Pop() *memo {
-	var size = hp.Size()
-	if size == 0 {
-		return nil
-	}
+	var size = len(hp.core)
+	//	if size == 0 {
+	//		return nil
+	//	}
 	var result = hp.core[0]
 	if size == 1 {
 		hp.core = hp.core[:0]
@@ -80,8 +75,7 @@ func (hp *binaryHeap) Pop() *memo {
 	}
 	if kid == last && unit.Dist > hp.core[kid].Dist {
 		hp.core[pos] = hp.core[kid]
-		hp.core[pos].off = pos
-		pos = kid
+		hp.core[pos].off, pos = pos, kid
 	}
 	hp.core[pos], unit.off = unit, pos
 

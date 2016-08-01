@@ -35,7 +35,7 @@ func PrimX(roads [][]graph.Path) (uint, error) {
 				hp.Push(peer)
 			} else if peer.Index != FAKE &&
 				path.Weight < peer.Dist {
-				hp.ShiftUp(peer, path.Weight)
+				hp.FloatUp(peer, path.Weight)
 				peer.Link = index
 			}
 		}
@@ -73,7 +73,7 @@ func PrimTreeX(roads [][]graph.Path) ([]Edge, error) {
 			} else if peer.Index != FAKE &&
 				path.Weight < peer.Dist {
 				peer.Link = index
-				hp.ShiftUp(peer, path.Weight)
+				hp.FloatUp(peer, path.Weight)
 			}
 		}
 		if hp.IsEmpty() {

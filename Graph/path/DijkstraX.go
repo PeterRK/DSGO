@@ -39,7 +39,7 @@ func DijkstraX(roads [][]graph.Path, start int) []int {
 			} else if peer.Index != FAKE {
 				var distance = curr.Dist + path.Weight
 				if distance < peer.Dist {
-					hp.ShiftUp(peer, distance)
+					hp.FloatUp(peer, distance)
 					//peer.Link = index
 				}
 			}
@@ -99,7 +99,7 @@ func DijkstraPathX(roads [][]graph.Path, start, end int) []int {
 			} else if peer.Index != FAKE {
 				var distance = curr.Dist + path.Weight
 				if distance < peer.Dist {
-					hp.ShiftUp(peer, distance)
+					hp.FloatUp(peer, distance)
 					peer.Link = index
 				}
 			}
