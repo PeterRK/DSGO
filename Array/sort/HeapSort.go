@@ -13,9 +13,9 @@ func HeapSort(list []int) {
 	}
 }
 
-func down(list []int, root int) {
-	var key = list[root]
-	var kid, last = root*2 + 1, len(list) - 1
+func down(list []int, pos int) {
+	var key = list[pos]
+	var kid, last = pos*2 + 1, len(list) - 1
 	for kid < last {
 		if list[kid+1] > list[kid] {
 			kid++
@@ -23,11 +23,11 @@ func down(list []int, root int) {
 		if key >= list[kid] {
 			break
 		}
-		list[root] = list[kid]
-		root, kid = kid, kid*2+1
+		list[pos] = list[kid]
+		pos, kid = kid, kid*2+1
 	}
 	if kid == last && key < list[kid] {
-		list[root], root = list[kid], kid
+		list[pos], pos = list[kid], kid
 	}
-	list[root] = key
+	list[pos] = key
 }

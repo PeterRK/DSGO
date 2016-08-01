@@ -24,23 +24,29 @@ func BenchMark() {
 	for i := 0; i < size; i++ {
 		SPFA(roads, i)
 	}
-	fmt.Println("SPFA:          ", time.Since(start))
+	fmt.Println("SPFA:           ", time.Since(start))
 
 	start = time.Now()
 	for i := 0; i < size; i++ {
 		Dijkstra(roads_u, i)
 	}
-	fmt.Println("Dijkstra:      ", time.Since(start))
+	fmt.Println("Dijkstra:       ", time.Since(start))
+
+	start = time.Now()
+	for i := 0; i < size; i++ {
+		DijkstraX(roads_u, i)
+	}
+	fmt.Println("Simple Dijkstra:", time.Since(start))
 
 	start = time.Now()
 	for i := 0; i < size; i++ {
 		PlainDijkstra(matrix_u, i)
 	}
-	fmt.Println("Plain Dijkstra:", time.Since(start))
+	fmt.Println("Plain Dijkstra: ", time.Since(start))
 
 	start = time.Now()
 	FloydWarshall(matrix)
-	fmt.Println("Floyd-Warshall:", time.Since(start))
+	fmt.Println("Floyd-Warshall: ", time.Since(start))
 }
 
 func readGraph() (roads [][]Path, total int, err error) {
