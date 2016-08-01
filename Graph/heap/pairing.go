@@ -1,16 +1,8 @@
-package graph
+package heap
 
 import (
 	"unsafe"
 )
-
-const MaxDistance = ^uint(0)
-
-type Vertex struct {
-	Index int  //本顶点编号
-	Link  int  //关联顶点编号
-	Dist  uint //与关联顶点间的距离
-}
 
 type node struct {
 	Vertex
@@ -19,7 +11,7 @@ type node struct {
 	next  *node
 }
 
-func NewVector(size int) []node {
+func NewVectorPH(size int) []node {
 	return make([]node, size)
 }
 
@@ -78,9 +70,9 @@ func Extract(root *node) *node {
 	}
 	return nil
 }
-func FloatUp(root *node, target *node, diff uint) *node {
+func FloatUp(root *node, target *node, dist uint) *node {
 	if target != nil {
-		target.Dist -= diff
+		target.Dist = dist
 		if super := target.prev; super != nil && super.Dist > target.Dist {
 			target.prev = nil
 			if super.next == target { //super为兄

@@ -2,6 +2,7 @@ package span
 
 import (
 	"DSGO/Graph/graph"
+	"DSGO/Graph/heap"
 	"errors"
 )
 
@@ -16,26 +17,26 @@ func Prim(roads [][]graph.Path) (uint, error) {
 	}
 
 	const FAKE = -1
-	var list = graph.NewVector(size)
+	var list = heap.NewVectorPH(size)
 	for i := 1; i < size; i++ {
 		list[i].Link = FAKE
 	}
 	list[0].Index, list[0].Link, list[0].Dist = 0, 0, 0
-	var root = graph.Insert(nil, &list[0])
+	var root = heap.Insert(nil, &list[0])
 
 	var cnt int
 	for cnt = 0; root != nil; cnt++ {
 		sum += root.Dist
 		var index = root.Index
-		root.Index, root = FAKE, graph.Extract(root) //入围
+		root.Index, root = FAKE, heap.Extract(root) //入围
 		for _, path := range roads[index] {
 			var peer = &list[path.Next]
 			if peer.Link == FAKE { //未涉及点
 				peer.Index, peer.Link, peer.Dist = path.Next, index, path.Weight
-				root = graph.Insert(root, peer)
+				root = heap.Insert(root, peer)
 			} else if peer.Index != FAKE && //外围点
 				path.Weight < peer.Dist { //可更新
-				root = graph.FloatUp(root, peer, peer.Dist-path.Weight)
+				root = heap.FloatUp(root, peer, path.Weight)
 				peer.Link = index
 			}
 		}
@@ -59,25 +60,25 @@ func PrimTree(roads [][]graph.Path) ([]Edge, error) {
 	var edges = make([]Edge, 0, size-1)
 
 	const FAKE = -1
-	var list = graph.NewVector(size)
+	var list = heap.NewVectorPH(size)
 	for i := 1; i < size; i++ {
 		list[i].Link = FAKE
 	}
 	list[0].Index, list[0].Link, list[0].Dist = 0, 0, 0
-	var root = graph.Insert(nil, &list[0])
+	var root = heap.Insert(nil, &list[0])
 
 	for {
 		var index = root.Index
-		root.Index, root = FAKE, graph.Extract(root) //入围
+		root.Index, root = FAKE, heap.Extract(root) //入围
 		for _, path := range roads[index] {
 			var peer = &list[path.Next]
 			if peer.Link == FAKE { //未涉及点
 				peer.Index, peer.Link, peer.Dist = path.Next, index, path.Weight
-				root = graph.Insert(root, peer)
+				root = heap.Insert(root, peer)
 			} else if peer.Index != FAKE && //外围点
 				path.Weight < peer.Dist { //可更新
 				peer.Link = index
-				root = graph.FloatUp(root, peer, peer.Dist-path.Weight)
+				root = heap.FloatUp(root, peer, path.Weight)
 			}
 		}
 		if root == nil {

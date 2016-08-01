@@ -41,9 +41,13 @@ func Test_Dijkstra(t *testing.T) {
 	var expected = []int{19, 0, 11, 16, 4}
 	var ret = Dijkstra(roads, 1)
 	assert(t, isTheSame(ret, expected))
+	ret = DijkstraX(roads, 1)
+	assert(t, isTheSame(ret, expected))
 
 	expected = []int{1, 4, 2, 3, 0}
 	var vec = DijkstraPath(roads, 1, 0)
+	assert(t, isTheSame(vec, expected))
+	vec = DijkstraPathX(roads, 1, 0)
 	assert(t, isTheSame(vec, expected))
 }
 

@@ -1,7 +1,7 @@
 package span
 
 import (
-	"DSGO/Graph/graph"
+	"DSGO/Graph/heap"
 	"errors"
 )
 
@@ -14,9 +14,9 @@ func PlainPrim(matrix [][]uint) (uint, error) {
 		return 0, errors.New("illegal input")
 	}
 
-	var list = make([]graph.Vertex, size)
+	var list = make([]heap.Vertex, size)
 	for i := 0; i < size; i++ {
-		list[i].Index, list[i].Dist = i, graph.MaxDistance
+		list[i].Index, list[i].Dist = i, heap.MaxDistance
 	}
 	list[size-1].Dist = 0
 
@@ -33,7 +33,7 @@ func PlainPrim(matrix [][]uint) (uint, error) {
 				best = i
 			}
 		}
-		if list[best].Dist == graph.MaxDistance {
+		if list[best].Dist == heap.MaxDistance {
 			return 0, errors.New("isolated part exist")
 		}
 		sum += list[best].Dist
@@ -49,9 +49,9 @@ func PlainPrimTree(matrix [][]uint) ([]Edge, error) {
 	}
 	var edges = make([]Edge, 0, size-1)
 
-	var list = make([]graph.Vertex, size)
+	var list = make([]heap.Vertex, size)
 	for i := 0; i < size-1; i++ {
-		list[i].Index, list[i].Dist = i+1, graph.MaxDistance
+		list[i].Index, list[i].Dist = i+1, heap.MaxDistance
 	}
 	list[size-1].Index, list[size-1].Dist, list[size-1].Link = 0, 0, 0
 
@@ -68,7 +68,7 @@ func PlainPrimTree(matrix [][]uint) ([]Edge, error) {
 				best = i
 			}
 		}
-		if list[best].Dist == graph.MaxDistance {
+		if list[best].Dist == heap.MaxDistance {
 			return nil, errors.New("isolated part exist")
 		}
 		edges = append(edges, Edge{list[best].Link, list[best].Index})

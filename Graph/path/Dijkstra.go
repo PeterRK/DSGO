@@ -2,6 +2,7 @@ package path
 
 import (
 	"DSGO/Graph/graph"
+	"DSGO/Graph/heap"
 )
 
 //输入邻接表，返回某点到各点的最短路径的长度(-1指不通)。
@@ -20,26 +21,26 @@ func Dijkstra(roads [][]graph.Path, start int) []int {
 	}
 
 	const FAKE = -1
-	var list = graph.NewVector(size)
+	var list = heap.NewVectorPH(size)
 	for i := 0; i < size; i++ {
 		list[i].Link = FAKE
 	}
 	list[start].Index, list[start].Link, list[start].Dist = start, start, 0
-	var root = graph.Insert(nil, &list[start])
+	var root = heap.Insert(nil, &list[start])
 
 	for root != nil {
 		var index, dist = root.Index, root.Dist
-		root.Index, root = FAKE, graph.Extract(root) //入围
+		root.Index, root = FAKE, heap.Extract(root) //入围
 		for _, path := range roads[index] {
 			var peer = &list[path.Next]
 			if peer.Link == FAKE { //未涉及点
 				peer.Index, peer.Link = path.Next, index
 				peer.Dist = dist + path.Weight
-				root = graph.Insert(root, peer)
+				root = heap.Insert(root, peer)
 			} else if peer.Index != FAKE { //外围点
 				var distance = dist + path.Weight
 				if distance < peer.Dist {
-					root = graph.FloatUp(root, peer, peer.Dist-distance)
+					root = heap.FloatUp(root, peer, distance)
 					//peer.Link = index
 				}
 			}
@@ -47,7 +48,7 @@ func Dijkstra(roads [][]graph.Path, start int) []int {
 	}
 
 	for i := 0; i < size; i++ {
-		if list[i].Dist == graph.MaxDistance {
+		if list[i].Dist == heap.MaxDistance {
 			result[i] = -1
 		} else {
 			result[i] = (int)(list[i].Dist)
@@ -67,7 +68,7 @@ func DijkstraPath(roads [][]graph.Path, start, end int) []int {
 	}
 
 	const FAKE = -1
-	var list = graph.NewVector(size)
+	var list = heap.NewVectorPH(size)
 	for i := 0; i < size; i++ {
 		list[i].Link = FAKE
 	}
@@ -82,23 +83,23 @@ func DijkstraPath(roads [][]graph.Path, start, end int) []int {
 	}
 
 	list[start].Index, list[start].Link, list[start].Dist = start, start, 0
-	var root = graph.Insert(nil, &list[start]) //第一步
+	var root = heap.Insert(nil, &list[start]) //第一步
 	for root != nil {
 		var index, dist = root.Index, root.Dist
 		if index == end {
 			return trace()
 		}
-		root.Index, root = FAKE, graph.Extract(root) //入围
+		root.Index, root = FAKE, heap.Extract(root) //入围
 		for _, path := range roads[index] {
 			var peer = &list[path.Next]
 			if peer.Link == FAKE { //未涉及点
 				peer.Index, peer.Link = path.Next, index
 				peer.Dist = dist + path.Weight
-				root = graph.Insert(root, peer)
+				root = heap.Insert(root, peer)
 			} else if peer.Index != FAKE { //外围点
 				var distance = dist + path.Weight
 				if distance < peer.Dist {
-					root = graph.FloatUp(root, peer, peer.Dist-distance)
+					root = heap.FloatUp(root, peer, distance)
 					peer.Link = index
 				}
 			}

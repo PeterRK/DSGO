@@ -1,34 +1,41 @@
-package astar
+package heap
 
 type memo struct {
-	index  int
-	link   int
-	dist   uint
-	weight uint
-	off    int
+	Vertex
+	off int
 }
 
-type heap struct {
+type binaryHeap struct {
 	core []*memo
 }
 
-func (hp *heap) Size() int {
+func NewVectorBH(size int) []memo {
+	return make([]memo, size)
+}
+
+func NewBinaryHeap(size int) *binaryHeap {
+	var hp = new(binaryHeap)
+	hp.core = make([]*memo, 0, size)
+	return hp
+}
+
+func (hp *binaryHeap) Size() int {
 	return len(hp.core)
 }
-func (hp *heap) IsEmpty() bool {
+func (hp *binaryHeap) IsEmpty() bool {
 	return len(hp.core) == 0
 }
 
-func (hp *heap) ShiftUp(unit *memo, dist uint) {
-	unit.weight = dist
+func (hp *binaryHeap) ShiftUp(unit *memo, dist uint) {
+	unit.Dist = dist
 	hp.shiftUp(unit.off)
 }
 
-func (hp *heap) shiftUp(pos int) {
+func (hp *binaryHeap) shiftUp(pos int) {
 	var unit = hp.core[pos]
 	for pos > 0 {
 		var parent = (pos - 1) / 2
-		if hp.core[parent].weight <= unit.weight {
+		if hp.core[parent].Dist <= unit.Dist {
 			break
 		}
 		hp.core[pos] = hp.core[parent]
@@ -38,14 +45,14 @@ func (hp *heap) shiftUp(pos int) {
 	hp.core[pos], unit.off = unit, pos
 }
 
-func (hp *heap) Push(unit *memo) {
+func (hp *binaryHeap) Push(unit *memo) {
 	var place = len(hp.core)
 	hp.core = append(hp.core, unit)
 	unit.off = place
 	hp.shiftUp(place)
 }
 
-func (hp *heap) Pop() *memo {
+func (hp *binaryHeap) Pop() *memo {
 	var size = hp.Size()
 	if size == 0 {
 		return nil
@@ -61,17 +68,17 @@ func (hp *heap) Pop() *memo {
 
 	var pos, kid, last = 0, 1, size - 2
 	for kid < last {
-		if hp.core[kid+1].weight < hp.core[kid].weight {
+		if hp.core[kid+1].Dist < hp.core[kid].Dist {
 			kid++
 		}
-		if unit.weight <= hp.core[kid].weight {
+		if unit.Dist <= hp.core[kid].Dist {
 			break
 		}
 		hp.core[pos] = hp.core[kid]
 		hp.core[pos].off = pos
 		pos, kid = kid, kid*2+1
 	}
-	if kid == last && unit.weight > hp.core[kid].weight {
+	if kid == last && unit.Dist > hp.core[kid].Dist {
 		hp.core[pos] = hp.core[kid]
 		hp.core[pos].off = pos
 		pos = kid

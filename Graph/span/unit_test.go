@@ -42,12 +42,16 @@ func Test_Prim(t *testing.T) {
 		{{4, 6}, {6, 1}, {8, 2}},           //7
 		{{1, 4}, {2, 14}, {5, 10}, {7, 2}}} //8
 
-	dist, err := Prim(roads)
+	var dist, err = Prim(roads)
+	assert(t, err == nil && dist == 37)
+	dist, err = PrimX(roads)
 	assert(t, err == nil && dist == 37)
 
 	var expected = []Edge{
 		{0, 3}, {0, 1}, {1, 4}, {1, 8}, {8, 7}, {7, 6}, {1, 2}, {2, 5}}
 	ret, err := PrimTree(roads)
+	assert(t, err == nil && isTheSame(ret, expected))
+	ret, err = PrimTreeX(roads)
 	assert(t, err == nil && isTheSame(ret, expected))
 }
 

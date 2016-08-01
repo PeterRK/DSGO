@@ -19,7 +19,7 @@ func AStar(roads [][]Path, start int, end int,
 	}
 
 	const FAKE = -1
-	var list = make([]node, size)
+	var list = make([]memo, size)
 	for i := 0; i < size; i++ {
 		list[i].link = FAKE
 	}
@@ -35,26 +35,28 @@ func AStar(roads [][]Path, start int, end int,
 
 	list[start].index, list[start].link = start, start
 	list[start].dist = 0
-	var root = insert(nil, &list[start])
-	for root != nil {
-		var index, dist = root.index, root.dist
-		if index == end {
+	var hp = heap{core: make([]*memo, 0, size)}
+
+	hp.Push(&list[start])
+	for !hp.IsEmpty() {
+		var curr = hp.Pop()
+		if curr.index == end {
 			return trace()
 		}
-		root.index, root = FAKE, extract(root) //入围
-
+		var index = curr.index
+		curr.index = FAKE //入围
 		for _, path := range roads[index] {
 			var peer = &list[path.Next]
 			if peer.link == FAKE { //未涉及点
 				peer.index, peer.link = path.Next, index
-				peer.dist = dist + path.Dist
+				peer.dist = curr.dist + path.Dist
 				//dist记录了起点到当前点的距离，evaluate评估当前点到终点的距离
 				peer.weight = peer.dist + evaluate(peer.index)
-				root = insert(root, peer)
+				hp.Push(peer)
 			} else if peer.index != FAKE { //外围点
-				var distance = dist + path.Dist
+				var distance = curr.dist + path.Dist
 				if distance < peer.dist {
-					root = floatUp(root, peer, peer.dist-distance)
+					hp.ShiftUp(peer, distance)
 					peer.link, peer.dist = index, distance
 				}
 			}
