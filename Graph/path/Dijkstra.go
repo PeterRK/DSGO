@@ -27,7 +27,7 @@ func Dijkstra(roads [][]graph.Path, start int) []int {
 	list[start].Index, list[start].Link, list[start].Dist = start, start, 0
 	var root = graph.Insert(nil, &list[start])
 
-	for root != nil && root.Dist != graph.MaxDistance {
+	for root != nil {
 		var index, dist = root.Index, root.Dist
 		root.Index, root = FAKE, graph.Extract(root) //入围
 		for _, path := range roads[index] {
@@ -83,7 +83,7 @@ func DijkstraPath(roads [][]graph.Path, start, end int) []int {
 
 	list[start].Index, list[start].Link, list[start].Dist = start, start, 0
 	var root = graph.Insert(nil, &list[start]) //第一步
-	for root != nil && root.Dist != graph.MaxDistance {
+	for root != nil {
 		var index, dist = root.Index, root.Dist
 		if index == end {
 			return trace()

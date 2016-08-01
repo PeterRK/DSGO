@@ -36,7 +36,7 @@ func AStar(roads [][]Path, start int, end int,
 	list[start].index, list[start].link = start, start
 	list[start].dist = 0
 	var root = insert(nil, &list[start])
-	for root != nil && root.dist != MaxDistance {
+	for root != nil {
 		var index, dist = root.index, root.dist
 		if index == end {
 			return trace()
