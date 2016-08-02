@@ -1,13 +1,5 @@
 package astar
 
-type memo struct {
-	index  int
-	link   int
-	dist   uint
-	weight uint
-	off    int
-}
-
 type heap struct {
 	core []*memo
 }
@@ -16,8 +8,8 @@ func (hp *heap) isEmpty() bool {
 	return len(hp.core) == 0
 }
 
-func (hp *heap) floatUp(unit *memo, dist uint) {
-	unit.weight = dist
+func (hp *heap) floatUp(unit *memo, delta uint) {
+	unit.weight -= delta
 	hp.shiftUp(unit.off)
 }
 func (hp *heap) shiftUp(pos int) {

@@ -7,9 +7,18 @@ type Path struct {
 
 const MaxDistance = ^uint(0)
 
+type memo struct {
+	index  int
+	link   int
+	dist   uint //真实距离
+	weight uint //评估因素（恒等于dist+评估距离）
+	off    int
+}
+
 //这是个启发式算法，有猜测成分，不一定能得到最优解
 func AStar(roads [][]Path, start int, end int,
 	evaluate func(int) uint) []int {
+	//evaluate评估当前点到终点的距离
 	var size = len(roads)
 	if start < 0 || end < 0 || start >= size || end >= size {
 		return nil
@@ -56,7 +65,7 @@ func AStar(roads [][]Path, start int, end int,
 			} else if peer.index != FAKE { //外围点
 				var distance = curr.dist + path.Dist
 				if distance < peer.dist {
-					hp.floatUp(peer, distance)
+					hp.floatUp(peer, peer.dist-distance)
 					peer.link, peer.dist = index, distance
 				}
 			}
