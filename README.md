@@ -5,7 +5,7 @@
 
 ### 关于作者（内容贡献者）
 
-阮坤良(peterrk@126.com)  
+阮坤良(peterrk at 126 dot com)  
 ...
 
 欢迎有志者加入
