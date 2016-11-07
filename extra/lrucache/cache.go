@@ -8,7 +8,7 @@ type node struct {
 	prev *node
 	next *node
 	hot  bool
-	key  uint32
+	key  int
 	val  string
 }
 type knot struct {
@@ -20,7 +20,7 @@ type knot struct {
 type cache struct {
 	hot  knot
 	cool knot
-	book map[uint32]*node
+	book map[int]*node
 }
 
 func knotInit(k *knot, limit uint) {
@@ -35,7 +35,7 @@ func NewCache(hot_sz, cool_sz uint) *cache {
 		return nil
 	}
 	var obj = new(cache)
-	obj.book = make(map[uint32]*node)
+	obj.book = make(map[int]*node)
 	knotInit(&obj.hot, hot_sz)
 	knotInit(&obj.cool, cool_sz)
 	return obj
@@ -67,7 +67,7 @@ func (c *cache) access(u *node) {
 	}
 }
 
-func (c *cache) Insert(key uint32, val string) {
+func (c *cache) Insert(key int, val string) {
 	var u, ok = c.book[key]
 	if ok { //如果已经被缓存则更新其值
 		u.val = val
@@ -88,7 +88,7 @@ func (c *cache) Insert(key uint32, val string) {
 	}
 }
 
-func (c *cache) Search(key uint32) (val string, ok bool) {
+func (c *cache) Search(key int) (val string, ok bool) {
 	u, ok := c.book[key]
 	if ok {
 		c.access(u)
@@ -97,7 +97,7 @@ func (c *cache) Search(key uint32) (val string, ok bool) {
 	return "", false
 }
 
-func (c *cache) Remove(key uint32) {
+func (c *cache) Remove(key int) {
 	var u, ok = c.book[key]
 	if ok {
 		delete(c.book, u.key)
