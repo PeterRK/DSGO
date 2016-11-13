@@ -23,21 +23,21 @@ type cache struct {
 	book map[int]*node
 }
 
-func knotInit(k *knot, limit uint) {
+func (k *knot) initialize(limit uint) {
 	k.cnt = 0
 	k.limit = limit
 	k.prev = (*node)(unsafe.Pointer(k))
 	k.next = (*node)(unsafe.Pointer(k))
 }
 
-func NewCache(hot_sz, cool_sz uint) *cache {
+func New(hot_sz, cool_sz uint) *cache {
 	if cool_sz < 4 || hot_sz < cool_sz {
 		return nil
 	}
 	var obj = new(cache)
 	obj.book = make(map[int]*node)
-	knotInit(&obj.hot, hot_sz)
-	knotInit(&obj.cool, cool_sz)
+	obj.hot.initialize(hot_sz)
+	obj.cool.initialize(cool_sz)
 	return obj
 }
 

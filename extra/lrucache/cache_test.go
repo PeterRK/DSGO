@@ -18,7 +18,7 @@ func guardUT(t *testing.T) {
 func Test_LRUCache(t *testing.T) {
 	guardUT(t)
 
-	var c = NewCache(5, 4)
+	var c = New(5, 4)
 	assert(t, c != nil)
 
 	c.Insert(1, "A")
