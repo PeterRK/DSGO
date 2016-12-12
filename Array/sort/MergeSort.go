@@ -16,23 +16,25 @@ func MergeSort(list []int) {
 }
 func doMergeSort(in []int, out []int) {
 	if len(in) < LOWER_BOUND {
-		if len(in) < 2 {
+		if len(in) == 0 {
 			return
 		}
-		var best = 0
+		out[0] = in[0]
 		for i := 1; i < len(in); i++ {
-			if in[i] < in[best] {
-				best = i
+			var key = in[i]
+			if key < out[0] {
+				for j := i; j > 0; j-- {
+					out[j] = out[j-1]
+				}
+				out[0] = key
+			} else {
+				var pos = i
+				for out[pos-1] > key {
+					out[pos] = out[pos-1]
+					pos--
+				}
+				out[pos] = key
 			}
-		}
-		out[0], in[best] = in[best], in[0]
-		for i := 1; i < len(in); i++ {
-			var key, pos = in[i], i
-			for out[pos-1] > key {
-				out[pos] = out[pos-1]
-				pos--
-			}
-			out[pos] = key
 		}
 	} else {
 		var half = len(in) / 2

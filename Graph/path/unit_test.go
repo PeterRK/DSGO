@@ -36,7 +36,8 @@ func Test_Dijkstra(t *testing.T) {
 		{{4, 4}},                 //1
 		{{0, 10}, {3, 5}},        //2
 		{{0, 3}, {1, 9}, {4, 2}}, //3
-		{{1, 6}, {2, 7}}}         //4
+		{{1, 6}, {2, 7}},         //4
+	}
 
 	var expected = []int{19, 0, 11, 16, 4}
 	var ret = Dijkstra(roads, 1)
@@ -59,7 +60,8 @@ func Test_PlainDijkstra(t *testing.T) {
 		{0, 0, 0, 0, 4},
 		{10, 0, 0, 5, 0},
 		{3, 9, 0, 0, 2},
-		{0, 6, 7, 0, 0}}
+		{0, 6, 7, 0, 0},
+	}
 
 	var expected = []int{19, 0, 11, 16, 4}
 	var ret = PlainDijkstra(matrix, 1)
@@ -81,7 +83,8 @@ func Test_SPFA(t *testing.T) {
 		{{4, 4}},                 //1
 		{{0, 10}, {3, 5}},        //2
 		{{0, 3}, {1, 9}, {4, 2}}, //3
-		{{1, 6}, {2, 7}}}         //4
+		{{1, 6}, {2, 7}},         //4
+	}
 
 	var expected = []int{19, 0, 11, 16, 4}
 	var dists, err = SPFA(roads, 1)
@@ -103,7 +106,8 @@ func Test_FloydWarshall(t *testing.T) {
 		{19, 0, 11, 16, 4},
 		{8, 9, 0, 5, 7},
 		{3, 4, 9, 0, 2},
-		{15, 6, 7, 12, 0}}
+		{15, 6, 7, 12, 0},
+	}
 
 	FloydWarshall(matrix)
 	for i := 0; i < 5; i++ {

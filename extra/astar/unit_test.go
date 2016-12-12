@@ -35,7 +35,8 @@ func Test_AStarAsDijkstra(t *testing.T) {
 		{{4, 4}},                 //1
 		{{0, 10}, {3, 5}},        //2
 		{{0, 3}, {1, 9}, {4, 2}}, //3
-		{{1, 6}, {2, 7}}}         //4
+		{{1, 6}, {2, 7}},         //4
+	}
 
 	var expected = []int{1, 4, 2, 3, 0}
 	var vec = AStar(roads, 1, 0, func(int) uint { return 0 })
@@ -50,7 +51,8 @@ func Test_AStarNotBest(t *testing.T) {
 		{{3, 1}},         //1
 		{{4, 2}},         //2
 		{{4, 1}},         //3
-		{{0, 6}}}         //4
+		{{0, 6}},         //4
+	}
 
 	var book = []uint{100, 100, 1, 1, 0}
 

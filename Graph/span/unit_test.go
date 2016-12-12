@@ -40,7 +40,8 @@ func Test_Prim(t *testing.T) {
 		{{2, 9}, {8, 10}},                  //5
 		{{0, 11}, {3, 8}, {4, 7}, {7, 1}},  //6
 		{{4, 6}, {6, 1}, {8, 2}},           //7
-		{{1, 4}, {2, 14}, {5, 10}, {7, 2}}} //8
+		{{1, 4}, {2, 14}, {5, 10}, {7, 2}}, //8
+	}
 
 	var dist, err = Prim(roads)
 	assert(t, err == nil && dist == 37)
@@ -67,7 +68,8 @@ func Test_PlainPrim(t *testing.T) {
 		{0, 0, 9, 0, 0, 0, 0, 0, 10},
 		{11, 0, 0, 8, 7, 0, 0, 1, 0},
 		{0, 0, 0, 0, 6, 0, 1, 0, 2},
-		{0, 4, 14, 0, 0, 10, 0, 2, 0}}
+		{0, 4, 14, 0, 0, 10, 0, 2, 0},
+	}
 
 	dist, err := PlainPrim(matrix)
 	assert(t, err == nil && dist == 37)
@@ -95,7 +97,8 @@ func Test_Kruskal(t *testing.T) {
 		{4, 7, 6},
 		{5, 8, 10},
 		{6, 7, 1},
-		{7, 8, 2}}
+		{7, 8, 2},
+	}
 
 	var dist, err = Kruskal(roads, 9)
 	assert(t, err == nil && dist == 37)
