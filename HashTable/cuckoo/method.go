@@ -4,9 +4,9 @@ import (
 	"bytes"
 )
 
-func mod(code uint, bucket_size int) uint {
+func mod(code uint32, bucket_size int) uint32 {
 	//return code % uint(bucket_size)
-	return code & (uint(bucket_size) - 1) //bucket_size == 2^n
+	return code & (uint32(bucket_size) - 1) //bucket_size == 2^n
 }
 func (tb *hashTable) findAndKill(key []byte, kill bool) bool {
 	for i := 0; i < WAYS; i++ {

@@ -7,11 +7,11 @@ import (
 const WAYS = 3
 
 type node struct {
-	code [WAYS]uint
+	code [WAYS]uint32
 	key  []byte
 }
 type table struct {
-	hash   func([]byte) uint
+	hash   func([]byte) uint32
 	bucket []*node
 }
 type hashTable struct {
@@ -27,7 +27,7 @@ func (tb *hashTable) IsEmpty() bool {
 	return tb.cnt == 0
 }
 
-func (tb *hashTable) initialize(fn [WAYS]func(str []byte) uint) {
+func (tb *hashTable) initialize(fn [WAYS]func(str []byte) uint32) {
 	tb.idx, tb.cnt = 0, 0
 	var sz = 8 //2^n
 	for i := WAYS - 1; i >= 0; i-- {
@@ -36,7 +36,7 @@ func (tb *hashTable) initialize(fn [WAYS]func(str []byte) uint) {
 		sz *= 2
 	}
 }
-func NewHashTable(fn [WAYS]func(str []byte) uint) hash.HashTable {
+func NewHashTable(fn [WAYS]func(str []byte) uint32) hash.HashTable {
 	var tb = new(hashTable)
 	tb.initialize(fn)
 	return tb

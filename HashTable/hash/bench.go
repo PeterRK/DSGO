@@ -28,28 +28,30 @@ func TryByFile(filenme string) {
 	if data, err := FetchLines(filenme); err != nil {
 		fmt.Println("fail to open file:", filenme)
 	} else {
-		var size = bestSize(uint(len(data)))
+		var size = bestSize(uint32(len(data)))
 		fmt.Printf("%s [%d/%d]\n", filenme, len(data), size)
-		ShowBucketCounts("BKDRhash:", data, size, BKDRhash)
-		ShowBucketCounts("SDBMhash:", data, size, SDBMhash)
-		ShowBucketCounts("DJBhash: ", data, size, DJBhash)
-		ShowBucketCounts("DJB2hash:", data, size, DJB2hash)
-		ShowBucketCounts("FNVhash: ", data, size, FNVhash)
-		ShowBucketCounts("RShash:  ", data, size, RShash)
-		ShowBucketCounts("JShash:  ", data, size, JShash)
-		ShowBucketCounts("APhash:  ", data, size, APhash)
+		ShowBucketCounts("JenkinsHash:", data, size, JenkinsHash)
+		ShowBucketCounts("MurmurHash: ", data, size, MurmurHash)
+		ShowBucketCounts("BKDRhash:   ", data, size, BKDRhash)
+		ShowBucketCounts("SDBMhash:   ", data, size, SDBMhash)
+		ShowBucketCounts("DJBhash:    ", data, size, DJBhash)
+		ShowBucketCounts("DJB2hash:   ", data, size, DJB2hash)
+		ShowBucketCounts("FNVhash:    ", data, size, FNVhash)
+		ShowBucketCounts("RShash:     ", data, size, RShash)
+		ShowBucketCounts("JShash:     ", data, size, JShash)
+		ShowBucketCounts("APhash:     ", data, size, APhash)
 		fmt.Println()
 	}
 }
 func ShowBucketCounts(
-	msg string, data []string, size uint, fn func([]byte) uint) {
+	msg string, data []string, size uint32, fn func([]byte) uint32) {
 	var vec, top = BucketCounts(data, size, fn)
 	fmt.Printf("%s <%d> %v\n", msg, top, vec)
 }
-func BucketCounts(data []string, size uint, fn func([]byte) uint) (
+func BucketCounts(data []string, size uint32, fn func([]byte) uint32) (
 	vec [6]uint, top uint) {
 	var book = make([]uint, size)
-	for i := uint(0); i < size; i++ {
+	for i := uint32(0); i < size; i++ {
 		book[i] = 0
 	}
 	for _, str := range data {
@@ -98,11 +100,11 @@ func FetchLines(name string) (data []string, err error) {
 }
 
 //此数列借鉴自SGI STL
-var sz_primes = []uint{
+var sz_primes = []uint32{
 	17, 29, 53, 97, 193, 389, 769, 1543, 3079, 6151, 12289, 24593, 49157, 98317, 196613,
 	393241, 786433, 1572869, 3145739, 6291469, 12582917, 25165843, 50331653, 1610612741}
 
-func bestSize(hint uint) uint {
+func bestSize(hint uint32) uint32 {
 	var start, end = 0, len(sz_primes)
 	for start < end {
 		var mid = (start + end) / 2

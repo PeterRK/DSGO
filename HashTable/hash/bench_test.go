@@ -4,6 +4,12 @@ import (
 	"testing"
 )
 
+func Benchmark_JenkinsHash(b *testing.B) {
+	hashBenchmark(b, bench_data, JenkinsHash)
+}
+func Benchmark_MurmurHash(b *testing.B) {
+	hashBenchmark(b, bench_data, MurmurHash)
+}
 func Benchmark_BKDRhash(b *testing.B) {
 	hashBenchmark(b, bench_data, BKDRhash)
 }
@@ -31,7 +37,7 @@ func Benchmark_APhash(b *testing.B) {
 
 var bench_data = []byte("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
-func hashBenchmark(b *testing.B, str []byte, hash func(str []byte) uint) {
+func hashBenchmark(b *testing.B, str []byte, hash func(str []byte) uint32) {
 	b.SetBytes(int64(len(str)))
 	for i := 0; i < b.N; i++ {
 		hash(str)

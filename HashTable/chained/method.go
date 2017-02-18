@@ -6,11 +6,11 @@ import (
 
 func (tb *hashTable) Search(key []byte) bool {
 	var code = tb.hash(key)
-	var index = code % uint(len(tb.bucket))
+	var index = code % uint32(len(tb.bucket))
 	var found = search(tb.bucket[index], key)
 	if tb.isMoving() {
 		if !found { //尝试从旧表中查找
-			index = code % uint(len(tb.old_bucket))
+			index = code % uint32(len(tb.old_bucket))
 			found = search(tb.old_bucket[index], key)
 		}
 		tb.moveLine() //推进rehash过程
@@ -28,11 +28,11 @@ func search(head *node, key []byte) bool {
 
 func (tb *hashTable) Remove(key []byte) bool {
 	var code, done = tb.hash(key), false
-	var index = code % uint(len(tb.bucket))
+	var index = code % uint32(len(tb.bucket))
 	tb.bucket[index], done = remove(tb.bucket[index], key)
 	if tb.isMoving() {
 		if !done { //尝试从旧表中删除
-			index = code % uint(len(tb.old_bucket))
+			index = code % uint32(len(tb.old_bucket))
 			tb.old_bucket[index], done = remove(tb.old_bucket[index], key)
 		}
 		tb.moveLine()
@@ -57,11 +57,11 @@ func remove(head *node, key []byte) (*node, bool) {
 
 func (tb *hashTable) Insert(key []byte) bool {
 	var code = tb.hash(key)
-	var index = code % uint(len(tb.bucket))
+	var index = code % uint32(len(tb.bucket))
 	var conflict = search(tb.bucket[index], key)
 	if tb.isMoving() {
 		if !conflict {
-			var index = code % uint(len(tb.old_bucket))
+			var index = code % uint32(len(tb.old_bucket))
 			conflict = search(tb.old_bucket[index], key)
 		}
 		tb.moveLine()
@@ -83,7 +83,7 @@ func (tb *hashTable) resize(size uint) { //size != 0
 	tb.old_bucket, tb.bucket = tb.bucket, make([]*node, size)
 }
 func (tb *hashTable) moveLine() {
-	var size = uint(len(tb.bucket))
+	var size = uint32(len(tb.bucket))
 	for head := tb.old_bucket[tb.next_line]; head != nil; {
 		var unit, index = head, tb.hash(head.key) % size
 		head = head.next

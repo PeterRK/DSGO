@@ -17,7 +17,7 @@ func fakeHead(spt **node) *node {
 }
 
 type hashTable struct {
-	hash       func(str []byte) uint
+	hash       func(str []byte) uint32
 	bucket     []*node
 	cnt        int
 	old_bucket []*node //旧表（仅在rehash过程中有内容）
@@ -44,12 +44,12 @@ func (tb *hashTable) stopMoving() {
 	tb.old_bucket = nil //GC
 }
 
-func (tb *hashTable) initialize(fn func(str []byte) uint) {
+func (tb *hashTable) initialize(fn func(str []byte) uint32) {
 	tb.hash = fn
 	//tb.cnt, tb.next_line = 0, 0
 	tb.bucket = make([]*node, primes[0])
 }
-func NewHashTable(fn func(str []byte) uint) hash.HashTable {
+func NewHashTable(fn func(str []byte) uint32) hash.HashTable {
 	var tb = new(hashTable)
 	tb.initialize(fn)
 	return tb
