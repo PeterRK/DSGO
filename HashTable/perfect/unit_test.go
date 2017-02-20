@@ -1,7 +1,6 @@
 package perfect
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -17,5 +16,19 @@ func guardUT(t *testing.T) {
 }
 
 func Test_Nothing(t *testing.T) {
-	fmt.Println(len(primes))
+	defer guardUT(t)
+
+	var tpl = []byte("ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
+		"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+	var book [52][]byte
+	for i := 0; i < 52; i++ {
+		book[i] = tpl[i : i+26]
+	}
+
+	var table Table
+	assert(t, table.Build(book[:]) == nil)
+	for i := 0; i < len(book); i++ {
+		assert(t, table.Serach(book[i]))
+	}
+	assert(t, !table.Serach([]byte("GoodLuck")))
 }

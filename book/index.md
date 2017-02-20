@@ -16,7 +16,7 @@
  - 4.1 [开链式Hash表](pages/04-A.md)
  - 4.2 [多路Hash表](pages/04-B.md)
  - 4.3 [布隆过滤器](pages/04-C.md)
- - 4.4 完全Hash
+ - 4.4 [完全Hash](pages/04-D.md)
 * 五、[树](pages/05.md)
  - 5.1 [AVL树](pages/05-A.md)
  - 5.2 [红黑树](pages/05-B.md)

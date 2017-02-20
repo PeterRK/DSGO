@@ -3,7 +3,6 @@ package perfect
 import (
 	"bytes"
 	"errors"
-	"time"
 )
 
 type node struct {
@@ -17,21 +16,26 @@ type Table struct {
 }
 
 const VALUES_PER_HINT = 4
-const TRYS_LIMIT = 100
+const TRYS_LIMIT = 1000
 const DEFAULT_SEED = uint32(0)
+const SEED_STEP = 0x9e3779b9 //非零魔数
 
 type memo struct {
 	idx uint32
 	lst [][]byte
 }
 
-//不支持空串，不支持空集
 func (tb *Table) Build(data [][]byte) error {
+	return tb.BuildWithSeed(data, 0)
+}
+
+//不支持空串，不支持空集
+func (tb *Table) BuildWithSeed(data [][]byte, seed uint32) error {
 	var m = len(data)
 	if m == 0 {
 		return errors.New("cannot build empty table")
 	}
-	var n = uint32(m + m/10) //十分之一的冗余，目标容积率>0.9
+	var n = uint32(m + m/10) //十分之一的冗余，目标容积率0.9
 	if i := binarySearch(primes, n); i < len(primes) {
 		n = primes[i] //
 	}
@@ -44,6 +48,9 @@ func (tb *Table) Build(data [][]byte) error {
 
 	//初级Hash
 	for _, val := range data {
+		if val == nil {
+			return errors.New("illegal input")
+		}
 		var code = MurmurHash(DEFAULT_SEED, val)
 		var cell = &book[code%hn]
 		cell.lst = append(cell.lst, val)
@@ -63,9 +70,6 @@ func (tb *Table) Build(data [][]byte) error {
 	var hint = make([]uint32, hn)
 	var bucket = make([]node, n)
 
-	var rand xorshift
-	rand.initialize(uint32(time.Now().Unix()))
-
 	var dirty = make([]uint32, 0, len(book[len(book)-1].lst))
 
 	//先大后下小
@@ -73,7 +77,7 @@ func (tb *Table) Build(data [][]byte) error {
 		var trys = TRYS_LIMIT
 		for ; trys > 0; trys-- {
 			dirty = dirty[:0]
-			var seed = rand.Next()
+			seed += SEED_STEP
 
 			var j = 0
 			for lst := book[i].lst; j < len(lst); j++ {
@@ -106,7 +110,7 @@ func (tb *Table) Build(data [][]byte) error {
 
 func (tb *Table) Serach(val []byte) bool {
 	var hn, n = uint32(len(tb.hint)), uint32(len(tb.bucket))
-	if hn == 0 || n == 0 {
+	if hn == 0 || n == 0 || val == nil {
 		return false
 	}
 
