@@ -32,3 +32,19 @@ func MurmurHash(seed uint32, str []byte) uint32 {
 	code ^= code >> 16
 	return code
 }
+
+type xorshift struct {
+	x, y, z, w uint32
+}
+
+func (xs *xorshift) initialize(seed uint32) {
+	xs.x, xs.y, xs.z = 0x6c078965, 0x9908b0df, 0x9d2c5680
+	xs.w = seed
+}
+
+func (xs *xorshift) Next() uint32 {
+	var t = xs.x ^ (xs.x << 11)
+	xs.x, xs.y, xs.z = xs.y, xs.z, xs.w
+	xs.w ^= (xs.w >> 19) ^ t ^ (t >> 8)
+	return xs.w
+}
