@@ -18,9 +18,8 @@ func guardUT(t *testing.T) {
 func Test_Nothing(t *testing.T) {
 	defer guardUT(t)
 
-	var tpl = []byte("ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
-		"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
-	var book [52][]byte
+	var tpl = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	var book [52]string
 	for i := 0; i < 52; i++ {
 		book[i] = tpl[i : i+26]
 	}
@@ -30,5 +29,5 @@ func Test_Nothing(t *testing.T) {
 	for i := 0; i < len(book); i++ {
 		assert(t, table.Serach(book[i]))
 	}
-	assert(t, !table.Serach([]byte("GoodLuck")))
+	assert(t, !table.Serach("GoodLuck"))
 }

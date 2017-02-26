@@ -1,13 +1,13 @@
 package perfect
 
 import (
-	"bytes"
 	"errors"
 )
 
 type node struct {
-	code uint32
-	val  []byte //nil为无效
+	filled bool
+	code   uint32
+	val    string
 }
 
 type Table struct {
@@ -22,15 +22,15 @@ const SEED_STEP = 0x9e3779b9 //非零魔数
 
 type memo struct {
 	idx uint32
-	lst [][]byte
+	lst []string
 }
 
-func (tb *Table) Build(data [][]byte) error {
+func (tb *Table) Build(data []string) error {
 	return tb.BuildWithSeed(data, 0)
 }
 
 //不支持空串，不支持空集
-func (tb *Table) BuildWithSeed(data [][]byte, seed uint32) error {
+func (tb *Table) BuildWithSeed(data []string, seed uint32) error {
 	var m = len(data)
 	if m == 0 {
 		return errors.New("cannot build empty table")
@@ -48,9 +48,6 @@ func (tb *Table) BuildWithSeed(data [][]byte, seed uint32) error {
 
 	//初级Hash
 	for _, val := range data {
-		if val == nil {
-			return errors.New("illegal input")
-		}
 		var code = MurmurHash(DEFAULT_SEED, val)
 		var cell = &book[code%hn]
 		cell.lst = append(cell.lst, val)
@@ -83,10 +80,10 @@ func (tb *Table) BuildWithSeed(data [][]byte, seed uint32) error {
 			for lst := book[i].lst; j < len(lst); j++ {
 				var code = MurmurHash(seed, lst[j])
 				var index = code % n
-				if bucket[index].val != nil {
+				if bucket[index].filled {
 					break //冲突了
 				}
-				bucket[index] = node{code, lst[j]}
+				bucket[index] = node{true, code, lst[j]}
 				dirty = append(dirty, index)
 			}
 			if j == len(book[i].lst) {
@@ -95,7 +92,7 @@ func (tb *Table) BuildWithSeed(data [][]byte, seed uint32) error {
 			}
 			//失败回滚
 			for j = 0; j < len(dirty); j++ {
-				bucket[dirty[j]] = node{0, nil}
+				bucket[dirty[j]] = node{false, 0, ""}
 			}
 		}
 		if trys <= 0 {
@@ -108,9 +105,9 @@ func (tb *Table) BuildWithSeed(data [][]byte, seed uint32) error {
 	return nil
 }
 
-func (tb *Table) Serach(val []byte) bool {
+func (tb *Table) Serach(val string) bool {
 	var hn, n = uint32(len(tb.hint)), uint32(len(tb.bucket))
-	if hn == 0 || n == 0 || val == nil {
+	if hn == 0 || n == 0 {
 		return false
 	}
 
@@ -118,5 +115,5 @@ func (tb *Table) Serach(val []byte) bool {
 	var code = MurmurHash(tb.hint[index], val)
 
 	var cell = tb.bucket[code%n]
-	return cell.code == code && bytes.Equal(cell.val, val)
+	return cell.code == code && cell.val == val
 }
