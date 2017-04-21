@@ -18,7 +18,7 @@ func guardUT(t *testing.T) {
 func Test_LogStack(t *testing.T) {
 	guardUT(t)
 
-	var ls = logStack{limit: 4}
+	var ls = NewLogStack(4)
 	for i := 0; i < 20; i += 2 {
 		ls.Insert(i)
 	}

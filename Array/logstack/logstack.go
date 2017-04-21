@@ -64,9 +64,11 @@ func (ls *logStack) Search(key int) bool {
 	return found > 0
 }
 
+/*
 func (ls *logStack) debug() {
 	ls.cache.print()
 	for i := len(ls.stack) - 1; i >= 0; i-- {
 		ls.stack[i].print()
 	}
 }
+*/

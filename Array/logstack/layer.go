@@ -1,7 +1,7 @@
 package logstack
 
 import (
-	"fmt"
+	//"fmt"
 	"unsafe"
 )
 
@@ -141,6 +141,7 @@ func (ly *layer) compact() {
 	}
 }
 
+/*
 func (ly *layer) print() {
 	for i := uint(0); i < ly.size(); i++ {
 		if tellMark(ly.mark, i) {
@@ -162,3 +163,4 @@ func (ly *layer) debug() {
 	}
 	fmt.Println()
 }
+*/
