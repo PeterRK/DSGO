@@ -9,16 +9,16 @@ import (
 type Path = graph.Path
 
 func BenchMark() {
-	var start = time.Now()
-	var roads, total, err = readGraph() //IO就是慢！！！
+	start := time.Now()
+	roads, total, err := readGraph() //IO就是慢！！！
 	if err != nil {
 		fmt.Println("Illegal Input")
 		return
 	}
-	var roads_u = uAdjList(roads)
-	var matrix_u = transform(roads_u)
-	var matrix = sAdjMatrix(matrix_u)
-	var size = len(roads)
+	roads_u := uAdjList(roads)
+	matrix_u := transform(roads_u)
+	matrix := sAdjMatrix(matrix_u)
+	size := len(roads)
 	fmt.Printf("Prepare Graph [%d vertexes & %d edges] in %v\n",
 		size, total, time.Since(start))
 
@@ -70,9 +70,9 @@ func readGraph() (roads [][]PathS, total int, err error) {
 }
 
 func uAdjList(roads [][]PathS) [][]Path {
-	var out = make([][]Path, len(roads))
+	out := make([][]Path, len(roads))
 	for i, vec := range roads {
-		var line = make([]Path, len(vec))
+		line := make([]Path, len(vec))
 		for j, path := range vec {
 			line[j] = Path{Next: path.Next, Weight: uint(path.Dist)}
 		}
@@ -82,10 +82,10 @@ func uAdjList(roads [][]PathS) [][]Path {
 }
 
 func transform(roads [][]Path) [][]uint {
-	var size = len(roads)
-	var matrix = make([][]uint, size)
+	size := len(roads)
+	matrix := make([][]uint, size)
 	for i, vec := range roads {
-		var line = make([]uint, size) //全零
+		line := make([]uint, size) //全零
 		for _, path := range vec {
 			line[path.Next] = path.Weight
 		}
@@ -95,8 +95,8 @@ func transform(roads [][]Path) [][]uint {
 }
 
 func sAdjMatrix(matrix [][]uint) [][]int {
-	var size = len(matrix)
-	var out = make([][]int, size)
+	size := len(matrix)
+	out := make([][]int, size)
 	for i := 0; i < size; i++ {
 		out[i] = make([]int, size)
 		for j := 0; j < size; j++ {

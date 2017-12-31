@@ -3,7 +3,7 @@ package wavl
 //成功返回序号（从1开始），冲突返回序号的负值。
 //AVL树插入过程包括：O(log N)的搜索，O(1)的旋转，O(log N)的平衡因子调整。
 func (tr *Tree) Insert(key int) int {
-	var root, rank = (*node)(nil), int32(1)
+	root, rank := (*node)(nil), int32(1)
 	if tr.root == nil {
 		tr.root = newNode(nil, key)
 	} else {
@@ -19,7 +19,7 @@ func (tr *Tree) Insert(key int) int {
 
 //插入节点，root != nil
 func (tr *Tree) insert(key int) (*node, int32) {
-	var root, base = tr.root, int32(0)
+	root, base := tr.root, int32(0)
 	for {
 		root.weight++
 		switch {
@@ -45,7 +45,7 @@ func (tr *Tree) insert(key int) (*node, int32) {
 //回溯矫正
 func (tr *Tree) rebalanceAfterInsert(root *node, key int) {
 	for {
-		var state = root.state
+		state := root.state
 		if key < root.key {
 			root.state++
 		} else {
@@ -56,7 +56,7 @@ func (tr *Tree) rebalanceAfterInsert(root *node, key int) {
 			continue
 		}
 		if state != 0 && root.state != 0 { //2 || -2
-			var super = root.parent
+			super := root.parent
 			root, _ = root.rotate()
 			if super == nil {
 				tr.root = super.hook(root)

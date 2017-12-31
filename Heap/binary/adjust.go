@@ -1,8 +1,8 @@
 package binary
 
 func (hp *Heap) adjustDown(pos int) {
-	var key = hp.core[pos]
-	var kid, last = pos*2 + 1, len(hp.core) - 1
+	key := hp.core[pos]
+	kid, last := pos*2+1, len(hp.core)-1
 	for kid < last {
 		if hp.core[kid+1] < hp.core[kid] {
 			kid++
@@ -20,9 +20,9 @@ func (hp *Heap) adjustDown(pos int) {
 }
 
 func (hp *Heap) adjustUp(pos int) {
-	var key = hp.core[pos]
+	key := hp.core[pos]
 	for pos > 0 {
-		var parent = (pos - 1) / 2
+		parent := (pos - 1) / 2
 		if hp.core[parent] <= key {
 			break
 		}

@@ -18,7 +18,7 @@ func (tr *Tree) IsEmpty() bool {
 }
 
 func (tr *Tree) Search(key int32) bool {
-	var target = tr.root
+	target := tr.root
 	for target != nil {
 		if key == target.key {
 			return true

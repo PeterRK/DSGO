@@ -22,8 +22,8 @@ func (unit *node) hook(peer *node) *node {
 	return peer
 }
 func fakeHead(spt **node) *node {
-	var base = uintptr(unsafe.Pointer(spt))
-	var off = unsafe.Offsetof((*spt).next)
+	base := uintptr(unsafe.Pointer(spt))
+	off := unsafe.Offsetof((*spt).next)
 	return (*node)(unsafe.Pointer(base - off))
 }
 func merge(one *node, another *node) *node {
@@ -50,9 +50,9 @@ func Insert(root *node, unit *node) *node {
 func collect(head *node) *node {
 	if head != nil {
 		for head.next != nil {
-			var list, knot = head, fakeHead(&head)
+			list, knot := head, fakeHead(&head)
 			for list != nil && list.next != nil {
-				var one, another = list, list.next
+				one, another := list, list.next
 				list = another.next
 				knot.next = merge(one, another)
 				knot = knot.next

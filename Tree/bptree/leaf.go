@@ -11,7 +11,7 @@ type leaf struct {
 }
 
 func newLeaf() *leaf {
-	var u = new(leaf)
+	u := new(leaf)
 	u.inner = false
 	return u
 }
@@ -69,7 +69,7 @@ func (u *leaf) insert(place int, key int) (peer *leaf) {
 
 //要求peer为unit后的节点，发生合并返回 true
 func (u *leaf) combine(peer *leaf) bool {
-	var total = u.cnt + peer.cnt
+	total := u.cnt + peer.cnt
 	if total <= LEAF_HALF+LEAF_QUARTER {
 		for i := u.cnt; i < total; i++ {
 			u.data[i] = peer.data[i-u.cnt]
@@ -79,13 +79,13 @@ func (u *leaf) combine(peer *leaf) bool {
 		return true
 	}
 	//分流而不合并
-	var u_sz = total / 2
+	u_sz := total / 2
 	if u.cnt == u_sz {
 		return false
 	}
-	var peer_sz = total - u_sz
+	peer_sz := total - u_sz
 	if peer.cnt > peer_sz { //后填前
-		var diff = peer.cnt - peer_sz
+		diff := peer.cnt - peer_sz
 		for i := u.cnt; i < u_sz; i++ {
 			u.data[i] = peer.data[i-u.cnt]
 			//
@@ -95,7 +95,7 @@ func (u *leaf) combine(peer *leaf) bool {
 			//
 		}
 	} else { //前填后
-		var diff = peer_sz - peer.cnt
+		diff := peer_sz - peer.cnt
 		for i := peer.cnt - 1; i >= 0; i-- {
 			peer.data[i+diff] = peer.data[i]
 			//

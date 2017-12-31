@@ -34,7 +34,7 @@ func New(hot_sz, cold_sz uint) *cache {
 	if cold_sz < 4 || hot_sz < 4 {
 		return nil
 	}
-	var obj = new(cache)
+	obj := new(cache)
 	obj.book = make(map[int]*node)
 	obj.hot.initialize(hot_sz)
 	obj.cold.initialize(cold_sz)
@@ -74,7 +74,7 @@ func (c *cache) Clear() {
 }
 
 func (c *cache) Insert(key int, val string) {
-	var u, ok = c.book[key]
+	u, ok := c.book[key]
 	if ok { //如果已经被缓存则更新其值
 		u.val = val
 		c.access(u)
@@ -104,7 +104,7 @@ func (c *cache) Search(key int) (val string, ok bool) {
 }
 
 func (c *cache) Remove(key int) {
-	var u, ok = c.book[key]
+	u, ok := c.book[key]
 	if ok {
 		delete(c.book, u.key)
 		u.unhook()

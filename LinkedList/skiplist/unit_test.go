@@ -21,8 +21,8 @@ func guardUT(t *testing.T) {
 func Test_SkipList(t *testing.T) {
 	defer guardUT(t)
 
-	var dict = NewSkipList()
-	var cnt = 0
+	dict := NewSkipList()
+	cnt := 0
 	const size = 300
 	var list [size * 2]int
 

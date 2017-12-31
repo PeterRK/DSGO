@@ -38,7 +38,7 @@ func Benchmark_RBtreeRemove(b *testing.B) {
 
 func benchInsert(b *testing.B, hint int) {
 	b.StopTimer()
-	var tree, list = newTree(hint), mixedArray(b.N)
+	tree, list := newTree(hint), mixedArray(b.N)
 	b.StartTimer()
 	for i := 0; i < b.N; i++ {
 		tree.Insert(list[i])
@@ -46,7 +46,7 @@ func benchInsert(b *testing.B, hint int) {
 }
 func benchSearch(b *testing.B, hint int) {
 	b.StopTimer()
-	var tree, list = newTree(hint), mixedArray(b.N)
+	tree, list := newTree(hint), mixedArray(b.N)
 	for i := 0; i < b.N; i++ {
 		tree.Insert(list[i])
 	}
@@ -57,7 +57,7 @@ func benchSearch(b *testing.B, hint int) {
 }
 func benchRemove(b *testing.B, hint int) {
 	b.StopTimer()
-	var tree, list = newTree(hint), mixedArray(b.N)
+	tree, list := newTree(hint), mixedArray(b.N)
 	for i := 0; i < b.N; i++ {
 		tree.Insert(list[i])
 	}

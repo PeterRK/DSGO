@@ -56,18 +56,18 @@ func newTree(hint int) BST {
 
 func ramdomArray(size int) []int32 {
 	rand.Seed(time.Now().Unix())
-	var list = make([]int32, size)
+	list := make([]int32, size)
 	for i := 0; i < size; i++ {
 		list[i] = int32(rand.Int())
 	}
 	return list
 }
 func benchMark(list []int32, hint int) {
-	var tree = newTree(hint)
-	var size = len(list)
+	tree := newTree(hint)
+	size := len(list)
 	fmt.Println(showName(hint))
 
-	var start = time.Now()
+	start := time.Now()
 	for i := 0; i < size; i++ {
 		tree.Insert(list[i])
 	}
@@ -89,7 +89,7 @@ func BenchMark(size int) {
 		fmt.Println("too small")
 		return
 	}
-	var list = ramdomArray(size)
+	list := ramdomArray(size)
 
 	benchMark(list, AVL_TREE)
 	benchMark(list, RB_TREE)

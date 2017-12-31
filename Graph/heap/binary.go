@@ -14,7 +14,7 @@ func NewVectorBH(size int) []memo {
 }
 
 func NewBinaryHeap(size int) *binaryHeap {
-	var hp = new(binaryHeap)
+	hp := new(binaryHeap)
 	hp.core = make([]*memo, 0, size)
 	return hp
 }
@@ -28,9 +28,9 @@ func (hp *binaryHeap) FloatUp(unit *memo, dist uint) {
 	hp.shiftUp(unit.off)
 }
 func (hp *binaryHeap) shiftUp(pos int) {
-	var unit = hp.core[pos]
+	unit := hp.core[pos]
 	for pos > 0 {
-		var parent = (pos - 1) / 2
+		parent := (pos - 1) / 2
 		if hp.core[parent].Dist <= unit.Dist {
 			break
 		}
@@ -41,27 +41,27 @@ func (hp *binaryHeap) shiftUp(pos int) {
 }
 
 func (hp *binaryHeap) Push(unit *memo) {
-	var pos = len(hp.core)
+	pos := len(hp.core)
 	hp.core = append(hp.core, unit)
 	//	unit.off = pos
 	hp.shiftUp(pos)
 }
 
 func (hp *binaryHeap) Pop() *memo {
-	var size = len(hp.core)
+	size := len(hp.core)
 	//	if size == 0 {
 	//		return nil
 	//	}
-	var result = hp.core[0]
+	result := hp.core[0]
 	if size == 1 {
 		hp.core = hp.core[:0]
 		return result
 	}
 
-	var unit = hp.core[size-1]
+	unit := hp.core[size-1]
 	hp.core = hp.core[:size-1]
 
-	var pos, kid, last = 0, 1, size - 2
+	pos, kid, last := 0, 1, size-2
 	for kid < last {
 		if hp.core[kid+1].Dist < hp.core[kid].Dist {
 			kid++

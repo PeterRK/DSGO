@@ -28,23 +28,23 @@ func (hp *Heap) Top() (int, error) {
 }
 
 func (hp *Heap) Build(list []int) {
-	var size = len(list)
+	size := len(list)
 	hp.core = list
 	for idx := size/2 - 1; idx >= 0; idx-- {
 		hp.adjustDown(idx)
 	}
 }
 func (hp *Heap) Push(key int) {
-	var place = len(hp.core)
+	place := len(hp.core)
 	hp.core = append(hp.core, key)
 	hp.adjustUp(place)
 }
 func (hp *Heap) Pop() (int, error) {
-	var size = hp.Size()
+	size := hp.Size()
 	if size == 0 {
 		return 0, errors.New("empty")
 	}
-	var key = hp.core[0]
+	key := hp.core[0]
 	if size == 1 {
 		hp.core = hp.core[:0]
 	} else {

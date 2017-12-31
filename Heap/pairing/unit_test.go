@@ -25,19 +25,19 @@ func Test_Heap(t *testing.T) {
 
 	var heap Heap
 	const size = 200
-	var list = new([size]int)
+	list := new([size]int)
 
-	var mark = INT_MAX
+	mark := INT_MAX
 	rand.Seed(time.Now().Unix())
 	for i := 0; i < size; i++ {
-		var key = rand.Int()
+		key := rand.Int()
 		if key < mark {
 			mark = key
 		}
 		list[i] = key
 		heap.Push(key)
 	}
-	var key, err = heap.Top()
+	key, err := heap.Top()
 	assert(t, err == nil && key == mark)
 
 	for i := 0; i < size; i++ {
@@ -74,7 +74,7 @@ func Test_Merge(t *testing.T) {
 	hp1.Push(100)
 	hp2.Push(101)
 	hp1.Merge(&hp2)
-	var key, err = hp1.Top()
+	key, err := hp1.Top()
 	assert(t, err == nil && key == 100)
 
 	hp1.Push(11)
@@ -89,9 +89,9 @@ func Test_FloatUpAndRemove(t *testing.T) {
 
 	var heap Heap
 	const size = 200
-	var list = new([size]int)
+	list := new([size]int)
 
-	var mark = INT_MAX
+	mark := INT_MAX
 	rand.Seed(time.Now().Unix())
 	for i := 0; i < size; i++ {
 		list[i] = rand.Int()
@@ -101,10 +101,10 @@ func Test_FloatUpAndRemove(t *testing.T) {
 	}
 
 	//插入
-	var fake = Node{key: INT_MIN}
-	var node = &fake
+	fake := Node{key: INT_MIN}
+	node := &fake
 	for i := 0; i < size; i++ {
-		var unit = new(Node)
+		unit := new(Node)
 		unit.key = list[i]
 		if unit.key > node.key {
 			node = unit
@@ -112,7 +112,7 @@ func Test_FloatUpAndRemove(t *testing.T) {
 		heap.PushNode(unit)
 	}
 
-	var super = node.prev
+	super := node.prev
 	heap.FloatUp(node, super.key)
 	assert(t, node.prev == super && node.key == super.key)
 	heap.Remove(node)
@@ -120,12 +120,12 @@ func Test_FloatUpAndRemove(t *testing.T) {
 
 	mark--
 	heap.FloatUp(node, mark)
-	var key, err = heap.Top()
+	key, err := heap.Top()
 	assert(t, err == nil && key == mark && key == node.key)
 	heap.Remove(node)
 	heap.PushNode(node)
 
-	var kid = node.child
+	kid := node.child
 	heap.Remove(kid)
 	kid = node.child
 	heap.FloatUp(kid, mark-1)

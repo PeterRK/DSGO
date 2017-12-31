@@ -16,7 +16,7 @@ func guardUT(t *testing.T) {
 }
 
 func Test_BloomFliter(t *testing.T) {
-	var tpl = []byte("ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
+	tpl := []byte("ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
 		"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 	var book [52][]byte
 	for i := 0; i < 52; i++ {

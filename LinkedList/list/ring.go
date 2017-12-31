@@ -32,7 +32,7 @@ func (r *Ring) PopHead() *NodeX {
 	if r.IsEmpty() {
 		return nil
 	}
-	var node = r.head
+	node := r.head
 	r.head = node.Next
 	r.head.Prev = r.asNodeX()
 	return node
@@ -54,7 +54,7 @@ func (r *Ring) PopTail() *NodeX {
 	if r.IsEmpty() {
 		return nil
 	}
-	var node = r.tail
+	node := r.tail
 	r.tail = node.Prev
 	r.tail.Next = r.asNodeX()
 	return node

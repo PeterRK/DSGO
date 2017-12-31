@@ -23,9 +23,9 @@ func (G *node) rotate() (root *node, stop bool) {
 	stop = false
 	//root = nil
 	if G.state == 2 { //左倾右旋
-		var P = G.left
+		P := G.left
 		if P.state == -1 { //LR
-			var C = P.right //一定非nil
+			C := P.right //C != nil
 			P.right, G.left = P.tryHook(C.left), G.tryHook(C.right)
 			C.left, C.right = C.hook(P), C.hook(G)
 			switch C.state {
@@ -49,9 +49,9 @@ func (G *node) rotate() (root *node, stop bool) {
 			root = P
 		}
 	} else { //右倾左旋(P.state==-2)
-		var P = G.right
+		P := G.right
 		if P.state == 1 { //RL
-			var C = P.left //一定非nil
+			C := P.left //C != nil
 			P.left, G.right = P.tryHook(C.right), G.tryHook(C.left)
 			C.right, C.left = C.hook(P), C.hook(G)
 			switch C.state {

@@ -14,25 +14,25 @@ type Edge struct {
 }
 
 func BenchMark() {
-	var start = time.Now()
-	var edges, size, err = readGraph() //IO就是慢！！！
+	start := time.Now()
+	edges, size, err := readGraph() //IO就是慢！！！
 	if err != nil {
 		fmt.Println("Illegal Input")
 		return
 	}
-	var roads = transform(edges, size)
+	roads := transform(edges, size)
 	fmt.Printf("Prepare Graph [%d vertexes & %d edges] in %v\n", size, len(edges), time.Since(start))
 
 	start = time.Now()
 	ret1, err := Kruskal(edges, size)
-	var tm1 = time.Since(start)
+	tm1 := time.Since(start)
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	start = time.Now()
 	ret2, err := Prim(roads)
-	var tm2 = time.Since(start)
+	tm2 := time.Since(start)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -63,7 +63,7 @@ func readGraph() (edges []EdgeW, size int, err error) {
 }
 
 func transform(edges []EdgeW, size int) [][]Path {
-	var roads = make([][]Path, size)
+	roads := make([][]Path, size)
 	for _, path := range edges {
 		roads[path.A] = append(
 			roads[path.A], Path{Next: path.B, Weight: path.Weight})

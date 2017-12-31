@@ -7,13 +7,13 @@ import (
 //输入邻接矩阵(0指不通)，返回某点到各点的最短路径的长度(-1指不通)。
 //本实现复杂度为O(V^2)。
 func PlainDijkstra(matrix [][]uint, start int) []int {
-	var size = len(matrix)
+	size := len(matrix)
 	if size == 0 || start < 0 || start >= size {
 		return nil
 	}
-	var result = make([]int, size)
+	result := make([]int, size)
 
-	var list = make([]heap.Vertex, size)
+	list := make([]heap.Vertex, size)
 	for i := 0; i < size-1; i++ {
 		list[i].Index, list[i].Dist = i, heap.MaxDistance
 	}
@@ -22,10 +22,10 @@ func PlainDijkstra(matrix [][]uint, start int) []int {
 
 	for last := size - 1; last > 0 &&
 		list[last].Dist != heap.MaxDistance; last-- {
-		var best = 0
+		best := 0
 		for i := 0; i < last; i++ {
-			var step = matrix[list[last].Index][list[i].Index]
-			var distance = list[last].Dist + step
+			step := matrix[list[last].Index][list[i].Index]
+			distance := list[last].Dist + step
 			if step != 0 && distance < list[i].Dist {
 				list[i].Dist = distance
 			} else {
@@ -50,7 +50,7 @@ func PlainDijkstra(matrix [][]uint, start int) []int {
 
 //输入邻接矩阵(0指不通)，返回两点间的最短路径及其长度(-1指不通)。
 func PlainDijkstraPath(matrix [][]uint, start, end int) []int {
-	var size = len(matrix)
+	size := len(matrix)
 	if start < 0 || end < 0 || start >= size || end >= size {
 		return nil
 	}
@@ -58,14 +58,14 @@ func PlainDijkstraPath(matrix [][]uint, start, end int) []int {
 		return []int{start}
 	}
 
-	var list = make([]heap.Vertex, size)
+	list := make([]heap.Vertex, size)
 	for i := 0; i < size-1; i++ {
 		list[i].Index, list[i].Dist = i, heap.MaxDistance
 	}
-	var trace = func(yard []heap.Vertex) []int {
+	trace := func(yard []heap.Vertex) []int {
 		var path []int
 		for idx := 0; idx < len(yard)-1; {
-			var next = yard[idx].Link
+			next := yard[idx].Link
 			for yard[idx].Index != next {
 				idx++
 			}
@@ -83,10 +83,10 @@ func PlainDijkstraPath(matrix [][]uint, start, end int) []int {
 		if list[last].Index == end {
 			return trace(list[last:])
 		}
-		var best = 0
+		best := 0
 		for i := 0; i < last; i++ {
-			var step = matrix[list[last].Index][list[i].Index]
-			var distance = list[last].Dist + step
+			step := matrix[list[last].Index][list[i].Index]
+			distance := list[last].Dist + step
 			if step != 0 && distance < list[i].Dist {
 				list[i].Dist, list[i].Link = distance, list[last].Index
 			} else {

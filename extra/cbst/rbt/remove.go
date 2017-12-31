@@ -3,11 +3,11 @@ package rbt
 //成功返回true，没有返回false。
 //红黑树删除过程包括：O(log N)的搜索，O(1)的旋转，O(log N)的平衡因子调整。
 func (tr *Tree) Remove(key int32) bool {
-	var target = tr.findRemoveTarget(key)
+	target := tr.findRemoveTarget(key)
 	if target == nil {
 		return false
 	}
-	var victim, orphan = tr.findRemoveVictim(target)
+	victim, orphan := tr.findRemoveVictim(target)
 
 	if tr.path.isEmpty() { //此时victim==target
 		tr.root = orphan
@@ -30,7 +30,7 @@ func (tr *Tree) Remove(key int32) bool {
 
 func (tr *Tree) findRemoveTarget(key int32) *node {
 	tr.path.clear()
-	var target = tr.root
+	target := tr.root
 	for target != nil && key != target.key {
 		if key < target.key {
 			tr.path.push(target, true)
@@ -92,11 +92,11 @@ func (tr *Tree) findRemoveVictim(target *node) (victim *node, orphan *node) {
 //|      u    v      |                  |
 
 func (tr *Tree) adjustAfterDelete() {
-	var G, lf = tr.path.pop()
+	G, lf := tr.path.pop()
 	for { //剩下情况：victim黑，orphan也黑，此时victim(orphan顶替)的兄弟必然存在
 		if lf {
-			var U = G.right //U != nil
-			var L, R = U.left, U.right
+			U := G.right //U != nil
+			L, R := U.left, U.right
 			if !U.black { //红U下必是两个实体黑，以保证每条支路至少双黑（与victim和orphan也黑双黑匹配）
 				G.right, U.left = L, G
 				U.black, G.black = true, false
@@ -125,8 +125,8 @@ func (tr *Tree) adjustAfterDelete() {
 				}
 			}
 		} else {
-			var U = G.left //U != nil
-			var R, L = U.right, U.left
+			U := G.left //U != nil
+			R, L := U.right, U.left
 			if !U.black { //红U下必是两个实体黑，以保证每条支路至少双黑（与victim和orphan也黑双黑匹配）
 				G.left, U.right = R, G
 				U.black, G.black = true, false

@@ -4,7 +4,7 @@ const fakeLevel = ^uint(0)
 
 func (pk *data) flushBack() {
 	for i := 0; i < len(pk.origin); i++ {
-		var origin, shadow, reflux = pk.origin[i], pk.shadow[i], pk.reflux[i]
+		origin, shadow, reflux := pk.origin[i], pk.shadow[i], pk.reflux[i]
 		if len(shadow) != 0 {
 			fillBackVec(origin, shadow)
 			pk.shadow[i] = shadow[:0]
@@ -17,7 +17,7 @@ func (pk *data) flushBack() {
 	}
 }
 func merge(base, part []Path) []Path {
-	var a, b = len(base) - 1, len(part) - 1
+	a, b := len(base)-1, len(part)-1
 	base = append(base, part...)
 	for c := len(base) - 1; b >= 0; c-- {
 		if a < 0 {
@@ -37,11 +37,11 @@ func merge(base, part []Path) []Path {
 	return base
 }
 func compact(list []Path) []Path {
-	var size = len(list)
+	size := len(list)
 	if size == 0 {
 		return list
 	}
-	var last = 0
+	last := 0
 	for i := 1; i < size; i++ {
 		if list[i].Next == list[last].Next {
 			list[last].Weight += list[i].Weight
@@ -68,7 +68,7 @@ func (pk *data) markLevel() bool {
 	pk.queue.push(pk.start)
 
 	for !pk.queue.isEmpty() {
-		var cur = pk.queue.pop()
+		cur := pk.queue.pop()
 		for _, path := range pk.origin[cur] {
 			if pk.memo[path.Next] != fakeLevel {
 				continue
@@ -90,13 +90,13 @@ func (pk *data) separate() bool {
 		return false
 	}
 	for { //队列pop出的点并没有实际删除，可回溯遍历所有访问过的点
-		var cur, err = pk.queue.traceBack()
+		cur, err := pk.queue.traceBack()
 		if err != nil {
 			break
 		}
-		var paths = pk.origin[cur]
+		paths := pk.origin[cur]
 		for i := 0; i < len(paths); i++ {
-			var next = paths[i].Next
+			next := paths[i].Next
 			if pk.memo[next] == pk.memo[cur]+1 {
 				pk.shadow[cur] = append(pk.shadow[cur], paths[i])
 				paths[i].Weight = 0

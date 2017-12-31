@@ -18,8 +18,8 @@ func (s *stack) push(pt *index, idx int) {
 	s.core = append(s.core, stackNode{pt, idx})
 }
 func (s *stack) pop() (pt *index, idx int) {
-	var sz = len(s.core) - 1
-	var unit = s.core[sz]
+	sz := len(s.core) - 1
+	unit := s.core[sz]
 	s.core = s.core[:sz]
 	return unit.pt, unit.idx
 }

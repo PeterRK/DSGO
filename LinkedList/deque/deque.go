@@ -46,7 +46,7 @@ func (dq *deque) PushFront(key int) {
 	if dq.front.idx == PIECE_SIZE {
 		dq.front.idx = 0
 		if dq.front.pt.fw == nil {
-			var block = new(piece)
+			block := new(piece)
 			block.bw, block.fw = dq.front.pt, nil
 			dq.front.pt.fw = block
 		}
@@ -60,7 +60,7 @@ func (dq *deque) PushBack(key int) {
 	if dq.back.idx == -1 {
 		dq.back.idx = PIECE_SIZE - 1
 		if dq.back.pt.bw == nil {
-			var block = new(piece)
+			block := new(piece)
 			block.fw, block.bw = dq.back.pt, nil
 			dq.back.pt.bw = block
 		}
@@ -90,7 +90,7 @@ func (dq *deque) PopFront() (int, error) {
 	}
 	dq.cnt--
 	dq.front.idx--
-	var key = dq.front.pt.space[dq.front.idx]
+	key := dq.front.pt.space[dq.front.idx]
 	if dq.front.idx == 0 {
 		dq.front.idx = PIECE_SIZE //dq.front.idx永远不为0
 		dq.front.pt.fw = nil      //只保留一块缓冲
@@ -104,7 +104,7 @@ func (dq *deque) PopBack() (int, error) {
 	}
 	dq.cnt--
 	dq.back.idx++
-	var key = dq.back.pt.space[dq.back.idx]
+	key := dq.back.pt.space[dq.back.idx]
 	if dq.back.idx == PIECE_SIZE-1 {
 		dq.back.idx = -1    //dq.back.idx永远不为(PIECE_SIZE-1)
 		dq.back.pt.bw = nil //只保留一块缓冲

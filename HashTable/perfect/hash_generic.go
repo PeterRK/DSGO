@@ -3,11 +3,11 @@
 package perfect
 
 func MurmurHash(seed uint32, str string) uint32 {
-	var code = seed
+	code := seed
 
-	var m = len(str) % 4
+	m := len(str) % 4
 	for i := 0; i < len(str)-m; i += 4 {
-		var w = uint32(str[i]) | (uint32(str[i+1]) << 8) |
+		w := uint32(str[i]) | (uint32(str[i+1]) << 8) |
 			(uint32(str[i+2]) << 16) | (uint32(str[i+3]) << 24)
 		w *= 0xcc9e2d51
 		w = (w << 15) | (w >> 17)
@@ -17,7 +17,7 @@ func MurmurHash(seed uint32, str string) uint32 {
 		code += (code << 2) + 0xe6546b64
 	}
 	if m != 0 {
-		var w = uint32(0)
+		w := uint32(0)
 		for i := len(str) - 1; i >= len(str)-m; i-- {
 			w = (w << 8) | uint32(str[i])
 		}

@@ -14,7 +14,7 @@ func (tr *Tree) IsEmpty() bool {
 }
 
 func (tr *Tree) Search(key int32) bool {
-	var target = tr.root
+	target := tr.root
 	for target != nil {
 		if key == target.key {
 			return true
@@ -42,7 +42,7 @@ func (tr *Tree) Insert(key int32) bool {
 		return true
 	}
 
-	var parent = tr.root
+	parent := tr.root
 	for {
 		switch {
 		case key < parent.key:
@@ -65,7 +65,7 @@ func (tr *Tree) Insert(key int32) bool {
 
 //成功返回true，没有返回false
 func (tr *Tree) Remove(key int32) bool {
-	var target, parent = tr.root, (*node)(nil)
+	target, parent := tr.root, (*node)(nil)
 	for target != nil && key != target.key {
 		if key < target.key {
 			target, parent = target.left, target

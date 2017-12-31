@@ -54,7 +54,7 @@ func (q *arrayQueue) push(key int) {
 	q.wpt = (q.wpt + 1) % len(q.space)
 }
 func (q *arrayQueue) pop() int {
-	var key = q.space[q.rpt]
+	key := q.space[q.rpt]
 	q.rpt = (q.rpt + 1) % len(q.space)
 	return key
 }

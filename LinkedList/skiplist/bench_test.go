@@ -8,8 +8,8 @@ import (
 
 func Benchmark_Insert(b *testing.B) {
 	b.StopTimer()
-	var dict = NewSkipList()
-	var list = make([]int, b.N)
+	dict := NewSkipList()
+	list := make([]int, b.N)
 	rand.Seed(time.Now().Unix())
 	for i := 0; i < b.N; i++ {
 		list[i] = rand.Int()
@@ -23,8 +23,8 @@ func Benchmark_Insert(b *testing.B) {
 
 func Benchmark_Remove(b *testing.B) {
 	b.StopTimer()
-	var dict = NewSkipList()
-	var list = make([]int, b.N)
+	dict := NewSkipList()
+	list := make([]int, b.N)
 	rand.Seed(time.Now().Unix())
 	for i := 0; i < b.N; i++ {
 		list[i] = rand.Int()
@@ -39,8 +39,8 @@ func Benchmark_Remove(b *testing.B) {
 
 func Benchmark_Search(b *testing.B) {
 	b.StopTimer()
-	var dict = NewSkipList()
-	var list = make([]int, b.N)
+	dict := NewSkipList()
+	list := make([]int, b.N)
 	rand.Seed(time.Now().Unix())
 	for i := 0; i < b.N; i++ {
 		list[i] = rand.Int()

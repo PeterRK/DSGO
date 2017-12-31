@@ -58,8 +58,8 @@ func guardUT(t *testing.T) {
 func testArraySort(t *testing.T, doit func([]int), sz1 int, sz2 int) {
 	defer guardUT(t)
 
-	var list = randArray(sz1)
-	var tips = figureOutTips(list)
+	list := randArray(sz1)
+	tips := figureOutTips(list)
 	doit(list)
 	assert(t, checkArrary(list) && tips == figureOutTips(list))
 
@@ -89,7 +89,7 @@ func checkArrary(list []int) bool {
 	return true
 }
 func figureOutTips(list []int) int {
-	var tips = 0
+	tips := 0
 	for _, num := range list {
 		tips ^= num
 	}
@@ -98,22 +98,22 @@ func figureOutTips(list []int) int {
 
 func randArray(size int) []int {
 	rand.Seed(time.Now().Unix())
-	var list = make([]int, size)
+	list := make([]int, size)
 	for i := 0; i < size; i++ {
 		list[i] = rand.Int()
 	}
 	return list
 }
 func desArray(size int) []int {
-	var list = make([]int, size)
+	list := make([]int, size)
 	for i := 0; i < size; i++ {
 		list[i] = size - i
 	}
 	return list
 }
 func constArray(size int) []int {
-	var val = rand.Int()
-	var list = make([]int, size)
+	val := rand.Int()
+	list := make([]int, size)
 	for i := 0; i < size; i++ {
 		list[i] = val
 	}

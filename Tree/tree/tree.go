@@ -23,7 +23,7 @@ type Node struct {
 
 func BreadthFirstSearch(root *Node, doit func(int)) {
 	if root != nil {
-		var q = newQ()
+		q := newQ()
 		for err := error(nil); err == nil; root, err = q.pop() {
 			for kid := root.child; kid != nil; kid = kid.peer {
 				q.push(kid)
@@ -39,14 +39,14 @@ type TreeNode struct {
 }
 
 func BuildBalanceTree(list []int, parent *TreeNode) *TreeNode {
-	var size = len(list)
+	size := len(list)
 	if size == 0 {
 		return nil
 	}
-	var node = new(TreeNode)
+	node := new(TreeNode)
 	node.parent = parent
 	//node.left, node.right = nil, nil
-	var m = size / 2
+	m := size / 2
 	node.key = list[m]
 	if size != 1 {
 		node.left = BuildBalanceTree(list[:m], node)
@@ -60,13 +60,13 @@ func MoveForward(node *TreeNode) *TreeNode {
 		return nil
 	}
 	if node.right != nil {
-		var kid = node.right
+		kid := node.right
 		for kid.left != nil {
 			kid = kid.left
 		}
 		return kid
 	}
-	var parent = node.parent
+	parent := node.parent
 	for parent != nil && node == parent.right {
 		node, parent = parent, parent.parent
 	}
@@ -78,13 +78,13 @@ func MoveBackward(node *TreeNode) *TreeNode {
 		return nil
 	}
 	if node.left != nil {
-		var kid = node.left
+		kid := node.left
 		for kid.right != nil {
 			kid = kid.right
 		}
 		return kid
 	}
-	var parent = node.parent
+	parent := node.parent
 	for parent != nil && node == parent.left {
 		node, parent = parent, parent.parent
 	}

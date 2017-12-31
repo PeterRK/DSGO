@@ -34,7 +34,7 @@ func Benchmark_DesRadixSort(b *testing.B) {
 func benchLinkedListSort(b *testing.B,
 	doit func(*list.Node) *list.Node, make_array func(int) *list.Node) {
 	b.StopTimer()
-	var head = make_array(b.N)
+	head := make_array(b.N)
 	b.StartTimer()
 	doit(head)
 }

@@ -18,12 +18,12 @@ func (s *stack) push(pt *node, lf bool) {
 	s.core = append(s.core, stackNode{pt, lf})
 }
 func (s *stack) pop() (pt *node, lf bool) {
-	var sz = len(s.core) - 1
-	var unit = s.core[sz]
+	sz := len(s.core) - 1
+	unit := s.core[sz]
 	s.core = s.core[:sz]
 	return unit.pt, unit.lf
 }
 func (s *stack) top() (pt *node, lf bool) {
-	var unit = s.core[len(s.core)-1]
+	unit := s.core[len(s.core)-1]
 	return unit.pt, unit.lf
 }

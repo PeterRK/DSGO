@@ -22,10 +22,9 @@ type Object struct {
 func Test_SkipArray(t *testing.T) {
 	guardUT(t)
 
-	var obj1 = Object{val: 1}
-	var obj2 = Object{val: 2}
+	obj1, obj2 := Object{val: 1}, Object{val: 2}
 
-	var space = NewSkipArray(64 + 8 + 1)
+	space := NewSkipArray(64 + 8 + 1)
 	for i := 0; i < space.Capacity(); i++ {
 		assert(t, space.Insert(&obj1) == i)
 	}
@@ -45,7 +44,7 @@ func Test_SkipArray(t *testing.T) {
 	assert(t, space.Insert(&obj2) == 63)
 	assert(t, space.Insert(&obj2) == 72)
 
-	var it = space.Search(0)
+	it := space.Search(0)
 	assert(t, it != nil && it.(*Object) == &obj2)
 	it = space.Search(1)
 	assert(t, it != nil && it.(*Object) == &obj1)

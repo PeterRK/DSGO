@@ -67,7 +67,7 @@ func (hp *Heap) PushNode(unit *Node) {
 	}
 }
 func (hp *Heap) Push(key int) *Node {
-	var unit = new(Node)
+	unit := new(Node)
 	unit.key = key
 	hp.PushNode(unit)
 	return unit

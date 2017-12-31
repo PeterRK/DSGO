@@ -30,7 +30,7 @@ func isTheSame(vec1 []int, vec2 []int) bool {
 func Test_TopologicalSort(t *testing.T) {
 	defer guardUT(t)
 
-	var roads = [][]int{
+	roads := [][]int{
 		{1, 5, 6},    //0
 		nil,          //1
 		{0, 3},       //2
@@ -46,15 +46,15 @@ func Test_TopologicalSort(t *testing.T) {
 		nil,          //12
 	}
 
-	var expected = []int{8, 7, 2, 3, 0, 6, 9, 11, 12, 10, 5, 4, 1}
-	var vec, err = TopologicalSort(roads)
+	expected := []int{8, 7, 2, 3, 0, 6, 9, 11, 12, 10, 5, 4, 1}
+	vec, err := TopologicalSort(roads)
 	assert(t, err == nil && isTheSame(vec, expected))
 }
 
 func Test_SplitDirectedGraph(t *testing.T) {
 	defer guardUT(t)
 
-	var roads = [][]int{
+	roads := [][]int{
 		{1},       //0
 		{2, 3, 4}, //1
 		{5},       //2
@@ -69,8 +69,8 @@ func Test_SplitDirectedGraph(t *testing.T) {
 		{9},       //11
 	}
 
-	var expected = [][]int{{0}, {4, 1}, {3}, {5, 2}, {10, 11, 9, 8, 6, 7}}
-	var parts = SplitDirectedGraph(roads)
+	expected := [][]int{{0}, {4, 1}, {3}, {5, 2}, {10, 11, 9, 8, 6, 7}}
+	parts := SplitDirectedGraph(roads)
 	assert(t, len(parts) == len(expected))
 	for i := 0; i < len(parts); i++ {
 		assert(t, isTheSame(parts[i], expected[i]))

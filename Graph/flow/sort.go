@@ -7,7 +7,7 @@ import (
 type Path = graph.Path
 
 func sort(list []Path) {
-	var lv = uint(1)
+	lv := uint(1)
 	for sz := len(list); sz != 0; sz /= 2 {
 		lv++
 	}
@@ -19,15 +19,15 @@ func doIntroSort(list []Path, life uint) {
 	} else if life == 0 {
 		heapSort(list)
 	} else {
-		var m = partition(list)
+		m := partition(list)
 		doIntroSort(list[:m], life-1)
 		doIntroSort(list[m:], life-1)
 	}
 }
 
 func partition(list []Path) int {
-	var pivot = list[len(list)/2].Next
-	var a, b = 0, len(list) - 1
+	pivot := list[len(list)/2].Next
+	a, b := 0, len(list)-1
 	for {
 		for list[a].Next < pivot {
 			a++
@@ -55,8 +55,8 @@ func heapSort(list []Path) {
 	}
 }
 func down(list []Path, root int) {
-	var key = list[root]
-	var kid, last = root*2 + 1, len(list) - 1
+	key := list[root]
+	kid, last := root*2+1, len(list)-1
 	for kid < last {
 		if list[kid+1].Next > list[kid].Next {
 			kid++
@@ -77,7 +77,7 @@ func simpleSort(list []Path) {
 	if len(list) < 2 {
 		return
 	}
-	var best = 0
+	best := 0
 	for i := 1; i < len(list); i++ {
 		if list[i].Next < list[best].Next {
 			best = i
@@ -85,7 +85,7 @@ func simpleSort(list []Path) {
 	}
 	list[0], list[best] = list[best], list[0]
 	for i := 1; i < len(list); i++ {
-		var key, pos = list[i], i
+		key, pos := list[i], i
 		for list[pos-1].Next > key.Next {
 			list[pos] = list[pos-1]
 			pos--

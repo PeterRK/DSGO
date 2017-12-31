@@ -7,7 +7,7 @@ func (tr *Tree) Insert(key int32) bool {
 		tr.root = newNode(nil, key) //默认为红
 		tr.root.black = true
 	} else {
-		var root = tr.insert(key)
+		root := tr.insert(key)
 		if root == nil {
 			return false
 		}
@@ -18,7 +18,7 @@ func (tr *Tree) Insert(key int32) bool {
 
 //插入节点，root != nil
 func (tr *Tree) insert(key int32) *node {
-	var root = tr.root
+	root := tr.root
 	for {
 		switch {
 		case key < root.key:
@@ -64,10 +64,10 @@ func (tr *Tree) insert(key int32) *node {
 
 func (tr *Tree) rebalanceAfterInsert(P *node, key int32) {
 	for !P.black { //违反双红禁
-		var G = P.parent //必然存在，根为黑，P非根
-		var super = G.parent
+		G := P.parent //必然存在，根为黑，P非根
+		super := G.parent
 		if key < G.key {
-			var U = G.right
+			U := G.right
 			if U != nil && !U.black { //红叔模式，变色解决
 				P.black, U.black = true, true
 				if super != nil {
@@ -81,7 +81,7 @@ func (tr *Tree) rebalanceAfterInsert(P *node, key int32) {
 					G.black, P.black = false, true
 					tr.hookSubTree(super, P)
 				} else { //LR
-					var C = P.right
+					C := P.right
 					P.right, G.left = P.tryHook(C.left), G.tryHook(C.right)
 					C.left, C.right = C.hook(P), C.hook(G)
 					G.black, C.black = false, true
@@ -89,7 +89,7 @@ func (tr *Tree) rebalanceAfterInsert(P *node, key int32) {
 				}
 			}
 		} else {
-			var U = G.left
+			U := G.left
 			if U != nil && !U.black { //红叔模式，变色解决
 				P.black, U.black = true, true
 				if super != nil {
@@ -103,7 +103,7 @@ func (tr *Tree) rebalanceAfterInsert(P *node, key int32) {
 					G.black, P.black = false, true
 					tr.hookSubTree(super, P)
 				} else { //RL
-					var C = P.left
+					C := P.left
 					P.left, G.right = P.tryHook(C.right), G.tryHook(C.left)
 					C.right, C.left = C.hook(P), C.hook(G)
 					G.black, C.black = false, true

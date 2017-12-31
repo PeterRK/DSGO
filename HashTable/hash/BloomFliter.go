@@ -18,7 +18,7 @@ func (tb *BloomFliter) setBit(index uint) {
 	tb.core[index>>3] |= (byte(1) << (index & 7))
 }
 func (tb *BloomFliter) testBit(index uint) bool {
-	var bit = tb.core[index>>3] & (byte(1) << (index & 7))
+	bit := tb.core[index>>3] & (byte(1) << (index & 7))
 	return bit != byte(0)
 }
 
@@ -26,17 +26,17 @@ func (tb *BloomFliter) testBit(index uint) bool {
 //建议hash段数为ln2*(m/n)，容积率(n/m)低于1/16
 
 func (tb *BloomFliter) Insert(key []byte) {
-	var hash = md5.Sum(key)
+	hash := md5.Sum(key)
 	for i := 1; i < len(hash); i++ {
-		var index = hashToIndex(hash[i], hash[i-1])
+		index := hashToIndex(hash[i], hash[i-1])
 		tb.setBit(index)
 	}
 }
 
 func (tb *BloomFliter) Search(key []byte) bool {
-	var hash = md5.Sum(key)
+	hash := md5.Sum(key)
 	for i := 1; i < len(hash); i++ {
-		var index = hashToIndex(hash[i], hash[i-1])
+		index := hashToIndex(hash[i], hash[i-1])
 		if !tb.testBit(index) {
 			return false
 		}

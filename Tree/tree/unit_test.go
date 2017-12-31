@@ -19,14 +19,14 @@ func Test_Iterator(t *testing.T) {
 	guardUT(t)
 
 	const size = 100
-	var list = make([]int, size)
+	list := make([]int, size)
 	for i := 0; i < size; i++ {
 		list[i] = i
 	}
 
-	var root = BuildBalanceTree(list, nil)
+	root := BuildBalanceTree(list, nil)
 
-	var node = root
+	node := root
 	for node.left != nil {
 		node = node.left
 	}

@@ -28,7 +28,7 @@ func DFS(table [][]int, x int, y int) {
 		UP
 		DOWN
 	)
-	var length, width = len(table), len(table[0])
+	length, width := len(table), len(table[0])
 	var path []int
 	for {
 		if x >= 0 && x < length &&
@@ -39,7 +39,7 @@ func DFS(table [][]int, x int, y int) {
 			path = append(path, LEFT)
 		} else {
 		Label_LOOP:
-			var last = len(path) - 1
+			last := len(path) - 1
 			if last < 0 {
 				return
 			}

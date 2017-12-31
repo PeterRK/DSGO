@@ -11,8 +11,8 @@ type node struct {
 }
 
 func fakeHead(spt **node) *node {
-	var base = uintptr(unsafe.Pointer(spt))
-	var off = unsafe.Offsetof((*spt).next)
+	base := uintptr(unsafe.Pointer(spt))
+	off := unsafe.Offsetof((*spt).next)
 	return (*node)(unsafe.Pointer(base - off))
 }
 
@@ -50,7 +50,7 @@ func (tb *hashTable) initialize(fn func(str []byte) uint32) {
 	tb.bucket = make([]*node, primes[0])
 }
 func NewHashTable(fn func(str []byte) uint32) hash.HashTable {
-	var tb = new(hashTable)
+	tb := new(hashTable)
 	tb.initialize(fn)
 	return tb
 }
@@ -61,11 +61,11 @@ var primes = []uint{
 	393241, 786433, 1572869, 3145739, 6291469, 12582917, 25165843, 50331653, 1610612741}
 
 func (tb *hashTable) expand() {
-	var size = uint(len(tb.bucket))
+	size := uint(len(tb.bucket))
 	if size != primes[len(primes)-1] {
-		var a, b = 0, len(primes)
+		a, b := 0, len(primes)
 		for a < b {
-			var m = (a + b) / 2
+			m := (a + b) / 2
 			if size < primes[m] {
 				b = m
 			} else {
@@ -76,11 +76,11 @@ func (tb *hashTable) expand() {
 	}
 }
 func (tb *hashTable) shrink() {
-	var size = uint(len(tb.bucket))
+	size := uint(len(tb.bucket))
 	if size != primes[0] {
-		var a, b = len(primes) - 1, -1
+		a, b := len(primes)-1, -1
 		for a > b {
-			var m = (a + b + 1) / 2
+			m := (a + b + 1) / 2
 			if size > primes[m] {
 				b = m
 			} else {

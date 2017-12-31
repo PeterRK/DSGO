@@ -22,7 +22,7 @@ func cut(key uint, i uint) uint {
 }
 
 func (tr *Tree) Search(key uint) unsafe.Pointer {
-	var root = &tr.root
+	root := &tr.root
 	for i := uint(0); i < DEPTH && root != nil; i++ {
 		root = root.kids[cut(key, i)]
 	}
@@ -30,15 +30,15 @@ func (tr *Tree) Search(key uint) unsafe.Pointer {
 }
 
 func (tr *Tree) Insert(key uint, ptr unsafe.Pointer) bool {
-	var root = &tr.root
+	root := &tr.root
 	for i := uint(0); i < DEPTH-1; i++ {
-		var idx = cut(key, i)
+		idx := cut(key, i)
 		if root.kids[idx] == nil {
 			root.kids[idx] = new(node)
 		}
 		root = root.kids[idx]
 	}
-	var idx = key & MASK
+	idx := key & MASK
 	if root.kids[idx] != nil {
 		return false
 	}
@@ -55,13 +55,13 @@ func (tr *Tree) Remove(key uint) bool {
 			return false
 		}
 	}
-	var idx = key & MASK
+	idx := key & MASK
 	if path[DEPTH-1].kids[idx] == nil {
 		return false
 	}
 	path[DEPTH-1].kids[idx] = nil
 	for i := DEPTH - 1; i != 0; i-- {
-		var j = uint(0)
+		j := uint(0)
 		for j < KIDS_LIMIT && path[i].kids[j] == nil {
 			j++
 		}

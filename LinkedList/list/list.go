@@ -10,13 +10,13 @@ type Node struct {
 }
 
 func FakeHead(spt **Node) *Node {
-	var base = uintptr(unsafe.Pointer(spt))
-	var off = unsafe.Offsetof((*spt).Next)
+	base := uintptr(unsafe.Pointer(spt))
+	off := unsafe.Offsetof((*spt).Next)
 	return (*Node)(unsafe.Pointer(base - off))
 }
 
 func Merge(lst1 *Node, lst2 *Node) (list *Node) {
-	var last = FakeHead(&list)
+	last := FakeHead(&list)
 	for {
 		last.Next = lst1
 		if lst2 == nil {
@@ -37,9 +37,9 @@ func Merge(lst1 *Node, lst2 *Node) (list *Node) {
 }
 
 func Reverse(list *Node) *Node {
-	var head = (*Node)(nil)
+	head := (*Node)(nil)
 	for list != nil {
-		var node = list
+		node := list
 		list = list.Next
 		node.Next, head = head, node
 	}

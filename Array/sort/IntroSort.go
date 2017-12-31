@@ -4,7 +4,7 @@ package sort
 // 复杂度为O(NlogN) & O(logN)。
 // 主要限制了QuickSort的最坏情况，适合递归实现(没有爆栈风险)。
 func IntroSort(list []int) {
-	var life = log2ceil(uint(len(list))) * 2
+	life := log2ceil(uint(len(list))) * 2
 	doIntroSort(list, life)
 }
 func doIntroSort(list []int, life uint) {
@@ -13,7 +13,7 @@ func doIntroSort(list []int, life uint) {
 	} else if life == 0 {
 		HeapSort(list)
 	} else {
-		var m = partition(list)
+		m := partition(list)
 		doIntroSort(list[:m], life-1)
 		doIntroSort(list[m:], life-1)
 	}
@@ -29,7 +29,7 @@ func log2ceil(num uint) uint {
 
 // 三分内省排序
 func IntroSortY(list []int) {
-	var life = log2ceil(uint(len(list))) * 3 / 2
+	life := log2ceil(uint(len(list))) * 3 / 2
 	doIntroSortY(list, life)
 }
 func doIntroSortY(list []int, life uint) {
@@ -39,7 +39,7 @@ func doIntroSortY(list []int, life uint) {
 			return
 		}
 		life--
-		var fst, snd = triPartition(list)
+		fst, snd := triPartition(list)
 		doIntroSortY(list[:fst], life)
 		doIntroSortY(list[snd+1:], life)
 		if list[fst] == list[snd] {

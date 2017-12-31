@@ -12,8 +12,8 @@ func Pick(list []int, k int) (int, error) {
 		return 0, errors.New("out of range")
 	}
 	for begin, end := 0, len(list); begin < end-1; {
-		var pivot = list[(begin+end)/2] //一定要选偏后
-		var a, b = begin, end - 1
+		pivot := list[(begin+end)/2] //一定要选偏后
+		a, b := begin, end-1
 		for { //注意对称性
 			for list[a] < pivot {
 				a++
@@ -41,18 +41,17 @@ func Pick(list []int, k int) (int, error) {
 func Randomize(list []int) {
 	rand.Seed(time.Now().Unix())
 	for i := 1; i < len(list); i++ {
-		var j = rand.Int() % (i + 1)
+		j := rand.Int() % (i + 1)
 		list[i], list[j] = list[j], list[i]
 	}
 }
 
 // 随机组合，前n项为结果
 func RandomPart(list []int, n int) {
-	var size = len(list)
-	if n > 0 && n < size {
+	if n > 0 && n < len(list) {
 		rand.Seed(time.Now().Unix())
-		for i := n; i < size; i++ {
-			var j = rand.Int() % (i + 1)
+		for i := n; i < len(list); i++ {
+			j := rand.Int() % (i + 1)
 			list[i], list[j] = list[j], list[i]
 		}
 	}

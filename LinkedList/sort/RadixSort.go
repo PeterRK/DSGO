@@ -12,7 +12,7 @@ func RadixSort(head *list.Node) *list.Node {
 		node.Val += base
 	}
 
-	var parts, tails = new([256]*list.Node), new([256]*list.Node)
+	parts, tails := new([256]*list.Node), new([256]*list.Node)
 
 	const UINT_LEN = uint(unsafe.Sizeof(uint(0))) * 8
 	for step := uint(0); step < UINT_LEN; step += 8 {
@@ -21,10 +21,10 @@ func RadixSort(head *list.Node) *list.Node {
 			tails[i] = list.FakeHead(&parts[i])
 		}
 		for node := head; node != nil; node = node.Next {
-			var radix = uint8((node.Val >> step) & 0xFF)
+			radix := uint8((node.Val >> step) & 0xFF)
 			tails[radix].Next, tails[radix] = node, node
 		}
-		var tail = list.FakeHead(&head)
+		tail := list.FakeHead(&head)
 		for i := 0; i < 256; i++ {
 			if parts[i] != nil {
 				tail.Next = parts[i]

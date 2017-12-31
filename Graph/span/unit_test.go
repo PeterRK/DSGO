@@ -31,7 +31,7 @@ func isTheSame(vec1 []Edge, vec2 []Edge) bool {
 func Test_Prim(t *testing.T) {
 	defer guardUT(t)
 
-	var roads = [][]graph.Path{
+	roads := [][]graph.Path{
 		{{1, 8}, {3, 4}, {6, 11}},          //0
 		{{0, 8}, {2, 7}, {4, 2}, {8, 4}},   //1
 		{{1, 7}, {5, 9}, {8, 14}},          //2
@@ -43,12 +43,12 @@ func Test_Prim(t *testing.T) {
 		{{1, 4}, {2, 14}, {5, 10}, {7, 2}}, //8
 	}
 
-	var dist, err = Prim(roads)
+	dist, err := Prim(roads)
 	assert(t, err == nil && dist == 37)
 	dist, err = PrimX(roads)
 	assert(t, err == nil && dist == 37)
 
-	var expected = []Edge{
+	expected := []Edge{
 		{0, 3}, {0, 1}, {1, 4}, {1, 8}, {8, 7}, {7, 6}, {1, 2}, {2, 5}}
 	ret, err := PrimTree(roads)
 	assert(t, err == nil && isTheSame(ret, expected))
@@ -59,7 +59,7 @@ func Test_Prim(t *testing.T) {
 func Test_PlainPrim(t *testing.T) {
 	defer guardUT(t)
 
-	var matrix = [][]uint{
+	matrix := [][]uint{
 		{0, 8, 0, 4, 0, 0, 11, 0, 0},
 		{8, 0, 7, 0, 2, 0, 0, 0, 4},
 		{0, 7, 0, 0, 0, 9, 0, 0, 14},
@@ -74,7 +74,7 @@ func Test_PlainPrim(t *testing.T) {
 	dist, err := PlainPrim(matrix)
 	assert(t, err == nil && dist == 37)
 
-	var expected = []Edge{
+	expected := []Edge{
 		{0, 3}, {0, 1}, {1, 4}, {1, 8}, {8, 7}, {7, 6}, {1, 2}, {2, 5}}
 	ret, err := PlainPrimTree(matrix)
 	assert(t, err == nil && isTheSame(ret, expected))
@@ -83,7 +83,7 @@ func Test_PlainPrim(t *testing.T) {
 func Test_Kruskal(t *testing.T) {
 	defer guardUT(t)
 
-	var roads = []graph.Edge{
+	roads := []graph.Edge{
 		{0, 1, 8},
 		{0, 3, 4},
 		{0, 6, 11},
@@ -100,7 +100,7 @@ func Test_Kruskal(t *testing.T) {
 		{7, 8, 2},
 	}
 
-	var dist, err = Kruskal(roads, 9)
+	dist, err := Kruskal(roads, 9)
 	assert(t, err == nil && dist == 37)
 
 	dist, err = KruskalS(roads, 9)

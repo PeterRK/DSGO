@@ -6,29 +6,29 @@ import (
 )
 
 func PrimX(roads [][]Path) (uint, error) {
-	var size = len(roads)
-	var sum = uint(0)
+	size := len(roads)
+	sum := uint(0)
 	if size < 2 {
 		return 0, errors.New("illegal input")
 	}
 
 	const FAKE = -1
-	var list = heap.NewVectorBH(size)
+	list := heap.NewVectorBH(size)
 	for i := 1; i < size; i++ {
 		list[i].Link = FAKE
 	}
 	list[0].Index, list[0].Link, list[0].Dist = 0, 0, 0
 
-	var cnt = 0
-	var hp = heap.NewBinaryHeap(size)
+	cnt := 0
+	hp := heap.NewBinaryHeap(size)
 	hp.Push(&list[0])
 	for !hp.IsEmpty() {
-		var curr = hp.Pop()
+		curr := hp.Pop()
 		sum += curr.Dist
-		var index = curr.Index
+		index := curr.Index
 		curr.Index = FAKE
 		for _, path := range roads[index] {
-			var peer = &list[path.Next]
+			peer := &list[path.Next]
 			if peer.Link == FAKE {
 				peer.Index, peer.Link, peer.Dist = path.Next, index, path.Weight
 				hp.Push(peer)
@@ -47,25 +47,25 @@ func PrimX(roads [][]Path) (uint, error) {
 }
 
 func PrimTreeX(roads [][]Path) ([]Edge, error) {
-	var size = len(roads)
+	size := len(roads)
 	if size < 2 {
 		return nil, errors.New("illegal input")
 	}
-	var edges = make([]Edge, 0, size-1)
+	edges := make([]Edge, 0, size-1)
 
 	const FAKE = -1
-	var list = heap.NewVectorBH(size)
+	list := heap.NewVectorBH(size)
 	for i := 1; i < size; i++ {
 		list[i].Link = FAKE
 	}
 
-	var hp = heap.NewBinaryHeap(size)
-	var curr = &list[0]
+	hp := heap.NewBinaryHeap(size)
+	curr := &list[0]
 	for {
-		var index = curr.Index
+		index := curr.Index
 		curr.Index = FAKE
 		for _, path := range roads[index] {
-			var peer = &list[path.Next]
+			peer := &list[path.Next]
 			if peer.Link == FAKE {
 				peer.Index, peer.Link, peer.Dist = path.Next, index, path.Weight
 				hp.Push(peer)

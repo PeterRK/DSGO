@@ -6,8 +6,8 @@ import (
 )
 
 func fakeHead(spt **Node) *Node {
-	var base = uintptr(unsafe.Pointer(spt))
-	var off = unsafe.Offsetof((*spt).next)
+	base := uintptr(unsafe.Pointer(spt))
+	off := unsafe.Offsetof((*spt).next)
 	return (*Node)(unsafe.Pointer(base - off))
 }
 
@@ -15,9 +15,9 @@ func fakeHead(spt **Node) *Node {
 func collect(head *Node) *Node {
 	if head != nil {
 		for head.next != nil {
-			var list, knot = head, fakeHead(&head)
+			list, knot := head, fakeHead(&head)
 			for list != nil && list.next != nil { //两两配对
-				var one, another = list, list.next
+				one, another := list, list.next
 				list = another.next
 				knot.next = merge(one, another)
 				knot = knot.next
@@ -32,9 +32,9 @@ func collect(head *Node) *Node {
 
 func collect(head *Node) *Node {
 	if head != nil && head.next != nil {
-		var list, last = head, fakeHead(&head)
+		list, last := head, fakeHead(&head)
 		for list != nil && list.next != nil { //两两配对
-			var one, another = list, list.next
+			one, another := list, list.next
 			list = another.next
 			last.next = last.hook(merge(one, another))
 			last = last.next
@@ -55,14 +55,14 @@ func collect(head *Node) *Node {
 }
 
 func (hp *Heap) PopNode() *Node {
-	var unit = hp.root
+	unit := hp.root
 	if unit != nil {
 		hp.root = collect(unit.child)
 	}
 	return unit
 }
 func (hp *Heap) Pop() (int, error) {
-	var node = hp.PopNode()
+	node := hp.PopNode()
 	if node == nil {
 		return 0, errors.New("empty")
 	}

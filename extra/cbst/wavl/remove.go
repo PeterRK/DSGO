@@ -3,11 +3,11 @@ package wavl
 //成功返回true，没有返回false。
 //AVL树删除过程包括：O(log N)的搜索，O(log N)的旋转，O(log N)的平衡因子调整。
 func (tr *Tree) Remove(key int) int {
-	var target, rank = tr.findRemoveTarget(key)
+	target, rank := tr.findRemoveTarget(key)
 	if target == nil {
 		return -1
 	}
-	var victim, orphan = tr.findRemoveVictim(target)
+	victim, orphan := tr.findRemoveVictim(target)
 	tr.path.travel(func(pt *node, _ bool) {
 		pt.weight--
 	})
@@ -23,7 +23,7 @@ func (tr *Tree) Remove(key int) int {
 
 func (tr *Tree) findRemoveTarget(key int) (*node, int32) {
 	tr.path.clear()
-	var target, base = tr.root, int32(0)
+	target, base := tr.root, int32(0)
 	for target != nil {
 		if key == target.key {
 			return target, base + target.subRank()
@@ -69,8 +69,8 @@ func (tr *Tree) findRemoveVictim(target *node) (victim *node, orphan *node) {
 }
 
 func (tr *Tree) rebalanceAfterRemove(orphan *node) {
-	var root, lf = tr.hookSubTree(orphan)
-	var state, stop = root.adjust(lf), false
+	root, lf := tr.hookSubTree(orphan)
+	state, stop := root.adjust(lf), false
 	for state != 0 { //如果原平衡因子为0则子树高度不变
 		if root.state != 0 { //2 || -2
 			root, stop = root.rotate()

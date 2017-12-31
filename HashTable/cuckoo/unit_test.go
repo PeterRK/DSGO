@@ -19,15 +19,15 @@ func guardUT(t *testing.T) {
 func Test_HashTable(t *testing.T) {
 	defer guardUT(t)
 
-	var tpl = []byte("ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
+	tpl := []byte("ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
 		"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 	var book [52][]byte
 	for i := 0; i < 52; i++ {
 		book[i] = tpl[i : i+26]
 	}
 
-	var fn = [WAYS]func([]byte) uint32{hash.APhash, hash.FNVhash, hash.JShash}
-	var table = NewHashTable(fn)
+	fn := [WAYS]func([]byte) uint32{hash.APhash, hash.FNVhash, hash.JShash}
+	table := NewHashTable(fn)
 	for i := 0; i < 52; i++ {
 		assert(t, table.Insert(book[i]))
 	}

@@ -7,7 +7,7 @@ func (tr *Tree) Insert(key int32) bool {
 		tr.root = newNode(key) //默认为红
 		tr.root.black = true
 	} else {
-		var root = tr.insert(key)
+		root := tr.insert(key)
 		if root == nil {
 			return false
 		}
@@ -65,11 +65,11 @@ func (tr *Tree) insert(key int32) *node {
 //|    u    v        |                  |
 
 func (tr *Tree) adjustAfterInsert() {
-	var P, klf = tr.path.pop()
+	P, klf := tr.path.pop()
 	for !P.black { //违法双红禁
-		var G, plf = tr.path.pop() //必然存在，根为黑，P非根
+		G, plf := tr.path.pop() //必然存在，根为黑，P非根
 		if plf {
-			var U = G.right
+			U := G.right
 			if !U.isBlack() { //红叔模式，变色解决
 				P.black, U.black = true, true
 				if !tr.path.isEmpty() {
@@ -83,7 +83,7 @@ func (tr *Tree) adjustAfterInsert() {
 					G.black, P.black = false, true
 					tr.hookSubTree(P)
 				} else { //LR
-					var C = P.right
+					C := P.right
 					P.right, G.left = C.left, C.right
 					C.left, C.right = P, G
 					G.black, C.black = false, true
@@ -91,7 +91,7 @@ func (tr *Tree) adjustAfterInsert() {
 				}
 			}
 		} else {
-			var U = G.left
+			U := G.left
 			if !U.isBlack() { //红叔模式，变色解决
 				P.black, U.black = true, true
 				if !tr.path.isEmpty() {
@@ -101,7 +101,7 @@ func (tr *Tree) adjustAfterInsert() {
 				} //遇根终止
 			} else { //黑叔模式，旋转解决
 				if klf { //RL
-					var C = P.left
+					C := P.left
 					P.left, G.right = C.right, C.left
 					C.right, C.left = P, G
 					G.black, C.black = false, true

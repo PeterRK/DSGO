@@ -7,8 +7,8 @@ import (
 //输入邻接表，返回拓扑序列
 func TopologicalSort(roads [][]int) ([]int, error) {
 	var list []int
-	var size = len(roads)
-	var book = make([]int, size)
+	size := len(roads)
+	book := make([]int, size)
 	//	for i := 0; i < size; i++ {
 	//		book[i] = 0
 	//	}
@@ -26,8 +26,8 @@ func TopologicalSort(roads [][]int) ([]int, error) {
 	}
 
 	for len(space) != 0 {
-		var last = len(space) - 1
-		var cur = space[last]
+		last := len(space) - 1
+		cur := space[last]
 		space = space[:last]
 
 		for _, next := range roads[cur] {

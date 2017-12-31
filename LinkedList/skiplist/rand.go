@@ -9,12 +9,12 @@ type easyRand struct {
 }
 
 func NewEasyRand(seed uint) Random {
-	var rand = new(easyRand)
+	rand := new(easyRand)
 	rand.magic = seed
 	return rand
 }
 func (r *easyRand) Next() uint32 {
-	var num = uint32(r.magic)
+	num := uint32(r.magic)
 	r.magic = r.magic*1103515245 + 12345
 	return num
 }
@@ -32,7 +32,7 @@ func (mt *mt19937) initialize(seed uint32) {
 	}
 }
 func NewMT19937(seed uint) Random {
-	var mt = new(mt19937)
+	mt := new(mt19937)
 	mt.initialize(uint32(seed))
 	return mt
 }
@@ -40,7 +40,7 @@ func NewMT19937(seed uint) Random {
 func (mt *mt19937) Next() uint32 {
 	if mt.index == 0 {
 		for i := 0; i < 624; i++ {
-			var num = (mt.array[i] & uint32(0x80000000)) + (mt.array[(i+1)%624] & uint32(0x7fffffff))
+			num := (mt.array[i] & uint32(0x80000000)) + (mt.array[(i+1)%624] & uint32(0x7fffffff))
 			mt.array[i] = mt.array[(i+397)%624] ^ (num >> 1)
 			if num%2 != 0 {
 				mt.array[i] ^= uint32(0x9908b0df)
@@ -48,7 +48,7 @@ func (mt *mt19937) Next() uint32 {
 		}
 	}
 
-	var num = mt.array[mt.index]
+	num := mt.array[mt.index]
 	mt.index = (mt.index + 1) % 624
 	num ^= num >> 11
 	num ^= (num << 7) & uint32(0x9d2c5680)
@@ -68,13 +68,13 @@ func (xs *xorshift) initialize(seed uint32) {
 }
 
 func NewXorshift(seed uint) Random {
-	var xs = new(xorshift)
+	xs := new(xorshift)
 	xs.initialize(uint32(seed))
 	return xs
 }
 
 func (xs *xorshift) Next() uint32 {
-	var t = xs.x ^ (xs.x << 11)
+	t := xs.x ^ (xs.x << 11)
 	xs.x, xs.y, xs.z = xs.y, xs.z, xs.w
 	xs.w ^= (xs.w >> 19) ^ t ^ (t >> 8)
 	return xs.w

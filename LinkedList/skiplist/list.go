@@ -28,7 +28,7 @@ type skipList struct {
 }
 
 func NewSkipList() SkipList {
-	var l = new(skipList)
+	l := new(skipList)
 	l.initialize()
 	return l
 }
@@ -52,26 +52,26 @@ func (l *skipList) Travel(doit func(int)) {
 	}
 }
 func (l *skipList) Search(key int) bool {
-	var knot = (*node)(unsafe.Pointer(l))
+	knot := (*node)(unsafe.Pointer(l))
 	for i := l.level - 1; i >= 0; i-- {
 		for knot.next[i] != nil && knot.next[i].key < key {
 			knot = knot.next[i]
 		}
 	}
-	var target = knot.next[0]
+	target := knot.next[0]
 	return target != nil && target.key == key
 }
 
 //成功返回true，冲突返回false
 func (l *skipList) Insert(key int) bool {
-	var knot = (*node)(unsafe.Pointer(l))
+	knot := (*node)(unsafe.Pointer(l))
 	for i := l.level - 1; i >= 0; i-- {
 		for knot.next[i] != nil && knot.next[i].key < key {
 			knot = knot.next[i]
 		}
 		l.knots[i] = knot
 	}
-	var target = knot.next[0]
+	target := knot.next[0]
 	if target != nil && target.key == key {
 		return false
 	}
@@ -85,7 +85,7 @@ func (l *skipList) Insert(key int) bool {
 		l.knots = append(l.knots, (*node)(unsafe.Pointer(l)))
 	}
 
-	var lv = 1
+	lv := 1
 	for lv < l.level &&
 		l.rand.Next() <= (^uint32(0)/uint32(LEVEL_FACTOR)) {
 		lv++
@@ -102,19 +102,19 @@ func (l *skipList) Insert(key int) bool {
 
 //成功返回true，没有返回false
 func (l *skipList) Remove(key int) bool {
-	var knot = (*node)(unsafe.Pointer(l))
+	knot := (*node)(unsafe.Pointer(l))
 	for i := l.level - 1; i >= 0; i-- {
 		for knot.next[i] != nil && knot.next[i].key < key {
 			knot = knot.next[i]
 		}
 		l.knots[i] = knot
 	}
-	var target = knot.next[0]
+	target := knot.next[0]
 	if target == nil || target.key != key {
 		return false
 	}
 
-	var lv = min(len(target.next), l.level)
+	lv := min(len(target.next), l.level)
 	for i := 0; i < lv; i++ {
 		l.knots[i].next[i] = target.next[i]
 	}

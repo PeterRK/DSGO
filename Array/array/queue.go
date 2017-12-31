@@ -16,9 +16,8 @@ type Queue interface {
 
 // 申请环状队列
 func NewQueue(size int) (Queue, error) {
-	var core = new(queue)
-	var err = core.initialize(size)
-	if err != nil {
+	core := new(queue)
+	if err := core.initialize(size); err != nil {
 		return nil, err
 	}
 	return core, nil
@@ -34,7 +33,7 @@ func (q *queue) initialize(size int) error {
 	if size < 1 || size > 0xffff {
 		return errors.New("illefal queue size")
 	}
-	var sz = 4
+	sz := 4
 	for sz <= size {
 		sz *= 2
 	} //实际容量为sz-1
@@ -48,15 +47,14 @@ func (q *queue) Clear() {
 }
 
 func (q *queue) IsFull() bool {
-	var next = (q.wpt + 1) & q.mask
-	return next == q.rpt
+	return (q.wpt+1)&q.mask == q.rpt
 }
 func (q *queue) IsEmpty() bool {
 	return q.rpt == q.wpt
 }
 
 func (q *queue) Push(key int) error {
-	var next = (q.wpt + 1) & q.mask
+	next := (q.wpt + 1) & q.mask
 	if next == q.rpt {
 		return errors.New("full")
 	}
@@ -73,7 +71,7 @@ func (q *queue) Front() (int, error) {
 	return q.space[q.rpt], nil
 }
 func (q *queue) Pop() (int, error) {
-	var key, err = q.Front()
+	key, err := q.Front()
 	if err == nil {
 		//memory barrier
 		q.rpt = (q.rpt + 1) & q.mask

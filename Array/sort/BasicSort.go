@@ -16,7 +16,7 @@ func BubleSort(list []int) {
 // 比较操作是O(N^2)，挪移是O(N)，综合性能不如InsertSort。
 func SelectSort(list []int) {
 	for i := 0; i < len(list)-1; i++ {
-		var pos = i
+		pos := i
 		for j := i + 1; j < len(list); j++ {
 			if list[j] < list[pos] {
 				pos = j
@@ -30,11 +30,10 @@ func SelectSort(list []int) {
 // 比较操作是O(NlogN)，挪移是O(N^2)，综合性能优于SelectSort。
 func InsertSort(list []int) {
 	for i := 1; i < len(list); i++ {
-		var key = list[i]
-		var a, b = 0, i
+		key := list[i]
+		a, b := 0, i
 		for a < b {
-			//var m = (a + b) / 2
-			var m = a + (b-a)/2
+			m := a + (b-a)/2 //(a+b)/2
 			if key < list[m] {
 				b = m
 			} else { //找第一个大于key的位置
@@ -52,7 +51,7 @@ func SimpleSortX(list []int) {
 	if len(list) < 2 {
 		return
 	}
-	var best = 0
+	best := 0
 	for i := 1; i < len(list); i++ {
 		if list[i] < list[best] {
 			best = i
@@ -60,7 +59,7 @@ func SimpleSortX(list []int) {
 	}
 	list[0], list[best] = list[best], list[0]
 	for i := 1; i < len(list); i++ {
-		var key, pos = list[i], i
+		key, pos := list[i], i
 		for list[pos-1] > key {
 			list[pos] = list[pos-1]
 			pos--
@@ -73,14 +72,14 @@ func SimpleSort(list []int) {
 		return
 	}
 	for i := 1; i < len(list); i++ {
-		var key = list[i]
+		key := list[i]
 		if key < list[0] {
 			for j := i; j > 0; j-- {
 				list[j] = list[j-1]
 			}
 			list[0] = key
 		} else {
-			var pos = i
+			pos := i
 			for list[pos-1] > key {
 				list[pos] = list[pos-1]
 				pos--

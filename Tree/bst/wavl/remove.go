@@ -3,14 +3,14 @@ package wavl
 //成功返回序号（从1开始），没有返回-1。
 //AVL树删除过程包括：O(log N)的搜索，O(log N)的旋转，O(log N)的平衡因子调整。
 func (tr *Tree) Remove(key int) int {
-	var target, rank = tr.findRemoveTarget(key)
+	target, rank := tr.findRemoveTarget(key)
 	if target == nil {
 		return -1
 	}
 	for node := target.parent; node != nil; node = node.parent {
 		node.weight--
 	}
-	var victim, orphan = findRemoveVictim(target)
+	victim, orphan := findRemoveVictim(target)
 
 	if victim.parent == nil { //此时victim==target
 		tr.root = ((*node)(nil)).tryHook(orphan)
@@ -22,7 +22,7 @@ func (tr *Tree) Remove(key int) int {
 }
 
 func (tr *Tree) findRemoveTarget(key int) (*node, int32) {
-	var target, base = tr.root, int32(0)
+	target, base := tr.root, int32(0)
 	for target != nil {
 		if key == target.key {
 			return target, base + target.subRank()
@@ -65,8 +65,8 @@ func findRemoveVictim(target *node) (victim *node, orphan *node) {
 }
 
 func (tr *Tree) rebalanceAfterRemove(victim *node, orphan *node, key int) {
-	var root = victim.parent
-	var state, stop = root.state, false
+	root := victim.parent
+	state, stop := root.state, false
 	if key < root.key {
 		root.left = root.tryHook(orphan)
 		root.state--
@@ -76,7 +76,7 @@ func (tr *Tree) rebalanceAfterRemove(victim *node, orphan *node, key int) {
 	}
 
 	for state != 0 { //如果原平衡因子为0则子树高度不变
-		var super = root.parent
+		super := root.parent
 		if super == nil {
 			if root.state != 0 { //2 || -2
 				root, _ = root.rotate()

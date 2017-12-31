@@ -13,9 +13,9 @@ func (hp *heap) floatUp(unit *memo, delta uint) {
 	hp.shiftUp(unit.off)
 }
 func (hp *heap) shiftUp(pos int) {
-	var unit = hp.core[pos]
+	unit := hp.core[pos]
 	for pos > 0 {
-		var parent = (pos - 1) / 2
+		parent := (pos - 1) / 2
 		if hp.core[parent].weight <= unit.weight {
 			break
 		}
@@ -26,27 +26,27 @@ func (hp *heap) shiftUp(pos int) {
 }
 
 func (hp *heap) push(unit *memo) {
-	var pos = len(hp.core)
+	pos := len(hp.core)
 	hp.core = append(hp.core, unit)
 	//	unit.off = pos
 	hp.shiftUp(pos)
 }
 
 func (hp *heap) pop() *memo {
-	var size = len(hp.core)
+	size := len(hp.core)
 	//	if size == 0 {
 	//		return nil
 	//	}
-	var result = hp.core[0]
+	result := hp.core[0]
 	if size == 1 {
 		hp.core = hp.core[:0]
 		return result
 	}
 
-	var unit = hp.core[size-1]
+	unit := hp.core[size-1]
 	hp.core = hp.core[:size-1]
 
-	var pos, kid, last = 0, 1, size - 2
+	pos, kid, last := 0, 1, size-2
 	for kid < last {
 		if hp.core[kid+1].weight < hp.core[kid].weight {
 			kid++

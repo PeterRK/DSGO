@@ -15,7 +15,7 @@ func QuickSort(head *list.Node) *list.Node {
 func doQuickSort(head *list.Node) (first, last *list.Node) {
 	first, last = sortOnlyTwo(head)
 	if first == nil {
-		var left, center, right, _ = partition(head)
+		left, center, right, _ := partition(head)
 		var knot *list.Node
 		first, knot = doQuickSort(left)
 		knot.Next = center
@@ -30,7 +30,7 @@ func sortOnlyTwo(head *list.Node) (first, last *list.Node) {
 	if head.Next == nil {
 		return head, head
 	}
-	var node = head.Next
+	node := head.Next
 	if node.Next == nil {
 		if head.Val > node.Val {
 			node.Next, head.Next = head, nil
@@ -42,9 +42,9 @@ func sortOnlyTwo(head *list.Node) (first, last *list.Node) {
 }
 
 func partition(nd0 *list.Node) (left, center, right *list.Node, size int) {
-	var nd1 = nd0.Next
-	var nd2 = nd1.Next
-	var tail = nd2.Next
+	nd1 := nd0.Next
+	nd2 := nd1.Next
+	tail := nd2.Next
 
 	if nd1.Val > nd2.Val {
 		nd1, nd2 = nd2, nd1

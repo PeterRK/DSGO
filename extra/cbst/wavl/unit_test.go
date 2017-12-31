@@ -19,7 +19,7 @@ func guardUT(t *testing.T) {
 
 func randArray(size int) []int {
 	rand.Seed(time.Now().Unix())
-	var list = make([]int, size)
+	list := make([]int, size)
 	for i := 0; i < size; i++ {
 		list[i] = rand.Int()
 	}
@@ -29,9 +29,9 @@ func Test_Tree(t *testing.T) {
 	defer guardUT(t)
 
 	var tree Tree
-	var cnt = 0
 	const size = 200
-	var list = randArray(size)
+	list := randArray(size)
+	cnt := 0
 
 	for i := 0; i < size; i++ {
 		if tree.Insert(list[i]) > 0 {
@@ -58,7 +58,7 @@ func Test_Tree(t *testing.T) {
 func randomize(list []int) {
 	rand.Seed(time.Now().Unix())
 	for i := 1; i < len(list); i++ {
-		var j = rand.Int() % (i + 1)
+		j := rand.Int() % (i + 1)
 		list[i], list[j] = list[j], list[i]
 	}
 }
@@ -67,25 +67,25 @@ func Test_Rank(t *testing.T) {
 
 	var tree Tree
 	const size = 200
-	var list = make([]int, size)
+	list := make([]int, size)
 
 	for i := 0; i < size; i++ {
 		list[i] = i + 1
 	}
 	randomize(list)
-	var shadow = make([]int, size)
+	shadow := make([]int, size)
 	for i := 0; i < size; i++ {
 		shadow[i] = list[i]
 	}
 
 	assert(t, tree.Insert(shadow[0]) == 1)
 	for i := 1; i < size; i++ {
-		var rank = tree.Insert(shadow[i])
+		rank := tree.Insert(shadow[i])
 
-		var key = shadow[i]
-		var a, b = 0, i
+		key := shadow[i]
+		a, b := 0, i
 		for a < b {
-			var m = a + (b-a)/2
+			m := a + (b-a)/2
 			if key < shadow[m] {
 				b = m
 			} else {
@@ -105,12 +105,12 @@ func Test_Rank(t *testing.T) {
 	}
 
 	for i := 0; i < size; i++ {
-		var rank = tree.Remove(list[i])
+		rank := tree.Remove(list[i])
 
-		var key = list[i]
-		var a, b = 0, size - i
+		key := list[i]
+		a, b := 0, size-i
 		for a < b {
-			var m = a + (b-a)/2
+			m := a + (b-a)/2
 			if key < shadow[m] {
 				b = m
 			} else {

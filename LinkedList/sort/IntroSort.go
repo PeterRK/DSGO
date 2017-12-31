@@ -22,8 +22,8 @@ func IntroSort(head *list.Node) *list.Node {
 		return first
 	}
 
-	var left, center, right, size = partition(head)
-	var life = log2ceil(uint(size)) * 2
+	left, center, right, size := partition(head)
+	life := log2ceil(uint(size)) * 2
 
 	var knot *list.Node
 	head, knot = doIntroSort(left, life)
@@ -38,7 +38,7 @@ func doIntroSort(head *list.Node, life uint) (first, last *list.Node) {
 		if life == 0 {
 			first, last = doMergeSort(head)
 		} else {
-			var left, center, right, _ = partition(head)
+			left, center, right, _ := partition(head)
 			var knot *list.Node
 			first, knot = doIntroSort(left, life-1)
 			knot.Next = center

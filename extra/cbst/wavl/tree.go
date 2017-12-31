@@ -18,7 +18,7 @@ func (tr *Tree) IsEmpty() bool {
 
 //找到返回序号（从1开始），没有返回-1
 func (tr *Tree) Search(key int) int {
-	var target, base = tr.root, int32(0)
+	target, base := tr.root, int32(0)
 	for target != nil {
 		if key == target.key {
 			return int(base + target.subRank())

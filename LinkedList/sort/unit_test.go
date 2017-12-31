@@ -38,8 +38,8 @@ func testLinkListSort(t *testing.T,
 	doit func(*list.Node) *list.Node, sz1 int, sz2 int) {
 	defer guardUT(t)
 
-	var head = randLinkedList(sz1)
-	var tips = figureOutTips(head)
+	head := randLinkedList(sz1)
+	tips := figureOutTips(head)
 	head = doit(head)
 	assert(t, checkLinkList(head, sz1) && tips == figureOutTips(head))
 
@@ -57,7 +57,7 @@ func checkLinkList(head *list.Node, size int) bool {
 	if size == 0 {
 		return head == nil
 	}
-	var cnt = 1
+	cnt := 1
 	for ; head.Next != nil; head = head.Next {
 		if head.Next.Val < head.Val {
 			return false
@@ -67,7 +67,7 @@ func checkLinkList(head *list.Node, size int) bool {
 	return cnt == size
 }
 func figureOutTips(head *list.Node) int {
-	var tips = 0
+	tips := 0
 	for ; head != nil; head = head.Next {
 		tips ^= head.Val
 	}
@@ -77,7 +77,7 @@ func figureOutTips(head *list.Node) int {
 func randLinkedList(size int) *list.Node {
 	rand.Seed(time.Now().Unix())
 	var head *list.Node
-	var tail = list.FakeHead(&head)
+	tail := list.FakeHead(&head)
 	for i := 0; i < size; i++ {
 		tail.Next = new(list.Node)
 		tail = tail.Next
@@ -88,7 +88,7 @@ func randLinkedList(size int) *list.Node {
 }
 func desLinkList(size int) *list.Node {
 	var head *list.Node
-	var tail = list.FakeHead(&head)
+	tail := list.FakeHead(&head)
 	for i := 0; i < size; i++ {
 		tail.Next = new(list.Node)
 		tail = tail.Next

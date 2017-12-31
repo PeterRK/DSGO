@@ -23,10 +23,10 @@ func (G *node) rotate() (root *node, stop bool) {
 	stop = false
 	//root = nil
 	if G.state == 2 { //左倾右旋
-		var P = G.left
+		P := G.left
 		if P.state == -1 { //LR
-			var C = P.right //一定非nil
-			var v = C.right.realWeight()
+			C := P.right //一定非nil
+			v := C.right.realWeight()
 			P.right, G.left = P.tryHook(C.left), G.tryHook(C.right)
 			C.left, C.right = C.hook(P), C.hook(G)
 
@@ -45,7 +45,7 @@ func (G *node) rotate() (root *node, stop bool) {
 			P.weight -= v + 1
 			root = C
 		} else { //LL
-			var x = P.right.realWeight()
+			x := P.right.realWeight()
 			G.left, P.right = G.tryHook(P.right), P.hook(G)
 
 			if P.state == 1 { //真LL
@@ -55,16 +55,16 @@ func (G *node) rotate() (root *node, stop bool) {
 				G.state, P.state = 1, -1
 			}
 
-			var p = P.weight
+			p := P.weight
 			P.weight = G.weight
 			G.weight -= p - x
 			root = P
 		}
 	} else { //右倾左旋(P.state==-2)
-		var P = G.right
+		P := G.right
 		if P.state == 1 { //RL
-			var C = P.left //一定非nil
-			var v = C.left.realWeight()
+			C := P.left //一定非nil
+			v := C.left.realWeight()
 			P.left, G.right = P.tryHook(C.right), G.tryHook(C.left)
 			C.right, C.left = C.hook(P), C.hook(G)
 
@@ -83,7 +83,7 @@ func (G *node) rotate() (root *node, stop bool) {
 			P.weight -= v + 1
 			root = C
 		} else { //RR
-			var x = P.left.realWeight()
+			x := P.left.realWeight()
 			G.right, P.left = G.tryHook(P.left), P.hook(G)
 
 			if P.state == -1 { //真RR
@@ -93,7 +93,7 @@ func (G *node) rotate() (root *node, stop bool) {
 				G.state, P.state = -1, 1
 			}
 
-			var p = P.weight
+			p := P.weight
 			P.weight = G.weight
 			G.weight -= p - x
 			root = P

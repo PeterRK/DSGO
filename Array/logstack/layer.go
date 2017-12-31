@@ -15,12 +15,12 @@ type layer struct {
 }
 
 func tellMark(bitvec []usec, place uint) bool {
-	var idx, sft = place / USSZ, place % USSZ
+	idx, sft := place/USSZ, place%USSZ
 	return (bitvec[idx] & (usec(1) << sft)) != 0
 }
 
 func changeMark(bitvec []usec, place uint, mk bool) {
-	var idx, sft = place / USSZ, place % USSZ
+	idx, sft := place/USSZ, place%USSZ
 	if mk {
 		bitvec[idx] |= usec(1) << sft
 	} else {
@@ -38,9 +38,9 @@ func (ly *layer) size() uint {
 }
 
 func (ly *layer) change(key int, mk bool) {
-	var a, b = uint(0), ly.size()
+	a, b := uint(0), ly.size()
 	for a < b {
-		var m = (a + b) / 2
+		m := a + (b-a)/2
 		switch {
 		case key > ly.data[m]:
 			a = m + 1
@@ -57,11 +57,11 @@ func (ly *layer) change(key int, mk bool) {
 	}
 	ly.data = append(ly.data, 0)
 
-	var idx = a / USSZ
+	idx := a / USSZ
 	for i := (ly.size() - 1) / USSZ; i > idx; i-- {
 		ly.mark[i] = (ly.mark[i] << 1) | (ly.mark[i-1] >> (USSZ - 1))
 	}
-	var mask = ^usec(0) << (a % USSZ)
+	mask := ^usec(0) << (a % USSZ)
 	ly.mark[idx] = (ly.mark[idx] & ^mask) | ((ly.mark[idx] & mask) << 1)
 
 	changeMark(ly.mark, a, mk)
@@ -74,9 +74,9 @@ func (ly *layer) change(key int, mk bool) {
 
 //返回0表示没有，返回1表示有，返回-1表示标记删除
 func (ly *layer) search(key int) int {
-	var a, b = uint(0), ly.size()
+	a, b := uint(0), ly.size()
 	for a < b {
-		var m = (a + b) / 2
+		m := a + (b-a)/2
 		switch {
 		case key > ly.data[m]:
 			a = m + 1
@@ -102,7 +102,7 @@ func (ly *layer) extend(key int, mk bool) {
 }
 func (ly *layer) merge(vic *layer) {
 	var nly layer
-	var a, b = uint(0), uint(0)
+	a, b := uint(0), uint(0)
 	for a < ly.size() && b < vic.size() {
 		if ly.data[a] < vic.data[b] {
 			nly.extend(ly.data[a], tellMark(ly.mark, a))
@@ -127,7 +127,7 @@ func (ly *layer) merge(vic *layer) {
 }
 
 func (ly *layer) compact() {
-	var w = uint(0)
+	w := uint(0)
 	for r := uint(0); r < ly.size(); r++ {
 		if tellMark(ly.mark, r) {
 			ly.data[w] = ly.data[r]

@@ -6,7 +6,7 @@ func (tr *Tree) Insert(key int32) bool {
 	if tr.root == nil {
 		tr.root = newNode(key)
 	} else {
-		var root = tr.insert(key)
+		root := tr.insert(key)
 		if root == nil {
 			return false
 		}
@@ -18,7 +18,7 @@ func (tr *Tree) Insert(key int32) bool {
 //插入节点，root != nil
 func (tr *Tree) insert(key int32) *node {
 	tr.path.clear()
-	var root = tr.root
+	root := tr.root
 	for {
 		switch {
 		case key < root.key:
@@ -43,7 +43,7 @@ func (tr *Tree) insert(key int32) *node {
 
 //回溯矫正
 func (tr *Tree) rebalanceAfterInsert(root *node, key int32) {
-	var state, lf = int8(0), false
+	state, lf := int8(0), false
 	for !tr.path.isEmpty() && state == 0 {
 		root, lf = tr.path.pop()
 		state = root.adjust(!lf)

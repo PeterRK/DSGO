@@ -21,9 +21,9 @@ func Test_Tree(t *testing.T) {
 	defer guardUT(t)
 
 	var tree Tree
-	var cnt = 0
 	const size = 5000
-	var list = new([size]int)
+	list := new([size]int)
+	cnt := 0
 
 	rand.Seed(time.Now().Unix())
 	for i := 0; i < size; i++ {

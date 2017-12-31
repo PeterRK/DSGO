@@ -2,10 +2,9 @@ package array
 
 // 在由小到大的序列中寻找第一个大于key的位置
 func SearchAfter(list []int, key int) int {
-	var a, b = 0, len(list)
+	a, b := 0, len(list)
 	for a < b {
-		//var m = (a + b) / 2
-		var m = a + (b-a)/2
+		m := a + (b-a)/2 //(a+b)/2
 		if key < list[m] {
 			b = m
 		} else {
@@ -18,8 +17,7 @@ func SearchAfter(list []int, key int) int {
 // 寻找key的位置(未必是第一个)，没有返回-1
 func Search(list []int, key int) int {
 	for a, b := 0, len(list); a < b; {
-		//var m = (a + b) / 2
-		var m = a + (b-a)/2
+		m := a + (b-a)/2 //(a+b)/2
 		switch {
 		case key > list[m]:
 			a = m + 1
@@ -34,10 +32,9 @@ func Search(list []int, key int) int {
 
 // 在由小到大的序列中寻找第一个大于或等于key的位置
 func SearchFirst(list []int, key int) int {
-	var a, b = 0, len(list)
+	a, b := 0, len(list)
 	for a < b {
-		//var m = (a + b) / 2
-		var m = a + (b-a)/2
+		m := a + (b-a)/2 //(a+b)/2
 		if key > list[m] {
 			a = m + 1
 		} else {
@@ -49,11 +46,9 @@ func SearchFirst(list []int, key int) int {
 
 // 在由小到大的序列中寻找最后一个小于或等于key的位置
 func SearchLast(list []int, key int) int {
-	var a, b = len(list) - 1, -1
+	a, b := len(list)-1, -1
 	for a > b {
-		//"(a + b + 2) / 2"也可以，但"(a+b)/2 + 1"不行
-		//var m = (a + b + 1) / 2
-		var m = a + (b-a+1)/2
+		m := a + (b-a+1)/2 //(a+b+1)/2，(a+b+2)/2也可以，但(a+b)/2+1不行
 		if key < list[m] {
 			a = m - 1
 		} else {
@@ -75,7 +70,7 @@ func SearchRange(list []int, key int) (first, last int, ok bool) {
 
 // 向有序数组插入值
 func Insert(list []int, key int) []int {
-	var spot = SearchAfter(list, key)
+	spot := SearchAfter(list, key)
 	list = append(list, 0)
 	for i := len(list) - 1; i > spot; i-- {
 		list[i] = list[i-1] //后移

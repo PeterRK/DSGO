@@ -9,27 +9,27 @@ import (
 //复杂度为O(E+VlogV)，通常比Kruskal强。
 //对有向图不适用，多路同权时选择有问题（不能倒着用，可能选错）。
 func Prim(roads [][]Path) (uint, error) {
-	var size = len(roads)
-	var sum = uint(0)
+	size := len(roads)
+	sum := uint(0)
 	if size < 2 {
 		return 0, errors.New("illegal input")
 	}
 
 	const FAKE = -1
-	var list = heap.NewVectorPH(size)
+	list := heap.NewVectorPH(size)
 	for i := 1; i < size; i++ {
 		list[i].Link = FAKE
 	}
 	list[0].Index, list[0].Link, list[0].Dist = 0, 0, 0
-	var root = heap.Insert(nil, &list[0])
+	root := heap.Insert(nil, &list[0])
 
 	var cnt int
 	for cnt = 0; root != nil; cnt++ {
 		sum += root.Dist
-		var index = root.Index
+		index := root.Index
 		root.Index, root = FAKE, heap.Extract(root) //入围
 		for _, path := range roads[index] {
-			var peer = &list[path.Next]
+			peer := &list[path.Next]
 			if peer.Link == FAKE { //未涉及点
 				peer.Index, peer.Link, peer.Dist = path.Next, index, path.Weight
 				root = heap.Insert(root, peer)
@@ -48,25 +48,25 @@ func Prim(roads [][]Path) (uint, error) {
 
 //输入邻接表，返回一个以0号节点为根的最小生成树。
 func PrimTree(roads [][]Path) ([]Edge, error) {
-	var size = len(roads)
+	size := len(roads)
 	if size < 2 {
 		return nil, errors.New("illegal input")
 	}
-	var edges = make([]Edge, 0, size-1)
+	edges := make([]Edge, 0, size-1)
 
 	const FAKE = -1
-	var list = heap.NewVectorPH(size)
+	list := heap.NewVectorPH(size)
 	for i := 1; i < size; i++ {
 		list[i].Link = FAKE
 	}
 	list[0].Index, list[0].Link, list[0].Dist = 0, 0, 0
-	var root = heap.Insert(nil, &list[0])
+	root := heap.Insert(nil, &list[0])
 
 	for {
-		var index = root.Index
+		index := root.Index
 		root.Index, root = FAKE, heap.Extract(root) //入围
 		for _, path := range roads[index] {
-			var peer = &list[path.Next]
+			peer := &list[path.Next]
 			if peer.Link == FAKE { //未涉及点
 				peer.Index, peer.Link, peer.Dist = path.Next, index, path.Weight
 				root = heap.Insert(root, peer)

@@ -8,11 +8,11 @@ type memo struct {
 const FakeID = -1
 
 func shadowGraph(roads [][]int) [][]int {
-	var shadow = make([][]int, len(roads))
+	shadow := make([][]int, len(roads))
 	for i := 0; i < len(roads); i++ {
-		var nexts = roads[i]
+		nexts := roads[i]
 		for j := 0; j < len(nexts); j++ {
-			var peer = nexts[j]
+			peer := nexts[j]
 			shadow[peer] = append(shadow[peer], i)
 		}
 	}
@@ -27,13 +27,13 @@ type data struct {
 }
 
 func doDFS(doit func(*data, int), pk *data, curr int) {
-	var node = &pk.book[curr]
+	node := &pk.book[curr]
 	node.id = FakeID
 	node.prev.next, node.next.prev = node.next, node.prev
 
-	var nexts = pk.roads[curr]
+	nexts := pk.roads[curr]
 	for i := 0; i < len(nexts); i++ {
-		var peer = nexts[i]
+		peer := nexts[i]
 		if pk.book[peer].id != FakeID {
 			doit(pk, peer)
 		}
@@ -41,13 +41,13 @@ func doDFS(doit func(*data, int), pk *data, curr int) {
 }
 func doDFSX(pk *data, curr int) {
 	doDFS(doDFSX, pk, curr)
-	var node = &pk.book[curr]
+	node := &pk.book[curr]
 	pk.knot.next.prev, node.next = node, pk.knot.next
 	pk.knot.next, node.prev = node, pk.knot
 }
 func doDFSY(pk *data, curr int) {
 	doDFS(doDFSY, pk, curr)
-	var last = len(pk.parts) - 1
+	last := len(pk.parts) - 1
 	pk.parts[last] = append(pk.parts[last], curr)
 }
 
@@ -60,7 +60,7 @@ func (pk *data) dfsY(id int) {
 
 //分解强联通分量
 func SplitDirectedGraph(roads [][]int) [][]int {
-	var size = len(roads)
+	size := len(roads)
 	if size < 1 {
 		return nil
 	}
@@ -68,7 +68,7 @@ func SplitDirectedGraph(roads [][]int) [][]int {
 		return [][]int{{0}}
 	}
 
-	var book = make([]memo, size+2)
+	book := make([]memo, size+2)
 	for i := 0; i < size; i++ {
 		book[i].next, book[i+1].prev = &book[i+1], &book[i]
 		book[i].id = i
@@ -77,11 +77,11 @@ func SplitDirectedGraph(roads [][]int) [][]int {
 	book[size].id, book[size+1].id = FakeID, FakeID
 	book[size+1].prev, book[size+1].next = &book[size+1], &book[size+1]
 
-	var pack = data{
+	pack := data{
 		roads: roads,
 		book:  book,
 		knot:  &book[size+1]}
-	var knot = &book[size]
+	knot := &book[size]
 	for knot.next != knot {
 		pack.dfsX(knot.next.id)
 	}

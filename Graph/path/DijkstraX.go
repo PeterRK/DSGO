@@ -5,38 +5,38 @@ import (
 )
 
 func DijkstraX(roads [][]Path, start int) []int {
-	var size = len(roads)
+	size := len(roads)
 	if size == 0 || start < 0 || start >= size {
 		return nil
 	}
 
-	var result = make([]int, size)
+	result := make([]int, size)
 	if size == 1 {
 		result[0] = 0
 		return result
 	}
 
-	var list = heap.NewVectorBH(size)
+	list := heap.NewVectorBH(size)
 	const FAKE = -1
 	for i := 0; i < size; i++ {
 		list[i].Link = FAKE
 	}
 
 	list[start].Index, list[start].Link, list[start].Dist = start, start, 0
-	var hp = heap.NewBinaryHeap(size)
+	hp := heap.NewBinaryHeap(size)
 	hp.Push(&list[start])
 	for !hp.IsEmpty() {
-		var curr = hp.Pop()
-		var index = curr.Index
+		curr := hp.Pop()
+		index := curr.Index
 		curr.Index = FAKE
 		for _, path := range roads[index] {
-			var peer = &list[path.Next]
+			peer := &list[path.Next]
 			if peer.Link == FAKE {
 				peer.Index, peer.Link = path.Next, index
 				peer.Dist = curr.Dist + path.Weight
 				hp.Push(peer)
 			} else if peer.Index != FAKE {
-				var distance = curr.Dist + path.Weight
+				distance := curr.Dist + path.Weight
 				if distance < peer.Dist {
 					hp.FloatUp(peer, distance)
 					//peer.Link = index
@@ -56,7 +56,7 @@ func DijkstraX(roads [][]Path, start int) []int {
 }
 
 func DijkstraPathX(roads [][]Path, start, end int) []int {
-	var size = len(roads)
+	size := len(roads)
 	if start < 0 || end < 0 || start >= size || end >= size {
 		return nil
 	}
@@ -64,12 +64,12 @@ func DijkstraPathX(roads [][]Path, start, end int) []int {
 		return []int{start}
 	}
 
-	var list = heap.NewVectorBH(size)
+	list := heap.NewVectorBH(size)
 	const FAKE = -1
 	for i := 0; i < size; i++ {
 		list[i].Link = FAKE
 	}
-	var trace = func() []int {
+	trace := func() []int {
 		var path []int
 		for idx := end; idx != start; idx = list[idx].Link {
 			path = append(path, idx)
@@ -80,23 +80,23 @@ func DijkstraPathX(roads [][]Path, start, end int) []int {
 	}
 
 	list[start].Index, list[start].Link, list[start].Dist = start, start, 0
-	var hp = heap.NewBinaryHeap(size)
+	hp := heap.NewBinaryHeap(size)
 	hp.Push(&list[start])
 	for !hp.IsEmpty() {
-		var curr = hp.Pop()
+		curr := hp.Pop()
 		if curr.Index == end {
 			return trace()
 		}
-		var index = curr.Index
+		index := curr.Index
 		curr.Index = FAKE
 		for _, path := range roads[index] {
-			var peer = &list[path.Next]
+			peer := &list[path.Next]
 			if peer.Link == FAKE {
 				peer.Index, peer.Link = path.Next, index
 				peer.Dist = curr.Dist + path.Weight
 				hp.Push(peer)
 			} else if peer.Index != FAKE {
-				var distance = curr.Dist + path.Weight
+				distance := curr.Dist + path.Weight
 				if distance < peer.Dist {
 					hp.FloatUp(peer, distance)
 					peer.Link = index

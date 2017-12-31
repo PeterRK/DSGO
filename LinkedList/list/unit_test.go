@@ -43,7 +43,7 @@ func Test_Ring(t *testing.T) {
 	ring.InsertTail(&space[0])
 
 	//9 1 2 3 4 5 6 7 8 0
-	var node = ring.Head()
+	node := ring.Head()
 	assert(t, node != nil && node.Val == 9)
 	node = ring.Tail()
 	assert(t, node != nil && node.Val == 0)

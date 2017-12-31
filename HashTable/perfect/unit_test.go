@@ -18,7 +18,7 @@ func guardUT(t *testing.T) {
 func Test_Nothing(t *testing.T) {
 	defer guardUT(t)
 
-	var tpl = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	tpl := "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	var book [52]string
 	for i := 0; i < 52; i++ {
 		book[i] = tpl[i : i+26]

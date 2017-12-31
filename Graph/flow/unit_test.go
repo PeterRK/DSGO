@@ -21,7 +21,7 @@ func guardUT(t *testing.T) {
 func Test_DinicM(t *testing.T) {
 	defer guardUT(t)
 
-	var matrix = [][]uint{
+	matrix := [][]uint{
 		{0, 8, 0, 4, 0, 0, 11, 0, 0},
 		{8, 0, 7, 0, 2, 0, 0, 0, 4},
 		{0, 7, 0, 0, 0, 9, 0, 0, 14},
@@ -58,7 +58,7 @@ func Test_DinicM(t *testing.T) {
 func Test_Dinic(t *testing.T) {
 	defer guardUT(t)
 
-	var roads = [][]graph.Path{
+	roads := [][]graph.Path{
 		{{1, 8}, {3, 4}, {6, 11}},          //0
 		{{0, 8}, {2, 7}, {4, 2}, {8, 4}},   //1
 		{{1, 7}, {5, 9}, {8, 14}},          //2

@@ -17,7 +17,7 @@ func guardUT(t *testing.T) {
 
 func Test_BinarySearch(t *testing.T) {
 	defer guardUT(t)
-	var list = []int{2, 2, 4, 6, 6, 6, 8, 8}
+	list := []int{2, 2, 4, 6, 6, 6, 8, 8}
 
 	assert(t, SearchFirst(list, 1) == 0)
 	assert(t, SearchFirst(list, 2) == 0)
@@ -34,31 +34,30 @@ func Test_BinarySearch(t *testing.T) {
 func Test_CyclicQueue(t *testing.T) {
 	defer guardUT(t)
 
-	var queue, _ = NewQueue(5)
+	queue, _ := NewQueue(5)
 	for i := 1; i < 8; i++ {
-		var err = queue.Push(i)
-		if err != nil {
+		if err := queue.Push(i); err != nil {
 			t.Fail()
 		}
 	}
-	var err = queue.Push(9)
+	err := queue.Push(9)
 	assert(t, err != nil)
 	//1, 2, 3, 4, 5, 6, 7
 
 	for i := 1; i < 5; i++ {
-		var key, err = queue.Pop()
+		key, err := queue.Pop()
 		assert(t, err == nil && key == i)
 	}
 	//5, 6, 7
 	for i := 8; i < 12; i++ {
-		var err = queue.Push(i)
+		err := queue.Push(i)
 		assert(t, err == nil)
 	}
 	assert(t, queue.IsFull())
 	//5, 6, 7, 8, 9, 10, 11
 
 	for i := 5; i < 12; i++ {
-		var key, err = queue.Pop()
+		key, err := queue.Pop()
 		assert(t, err == nil && key == i)
 	}
 	assert(t, queue.IsEmpty())

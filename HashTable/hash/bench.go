@@ -8,13 +8,13 @@ import (
 )
 
 func ConflictRate(data []string, size uint, fn func([]byte) uint) float64 {
-	var cnt = uint(0)
-	var book = make([]bool, size)
+	cnt := uint(0)
+	book := make([]bool, size)
 	for i := uint(0); i < size; i++ {
 		book[i] = false
 	}
 	for _, str := range data {
-		var index = fn([]byte(str)) % size
+		index := fn([]byte(str)) % size
 		if book[index] {
 			cnt++
 		} else {
@@ -28,7 +28,7 @@ func TryByFile(filenme string) {
 	if data, err := FetchLines(filenme); err != nil {
 		fmt.Println("fail to open file:", filenme)
 	} else {
-		var size = bestSize(uint32(len(data)))
+		size := bestSize(uint32(len(data)))
 		fmt.Printf("%s [%d/%d]\n", filenme, len(data), size)
 		ShowBucketCounts("JenkinsHash:", data, size, JenkinsHash)
 		ShowBucketCounts("MurmurHash: ", data, size, MurmurHash)
@@ -45,17 +45,17 @@ func TryByFile(filenme string) {
 }
 func ShowBucketCounts(
 	msg string, data []string, size uint32, fn func([]byte) uint32) {
-	var vec, top = BucketCounts(data, size, fn)
+	vec, top := BucketCounts(data, size, fn)
 	fmt.Printf("%s <%d> %v\n", msg, top, vec)
 }
 func BucketCounts(data []string, size uint32, fn func([]byte) uint32) (
 	vec [6]uint, top uint) {
-	var book = make([]uint, size)
+	book := make([]uint, size)
 	for i := uint32(0); i < size; i++ {
 		book[i] = 0
 	}
 	for _, str := range data {
-		var index = fn([]byte(str)) % size
+		index := fn([]byte(str)) % size
 		book[index]++
 	}
 	top = 1
@@ -105,9 +105,9 @@ var sz_primes = []uint32{
 	393241, 786433, 1572869, 3145739, 6291469, 12582917, 25165843, 50331653, 1610612741}
 
 func bestSize(hint uint32) uint32 {
-	var start, end = 0, len(sz_primes)
+	start, end := 0, len(sz_primes)
 	for start < end {
-		var mid = (start + end) / 2
+		mid := (start + end) / 2
 		if hint < sz_primes[mid] {
 			end = mid
 		} else {

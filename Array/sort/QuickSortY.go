@@ -3,7 +3,7 @@ package sort
 // 三分快速排序，比二分版本略为复杂
 func QuickSortY(list []int) {
 	for len(list) > LOWER_BOUND_Y {
-		var fst, snd = triPartition(list)
+		fst, snd := triPartition(list)
 		QuickSortY(list[:fst])
 		QuickSortY(list[snd+1:])
 		if list[fst] == list[snd] {
@@ -16,13 +16,13 @@ func QuickSortY(list []int) {
 
 // 返回两个分界元素的位置
 func triPartition(list []int) (fst, snd int) {
-	var sz = len(list)
-	var m, s = sz / 2, sz / 8
-	var a, b = m - s, m + s
+	sz := len(list)
+	m, s := sz/2, sz/8
+	a, b := m-s, m+s
 	if list[a] > list[b] {
 		a, b = b, a
 	}
-	var pivot1, pivot2 = list[a], list[b]
+	pivot1, pivot2 := list[a], list[b]
 	list[a], list[b] = list[0], list[sz-1]
 
 	a, b = 1, sz-2
@@ -50,12 +50,12 @@ func triPartition(list []int) (fst, snd int) {
 
 /*
 func triPartition(list []int) (fst, snd int) {
-	var sz = len(list)
-	var m, s = sz / 2, sz / 8
+	sz := len(list)
+	m, s := sz / 2, sz / 8
 	moveMedianTwo(list, m-s, 0, sz-1, m+s)
-	var pivot1, pivot2 = list[0], list[sz-1]
+	pivot1, pivot2 := list[0], list[sz-1]
 
-	var a, b = 1, sz - 2
+	a, b := 1, sz - 2
 	for list[a] < pivot1 {
 		a++
 	}
@@ -96,16 +96,16 @@ func moveMedianTwo(list []int, a, b, c, d int) {
 
 /*
 func triPartition(list []int) (fst, snd int) {
-	var sz = len(list)
+	sz := len(list)
 
-	var pivot1, pivot2 = list[0], list[sz-1]
+	pivot1, pivot2 := list[0], list[sz-1]
 	if pivot1 > pivot2 {
 		pivot1, pivot2 = pivot2, pivot1
 		list[0], list[sz-1] = pivot1, pivot2
 	}
 
-	var ax, bx = 1, sz - 2
-	var a, b = ax, bx
+	ax, bx := 1, sz - 2
+	a, b := ax, bx
 	for {
 		for ; a <= b; a++ {
 			if list[a] > pivot2 {

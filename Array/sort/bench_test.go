@@ -86,7 +86,7 @@ func Benchmark_ConstRadixSort(b *testing.B) {
 func benchArraySort(b *testing.B,
 	doit func([]int), make_array func(int) []int) {
 	b.StopTimer()
-	var list = make_array(b.N)
+	list := make_array(b.N)
 	b.StartTimer()
 	doit(list)
 }

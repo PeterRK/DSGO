@@ -1,7 +1,7 @@
 package span
 
 func sort(list []EdgeW) {
-	var lv = uint(1)
+	lv := uint(1)
 	for sz := len(list); sz != 0; sz /= 2 {
 		lv++
 	}
@@ -13,15 +13,15 @@ func doIntroSort(list []EdgeW, life uint) {
 	} else if life == 0 {
 		heapSort(list)
 	} else {
-		var m = partition(list)
+		m := partition(list)
 		doIntroSort(list[:m], life-1)
 		doIntroSort(list[m:], life-1)
 	}
 }
 
 func partition(list []EdgeW) int {
-	var pivot = list[len(list)/2].Weight
-	var a, b = 0, len(list) - 1
+	pivot := list[len(list)/2].Weight
+	a, b := 0, len(list)-1
 	for {
 		for list[a].Weight < pivot {
 			a++
@@ -49,8 +49,8 @@ func heapSort(list []EdgeW) {
 	}
 }
 func down(list []EdgeW, root int) {
-	var key = list[root]
-	var kid, last = root*2 + 1, len(list) - 1
+	key := list[root]
+	kid, last := root*2+1, len(list)-1
 	for kid < last {
 		if list[kid+1].Weight > list[kid].Weight {
 			kid++
@@ -71,7 +71,7 @@ func simpleSort(list []EdgeW) {
 	if len(list) < 2 {
 		return
 	}
-	var best = 0
+	best := 0
 	for i := 1; i < len(list); i++ {
 		if list[i].Weight < list[best].Weight {
 			best = i
@@ -79,7 +79,7 @@ func simpleSort(list []EdgeW) {
 	}
 	list[0], list[best] = list[best], list[0]
 	for i := 1; i < len(list); i++ {
-		var key, pos = list[i], i
+		key, pos := list[i], i
 		for list[pos-1].Weight > key.Weight {
 			list[pos] = list[pos-1]
 			pos--

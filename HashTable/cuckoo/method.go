@@ -10,11 +10,11 @@ func mod(code uint32, bucket_size int) uint32 {
 }
 func (tb *hashTable) findAndKill(key []byte, kill bool) bool {
 	for i := 0; i < WAYS; i++ {
-		var idx = (tb.idx + i) % WAYS
-		var table = &tb.core[idx]
-		var code = table.hash(key)
-		var index = mod(code, len(table.bucket))
-		var target = table.bucket[index]
+		idx := (tb.idx + i) % WAYS
+		table := &tb.core[idx]
+		code := table.hash(key)
+		index := mod(code, len(table.bucket))
+		target := table.bucket[index]
 		if target != nil &&
 			target.code[idx] == code &&
 			bytes.Compare(target.key, key) == 0 {
@@ -31,18 +31,18 @@ func (tb *hashTable) Search(key []byte) bool {
 	return tb.findAndKill(key, false)
 }
 func (tb *hashTable) Remove(key []byte) bool {
-	var killed = tb.findAndKill(key, true)
-	if killed {
+	if tb.findAndKill(key, true) {
 		tb.cnt--
+		return true
 	}
-	return killed
+	return false
 }
 
 func (tb *hashTable) Insert(key []byte) bool {
 	if !tb.findAndKill(key, false) {
 		tb.cnt++
 
-		var unit = new(node)
+		unit := new(node)
 		unit.key = key
 		for i := 0; i < WAYS; i++ {
 			unit.code[i] = tb.core[i].hash(key)
@@ -50,8 +50,8 @@ func (tb *hashTable) Insert(key []byte) bool {
 
 		for obj, age := unit, 0; ; age++ {
 			for idx, trys := tb.idx, 0; trys < WAYS; idx = (idx + 1) % WAYS {
-				var table = &tb.core[idx]
-				var index = mod(obj.code[idx], len(table.bucket))
+				table := &tb.core[idx]
+				index := mod(obj.code[idx], len(table.bucket))
 				if table.bucket[index] == nil {
 					table.bucket[index] = obj
 					return true
@@ -73,12 +73,12 @@ func (tb *hashTable) Insert(key []byte) bool {
 }
 func (tb *hashTable) expand() {
 	tb.idx = (tb.idx + (WAYS - 1)) % WAYS
-	var table = &tb.core[tb.idx]
-	var old_bucket = table.bucket
+	table := &tb.core[tb.idx]
+	old_bucket := table.bucket
 	table.bucket = make([]*node, len(old_bucket)<<WAYS)
 	for _, u := range old_bucket {
 		if u != nil {
-			var index = mod(u.code[tb.idx], len(table.bucket))
+			index := mod(u.code[tb.idx], len(table.bucket))
 			table.bucket[index] = u //倍扩，绝对不会冲突
 		}
 	}

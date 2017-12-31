@@ -11,7 +11,7 @@ type HashTable interface {
 //以下算法搜集自网络，基本思路类似，效果相近
 
 func JenkinsHash(str []byte) uint32 {
-	var code = uint32(0)
+	code := uint32(0)
 	for i := 0; i < len(str); i++ {
 		code += uint32(str[i])
 		code += code << 10
@@ -24,11 +24,11 @@ func JenkinsHash(str []byte) uint32 {
 }
 
 func MurmurHash(str []byte) uint32 {
-	var code = uint32(0)
+	code := uint32(0)
 
-	var m = len(str) % 4
+	m := len(str) % 4
 	for i := 0; i < len(str)-m; i += 4 {
-		var w = uint32(str[i]) | (uint32(str[i+1]) << 8) |
+		w := uint32(str[i]) | (uint32(str[i+1]) << 8) |
 			(uint32(str[i+2]) << 16) | (uint32(str[i+3]) << 24)
 		w *= 0xcc9e2d51
 		w = (w << 15) | (w >> 17)
@@ -38,7 +38,7 @@ func MurmurHash(str []byte) uint32 {
 		code += (code << 2) + 0xe6546b64
 	}
 	if m != 0 {
-		var w = uint32(0)
+		w := uint32(0)
 		for i := len(str) - 1; i >= len(str)-m; i-- {
 			w = (w << 8) | uint32(str[i])
 		}
@@ -59,7 +59,7 @@ func MurmurHash(str []byte) uint32 {
 //by Brian Kernighan & Dennis Ritchie
 func BKDRhash(str []byte) uint32 {
 	const factor uint32 = 131 //31、131、1313、 13131、131313
-	var code = uint32(0)
+	code := uint32(0)
 	for i := 0; i < len(str); i++ {
 		code = code*factor + uint32(str[i])
 	}
@@ -68,7 +68,7 @@ func BKDRhash(str []byte) uint32 {
 
 //from SDBM
 func SDBMhash(str []byte) uint32 {
-	var code = uint32(0)
+	code := uint32(0)
 	for i := 0; i < len(str); i++ {
 		code = code*65599 + uint32(str[i])
 	}
@@ -77,14 +77,14 @@ func SDBMhash(str []byte) uint32 {
 
 //by Daniel J. Bernstein
 func DJBhash(str []byte) uint32 {
-	var code = uint32(5381)
+	code := uint32(5381)
 	for i := 0; i < len(str); i++ {
 		code = code*33 + uint32(str[i])
 	}
 	return code
 }
 func DJB2hash(str []byte) uint32 {
-	var code = uint32(5381)
+	code := uint32(5381)
 	for i := 0; i < len(str); i++ {
 		code = code*33 ^ uint32(str[i])
 	}
@@ -93,7 +93,7 @@ func DJB2hash(str []byte) uint32 {
 
 //from Unix
 func FNVhash(str []byte) uint32 {
-	var code = uint32(2166136261)
+	code := uint32(2166136261)
 	for i := 0; i < len(str); i++ {
 		code = code*16777619 ^ uint32(str[i])
 	}
@@ -102,8 +102,8 @@ func FNVhash(str []byte) uint32 {
 
 //Robert Sedgwicks
 func RShash(str []byte) uint32 {
-	var magic = uint32(63689)
-	var code uint32 = 0
+	magic := uint32(63689)
+	code := uint32(0)
 	for i := 0; i < len(str); i++ {
 		code = code*magic + uint32(str[i])
 		magic *= 378551
@@ -113,7 +113,7 @@ func RShash(str []byte) uint32 {
 
 //by Justin Sobel
 func JShash(str []byte) uint32 {
-	var code = uint32(1315423911)
+	code := uint32(1315423911)
 	for i := 0; i < len(str); i++ {
 		code ^= (code << 5) + uint32(str[i]) + (code >> 2)
 	}
@@ -122,8 +122,8 @@ func JShash(str []byte) uint32 {
 
 //by Arash Partow
 func APhash(str []byte) uint32 {
-	var code = uint32(0)
-	var tick = true
+	code := uint32(0)
+	tick := true
 	for i := 0; i < len(str); i++ {
 		if tick {
 			code ^= (code << 7) ^ uint32(str[i]) ^ (code >> 3)

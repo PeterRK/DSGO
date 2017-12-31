@@ -1,7 +1,7 @@
 package perfect
 
 func sort(list []memo) {
-	var lv = uint(1)
+	lv := uint(1)
 	for sz := len(list); sz != 0; sz /= 2 {
 		lv++
 	}
@@ -13,15 +13,15 @@ func doIntroSort(list []memo, life uint) {
 	} else if life == 0 {
 		heapSort(list)
 	} else {
-		var m = partition(list)
+		m := partition(list)
 		doIntroSort(list[:m], life-1)
 		doIntroSort(list[m:], life-1)
 	}
 }
 
 func partition(list []memo) int {
-	var pivot = len(list[len(list)/2].lst)
-	var a, b = 0, len(list) - 1
+	pivot := len(list[len(list)/2].lst)
+	a, b := 0, len(list)-1
 	for {
 		for len(list[a].lst) < pivot {
 			a++
@@ -49,8 +49,8 @@ func heapSort(list []memo) {
 	}
 }
 func down(list []memo, root int) {
-	var key = list[root]
-	var kid, last = root*2 + 1, len(list) - 1
+	key := list[root]
+	kid, last := root*2+1, len(list)-1
 	for kid < last {
 		if len(list[kid+1].lst) > len(list[kid].lst) {
 			kid++
@@ -71,7 +71,7 @@ func simpleSort(list []memo) {
 	if len(list) < 2 {
 		return
 	}
-	var best = 0
+	best := 0
 	for i := 1; i < len(list); i++ {
 		if len(list[i].lst) < len(list[best].lst) {
 			best = i
@@ -79,7 +79,7 @@ func simpleSort(list []memo) {
 	}
 	list[0], list[best] = list[best], list[0]
 	for i := 1; i < len(list); i++ {
-		var key, pos = list[i], i
+		key, pos := list[i], i
 		for len(list[pos-1].lst) > len(key.lst) {
 			list[pos] = list[pos-1]
 			pos--

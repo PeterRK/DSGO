@@ -8,7 +8,7 @@ func QuickSort(list []int) {
 	if len(list) < LOWER_BOUND {
 		SimpleSort(list)
 	} else {
-		var m = partition(list)
+		m := partition(list)
 		QuickSort(list[:m])
 		QuickSort(list[m:])
 	}
@@ -16,11 +16,11 @@ func QuickSort(list []int) {
 
 func partition(list []int) int {
 	//谨慎处理，以防越界
-	//var pivot = list[len(list)/2]
-	var pivot = median(list[0],
+	//pivot := list[len(list)/2]
+	pivot := median(list[0],
 		list[len(list)/2], list[len(list)-1])
 
-	var a, b = 0, len(list) - 1
+	a, b := 0, len(list)-1
 	for { //注意对称性
 		for list[a] < pivot {
 			a++
@@ -64,11 +64,11 @@ func QuickSort(list []int) {
 	var tasks stack
 	tasks.push(0, len(list))
 	for !tasks.isEmpty() {
-		var start, end = tasks.pop()
+		start, end := tasks.pop()
 		if end-start < LOWER_BOUND {
 			SimpleSort(list[start:end])
 		} else {
-			var knot = partition(list[start:end]) + start
+			knot := partition(list[start:end]) + start
 			tasks.push(knot, end)
 			tasks.push(start, knot)
 		}
@@ -93,8 +93,8 @@ func (s *stack) push(start int, end int) {
 	s.core = append(s.core, pair{start, end})
 }
 func (s *stack) pop() (start int, end int) {
-	var sz = len(s.core) - 1
-	var unit = s.core[sz]
+	sz := len(s.core) - 1
+	unit := s.core[sz]
 	s.core = s.core[:sz]
 	return unit.start, unit.end
 }

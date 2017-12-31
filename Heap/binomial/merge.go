@@ -5,16 +5,16 @@ import (
 )
 
 func fakeHead(spt **node) *node {
-	var base = uintptr(unsafe.Pointer(spt))
-	var off = unsafe.Offsetof((*spt).peer)
+	base := uintptr(unsafe.Pointer(spt))
+	off := unsafe.Offsetof((*spt).peer)
 	return (*node)(unsafe.Pointer(base - off))
 }
 
 //list是从少到多的
 func (hp *Heap) merge(list *node) {
-	var knot = fakeHead(&hp.list)
+	knot := fakeHead(&hp.list)
 	for list != nil {
-		var one, another = list, knot.peer
+		one, another := list, knot.peer
 		if another == nil || one.level < another.level {
 			list, one.peer = one.peer, another
 			knot.peer = one

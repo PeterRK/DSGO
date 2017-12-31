@@ -1,10 +1,9 @@
 package perfect
 
 func binarySearch(list []uint32, key uint32) int {
-	var a, b = 0, len(list)
+	a, b := 0, len(list)
 	for a < b {
-		//var m = (a + b) / 2
-		var m = a + (b-a)/2
+		m := a + (b-a)/2
 		if key < list[m] {
 			b = m
 		} else {

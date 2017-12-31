@@ -13,7 +13,7 @@ type Deque interface {
 }
 
 func NewDeque() Deque {
-	var con = new(deque)
+	con := new(deque)
 	con.initialize()
 	return con
 }
@@ -31,7 +31,7 @@ type Stack interface {
 }
 
 func NewStack() Stack {
-	var con = new(stack)
+	con := new(stack)
 	con.initialize()
 	return con
 }
@@ -59,7 +59,7 @@ type Queue interface {
 }
 
 func NewQueue() Queue {
-	var con = new(queue)
+	con := new(queue)
 	con.initialize()
 	return con
 }

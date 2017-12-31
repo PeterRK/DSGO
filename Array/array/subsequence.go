@@ -2,13 +2,12 @@ package array
 
 // 最长递增子序列
 func LongestIncreasingSubsequence(src []int) []int {
-	var size = len(src)
-	if size == 0 {
+	if len(src) == 0 {
 		return nil
 	} //result[i]记录某个长度为(i+1)的递增串的可能的最小尾数
-	var result = []int{src[0]}
-	for i := 1; i < size; i++ {
-		var place = SearchFirst(result, src[i])
+	result := []int{src[0]}
+	for i := 1; i < len(src); i++ {
+		place := SearchFirst(result, src[i])
 		if place == len(result) {
 			result = append(result, src[i])
 		} else {
@@ -20,7 +19,7 @@ func LongestIncreasingSubsequence(src []int) []int {
 
 // 最大子段和，全为负数时，最佳为空子段
 func MaximumIntervalSum(list []int) int {
-	var best, sum = 0, 0
+	best, sum := 0, 0
 	for _, num := range list {
 		sum += num
 		if sum < 0 {
@@ -35,7 +34,7 @@ func MaximumIntervalSum(list []int) int {
 // 最大子段和及对应区间
 func MaximumIntervalSumX(list []int) (value int, start, end int) {
 	value, start, end = 0, 0, 0
-	var sum, mark = -1, -1
+	sum, mark := -1, -1
 	for i, num := range list {
 		if sum < 0 {
 			sum, mark = num, i

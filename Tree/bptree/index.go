@@ -11,7 +11,7 @@ type index struct {
 }
 
 func newIndex() *index {
-	var u = new(index)
+	u := new(index)
 	u.inner = true
 	return u
 }
@@ -69,7 +69,7 @@ func (u *index) insert(place int, kid *index) (peer *index) {
 
 //要求peer为unit后的节点，发生合并返回true
 func (u *index) combine(peer *index) bool {
-	var total = u.cnt + peer.cnt
+	total := u.cnt + peer.cnt
 	if total <= INDEX_HALF+INDEX_QUARTER {
 		for i := u.cnt; i < total; i++ {
 			u.data[i] = peer.data[i-u.cnt]
@@ -79,13 +79,13 @@ func (u *index) combine(peer *index) bool {
 		return true
 	}
 	//分流而不合并
-	var u_sz = total / 2
+	u_sz := total / 2
 	if u.cnt == u_sz {
 		return false
 	}
-	var peer_sz = total - u_sz
+	peer_sz := total - u_sz
 	if peer.cnt > peer_sz { //后填前
-		var diff = peer.cnt - peer_sz
+		diff := peer.cnt - peer_sz
 		for i := u.cnt; i < u_sz; i++ {
 			u.data[i] = peer.data[i-u.cnt]
 			u.kids[i] = peer.kids[i-u.cnt]
@@ -95,7 +95,7 @@ func (u *index) combine(peer *index) bool {
 			peer.kids[i] = peer.kids[i+diff]
 		}
 	} else { //前填后
-		var diff = peer_sz - peer.cnt
+		diff := peer_sz - peer.cnt
 		for i := peer.cnt - 1; i >= 0; i-- {
 			peer.data[i+diff] = peer.data[i]
 			peer.kids[i+diff] = peer.kids[i]

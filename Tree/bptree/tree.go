@@ -27,14 +27,14 @@ type nodex struct {
 }
 
 func (u *node) ceil() int {
-	var unit = (*nodex)(unsafe.Pointer(u))
+	unit := (*nodex)(unsafe.Pointer(u))
 	return unit.data[unit.cnt-1]
 }
 func (u *node) locate(key int) int {
-	var unit = (*nodex)(unsafe.Pointer(u))
-	var start, end = 0, unit.cnt - 1
+	unit := (*nodex)(unsafe.Pointer(u))
+	start, end := 0, unit.cnt - 1
 	for start < end {
-		var mid = (start + end) / 2
+		mid := (start + end) / 2
 		if key > unit.data[mid] {
 			start = mid + 1
 		} else {
@@ -48,19 +48,19 @@ func (u *node) locate(key int) int {
 //开启数组越界审查时使用
 func (u *node) ceil() int {
 	if u.inner {
-		var unit = (*index)(unsafe.Pointer(u))
+		unit := (*index)(unsafe.Pointer(u))
 		return unit.data[unit.cnt-1]
 	} else {
-		var unit = (*leaf)(unsafe.Pointer(u))
+		unit := (*leaf)(unsafe.Pointer(u))
 		return unit.data[unit.cnt-1]
 	}
 }
 func (u *node) locate(key int) int {
-	var start, end = 0, u.cnt - 1
+	start, end := 0, u.cnt-1
 	if u.inner {
-		var unitx = (*index)(unsafe.Pointer(u))
+		unitx := (*index)(unsafe.Pointer(u))
 		for start < end {
-			var mid = (start + end) / 2
+			mid := (start + end) / 2
 			if key > unitx.data[mid] {
 				start = mid + 1
 			} else {
@@ -68,9 +68,9 @@ func (u *node) locate(key int) int {
 			}
 		}
 	} else {
-		var unitx = (*leaf)(unsafe.Pointer(u))
+		unitx := (*leaf)(unsafe.Pointer(u))
 		for start < end {
-			var mid = (start + end) / 2
+			mid := (start + end) / 2
 			if key > unitx.data[mid] {
 				start = mid + 1
 			} else {
@@ -96,15 +96,15 @@ func (tr *Tree) Search(key int) bool {
 		key > tr.root.ceil() {
 		return false
 	}
-	var target = tr.root
+	target := tr.root
 	for target.inner {
-		var idx = target.locate(key)
+		idx := target.locate(key)
 		if key == target.data[idx] {
 			return true
 		}
 		target = target.kids[idx]
 	}
-	var unit = target.asLeaf()
+	unit := target.asLeaf()
 	return key == unit.data[unit.locate(key)]
 }
 
@@ -115,4 +115,3 @@ func (tr *Tree) Travel(doit func(int)) {
 		}
 	}
 }
-

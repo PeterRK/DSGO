@@ -22,7 +22,7 @@ func (pk *dataM) markLevel() bool {
 	pk.queue.push(pk.start)
 
 	for !pk.queue.isEmpty() {
-		var cur = pk.queue.pop()
+		cur := pk.queue.pop()
 		if pk.matrix[cur][pk.end] != 0 {
 			pk.memo[pk.end] = pk.memo[cur] + 1
 			return true
@@ -44,14 +44,14 @@ func (pk *dataM) separate() bool {
 		return false
 	}
 	for { //队列pop出的点并没有实际删除，可回溯遍历所有访问过的点
-		var cur, err = pk.queue.traceBack()
+		cur, err := pk.queue.traceBack()
 		if err != nil {
 			break
 		}
 		//pk.shadow[cur] = pk.shadow[cur][:0]
 		for i := 0; i < len(pk.memo); i++ {
 			if pk.memo[i] == pk.memo[cur]+1 && pk.matrix[cur][i] != 0 {
-				var path = Path{Next: i, Weight: pk.matrix[cur][i]}
+				path := Path{Next: i, Weight: pk.matrix[cur][i]}
 				pk.shadow[cur] = append(pk.shadow[cur], path)
 				pk.matrix[cur][i] = 0
 			}
@@ -70,18 +70,18 @@ func (pk *dataM) search() uint {
 		stream = ^uint(0)
 		pk.stack.clear()
 		for cur := pk.start; cur != pk.end; {
-			var sz = len(pk.shadow[cur])
+			sz := len(pk.shadow[cur])
 			if sz != 0 {
 				pk.stack.push(cur, stream)
-				var path = pk.shadow[cur][sz-1]
+				path := pk.shadow[cur][sz-1]
 				cur, stream = path.Next, min(stream, path.Weight)
 			} else { //碰壁，退一步
 				if pk.stack.isEmpty() { //退无可退
 					return flow
 				}
 				cur, stream = pk.stack.pop()
-				var last = len(pk.shadow[cur]) - 1
-				var path = pk.shadow[cur][last]
+				last := len(pk.shadow[cur]) - 1
+				path := pk.shadow[cur][last]
 				pk.matrix[cur][path.Next] += path.Weight
 				pk.shadow[cur] = pk.shadow[cur][:last]
 			}
@@ -89,9 +89,9 @@ func (pk *dataM) search() uint {
 
 		//该循环的每一轮复杂度为O(V)
 		for !pk.stack.isEmpty() { //处理找到的增广路径
-			var cur, _ = pk.stack.pop()
-			var last = len(pk.shadow[cur]) - 1
-			var path = &pk.shadow[cur][last]
+			cur, _ := pk.stack.pop()
+			last := len(pk.shadow[cur]) - 1
+			path := &pk.shadow[cur][last]
 			path.Weight -= stream
 			pk.matrix[path.Next][cur] += stream //逆流，防止贪心断路
 			if path.Weight == 0 {

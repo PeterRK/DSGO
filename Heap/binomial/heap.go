@@ -30,7 +30,7 @@ func (hp *Heap) Top() (int, error) {
 	return hp.top.key, nil
 }
 func (hp *Heap) Push(key int) {
-	var unit = new(node)
+	unit := new(node)
 	unit.key, unit.level = key, 0
 	unit.peer, unit.child = nil, nil
 	if hp.IsEmpty() {
@@ -45,9 +45,9 @@ func (hp *Heap) Push(key int) {
 
 //list是从少到多的，而child相反
 func reverse(list *node) *node {
-	var head = (*node)(nil)
+	head := (*node)(nil)
 	for list != nil {
-		var current = list
+		current := list
 		list = list.peer
 		current.peer, head = head, current
 	}
@@ -57,9 +57,9 @@ func (hp *Heap) Pop() (int, error) {
 	if hp.IsEmpty() {
 		return 0, errors.New("empty")
 	}
-	var key = hp.top.key
+	key := hp.top.key
 
-	var knot = fakeHead(&hp.list)
+	knot := fakeHead(&hp.list)
 	for knot.peer != hp.top {
 		knot = knot.peer
 	}

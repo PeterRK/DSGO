@@ -3,11 +3,11 @@ package avlt
 //成功返回true，没有返回false。
 //AVL树删除过程包括：O(log N)的搜索，O(log N)的旋转，O(log N)的平衡因子调整。
 func (tr *Tree) Remove(key int32) bool {
-	var target = tr.findRemoveTarget(key)
+	target := tr.findRemoveTarget(key)
 	if target == nil {
 		return false
 	}
-	var victim, orphan = tr.findRemoveVictim(target)
+	victim, orphan := tr.findRemoveVictim(target)
 
 	if tr.path.isEmpty() { //此时victim==target
 		tr.root = orphan
@@ -20,7 +20,7 @@ func (tr *Tree) Remove(key int32) bool {
 
 func (tr *Tree) findRemoveTarget(key int32) *node {
 	tr.path.clear()
-	var target = tr.root
+	target := tr.root
 	for target != nil && key != target.key {
 		if key < target.key {
 			tr.path.push(target, true)
@@ -62,8 +62,8 @@ func (tr *Tree) findRemoveVictim(target *node) (victim *node, orphan *node) {
 }
 
 func (tr *Tree) rebalanceAfterRemove(orphan *node) {
-	var root, lf = tr.hookSubTree(orphan)
-	var state, stop = root.adjust(lf), false
+	root, lf := tr.hookSubTree(orphan)
+	state, stop := root.adjust(lf), false
 	for state != 0 { //如果原平衡因子为0则子树高度不变
 		if root.state != 0 { //2 || -2
 			root, stop = root.rotate()

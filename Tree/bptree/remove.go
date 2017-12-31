@@ -9,14 +9,14 @@ func (tr *Tree) Remove(key int) bool {
 	}
 	tr.path.clear()
 
-	var target = tr.root
+	target := tr.root
 	for target.inner {
-		var idx = target.locate(key)
+		idx := target.locate(key)
 		tr.path.push(target, idx)
 		target = target.kids[idx]
 	}
-	var unit = target.asLeaf()
-	var place = unit.locate(key)
+	unit := target.asLeaf()
+	place := unit.locate(key)
 	if key != unit.data[place] {
 		return false
 	}
@@ -28,22 +28,22 @@ func (tr *Tree) Remove(key int) bool {
 		}
 		return true
 	} //除了到根节点，unit.cnt >= 2
-	var shrink, new_ceil = (place == unit.cnt), unit.ceil()
+	shrink, new_ceil := (place == unit.cnt), unit.ceil()
 
 	parent, place := tr.path.pop()
 	if unit.cnt <= LEAF_QUARTER {
-		var peer = unit
+		peer := unit
 		if place == parent.cnt-1 {
 			unit = parent.kids[place-1].asLeaf()
 		} else {
 			place++
 			peer, shrink = parent.kids[place].asLeaf(), false
 		}
-		var combined = unit.combine(peer)
+		combined := unit.combine(peer)
 		parent.data[place-1] = unit.ceil()
 
 		for combined {
-			var unit = parent //此后代码与之前类似，但unit的类型已经不同
+			unit := parent //此后代码与之前类似，但unit的类型已经不同
 			unit.remove(place)
 			if tr.path.isEmpty() {
 				if unit.cnt == 1 {
@@ -54,7 +54,7 @@ func (tr *Tree) Remove(key int) bool {
 
 			parent, place = tr.path.pop()
 			if unit.cnt <= INDEX_QUARTER {
-				var peer = unit
+				peer := unit
 				if place == parent.cnt-1 {
 					unit = parent.kids[place-1]
 				} else {

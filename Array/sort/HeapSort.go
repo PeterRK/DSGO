@@ -14,8 +14,8 @@ func HeapSort(list []int) {
 }
 
 func down(list []int, pos int) {
-	var key = list[pos]
-	var kid, last = pos*2 + 1, len(list) - 1
+	key := list[pos]
+	kid, last := pos*2+1, len(list)-1
 	for kid < last {
 		if list[kid+1] > list[kid] {
 			kid++

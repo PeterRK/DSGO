@@ -6,12 +6,12 @@ type SkipArray struct {
 }
 
 func NewSkipArray(size uint) *SkipArray {
-	var sa = new(SkipArray)
+	sa := new(SkipArray)
 	sa.space = make([]interface{}, size)
 	for size >= 128 {
-		var r = size % 64
+		r := size % 64
 		size = (size + 63) / 64
-		var level = make([]uint64, size)
+		level := make([]uint64, size)
 		level[size-1] = ^uint64(0) >> r
 		sa.index = append(sa.index, level)
 	}
@@ -23,10 +23,10 @@ func (sa *SkipArray) Capacity() int {
 }
 
 func (sa *SkipArray) alloc() int {
-	var idx = 0
+	idx := 0
 	for i := len(sa.index) - 1; i >= 0; i-- {
-		var level = sa.index[i]
-		var j = idx * 64
+		level := sa.index[i]
+		j := idx * 64
 		for ; j < len(level); j++ {
 			if level[j] != ^uint64(0) {
 				idx = j
@@ -45,7 +45,7 @@ func (sa *SkipArray) alloc() int {
 }
 
 func (sa *SkipArray) Insert(obj interface{}) int {
-	var idx = sa.alloc()
+	idx := sa.alloc()
 	if idx != -1 {
 		sa.space[idx] = obj
 	}
@@ -66,10 +66,10 @@ func (sa *SkipArray) Remove(idx int) {
 	}
 	sa.space[idx] = nil
 	for i := 0; i < len(sa.index); i++ {
-		var level = sa.index[i]
-		var r = uint(idx) % 64
+		level := sa.index[i]
+		r := uint(idx) % 64
 		idx /= 64
-		var old = level[idx]
+		old := level[idx]
 		level[idx] &= ^(uint64(1) << (63 - r))
 		if old != ^uint64(0) {
 			break

@@ -11,14 +11,14 @@ func MergeSort(head *list.Node) *list.Node {
 }
 func doMergeSort(head *list.Node) (first, last *list.Node) { //head != nil
 	first, last = head, list.FakeHead(&first)
-	var size = 0
+	size := 0
 	for ; head != nil; size += 2 {
 		if head.Next == nil {
 			last = head
 			size++
 			break
 		}
-		var nd0, nd1 = head, head.Next
+		nd0, nd1 := head, head.Next
 		head = nd1.Next
 		if nd0.Val > nd1.Val {
 			last.Next, nd1.Next, nd0.Next = nd1, nd0, head
@@ -47,7 +47,7 @@ func cutPeice(head *list.Node, sz int) *list.Node {
 		head = head.Next
 	}
 	if head != nil {
-		var last = head
+		last := head
 		head, last.Next = head.Next, nil
 	}
 	return head

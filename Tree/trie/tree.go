@@ -15,21 +15,21 @@ type Trie interface {
 }
 
 func newNode() *node {
-	var unit = new(node)
+	unit := new(node)
 	//unit.cnt, unit.ref = 0, 0
 	//unit.kids = make([]*node, 0, 4)
 	return unit
 }
 func NewTrie() Trie {
-	var root = newNode()
+	root := newNode()
 	root.ref = 1 //空串总是有效
 	return root
 }
 
 func (unit *node) searchKid(ch byte) int {
-	var start, end = 0, len(unit.kids)
+	start, end := 0, len(unit.kids)
 	for start < end {
-		var mid = (start + end) / 2
+		mid := (start + end) / 2
 		if ch > unit.kids[mid].key[0] {
 			start = mid + 1
 		} else {
@@ -41,13 +41,13 @@ func (unit *node) searchKid(ch byte) int {
 
 func (root *node) consume(kid *node) {
 	if root.cnt+kid.cnt > NODE_CAP { //半缩
-		var j = uint8(0)
+		j := uint8(0)
 		for i := root.cnt; i < NODE_CAP; i++ {
 			root.key[i] = kid.key[j]
 			j++
 		}
 		root.cnt = NODE_CAP
-		var i = uint8(0)
+		i := uint8(0)
 		for ; j < kid.cnt; j++ {
 			kid.key[i] = kid.key[j]
 			i++
@@ -64,13 +64,13 @@ func (root *node) consume(kid *node) {
 
 //除了查找，还要尝试节缩
 func (root *node) Search(key string) uint16 {
-	var mk = uint8(0)
+	mk := uint8(0)
 	for idx := 0; idx < len(key); idx++ {
 		if mk == root.cnt { //下探
 			if len(root.kids) == 1 && root.ref == 0 && root.cnt < NODE_CAP {
 				root.consume(root.kids[0])
 			} else { //单纯下探
-				var spot = root.searchKid(key[idx])
+				spot := root.searchKid(key[idx])
 				if spot == len(root.kids) || root.kids[spot].key[0] != key[idx] {
 					return 0
 				}
@@ -91,8 +91,8 @@ func (root *node) Search(key string) uint16 {
 }
 
 func createTail(str string) *node { //data非空
-	var head = newNode()
-	var last, idx = head, 0
+	head := newNode()
+	last, idx := head, 0
 	for ; idx+int(NODE_CAP) < len(str); idx += int(NODE_CAP) {
 		for i := 0; i < int(NODE_CAP); i++ {
 			last.key[i] = str[idx+i]
@@ -109,7 +109,7 @@ func createTail(str string) *node { //data非空
 	return head
 }
 func (unit *node) split(mk uint8) {
-	var peer = newNode()
+	peer := newNode()
 	peer.ref, unit.ref = unit.ref, 0
 	peer.kids, unit.kids = unit.kids, append(peer.kids, peer)
 	for i := mk; i < unit.cnt; i++ {
@@ -122,10 +122,10 @@ func (root *node) Insert(key string) {
 	if len(key) == 0 {
 		return
 	}
-	var mk = uint8(0)
+	mk := uint8(0)
 	for idx := 0; idx < len(key); idx++ {
 		if mk == root.cnt { //下探
-			var spot = root.searchKid(key[idx])
+			spot := root.searchKid(key[idx])
 			if spot == len(root.kids) || root.kids[spot].key[0] != key[idx] {
 				root.kids = append(root.kids, nil)
 				for i := len(root.kids) - 1; i > spot; i-- {
@@ -159,11 +159,11 @@ func (root *node) Remove(key string, all bool) {
 	if len(key) == 0 {
 		return
 	}
-	var knot, branch = (*node)(nil), 0 //记录独苗分支节点
-	var mk = uint8(0)
+	knot, branch := (*node)(nil), 0 //记录独苗分支节点
+	mk := uint8(0)
 	for idx := 0; idx < len(key); idx++ {
 		if mk == root.cnt { //下探
-			var spot = root.searchKid(key[idx])
+			spot := root.searchKid(key[idx])
 			if spot == len(root.kids) || root.kids[spot].key[0] != key[idx] {
 				return
 			}
