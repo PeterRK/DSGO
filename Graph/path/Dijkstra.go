@@ -1,14 +1,13 @@
 package path
 
 import (
-	"DSGO/Graph/graph"
 	"DSGO/Graph/heap"
 )
 
 //输入邻接表，返回某点到各点的最短路径的长度(-1指不通)。
 //复杂度为O(E+VlogV)，已知最快的单源最短路径算法，对稀疏图尤甚。
 //可以处理有向图，不能处理负权边。
-func Dijkstra(roads [][]graph.Path, start int) []int {
+func Dijkstra(roads [][]Path, start int) []int {
 	var size = len(roads)
 	if size == 0 || start < 0 || start >= size {
 		return nil
@@ -58,7 +57,7 @@ func Dijkstra(roads [][]graph.Path, start int) []int {
 }
 
 //输入邻接表，返回两点间的最短路径及其长度(-1指不通)。
-func DijkstraPath(roads [][]graph.Path, start, end int) []int {
+func DijkstraPath(roads [][]Path, start, end int) []int {
 	var size = len(roads)
 	if start < 0 || end < 0 || start >= size || end >= size {
 		return nil

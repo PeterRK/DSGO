@@ -1,12 +1,11 @@
 package span
 
 import (
-	"DSGO/Graph/graph"
 	"DSGO/Graph/heap"
 	"errors"
 )
 
-func PrimX(roads [][]graph.Path) (uint, error) {
+func PrimX(roads [][]Path) (uint, error) {
 	var size = len(roads)
 	var sum = uint(0)
 	if size < 2 {
@@ -47,7 +46,7 @@ func PrimX(roads [][]graph.Path) (uint, error) {
 	return sum, nil
 }
 
-func PrimTreeX(roads [][]graph.Path) ([]Edge, error) {
+func PrimTreeX(roads [][]Path) ([]Edge, error) {
 	var size = len(roads)
 	if size < 2 {
 		return nil, errors.New("illegal input")

@@ -1,11 +1,10 @@
 package path
 
 import (
-	"DSGO/Graph/graph"
 	"DSGO/Graph/heap"
 )
 
-func DijkstraX(roads [][]graph.Path, start int) []int {
+func DijkstraX(roads [][]Path, start int) []int {
 	var size = len(roads)
 	if size == 0 || start < 0 || start >= size {
 		return nil
@@ -56,7 +55,7 @@ func DijkstraX(roads [][]graph.Path, start int) []int {
 	return result
 }
 
-func DijkstraPathX(roads [][]graph.Path, start, end int) []int {
+func DijkstraPathX(roads [][]Path, start, end int) []int {
 	var size = len(roads)
 	if start < 0 || end < 0 || start >= size || end >= size {
 		return nil

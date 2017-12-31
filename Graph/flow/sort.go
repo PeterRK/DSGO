@@ -4,14 +4,16 @@ import (
 	"DSGO/Graph/graph"
 )
 
-func sort(list []graph.Path) {
+type Path = graph.Path
+
+func sort(list []Path) {
 	var lv = uint(1)
 	for sz := len(list); sz != 0; sz /= 2 {
 		lv++
 	}
 	doIntroSort(list, lv*2)
 }
-func doIntroSort(list []graph.Path, life uint) {
+func doIntroSort(list []Path, life uint) {
 	if len(list) < 16 {
 		simpleSort(list)
 	} else if life == 0 {
@@ -23,7 +25,7 @@ func doIntroSort(list []graph.Path, life uint) {
 	}
 }
 
-func partition(list []graph.Path) int {
+func partition(list []Path) int {
 	var pivot = list[len(list)/2].Next
 	var a, b = 0, len(list) - 1
 	for {
@@ -43,7 +45,7 @@ func partition(list []graph.Path) int {
 	return a
 }
 
-func heapSort(list []graph.Path) {
+func heapSort(list []Path) {
 	for idx := len(list)/2 - 1; idx >= 0; idx-- {
 		down(list, idx)
 	}
@@ -52,7 +54,7 @@ func heapSort(list []graph.Path) {
 		down(list[:sz], 0)
 	}
 }
-func down(list []graph.Path, root int) {
+func down(list []Path, root int) {
 	var key = list[root]
 	var kid, last = root*2 + 1, len(list) - 1
 	for kid < last {
@@ -71,7 +73,7 @@ func down(list []graph.Path, root int) {
 	list[root] = key
 }
 
-func simpleSort(list []graph.Path) {
+func simpleSort(list []Path) {
 	if len(list) < 2 {
 		return
 	}

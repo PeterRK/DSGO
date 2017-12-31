@@ -1,7 +1,6 @@
 package span
 
 import (
-	"DSGO/Graph/graph"
 	"DSGO/Graph/heap"
 	"errors"
 )
@@ -9,7 +8,7 @@ import (
 //输入邻接表，返回最小生成树的权。
 //复杂度为O(E+VlogV)，通常比Kruskal强。
 //对有向图不适用，多路同权时选择有问题（不能倒着用，可能选错）。
-func Prim(roads [][]graph.Path) (uint, error) {
+func Prim(roads [][]Path) (uint, error) {
 	var size = len(roads)
 	var sum = uint(0)
 	if size < 2 {
@@ -47,12 +46,8 @@ func Prim(roads [][]graph.Path) (uint, error) {
 	return sum, nil
 }
 
-type Edge struct {
-	A, B int
-}
-
 //输入邻接表，返回一个以0号节点为根的最小生成树。
-func PrimTree(roads [][]graph.Path) ([]Edge, error) {
+func PrimTree(roads [][]Path) ([]Edge, error) {
 	var size = len(roads)
 	if size < 2 {
 		return nil, errors.New("illegal input")

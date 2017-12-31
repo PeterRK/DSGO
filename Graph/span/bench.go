@@ -6,6 +6,13 @@ import (
 	"time"
 )
 
+type Path = graph.Path
+type EdgeW = graph.Edge
+
+type Edge struct {
+	A, B int
+}
+
 func BenchMark() {
 	var start = time.Now()
 	var edges, size, err = readGraph() //IO就是慢！！！
@@ -39,13 +46,13 @@ func BenchMark() {
 	}
 }
 
-func readGraph() (edges []graph.Edge, size int, err error) {
+func readGraph() (edges []EdgeW, size int, err error) {
 	var total int
 	_, err = fmt.Scan(&size, &total)
 	if err != nil || size < 2 || size > total {
 		return nil, 0, err
 	}
-	edges = make([]graph.Edge, total)
+	edges = make([]EdgeW, total)
 	for i := 0; i < total; i++ {
 		_, err = fmt.Scan(&edges[i].A, &edges[i].B, &edges[i].Weight)
 		if err != nil {
@@ -55,11 +62,11 @@ func readGraph() (edges []graph.Edge, size int, err error) {
 	return edges, size, nil
 }
 
-func transform(edges []graph.Edge, size int) [][]graph.Path {
-	var roads = make([][]graph.Path, size)
+func transform(edges []EdgeW, size int) [][]Path {
+	var roads = make([][]Path, size)
 	for _, path := range edges {
 		roads[path.A] = append(
-			roads[path.A], graph.Path{Next: path.B, Weight: path.Weight})
+			roads[path.A], Path{Next: path.B, Weight: path.Weight})
 	}
 	return roads
 }

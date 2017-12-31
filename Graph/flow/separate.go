@@ -1,9 +1,5 @@
 package flow
 
-import (
-	"DSGO/Graph/graph"
-)
-
 const fakeLevel = ^uint(0)
 
 func (pk *data) flushBack() {
@@ -20,7 +16,7 @@ func (pk *data) flushBack() {
 		pk.origin[i] = compact(origin) //去重去零
 	}
 }
-func merge(base, part []graph.Path) []graph.Path {
+func merge(base, part []Path) []Path {
 	var a, b = len(base) - 1, len(part) - 1
 	base = append(base, part...)
 	for c := len(base) - 1; b >= 0; c-- {
@@ -40,7 +36,7 @@ func merge(base, part []graph.Path) []graph.Path {
 	}
 	return base
 }
-func compact(list []graph.Path) []graph.Path {
+func compact(list []Path) []Path {
 	var size = len(list)
 	if size == 0 {
 		return list

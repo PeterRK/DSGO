@@ -1,9 +1,5 @@
 package flow
 
-import (
-	"DSGO/Graph/graph"
-)
-
 //获取增广路径流量，复杂度为O(EVlogV)。
 func (pk *data) search() uint {
 	//每一轮都至少会删除图的一条边
@@ -34,7 +30,7 @@ func (pk *data) search() uint {
 			var path = &pk.shadow[cur][last]
 			path.Weight -= stream
 			pk.reflux[path.Next] = append(pk.reflux[path.Next],
-				graph.Path{Next: cur, Weight: stream}) //逆流，防止贪心断路
+				Path{Next: cur, Weight: stream}) //逆流，防止贪心断路
 			if path.Weight == 0 {
 				pk.shadow[cur] = pk.shadow[cur][:last]
 			}
@@ -44,11 +40,11 @@ func (pk *data) search() uint {
 }
 
 type segment struct {
-	space      []graph.Path
+	space      []Path
 	start, end int
 }
 
-func (s *segment) fill(path graph.Path) int {
+func (s *segment) fill(path Path) int {
 	var a, b = s.start, s.end
 	for a < b {
 		var m = (a + b) / 2
@@ -64,13 +60,13 @@ func (s *segment) fill(path graph.Path) int {
 	}
 	panic("no target") //目标必须存在
 }
-func fillBack(list []graph.Path, path graph.Path) {
+func fillBack(list []Path, path Path) {
 	var seg = segment{
 		space: list,
 		start: 0, end: len(list)}
 	seg.fill(path)
 }
-func fillBackVec(list []graph.Path, frag []graph.Path) {
+func fillBackVec(list []Path, frag []Path) {
 	var seg = segment{
 		space: list,
 		start: 0, end: len(list)}

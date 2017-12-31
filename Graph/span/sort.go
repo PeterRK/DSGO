@@ -1,17 +1,13 @@
 package span
 
-import (
-	"DSGO/Graph/graph"
-)
-
-func sort(list []graph.Edge) {
+func sort(list []EdgeW) {
 	var lv = uint(1)
 	for sz := len(list); sz != 0; sz /= 2 {
 		lv++
 	}
 	doIntroSort(list, lv*2)
 }
-func doIntroSort(list []graph.Edge, life uint) {
+func doIntroSort(list []EdgeW, life uint) {
 	if len(list) < 16 {
 		simpleSort(list)
 	} else if life == 0 {
@@ -23,7 +19,7 @@ func doIntroSort(list []graph.Edge, life uint) {
 	}
 }
 
-func partition(list []graph.Edge) int {
+func partition(list []EdgeW) int {
 	var pivot = list[len(list)/2].Weight
 	var a, b = 0, len(list) - 1
 	for {
@@ -43,7 +39,7 @@ func partition(list []graph.Edge) int {
 	return a
 }
 
-func heapSort(list []graph.Edge) {
+func heapSort(list []EdgeW) {
 	for idx := len(list)/2 - 1; idx >= 0; idx-- {
 		down(list, idx)
 	}
@@ -52,7 +48,7 @@ func heapSort(list []graph.Edge) {
 		down(list[:sz], 0)
 	}
 }
-func down(list []graph.Edge, root int) {
+func down(list []EdgeW, root int) {
 	var key = list[root]
 	var kid, last = root*2 + 1, len(list) - 1
 	for kid < last {
@@ -71,7 +67,7 @@ func down(list []graph.Edge, root int) {
 	list[root] = key
 }
 
-func simpleSort(list []graph.Edge) {
+func simpleSort(list []EdgeW) {
 	if len(list) < 2 {
 		return
 	}

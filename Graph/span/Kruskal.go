@@ -1,13 +1,12 @@
 package span
 
 import (
-	"DSGO/Graph/graph"
 	"errors"
 )
 
 //输入边集，返回最小生成树的权。
 //复杂度为O(ElogE)，性能通常不如Prim。
-func Kruskal(roads []graph.Edge, size int) (uint, error) {
+func Kruskal(roads []EdgeW, size int) (uint, error) {
 	if size < 2 || len(roads) < size-1 {
 		return 0, errors.New("illegal input")
 	}
@@ -55,7 +54,7 @@ func Kruskal(roads []graph.Edge, size int) (uint, error) {
 	return sum, errors.New("isolated part exist")
 }
 
-func KruskalS(roads []graph.Edge, size int) (uint, error) {
+func KruskalS(roads []EdgeW, size int) (uint, error) {
 	if size < 2 || len(roads) < size-1 {
 		return 0, errors.New("illegal input")
 	}

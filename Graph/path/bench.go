@@ -6,6 +6,8 @@ import (
 	"time"
 )
 
+type Path = graph.Path
+
 func BenchMark() {
 	var start = time.Now()
 	var roads, total, err = readGraph() //IO就是慢！！！
@@ -49,37 +51,37 @@ func BenchMark() {
 	fmt.Println("Floyd-Warshall: ", time.Since(start))
 }
 
-func readGraph() (roads [][]Path, total int, err error) {
+func readGraph() (roads [][]PathS, total int, err error) {
 	var size int
 	_, err = fmt.Scan(&size, &total)
 	if err != nil || size < 2 || size > total {
 		return nil, 0, err
 	}
-	roads = make([][]Path, size)
+	roads = make([][]PathS, size)
 	var a, b, dist int
 	for i := 0; i < total; i++ {
 		_, err = fmt.Scan(&a, &b, &dist)
 		if err != nil {
 			return nil, 0, err
 		}
-		roads[a] = append(roads[a], Path{Next: b, Dist: dist})
+		roads[a] = append(roads[a], PathS{Next: b, Dist: dist})
 	}
 	return roads, total, nil
 }
 
-func uAdjList(roads [][]Path) [][]graph.Path {
-	var out = make([][]graph.Path, len(roads))
+func uAdjList(roads [][]PathS) [][]Path {
+	var out = make([][]Path, len(roads))
 	for i, vec := range roads {
-		var line = make([]graph.Path, len(vec))
+		var line = make([]Path, len(vec))
 		for j, path := range vec {
-			line[j] = graph.Path{Next: path.Next, Weight: uint(path.Dist)}
+			line[j] = Path{Next: path.Next, Weight: uint(path.Dist)}
 		}
 		out[i] = line
 	}
 	return out
 }
 
-func transform(roads [][]graph.Path) [][]uint {
+func transform(roads [][]Path) [][]uint {
 	var size = len(roads)
 	var matrix = make([][]uint, size)
 	for i, vec := range roads {

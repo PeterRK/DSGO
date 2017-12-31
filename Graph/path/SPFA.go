@@ -4,7 +4,7 @@ import (
 	"errors"
 )
 
-type Path struct {
+type PathS struct {
 	Next int
 	Dist int
 }
@@ -13,7 +13,7 @@ const MAX_DIST = int((^uint(0)) >> 1)
 
 //输入邻接表，返回某点到各点的最短路径的长度(MAX_DIST指不通)。
 //实为改良的Bellman-Ford算法，复杂度为O(EV)，逊于Dijkstra，但可以处理负权边。
-func SPFA(roads [][]Path, start int) ([]int, error) {
+func SPFA(roads [][]PathS, start int) ([]int, error) {
 	var size = len(roads)
 	if size == 0 || start < 0 || start >= size {
 		return nil, errors.New("illegal input")

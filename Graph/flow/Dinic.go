@@ -1,25 +1,21 @@
 package flow
 
-import (
-	"DSGO/Graph/graph"
-)
-
 type data struct {
-	origin     [][]graph.Path
-	shadow     [][]graph.Path
-	reflux     [][]graph.Path
+	origin     [][]Path
+	shadow     [][]Path
+	reflux     [][]Path
 	queue      arrayQueue
 	stack      arrayStack
 	memo       []uint
 	start, end int
 }
 
-func newWorkObj(roads [][]graph.Path, start, end int) *data {
+func newWorkObj(roads [][]Path, start, end int) *data {
 	var size = len(roads)
 
 	var pack = new(data)
-	pack.shadow = make([][]graph.Path, size) //分层残图
-	pack.reflux = make([][]graph.Path, size) //逆流暂存
+	pack.shadow = make([][]Path, size) //分层残图
+	pack.reflux = make([][]Path, size) //逆流暂存
 
 	var space1 = make([]int, size)  //临时空间
 	var space2 = make([]uint, size) //临时空间
@@ -34,7 +30,7 @@ func newWorkObj(roads [][]graph.Path, start, end int) *data {
 }
 
 //输入邻接表，返回最大流，复杂度为O(V^2 E)。
-func Dinic(roads [][]graph.Path, start, end int) uint {
+func Dinic(roads [][]Path, start, end int) uint {
 	var size = len(roads)
 	if start < 0 || end < 0 ||
 		start >= size || end >= size ||
@@ -62,7 +58,7 @@ func (pk *data) dinic() uint {
 
 type dataM struct {
 	matrix     [][]uint
-	shadow     [][]graph.Path
+	shadow     [][]Path
 	queue      arrayQueue
 	stack      arrayStack
 	memo       []uint
@@ -73,7 +69,7 @@ func newWorkObjM(matrix [][]uint, start, end int) *dataM {
 	var size = len(matrix)
 
 	var pack = new(dataM)
-	pack.shadow = make([][]graph.Path, size) //分层残图
+	pack.shadow = make([][]Path, size) //分层残图
 
 	var space1 = make([]int, size)  //临时空间
 	var space2 = make([]uint, size) //临时空间

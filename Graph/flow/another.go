@@ -1,9 +1,5 @@
 package flow
 
-import (
-	"DSGO/Graph/graph"
-)
-
 func (pk *dataM) flushBack() {
 	for i := 0; i < len(pk.matrix); i++ {
 		if len(pk.shadow[i]) == 0 {
@@ -55,7 +51,7 @@ func (pk *dataM) separate() bool {
 		//pk.shadow[cur] = pk.shadow[cur][:0]
 		for i := 0; i < len(pk.memo); i++ {
 			if pk.memo[i] == pk.memo[cur]+1 && pk.matrix[cur][i] != 0 {
-				var path = graph.Path{Next: i, Weight: pk.matrix[cur][i]}
+				var path = Path{Next: i, Weight: pk.matrix[cur][i]}
 				pk.shadow[cur] = append(pk.shadow[cur], path)
 				pk.matrix[cur][i] = 0
 			}
