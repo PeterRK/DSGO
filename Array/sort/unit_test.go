@@ -34,6 +34,11 @@ func Test_QuickSort(t *testing.T) {
 func Test_QuickSortY(t *testing.T) {
 	testArraySort(t, QuickSortY, bigSize, smallSize)
 }
+
+//func Test_QuickSortS(t *testing.T) {
+//	testArraySort(t, QuickSortS, bigSize, smallSize)
+//}
+
 func Test_IntroSort(t *testing.T) {
 	testArraySort(t, IntroSort, bigSize, bigSize)
 }
@@ -55,7 +60,7 @@ func guardUT(t *testing.T) {
 	}
 }
 
-func testArraySort(t *testing.T, doit func([]int), sz1 int, sz2 int) {
+func testArraySort(t *testing.T, doit func([]Unit), sz1 int, sz2 int) {
 	defer guardUT(t)
 
 	list := randArray(sz1)
@@ -67,11 +72,11 @@ func testArraySort(t *testing.T, doit func([]int), sz1 int, sz2 int) {
 	doit(list)
 	assert(t, checkArrary(list))
 	for i := 0; i < len(list); i++ {
-		list[i] = 99
+		list[i].val = 99
 	}
 	doit(list)
-	for _, num := range list {
-		assert(t, num == 99)
+	for i := 0; i < len(list); i++ {
+		assert(t, list[i].val == 99)
 	}
 
 	for i := 0; i < 6; i++ {
@@ -80,42 +85,42 @@ func testArraySort(t *testing.T, doit func([]int), sz1 int, sz2 int) {
 		assert(t, checkArrary(list))
 	}
 }
-func checkArrary(list []int) bool {
+func checkArrary(list []Unit) bool {
 	for i, size := 1, len(list); i < size; i++ {
-		if list[i] < list[i-1] {
+		if list[i].val < list[i-1].val {
 			return false
 		}
 	}
 	return true
 }
-func figureOutTips(list []int) int {
+func figureOutTips(list []Unit) int {
 	tips := 0
-	for _, num := range list {
-		tips ^= num
+	for i := 0; i < len(list); i++ {
+		tips ^= list[i].val
 	}
 	return tips
 }
 
-func randArray(size int) []int {
+func randArray(size int) []Unit {
 	rand.Seed(time.Now().Unix())
-	list := make([]int, size)
+	list := make([]Unit, size)
 	for i := 0; i < size; i++ {
-		list[i] = rand.Int()
+		list[i].val = rand.Int()
 	}
 	return list
 }
-func desArray(size int) []int {
-	list := make([]int, size)
+func desArray(size int) []Unit {
+	list := make([]Unit, size)
 	for i := 0; i < size; i++ {
-		list[i] = size - i
+		list[i].val = size - i
 	}
 	return list
 }
-func constArray(size int) []int {
+func constArray(size int) []Unit {
 	val := rand.Int()
-	list := make([]int, size)
+	list := make([]Unit, size)
 	for i := 0; i < size; i++ {
-		list[i] = val
+		list[i].val = val
 	}
 	return list
 }

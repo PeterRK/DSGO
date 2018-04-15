@@ -6,14 +6,14 @@ import (
 
 // 基数排序，不依赖比较操作，具有稳定性
 // 复杂度为 O((w/m)N) & O(N+2^m)
-func RadixSort(list []int) {
+func RadixSort(list []Unit) {
 	const base = -int((^uint(0))>>1) - 1
 	size := len(list)
 	for i := 0; i < size; i++ {
-		list[i] += base
+		list[i].val += base
 	}
 
-	shadow := make([]int, size)
+	shadow := make([]Unit, size)
 	book := new([256]uint)
 
 	const UINT_LEN = uint(unsafe.Sizeof(uint(0))) * 8
@@ -22,7 +22,7 @@ func RadixSort(list []int) {
 			book[i] = 0
 		}
 		for i := 0; i < size; i++ {
-			radix := uint8((list[i] >> step) & 0xFF)
+			radix := uint8((list[i].val >> step) & 0xFF)
 			book[radix]++
 		}
 		line := uint(0)
@@ -30,20 +30,17 @@ func RadixSort(list []int) {
 			book[i], line = line, line+book[i]
 		}
 		for i := 0; i < size; i++ {
-			radix := uint8((list[i] >> step) & 0xFF)
+			radix := uint8((list[i].val >> step) & 0xFF)
 			shadow[book[radix]] = list[i]
 			book[radix]++
 		}
 		list, shadow = shadow, list
 	}
 
-	//if bytesOfUint%2 == 0 {
-	for i := 0; i < size; i++ {
-		list[i] -= base
-	}
-	//} else {
-	//	for i := 0; i < size; i++ {
-	//		shadow[i] = list[i] - base
-	//	}
+	//if UINT_LEN%16 != 0 {
+	//	copy(list, shadow)
 	//}
+	for i := 0; i < size; i++ {
+		list[i].val -= base
+	}
 }

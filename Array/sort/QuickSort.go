@@ -4,7 +4,7 @@ package sort
 // 平均复杂度为O(NlogN) & O(logN)，最坏情况是O(N^2) & O(N)。
 // 其中比较操作是O(NlogN)，常数与MergeSort相当；挪移操作是O(NlogN)，常数小于MergeSort。
 // 这里采用递归实现，但QuickSort不适合递归实现(有爆栈风险)。
-func QuickSort(list []int) {
+func QuickSort(list []Unit) {
 	if len(list) < LOWER_BOUND {
 		SimpleSort(list)
 	} else {
@@ -14,18 +14,18 @@ func QuickSort(list []int) {
 	}
 }
 
-func partition(list []int) int {
+func partition(list []Unit) int {
 	//谨慎处理，以防越界
 	//pivot := list[len(list)/2]
-	pivot := median(list[0],
-		list[len(list)/2], list[len(list)-1])
+	pivot := median(list[0].val,
+		list[len(list)/2].val, list[len(list)-1].val)
 
 	a, b := 0, len(list)-1
 	for { //注意对称性
-		for list[a] < pivot {
+		for list[a].val < pivot {
 			a++
 		}
-		for list[b] > pivot {
+		for list[b].val > pivot {
 			b--
 		}
 		if a >= b {
@@ -60,7 +60,7 @@ func median(a, b, c int) int {
 }
 
 /*
-func QuickSort(list []int) {
+func QuickSort(list []Unit) {
 	var tasks stack
 	tasks.push(0, len(list))
 	for !tasks.isEmpty() {

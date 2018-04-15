@@ -3,11 +3,11 @@ package sort
 // 内省排序，基于快速排序的一种混合排序算法，不具有稳定性。
 // 复杂度为O(NlogN) & O(logN)。
 // 主要限制了QuickSort的最坏情况，适合递归实现(没有爆栈风险)。
-func IntroSort(list []int) {
+func IntroSort(list []Unit) {
 	life := log2ceil(uint(len(list))) * 2
 	doIntroSort(list, life)
 }
-func doIntroSort(list []int, life uint) {
+func doIntroSort(list []Unit, life uint) {
 	if len(list) < LOWER_BOUND {
 		SimpleSort(list)
 	} else if life == 0 {
@@ -28,11 +28,11 @@ func log2ceil(num uint) uint {
 }
 
 // 三分内省排序
-func IntroSortY(list []int) {
+func IntroSortY(list []Unit) {
 	life := log2ceil(uint(len(list))) * 3 / 2
 	doIntroSortY(list, life)
 }
-func doIntroSortY(list []int, life uint) {
+func doIntroSortY(list []Unit, life uint) {
 	for len(list) > LOWER_BOUND_Y {
 		if life == 0 {
 			HeapSort(list)

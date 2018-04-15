@@ -1,11 +1,16 @@
 package sort
 
+type Unit struct {
+	pad [0]uint32
+	val int
+}
+
 // 冒泡排序，最原始的排序方法，具有稳定性。
 // 比较操作是O(N^2)，挪移是O(N^2)，性能差。
-func BubleSort(list []int) {
+func BubleSort(list []Unit) {
 	for i := 0; i < len(list)-1; i++ {
 		for j := len(list) - 1; j > i; j-- {
-			if list[j] < list[j-1] {
+			if list[j].val < list[j-1].val {
 				list[j], list[j-1] = list[j-1], list[j]
 			}
 		}
@@ -14,11 +19,11 @@ func BubleSort(list []int) {
 
 // 选择排序，不具有稳定性。
 // 比较操作是O(N^2)，挪移是O(N)，综合性能不如InsertSort。
-func SelectSort(list []int) {
+func SelectSort(list []Unit) {
 	for i := 0; i < len(list)-1; i++ {
 		pos := i
 		for j := i + 1; j < len(list); j++ {
-			if list[j] < list[pos] {
+			if list[j].val < list[pos].val {
 				pos = j
 			}
 		}
@@ -28,13 +33,13 @@ func SelectSort(list []int) {
 
 // 插入排序，具有稳定性。
 // 比较操作是O(NlogN)，挪移是O(N^2)，综合性能优于SelectSort。
-func InsertSort(list []int) {
+func InsertSort(list []Unit) {
 	for i := 1; i < len(list); i++ {
 		key := list[i]
 		a, b := 0, i
 		for a < b {
 			m := a + (b-a)/2 //(a+b)/2
-			if key < list[m] {
+			if key.val < list[m].val {
 				b = m
 			} else { //找第一个大于key的位置
 				a = m + 1
@@ -47,40 +52,40 @@ func InsertSort(list []int) {
 	}
 }
 
-func SimpleSortX(list []int) {
+func SimpleSortX(list []Unit) {
 	if len(list) < 2 {
 		return
 	}
 	best := 0
 	for i := 1; i < len(list); i++ {
-		if list[i] < list[best] {
+		if list[i].val < list[best].val {
 			best = i
 		}
 	}
 	list[0], list[best] = list[best], list[0]
 	for i := 1; i < len(list); i++ {
 		key, pos := list[i], i
-		for list[pos-1] > key {
+		for list[pos-1].val > key.val {
 			list[pos] = list[pos-1]
 			pos--
 		}
 		list[pos] = key
 	}
 }
-func SimpleSort(list []int) {
+func SimpleSort(list []Unit) {
 	if len(list) < 2 {
 		return
 	}
 	for i := 1; i < len(list); i++ {
 		key := list[i]
-		if key < list[0] {
+		if key.val < list[0].val {
 			for j := i; j > 0; j-- {
 				list[j] = list[j-1]
 			}
 			list[0] = key
 		} else {
 			pos := i
-			for list[pos-1] > key {
+			for list[pos-1].val > key.val {
 				list[pos] = list[pos-1]
 				pos--
 			}

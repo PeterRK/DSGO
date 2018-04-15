@@ -15,6 +15,7 @@ func Benchmark_InsertSort(b *testing.B) {
 	benchArraySort(b, InsertSort, randArray)
 }
 */
+
 func Benchmark_HeapSort(b *testing.B) {
 	benchArraySort(b, HeapSort, randArray)
 }
@@ -27,6 +28,11 @@ func Benchmark_QuickSort(b *testing.B) {
 func Benchmark_QuickSortY(b *testing.B) {
 	benchArraySort(b, QuickSortY, randArray)
 }
+
+//func Benchmark_QuickSortS(b *testing.B) {
+//	benchArraySort(b, QuickSortS, randArray)
+//}
+
 func Benchmark_IntroSort(b *testing.B) {
 	benchArraySort(b, IntroSort, randArray)
 }
@@ -84,7 +90,7 @@ func Benchmark_ConstRadixSort(b *testing.B) {
 //}
 
 func benchArraySort(b *testing.B,
-	doit func([]int), make_array func(int) []int) {
+	doit func([]Unit), make_array func(int) []Unit) {
 	b.StopTimer()
 	list := make_array(b.N)
 	b.StartTimer()
