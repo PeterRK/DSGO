@@ -1,6 +1,7 @@
 package sort
 
 import (
+	//"math"
 	"math/rand"
 	"testing"
 	"time"
@@ -48,6 +49,66 @@ func Test_IntroSortY(t *testing.T) {
 func Test_RadixSort(t *testing.T) {
 	testArraySort(t, RadixSort, bigSize, smallSize)
 }
+
+func Test_reorder(t *testing.T) {
+	defer guardUT(t)
+
+	const size = smallSize
+	list := make([]Unit, size)
+	index := make([]uint32, size)
+	for i := 0; i < size; i++ {
+		list[i].val = -i
+		index[i] = uint32(i)
+	}
+	rand.Seed(time.Now().Unix())
+	for i := 1; i < size; i++ {
+		j := rand.Int() % (i + 1)
+		index[i], index[j] = index[j], index[i]
+	}
+
+	reorder(list, index)
+	for i := 1; i < size; i++ {
+		assert(t, list[i].val == -int(index[i]))
+	}
+
+	reorder(nil, nil)
+}
+
+func Test_IndexIntroSort(t *testing.T) {
+	testArraySort(t, IndexIntroSort, smallSize, smallSize)
+
+	/*
+		defer guardUT(t)
+		list := randArray(bigSize)
+		injectConst(list, 10, math.MinInt32)
+		injectConst(list, 10, math.MaxInt32)
+		injectConst(list, 10, -1)
+		injectConst(list, 10, 1)
+		IndexIntroSort(list)
+		assert(t, checkArraryX(list))
+	*/
+}
+
+/*
+func injectConst(list []Unit, cnt int, val int) {
+	for i := 0; i < cnt; i++ {
+		j := rand.Int() % len(list)
+		list[j].val = val
+		list[j].pad[0] = uint32(j)
+	}
+}
+func checkArraryX(list []Unit) bool {
+	for i, size := 1, len(list); i < size; i++ {
+		if list[i].val < list[i-1].val {
+			return false
+		} else if list[i].val == list[i-1].val &&
+			list[i].pad[0] < list[i-1].pad[0] {
+			return false
+		}
+	}
+	return true
+}
+*/
 
 func assert(t *testing.T, state bool) {
 	if !state {

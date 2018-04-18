@@ -1,6 +1,7 @@
 package sort
 
 //增加判断条件，化不稳定排序为稳定排序
+/*
 func QuickSortS(list []Unit) {
 	for i := 0; i < len(list); i++ {
 		list[i].pad[0] = uint32(i)
@@ -58,3 +59,4 @@ func triPartitionS(list []Unit) (fst, snd int) {
 	list[sz-1], list[b+1] = list[b+1], pivot2
 	return a - 1, b + 1
 }
+*/
