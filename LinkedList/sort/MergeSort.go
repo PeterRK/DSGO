@@ -5,11 +5,11 @@ import (
 )
 
 // 归并排序，复杂度为O(2NlogN) & O(1)，具有稳定性。
-func MergeSort(head *list.Node) *list.Node {
+func MergeSort(head *Node) *Node {
 	head, _ = doMergeSort(head)
 	return head
 }
-func doMergeSort(head *list.Node) (first, last *list.Node) { //head != nil
+func doMergeSort(head *Node) (first, last *Node) { //head != nil
 	first, last = head, list.FakeHead(&first)
 	size := 0
 	for ; head != nil; size += 2 {
@@ -31,7 +31,7 @@ func doMergeSort(head *list.Node) (first, last *list.Node) { //head != nil
 	for step := 2; step < size; step *= 2 {
 		head, last = first, list.FakeHead(&first)
 		for head != nil {
-			var left, right, node *list.Node
+			var left, right, node *Node
 			left, head = head, cutPeice(head, step)
 			right, head = head, cutPeice(head, step)
 
@@ -42,7 +42,7 @@ func doMergeSort(head *list.Node) (first, last *list.Node) { //head != nil
 	return first, last
 }
 
-func cutPeice(head *list.Node, sz int) *list.Node {
+func cutPeice(head *Node, sz int) *Node {
 	for i := 1; i < sz && head != nil; i++ {
 		head = head.Next
 	}
@@ -52,7 +52,7 @@ func cutPeice(head *list.Node, sz int) *list.Node {
 	}
 	return head
 }
-func merge(left, right *list.Node) (first, last *list.Node) {
+func merge(left, right *Node) (first, last *Node) {
 	first, last = nil, list.FakeHead(&first)
 	for {
 		last.Next = left

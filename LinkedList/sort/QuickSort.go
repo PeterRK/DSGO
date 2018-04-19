@@ -1,22 +1,18 @@
 package sort
 
-import (
-	"DSGO/LinkedList/list"
-)
-
 // 快速排序，平均复杂度为O(NlogN) & O(logN)，最坏情况是O(N^2) & O(N)，不具有稳定性。
 // 这里采用递归实现，但实际上QuickSort不适合递归实现(有爆栈风险)。
-func QuickSort(head *list.Node) *list.Node {
+func QuickSort(head *Node) *Node {
 	if head != nil {
 		head, _ = doQuickSort(head)
 	}
 	return head
 }
-func doQuickSort(head *list.Node) (first, last *list.Node) {
+func doQuickSort(head *Node) (first, last *Node) {
 	first, last = sortOnlyTwo(head)
 	if first == nil {
 		left, center, right, _ := partition(head)
-		var knot *list.Node
+		var knot *Node
 		first, knot = doQuickSort(left)
 		knot.Next = center
 		center.Next, last = doQuickSort(right)
@@ -26,7 +22,7 @@ func doQuickSort(head *list.Node) (first, last *list.Node) {
 
 //head != nil
 //done if firt != nil
-func sortOnlyTwo(head *list.Node) (first, last *list.Node) {
+func sortOnlyTwo(head *Node) (first, last *Node) {
 	if head.Next == nil {
 		return head, head
 	}
@@ -41,7 +37,7 @@ func sortOnlyTwo(head *list.Node) (first, last *list.Node) {
 	return nil, nil
 }
 
-func partition(nd0 *list.Node) (left, center, right *list.Node, size int) {
+func partition(nd0 *Node) (left, center, right *Node, size int) {
 	nd1 := nd0.Next
 	nd2 := nd1.Next
 	tail := nd2.Next

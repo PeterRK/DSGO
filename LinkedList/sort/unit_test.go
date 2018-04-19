@@ -33,6 +33,9 @@ func Test_IntroSort(t *testing.T) {
 func Test_RadixSort(t *testing.T) {
 	testLinkListSort(t, RadixSort, bigSize, smallSize)
 }
+func Test_IndexIntroSort(t *testing.T) {
+	testLinkListSort(t, IndexIntroSort, bigSize, smallSize)
+}
 
 func testLinkListSort(t *testing.T,
 	doit func(*list.Node) *list.Node, sz1 int, sz2 int) {

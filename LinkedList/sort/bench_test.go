@@ -17,6 +17,9 @@ func Benchmark_IntroSort(b *testing.B) {
 func Benchmark_RadixSort(b *testing.B) {
 	benchLinkedListSort(b, RadixSort, randLinkedList)
 }
+func Benchmark_IndexIntroSort(b *testing.B) {
+	benchLinkedListSort(b, IndexIntroSort, randLinkedList)
+}
 
 func Benchmark_DesMergeSort(b *testing.B) {
 	benchLinkedListSort(b, MergeSort, desLinkList)
@@ -29,6 +32,9 @@ func Benchmark_DesIntroSort(b *testing.B) {
 }
 func Benchmark_DesRadixSort(b *testing.B) {
 	benchLinkedListSort(b, RadixSort, desLinkList)
+}
+func Benchmark_DesIndexIntroSort(b *testing.B) {
+	benchLinkedListSort(b, IndexIntroSort, desLinkList)
 }
 
 func benchLinkedListSort(b *testing.B,
