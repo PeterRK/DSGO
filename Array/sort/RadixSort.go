@@ -13,32 +13,33 @@ func RadixSort(list []Unit) {
 		list[i].val += base
 	}
 
-	shadow := make([]Unit, size)
-	book := new([256]uint)
+	temp := make([]Unit, size)
+	const MEMO_SIZE = 1 << 8
+	memo := new([MEMO_SIZE]uint)
 
-	const UINT_LEN = uint(unsafe.Sizeof(uint(0))) * 8
-	for step := uint(0); step < UINT_LEN; step += 8 {
-		for i := 0; i < 256; i++ {
-			book[i] = 0
+	const INT_BITS = uint(unsafe.Sizeof(temp[0].val)) * 8
+	for step := uint(0); step < INT_BITS; step += 8 {
+		for i := 0; i < MEMO_SIZE; i++ {
+			memo[i] = 0
 		}
 		for i := 0; i < size; i++ {
 			radix := uint8((list[i].val >> step) & 0xFF)
-			book[radix]++
+			memo[radix]++
 		}
 		line := uint(0)
-		for i := 0; i < 256; i++ {
-			book[i], line = line, line+book[i]
+		for i := 0; i < MEMO_SIZE; i++ {
+			memo[i], line = line, line+memo[i]
 		}
 		for i := 0; i < size; i++ {
 			radix := uint8((list[i].val >> step) & 0xFF)
-			shadow[book[radix]] = list[i]
-			book[radix]++
+			temp[memo[radix]] = list[i]
+			memo[radix]++
 		}
-		list, shadow = shadow, list
+		list, temp = temp, list
 	}
 
-	//if UINT_LEN%16 != 0 {
-	//	copy(list, shadow)
+	//if INT_BITS%16 != 0 {
+	//	copy(list, temp)
 	//}
 	for i := 0; i < size; i++ {
 		list[i].val -= base
