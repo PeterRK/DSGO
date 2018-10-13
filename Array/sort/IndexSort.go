@@ -100,24 +100,19 @@ func reorder(list []Unit, index []uint32) {
 	for i := 0; i < len(index); i++ {
 		to[index[i]] = uint32(i)
 	}
-	i, size := uint32(0), uint32(len(index))
-	for {
-		for {
-			if i >= size {
-				return
-			}
-			if to[i] != DONE && to[i] != i {
-				break
-			}
+	for i, size := uint32(0), uint32(len(index)); i < size; i++ {
+		for i < size && (to[i] == DONE || to[i] == i) {
 			i++
 		}
-		tmp, j := list[i], to[i]
-		to[i] = DONE
-		for to[j] != DONE {
-			tmp, list[j] = list[j], tmp
-			j, to[j] = to[j], DONE
+		if i < size {
+			tmp, j := list[i], to[i]
+			to[i] = DONE
+			for to[j] != DONE {
+				tmp, list[j] = list[j], tmp
+				j, to[j] = to[j], DONE
+			}
+			list[j] = tmp
 		}
-		list[j] = tmp
 	}
 }
 
