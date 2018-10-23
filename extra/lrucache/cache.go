@@ -14,7 +14,7 @@ type node struct {
 type knot struct {
 	prev  *node
 	next  *node
-	count uint
+	free  uint
 	limit uint
 }
 type cache struct {
@@ -24,8 +24,8 @@ type cache struct {
 }
 
 func (k *knot) initialize(limit uint) {
-	k.count = 0
 	k.limit = limit
+	k.free = limit
 	k.prev = (*node)(unsafe.Pointer(k))
 	k.next = (*node)(unsafe.Pointer(k))
 }
@@ -56,13 +56,14 @@ func (c *cache) access(u *node) {
 
 	if !u.hot { //冷热迁移
 		u.hot = true
-		c.cold.count--
-		if c.hot.count < c.hot.limit {
-			c.hot.count++
-		} else { //末位淘汰
+		if c.hot.free != 0 {
+			c.hot.free--
+			c.cold.free++
+		} else { //热末位淘汰，置于冷区头
 			u = c.hot.prev
 			u.unhook()
-			delete(c.book, u.key)
+			u.hot = false
+			u.hook((*node)(unsafe.Pointer(&c.cold)), c.cold.next)
 		}
 	}
 }
@@ -84,8 +85,8 @@ func (c *cache) Insert(key int, val string) {
 		u.key, u.val = key, val
 		c.book[key] = u
 		u.hook((*node)(unsafe.Pointer(&c.cold)), c.cold.next)
-		if c.cold.count < c.cold.limit {
-			c.cold.count++
+		if c.cold.free != 0 {
+			c.cold.free--
 		} else { //末位淘汰
 			u = c.cold.prev
 			u.unhook()
@@ -109,9 +110,9 @@ func (c *cache) Remove(key int) {
 		delete(c.book, u.key)
 		u.unhook()
 		if u.hot {
-			c.hot.count--
+			c.hot.free++
 		} else {
-			c.cold.count--
+			c.cold.free++
 		}
 	}
 }

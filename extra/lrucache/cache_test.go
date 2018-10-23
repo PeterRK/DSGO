@@ -29,10 +29,10 @@ func Test_LRUCache(t *testing.T) {
 	c.Insert(6, "F")
 	c.Insert(5, "e")
 	c.Remove(4)
-	val, ok := c.Search(4)
+	_, ok := c.Search(4)
 	assert(t, !ok)
 
-	val, ok = c.Search(6)
+	val, ok := c.Search(6)
 	assert(t, ok && val == "F")
 	val, ok = c.Search(5)
 	assert(t, ok && val == "e")
@@ -56,11 +56,6 @@ func Test_LRUCache(t *testing.T) {
 	assert(t, ok && val == "I")
 	val, ok = c.Search(10)
 	assert(t, ok && val == "J")
-
-	val, ok = c.Search(6)
-	assert(t, !ok)
-	val, ok = c.Search(5)
-	assert(t, !ok)
 
 	c.Insert(1, "A")
 	c.Insert(2, "B")
