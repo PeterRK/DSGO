@@ -172,8 +172,7 @@ bool RBtree::remove(int key)
 	if (target->left == nullptr) {
 		victim = target;
 		orphan = target->right;
-	}
-	else if (target->right == nullptr) {
+	} else if (target->right == nullptr) {
 		victim = target;
 		orphan = target->left;
 	} else {
@@ -186,12 +185,10 @@ bool RBtree::remove(int key)
 
 	Node* root = victim->parent();
 	if (root == nullptr) { //此时victim==target
-		if (orphan != nullptr) {
-			orphan->parent(nullptr);
-		}
 		m_root = orphan;
 		if (m_root != nullptr) {
 			m_root->black = true;
+			m_root->parent(nullptr);
 		}
 	} else {
 		if (key < root->key) {

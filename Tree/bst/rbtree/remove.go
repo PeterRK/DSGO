@@ -10,9 +10,10 @@ func (tr *Tree) Remove(key int32) bool {
 	victim, orphan := findRemoveVictim(target)
 
 	if victim.parent == nil { //此时victim==target
-		tr.root = ((*node)(nil)).tryHook(orphan)
+		tr.root = orphan
 		if tr.root != nil {
 			tr.root.black = true
+			tr.root.parent = nil
 		}
 	} else {
 		root := victim.parent
