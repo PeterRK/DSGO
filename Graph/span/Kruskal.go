@@ -65,10 +65,14 @@ func KruskalS(roads []EdgeW, size int) (uint, error) {
 		list[i] = -1 //正数表示归属，负数表示个数（仅首领项）
 	}
 	trace := func(id int) int {
-		for list[id] >= 0 {
-			id = list[id]
+		sid := id
+		for list[sid] >= 0 {
+			sid = list[sid]
 		}
-		return id
+		if sid != id {
+			list[id] = sid
+		}
+		return sid
 	}
 
 	sum := uint(0)

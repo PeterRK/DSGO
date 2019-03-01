@@ -66,9 +66,14 @@ func Test_reorder(t *testing.T) {
 		index[i], index[j] = index[j], index[i]
 	}
 
+	memo := make([]uint32, size)
+	for i := 1; i < size; i++ {
+		memo[i] = index[i]
+	}
+
 	reorder(list, index)
 	for i := 1; i < size; i++ {
-		assert(t, list[i].val == -int(index[i]))
+		assert(t, list[i].val == -int(memo[i]))
 	}
 
 	reorder(nil, nil)

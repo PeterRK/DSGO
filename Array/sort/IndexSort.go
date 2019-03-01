@@ -95,21 +95,18 @@ func indexTriPartition(list []Unit, index []uint32) (fst, snd int) {
 }
 
 func reorder(list []Unit, index []uint32) {
-	to := make([]uint32, len(index))
-	for i := 0; i < len(index); i++ {
-		to[index[i]] = uint32(i)
-	}
 	for i, size := uint32(0), uint32(len(index)); i < size; i++ {
-		if to[i] == i {
+		if index[i] == i {
 			continue
 		}
-		tmp, j := list[i], to[i]
-		to[i] = i
-		for to[j] != j {
-			tmp, list[j] = list[j], tmp
-			j, to[j] = to[j], j
+		tmp := list[i]
+		j, k := i, index[i]
+		list[j], index[j] = list[k], j
+		for index[k] != i {
+			j, k = k, index[k]
+			list[j], index[j] = list[k], j
 		}
-		list[j] = tmp
+		list[k], index[k] = tmp, k
 	}
 }
 
