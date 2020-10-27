@@ -1,18 +1,55 @@
 package array
 
 // 最长递增子序列
-func LongestIncreasingSubsequence(src []int) []int {
-	if len(src) == 0 {
-		return nil
-	} //result[i]记录某个长度为(i+1)的递增串的可能的最小尾数
-	result := []int{src[0]}
+func LongestIncreasingSubsequence(src []int) int {
+	if len(src) < 2 {
+		return len(src)
+	} //memo[i]记录某个长度为(i+1)的递增串的可能的最小尾数
+	memo := []int{src[0]}
 	for i := 1; i < len(src); i++ {
-		place := SearchFirst(result, src[i])
-		if place == len(result) {
-			result = append(result, src[i])
+		place := SearchFirst(memo, src[i])
+		if place == len(memo) {
+			memo = append(memo, src[i])
 		} else {
-			result[place] = src[i]
+			memo[place] = src[i]
 		}
+	}
+	return len(memo) //memo不是真正的候选序列
+}
+
+func LongestIncreasingSubsequenceX(src []int) []int {
+	if len(src) < 2 {
+		return src
+	}
+	type Mark struct {
+		prev   int
+		length uint
+		best   bool
+	}
+	memo := make([]Mark, 1, len(src))
+	memo[0] = Mark{-1, 1, true}
+	tail := 0
+	for i := 1; i < len(src); i++ {
+		mark := Mark{-1, 1, false}
+		for j := i - 1; j >= 0; j-- {
+			if src[i] > src[j] && memo[j].length >= mark.length {
+				mark.prev = j
+				mark.length = memo[j].length + 1
+			}
+			if memo[j].best {
+				break
+			}
+		}
+		if mark.length >= memo[tail].length {
+			mark.best = true
+			tail = i
+		}
+		memo = append(memo, mark)
+	}
+	result := make([]int, memo[tail].length)
+	for i := len(result); tail >= 0; tail = memo[tail].prev {
+		i--
+		result[i] = src[tail]
 	}
 	return result
 }
