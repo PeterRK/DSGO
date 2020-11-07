@@ -20,7 +20,7 @@ func (tr *Tree) Remove(key int32) bool {
 			if !orphan.isBlack() {
 				orphan.black = true //红子变黑顶上
 			} else {
-				tr.adjustAfterDelete()
+				tr.rebalanceAfterDelete()
 			}
 		}
 		target.key = victim.key //李代桃僵
@@ -91,7 +91,7 @@ func (tr *Tree) findRemoveVictim(target *node) (victim *node, orphan *node) {
 //|       /  \       |                  |
 //|      u    v      |                  |
 
-func (tr *Tree) adjustAfterDelete() {
+func (tr *Tree) rebalanceAfterDelete() {
 	G, lf := tr.path.pop()
 	for { //剩下情况：victim黑，orphan也黑，此时victim(orphan顶替)的兄弟必然存在
 		if lf {

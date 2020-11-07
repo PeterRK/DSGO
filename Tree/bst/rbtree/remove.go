@@ -26,7 +26,7 @@ func (tr *Tree) Remove(key int32) bool {
 			if orphan != nil && !orphan.black {
 				orphan.black = true //红子变黑顶上
 			} else {
-				tr.adjustAfterDelete(root, victim.key)
+				tr.rebalanceAfterDelete(root, victim.key)
 			}
 		}
 		target.key = victim.key
@@ -92,7 +92,7 @@ func findRemoveVictim(target *node) (victim *node, orphan *node) {
 //|       /  \       |                  |
 //|      u    v      |                  |
 
-func (tr *Tree) adjustAfterDelete(G *node, key int32) {
+func (tr *Tree) rebalanceAfterDelete(G *node, key int32) {
 	for { //剩下情况：victim黑，orphan也黑，此时victim(orphan顶替)的兄弟必然存在
 		super := G.parent
 		if key < G.key {

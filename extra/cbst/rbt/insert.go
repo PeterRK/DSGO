@@ -11,7 +11,7 @@ func (tr *Tree) Insert(key int32) bool {
 		if root == nil {
 			return false
 		}
-		tr.adjustAfterInsert()
+		tr.rebalanceAfterInsert()
 	}
 	return true
 }
@@ -64,7 +64,7 @@ func (tr *Tree) insert(key int32) *node {
 //|     /  \         |                  |
 //|    u    v        |                  |
 
-func (tr *Tree) adjustAfterInsert() {
+func (tr *Tree) rebalanceAfterInsert() {
 	P, klf := tr.path.pop()
 	for !P.black { //违法双红禁
 		G, plf := tr.path.pop() //必然存在，根为黑，P非根
