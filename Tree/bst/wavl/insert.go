@@ -51,11 +51,12 @@ func (tr *Tree) rebalanceAfterInsert(root *node, key int) {
 		} else {
 			root.state--
 		}
-		if state == 0 && root.parent != nil {
-			root = root.parent
-			continue
-		}
-		if state != 0 && root.state != 0 { //2 || -2
+		if state == 0 {
+			if root.parent != nil {
+				root = root.parent
+				continue
+			}
+		} else if root.state != 0 {
 			super := root.parent
 			root, _ = root.rotate()
 			if super == nil {
