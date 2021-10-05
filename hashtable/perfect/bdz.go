@@ -178,7 +178,8 @@ func (g *hypergraph) tear(free []uint32, bitmap []uint32) []uint32 {
 
 func (h *bdz) mapping(edges [][3]vertex, free []uint32, bitmap []uint32) {
 	array.SetAll(h.bitmap, ^uint32(0))
-	for i := len(free) - 1; i >= 0; i-- { //BDZ论文指出：逆序就可以保证不误占
+	//free从前到后的过程中伴随剩余点集的净收缩，逆之则可以保证每次处理的边不会无点可占
+	for i := len(free) - 1; i >= 0; i-- {
 		e := edges[free[i]]
 		v0, v1, v2 := e[0].slot, e[1].slot, e[2].slot
 		switch {
