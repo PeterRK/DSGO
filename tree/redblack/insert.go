@@ -1,7 +1,7 @@
 package redblack
 
 //成功返回true，冲突返回false。
-//红黑树插入过程包括：O(log N)的搜索，O(1)的旋转，O(log N)的平衡因子调整。
+//红黑树插入过程包括：O(logN)的搜索，O(1)的旋转，O(logN)的平衡因子调整。
 func (tr *Tree[T]) Insert(key T) bool {
 	if tr.root == nil {
 		tr.root = newNode(nil, key) //默认为红
@@ -78,12 +78,12 @@ func (tr *Tree[T]) rebalanceAfterInsert(P *node[T], key T) {
 				} //遇根终止
 			} else { //黑叔模式，旋转解决
 				if key < P.key { //LL
-					G.left, P.right = G.tryHook(P.right), P.hook(G)
+					G.left, P.right = G.Hook(P.right), P.hook(G)
 					G.black, P.black = false, true
 					tr.hookSubTree(super, P)
 				} else { //LR
 					C := P.right
-					P.right, G.left = P.tryHook(C.left), G.tryHook(C.right)
+					P.right, G.left = P.Hook(C.left), G.Hook(C.right)
 					C.left, C.right = C.hook(P), C.hook(G)
 					G.black, C.black = false, true
 					tr.hookSubTree(super, C)
@@ -100,12 +100,12 @@ func (tr *Tree[T]) rebalanceAfterInsert(P *node[T], key T) {
 				} //遇根终止
 			} else { //黑叔模式，旋转解决
 				if key > P.key { //RR
-					G.right, P.left = G.tryHook(P.left), P.hook(G)
+					G.right, P.left = G.Hook(P.left), P.hook(G)
 					G.black, P.black = false, true
 					tr.hookSubTree(super, P)
 				} else { //RL
 					C := P.left
-					P.left, G.right = P.tryHook(C.right), G.tryHook(C.left)
+					P.left, G.right = P.Hook(C.right), G.Hook(C.left)
 					C.right, C.left = C.hook(P), C.hook(G)
 					G.black, C.black = false, true
 					tr.hookSubTree(super, C)

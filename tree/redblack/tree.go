@@ -47,7 +47,7 @@ func (tr *Tree[T]) Search(key T) bool {
 	return false
 }
 
-func (parent *node[T]) tryHook(child *node[T]) *node[T] {
+func (parent *node[T]) Hook(child *node[T]) *node[T] {
 	if child != nil {
 		child.parent = parent
 	}

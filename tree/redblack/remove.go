@@ -1,7 +1,7 @@
 package redblack
 
 //成功返回true，没有返回false。
-//红黑树删除过程包括：O(log N)的搜索，O(1)的旋转，O(log N)的平衡因子调整。
+//红黑树删除过程包括：O(logN)的搜索，O(1)的旋转，O(logN)的平衡因子调整。
 func (tr *Tree[T]) Remove(key T) bool {
 	target := tr.findRemoveTarget(key)
 	if target == nil {
@@ -17,10 +17,10 @@ func (tr *Tree[T]) Remove(key T) bool {
 		}
 	} else {
 		root := victim.parent
-		if key < root.key {
-			root.left = root.tryHook(orphan)
+		if victim.key < root.key {
+			root.left = root.Hook(orphan)
 		} else {
-			root.right = root.tryHook(orphan)
+			root.right = root.Hook(orphan)
 		}
 		if victim.black { //红victim随便删，黑的要考虑
 			if orphan != nil && !orphan.black {
@@ -114,12 +114,12 @@ func (tr *Tree[T]) rebalanceAfterRemove(G *node[T], key T) {
 						}
 						G.black = true
 					} else { //中黑外红
-						G.right, U.left = G.tryHook(L), U.hook(G)
+						G.right, U.left = G.Hook(L), U.hook(G)
 						U.black, G.black, R.black = G.black, true, true
 						tr.hookSubTree(super, U)
 					}
 				} else { //中红
-					U.left, G.right = U.tryHook(L.right), G.tryHook(L.left)
+					U.left, G.right = U.Hook(L.right), G.Hook(L.left)
 					L.right, L.left = L.hook(U), L.hook(G)
 					L.black, G.black = G.black, true
 					tr.hookSubTree(super, L)
@@ -143,12 +143,12 @@ func (tr *Tree[T]) rebalanceAfterRemove(G *node[T], key T) {
 						}
 						G.black = true
 					} else { //中黑外红
-						G.left, U.right = G.tryHook(R), U.hook(G)
+						G.left, U.right = G.Hook(R), U.hook(G)
 						U.black, G.black, L.black = G.black, true, true
 						tr.hookSubTree(super, U)
 					}
 				} else { //中红
-					U.right, G.left = U.tryHook(R.left), G.tryHook(R.right)
+					U.right, G.left = U.Hook(R.left), G.Hook(R.right)
 					R.left, R.right = R.hook(U), R.hook(G)
 					R.black, G.black = G.black, true
 					tr.hookSubTree(super, R)

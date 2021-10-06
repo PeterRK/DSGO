@@ -1,15 +1,12 @@
-package rank
+package avl
 
 import (
 	"constraints"
 )
 
-//为了方便查询排行，加入了数量记录
-
 type node[T constraints.Ordered] struct {
-	state  int8 //(2), 1, 0, -1, (-2)
-	weight int32
 	key    T
+	state  int8 //(2), 1, 0, -1, (-2)
 	parent *node[T]
 	left   *node[T]
 	right  *node[T]
@@ -33,21 +30,19 @@ func (tr *Tree[T]) Clear() {
 	tr.size = 0
 }
 
-//找到返回序号（从1开始），没有返回0
-func (tr *Tree[T]) Search(key T) int {
-	target, base := tr.root, int32(0)
+func (tr *Tree[T]) Search(key T) bool {
+	target := tr.root
 	for target != nil {
 		if key == target.key {
-			return int(base + target.rank())
+			return true
 		}
 		if key < target.key {
 			target = target.left
 		} else {
-			base += target.rank()
 			target = target.right
 		}
 	}
-	return 0
+	return false
 }
 
 func (parent *node[T]) Hook(child *node[T]) *node[T] {
@@ -61,21 +56,9 @@ func (parent *node[T]) hook(child *node[T]) *node[T] {
 	return child
 }
 
-func (unit *node[T]) Weight() int32 {
-	if unit == nil {
-		return 0
-	}
-	return unit.weight
-}
-func (unit *node[T]) rank() int32 {
-	return unit.left.Weight() + 1
-}
-
-
-func newNode[T constraints.Ordered](parent *node[T], key T) (unit *node[T]) {
-	unit = new(node[T])
+func newNode[T constraints.Ordered](parent *node[T], key T) *node[T] {
+	unit := new(node[T])
 	//unit.state = 0
-	unit.weight = 1
 	//unit.left, unit.right = nil, nil
 	unit.parent, unit.key = parent, key
 	return unit

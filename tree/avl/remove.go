@@ -1,14 +1,11 @@
-package rank
+package avl
 
-//成功返回序号（从1开始），没有返回0。
+//成功返回true，没有返回false。
 //AVL树删除过程包括：O(logN)的搜索，O(logN)的旋转，O(logN)的平衡因子调整。
-func (tr *Tree[T]) Remove(key T) int {
-	target, rank := tr.findRemoveTarget(key)
+func (tr *Tree[T]) Remove(key T) bool {
+	target := tr.findRemoveTarget(key)
 	if target == nil {
-		return 0
-	}
-	for node := target.parent; node != nil; node = node.parent {
-		node.weight--
+		return false
 	}
 	victim, orphan := target.findVictim()
 
@@ -19,44 +16,37 @@ func (tr *Tree[T]) Remove(key T) int {
 		target.key = victim.key //调整好了再修正值
 	}
 	tr.size--
-	return int(rank)
+	return true
 }
 
-func (tr *Tree[T]) findRemoveTarget(key T) (*node[T], int32) {
-	target, base := tr.root, int32(0)
-	for target != nil {
-		if key == target.key {
-			return target, base + target.rank()
-		}
+func (tr *Tree[T]) findRemoveTarget(key T) *node[T] {
+	target := tr.root
+	for target != nil && key != target.key {
 		if key < target.key {
 			target = target.left
 		} else {
-			base += target.rank()
 			target = target.right
 		}
 	}
-	return target, -1
+	return target
 }
 
-func (target *node[T])findVictim()(victim, orphan *node[T]) {
+func (target *node[T])findVictim() (victim, orphan *node[T]) {
 	switch {
 	case target.left == nil:
 		victim, orphan = target, target.right
 	case target.right == nil:
 		victim, orphan = target, target.left
 	default:
-		target.weight--
 		if target.state == 1 {
 			victim = target.left
 			for victim.right != nil {
-				victim.weight--
 				victim = victim.right
 			}
 			orphan = victim.left
 		} else {
 			victim = target.right
 			for victim.left != nil {
-				victim.weight--
 				victim = victim.left
 			}
 			orphan = victim.right

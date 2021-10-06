@@ -1,43 +1,40 @@
-package rank
+package avl
 
-//成功返回序号（从1开始），冲突返回序号的负值。
+//成功返回true，冲突返回false。
 //AVL树插入过程包括：O(logN)的搜索，O(1)的旋转，O(logN)的平衡因子调整。
-func (tr *Tree[T]) Insert(key T) int {
-	root, rank := (*node[T])(nil), int32(1)
+func (tr *Tree[T]) Insert(key T) bool {
 	if tr.root == nil {
 		tr.root = newNode[T](nil, key)
 	} else {
-		root, rank = tr.insert(key)
+		root := tr.insert(key)
 		if root == nil {
-			return int(-rank)
+			return false
 		}
 		tr.rebalanceAfterInsert(root, key)
 	}
 	tr.size++
-	return int(rank)
+	return true
 }
 
 //插入节点，root != nil
-func (tr *Tree[T]) insert(key T) (*node[T], int32) {
-	root, base := tr.root, int32(0)
+func (tr *Tree[T]) insert(key T) *node[T] {
+	root := tr.root
 	for {
-		root.weight++
 		switch {
 		case key < root.key:
 			if root.left == nil {
 				root.left = newNode[T](root, key)
-				return root, base + 1
+				return root
 			}
 			root = root.left
 		case key > root.key:
-			base += root.rank()
 			if root.right == nil {
 				root.right = newNode[T](root, key)
-				return root, base + 1
+				return root
 			}
 			root = root.right
 		default: //key == root.key
-			return nil, base + root.rank()
+			return nil
 		}
 	}
 }
@@ -72,3 +69,4 @@ func (tr *Tree[T]) rebalanceAfterInsert(root *node[T], key T) {
 		break
 	}
 }
+
