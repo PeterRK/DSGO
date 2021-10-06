@@ -68,3 +68,12 @@ func (tr *Tree[T]) hookSubTree(super, root *node[T]) {
 		}
 	}
 }
+
+func newNode[T constraints.Ordered](parent *node[T], key T) (unit *node[T]) {
+	unit = new(node[T])
+	//unit.black = false
+	//unit.left, unit.right = nil, nil
+	unit.parent, unit.key = parent, key
+	return unit
+}
+

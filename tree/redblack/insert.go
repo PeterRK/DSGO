@@ -1,9 +1,5 @@
 package redblack
 
-import (
-	"constraints"
-)
-
 //成功返回true，冲突返回false。
 //红黑树插入过程包括：O(log N)的搜索，O(1)的旋转，O(log N)的平衡因子调整。
 func (tr *Tree[T]) Insert(key T) bool {
@@ -118,12 +114,4 @@ func (tr *Tree[T]) rebalanceAfterInsert(P *node[T], key T) {
 		}
 		break //变色时才需要循环
 	}
-}
-
-func newNode[T constraints.Ordered](parent *node[T], key T) (unit *node[T]) {
-	unit = new(node[T])
-	//unit.black = false
-	//unit.left, unit.right = nil, nil
-	unit.parent, unit.key = parent, key
-	return unit
 }

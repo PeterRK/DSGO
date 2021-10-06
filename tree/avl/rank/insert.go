@@ -1,9 +1,5 @@
 package rank
 
-import (
-	"constraints"
-)
-
 //成功返回序号（从1开始），冲突返回序号的负值。
 //AVL树插入过程包括：O(log N)的搜索，O(1)的旋转，O(log N)的平衡因子调整。
 func (tr *Tree[T]) Insert(key T) int {
@@ -75,13 +71,4 @@ func (tr *Tree[T]) rebalanceAfterInsert(root *node[T], key T) {
 		}
 		break
 	}
-}
-
-func newNode[T constraints.Ordered](parent *node[T], key T) (unit *node[T]) {
-	unit = new(node[T])
-	//unit.state = 0
-	unit.weight = 1
-	//unit.left, unit.right = nil, nil
-	unit.parent, unit.key = parent, key
-	return unit
 }

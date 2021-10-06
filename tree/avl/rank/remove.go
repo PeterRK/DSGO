@@ -1,9 +1,5 @@
 package rank
 
-import (
-	"constraints"
-)
-
 //成功返回序号（从1开始），没有返回0。
 //AVL树删除过程包括：O(log N)的搜索，O(log N)的旋转，O(log N)的平衡因子调整。
 func (tr *Tree[T]) Remove(key T) int {
@@ -14,7 +10,7 @@ func (tr *Tree[T]) Remove(key T) int {
 	for node := target.parent; node != nil; node = node.parent {
 		node.weight--
 	}
-	victim, orphan := findRemoveVictim(target)
+	victim, orphan := target.findVictim()
 
 	if victim.parent == nil { //此时victim==target
 		tr.root = ((*node[T])(nil)).tryHook(orphan)
@@ -42,7 +38,7 @@ func (tr *Tree[T]) findRemoveTarget(key T) (*node[T], int32) {
 	return target, -1
 }
 
-func findRemoveVictim[T constraints.Ordered](target *node[T]) (victim *node[T], orphan *node[T]) {
+func (target *node[T])findVictim()(victim, orphan *node[T]) {
 	switch {
 	case target.left == nil:
 		victim, orphan = target, target.right
@@ -69,7 +65,7 @@ func findRemoveVictim[T constraints.Ordered](target *node[T]) (victim *node[T], 
 	return victim, orphan
 }
 
-func (tr *Tree[T]) rebalanceAfterRemove(victim *node[T], orphan *node[T], key T) {
+func (tr *Tree[T]) rebalanceAfterRemove(victim, orphan *node[T], key T) {
 	root := victim.parent
 	state, stop := root.state, false
 	if key < root.key {

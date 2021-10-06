@@ -1,9 +1,5 @@
 package redblack
 
-import (
-	"constraints"
-)
-
 //成功返回true，没有返回false。
 //红黑树删除过程包括：O(log N)的搜索，O(1)的旋转，O(log N)的平衡因子调整。
 func (tr *Tree[T]) Remove(key T) bool {
@@ -11,7 +7,7 @@ func (tr *Tree[T]) Remove(key T) bool {
 	if target == nil {
 		return false
 	}
-	victim, orphan := findRemoveVictim(target)
+	victim, orphan := target.findVictim()
 
 	if victim.parent == nil { //此时victim==target
 		tr.root = orphan
@@ -51,7 +47,7 @@ func (tr *Tree[T]) findRemoveTarget(key T) *node[T] {
 	return target
 }
 
-func findRemoveVictim[T constraints.Ordered](target *node[T]) (victim, orphan *node[T]) {
+func (target *node[T])findVictim() (victim, orphan *node[T]) {
 	switch {
 	case target.left == nil:
 		victim, orphan = target, target.right

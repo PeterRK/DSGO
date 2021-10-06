@@ -60,6 +60,7 @@ func (parent *node[T]) hook(child *node[T]) *node[T] {
 	child.parent = parent
 	return child
 }
+
 func (unit *node[T]) realWeight() int32 {
 	if unit == nil {
 		return 0
@@ -68,4 +69,14 @@ func (unit *node[T]) realWeight() int32 {
 }
 func (unit *node[T]) subRank() int32 {
 	return unit.left.realWeight() + 1
+}
+
+
+func newNode[T constraints.Ordered](parent *node[T], key T) (unit *node[T]) {
+	unit = new(node[T])
+	//unit.state = 0
+	unit.weight = 1
+	//unit.left, unit.right = nil, nil
+	unit.parent, unit.key = parent, key
+	return unit
 }
