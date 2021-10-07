@@ -11,7 +11,7 @@ func Test_Hasher(t *testing.T) {
 
 	tpl := "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	var keys [52]string
-	for i := 0; i < 52; i++ {
+	for i := 0; i < len(keys); i++ {
 		keys[i] = tpl[i : i+26]
 	}
 

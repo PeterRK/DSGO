@@ -14,76 +14,98 @@ const PieceCap = PieceSize * 2 / 5
 
 type piece [PieceSize]byte
 
-type BloomFliter struct {
+type bloomFliter struct {
 	core []piece
-	item int
+	size int
 	seed uint64
 }
 
-func (b *BloomFliter) Capacity() int {
-	return len(b.core) * PieceCap
+type BloomFliter interface {
+	Capacity() int
+	Size() int
+	Insert(string)
+	Search(string) bool
 }
 
-func (b *BloomFliter) Item() int {
-	return b.item
+func New(capacity uint32) BloomFliter {
+	bf := new(bloomFliter)
+	bf.init(capacity)
+	return bf
 }
 
-func (b *BloomFliter) Init(capacity uint32) {
+func (bf *bloomFliter) Capacity() int {
+	return len(bf.core) * PieceCap
+}
+
+func (bf *bloomFliter) Size() int {
+	return bf.size
+}
+
+func (bf *bloomFliter) init(capacity uint32) {
 	if capacity == 0 {
 		capacity = 1
 	}
-	b.core = make([]piece, int((capacity+(PieceCap-1))/PieceCap))
-	b.item = 0
-	b.seed = uint64(time.Now().UnixNano())
+	bf.core = make([]piece, int((capacity+(PieceCap-1))/PieceCap))
+	//bf.size = 0
+	bf.seed = uint64(time.Now().UnixNano())
 }
 
-type hRes struct {
-	p    *piece
+type context struct {
+	vec  []byte
 	pos  [8]uint16
 	mask [8]byte
 }
 
-func (b *BloomFliter) hash(key string) (res hRes) {
-	var h [2]uint64
-	var z uint32
-	h[0], h[1], z = hashtable.Hash160(b.seed, key)
-	res.p = &b.core[int(z)%len(b.core)]
-	for i := 0; i < 1; i++ {
-		res.pos[i*4] = uint16(h[i])
-		res.pos[i*4+1] = uint16(h[i] >> 16)
-		res.pos[i*4+2] = uint16(h[i] >> 32)
-		res.pos[i*4+3] = uint16(h[i] >> 48)
-	}
-	for i := 0; i < 8; i++ {
-		res.mask[i] = 1 << (res.pos[i] & 7)
-	}
-	for i := 0; i < 8; i++ {
-		res.pos[i] >>= 3
-	}
-	return res
-}
-
-func (b *BloomFliter) Insert(key string) bool {
-	h := b.hash(key)
+func (ctx *context) insert() bool {
 	miss := false
 	for i := 0; i < 8; i++ {
-		if (*h.p)[h.pos[i]]&h.mask[i] == 0 {
-			(*h.p)[h.pos[i]] |= h.mask[i]
+		pos, mask := ctx.pos[i], ctx.mask[i]
+		if (ctx.vec[pos] & mask) == 0 {
+			ctx.vec[pos] |= mask
 			miss = true
 		}
-	}
-	if miss {
-		b.item++
 	}
 	return miss
 }
 
-func (b *BloomFliter) Search(key string) bool {
-	h := b.hash(key)
+func (ctx *context) search() bool {
 	for i := 0; i < 8; i++ {
-		if (*h.p)[h.pos[i]]&h.mask[i] == 0 {
+		pos, mask := ctx.pos[i], ctx.mask[i]
+		if (ctx.vec[pos] & mask) == 0 {
 			return false
 		}
 	}
 	return true
+}
+
+func (bf *bloomFliter) hash(key string) (ctx context) {
+	a, b, z := hashtable.Hash160(bf.seed, key)
+	ctx.vec = bf.core[int(z)%len(bf.core)][:]
+	ctx.pos[0] = uint16(a)
+	ctx.pos[1] = uint16(a >> 16)
+	ctx.pos[2] = uint16(a >> 32)
+	ctx.pos[3] = uint16(a >> 48)
+	ctx.pos[4] = uint16(b)
+	ctx.pos[5] = uint16(b >> 16)
+	ctx.pos[6] = uint16(b >> 32)
+	ctx.pos[7] = uint16(b >> 48)
+	for i := 0; i < 8; i++ {
+		ctx.mask[i] = 1 << (ctx.pos[i] & 7)
+	}
+	for i := 0; i < 8; i++ {
+		ctx.pos[i] >>= 3
+	}
+	return ctx
+}
+
+func (bf *bloomFliter) Insert(key string) {
+	ctx := bf.hash(key)
+	if ctx.insert() {
+		bf.size++
+	}
+}
+
+func (bf *bloomFliter) Search(key string) bool {
+	ctx := bf.hash(key)
+	return ctx.search()
 }

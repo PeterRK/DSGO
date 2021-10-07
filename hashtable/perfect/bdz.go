@@ -6,11 +6,12 @@ import (
 	"DSGO/utils"
 	"fmt"
 	"math"
+	"math/rand"
 	"time"
 )
 
 type bdz struct {
-	seed   uint32
+	seed   uint64
 	width  uint32
 	bitmap []uint32
 }
@@ -51,7 +52,7 @@ func setBitWithCheck(bitmap []uint32, pos uint32) bool {
 }
 
 func (h *bdz) hash(key string) (slots [3]uint32) {
-	a, b := hashtable.Hash128(uint64(h.seed), key)
+	a, b := hashtable.Hash128(h.seed, key)
 	slots[0] = uint32(a) % h.width
 	slots[1] = uint32(a>>32)%h.width + h.width
 	slots[2] = uint32(b)%h.width + h.width*2
@@ -98,11 +99,11 @@ func (h *bdz) init(keys []string) bool {
 
 	free := make([]uint32, 0, len(keys))
 
-	rand := utils.NewXorshift(uint32(time.Now().Unix()))
+	rnd := rand.New(rand.NewSource(time.Now().UnixNano()))
 	for trys := 0; trys < 16; trys++ {
-		h.seed = rand.Next()
+		h.seed = rnd.Uint64()
 		if trys != 0 {
-			fmt.Printf("retry with seed %d\n", h.seed)
+			fmt.Printf("retry with seed %x\n", h.seed)
 		}
 		if !graph.init(keys, h.hash) { //根据随机种子生成超图
 			return false
