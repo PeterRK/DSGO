@@ -94,7 +94,7 @@ func (target *node[T]) findVictim() (victim, orphan *node[T]) {
 //|   /  \   \     |    /     P1+    |
 //| Y1    \   \    |  Y2     /  \    |
 //|       Z?   \   |        Z?   \   |
-//|             X3 |              X2 |
+//|             X3 |             X2- |
 
 //P != nil
 func (tr *Tree[T]) rebalanceAfterRemove(P *node[T], key T) {
