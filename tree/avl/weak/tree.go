@@ -9,20 +9,22 @@ import (
 //当节点为叶节点（子节点皆为nil）时，高度必须为0
 //节点和子节点的高度差为1或2
 type node[T constraints.Ordered] struct {
-	height int8 //足以支持2^64的节点数
+//	height int8 //足以支持2^64的节点数
+	lDiff  uint8
+	rDiff  uint8
 	key    T
 	parent *node[T]
 	left   *node[T]
 	right  *node[T]
 }
-
+/*
 func (unit *node[T]) Height() int8 {
 	if unit == nil {
 		return -1
 	}
 	return unit.height
 }
-
+*/
 type Tree[T constraints.Ordered] struct {
 	root *node[T]
 	size int
@@ -82,6 +84,7 @@ func (tr *Tree[T]) hookSubTree(super, root *node[T]) {
 func newNode[T constraints.Ordered](parent *node[T], key T) *node[T] {
 	unit := new(node[T])
 	//unit.height = 0
+	unit.lDiff, unit.rDiff = 1, 1
 	//unit.left, unit.right = nil, nil
 	unit.parent, unit.key = parent, key
 	return unit

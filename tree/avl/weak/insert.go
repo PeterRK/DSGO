@@ -65,13 +65,73 @@ func (tr *Tree[T]) rebalanceAfterInsert(P *node[T], key T) {
 	for {
 		super, root := P.parent, (*node[T])(nil)
 		if key < P.key {
+			if P.lDiff--; P.lDiff > 0 {
+				break
+			}
+			if P.rDiff == 1 {
+				P.lDiff, P.rDiff = 1, 2
+				goto Lup
+			}
+			if X := P.left; X.lDiff == 1 {
+				P.left = P.Hook(X.right)
+				X.right = X.hook(P)
+				P.lDiff, P.rDiff, X.rDiff = 1, 1, 1
+				root = X
+			} else {
+				Z := X.right
+				X.right, P.left = X.Hook(Z.left), P.Hook(Z.right)
+				Z.left, Z.right = Z.hook(X), Z.hook(P)
+				X.rDiff, P.lDiff = Z.lDiff, Z.rDiff
+				X.lDiff, P.rDiff = 1, 1
+				Z.lDiff, Z.rDiff = 1, 1
+				root = Z
+			}
+		} else {
+			if P.rDiff--; P.rDiff > 0 {
+				break
+			}
+			if P.lDiff == 1 {
+				P.rDiff, P.lDiff = 1, 2
+				goto Lup
+			}
+			if X := P.right; X.rDiff == 1 {
+				P.right = P.Hook(X.left)
+				X.left = X.hook(P)
+				P.rDiff, P.lDiff, X.lDiff = 1, 1, 1
+				root = X
+			} else {
+				Z := X.left
+				X.left, P.right = X.Hook(Z.right), P.Hook(Z.left)
+				Z.right, Z.left = Z.hook(X), Z.hook(P)
+				X.lDiff, P.rDiff = Z.rDiff, Z.lDiff
+				X.rDiff, P.lDiff = 1, 1
+				Z.rDiff, Z.lDiff = 1, 1
+				root = Z
+			}
+		}
+		tr.hookSubTree(super, root)
+		break
+	Lup:
+		if P = super; P == nil {
+			break
+		}
+	}
+}
+/*
+func (tr *Tree[T]) rebalanceAfterInsert(P *node[T], key T) {
+	for {
+		super, root := P.parent, (*node[T])(nil)
+		if key < P.key {
 			X, S := P.left, P.right
 			if X.height < P.height {
 				break
 			}
 			if P.height-S.Height() == 1 {
 				P.height++
-				goto Lup
+				if P = super; P == nil {
+					break
+				}
+				continue
 			}
 			//P.height - S.Height() == 2
 			Y, Z := X.left, X.right
@@ -95,7 +155,10 @@ func (tr *Tree[T]) rebalanceAfterInsert(P *node[T], key T) {
 			}
 			if P.height-S.Height() == 1 {
 				P.height++
-				goto Lup
+				if P = super; P == nil {
+					break
+				}
+				continue
 			}
 			//P.height - S.Height() == 2
 			Y, Z := X.right, X.left
@@ -115,9 +178,6 @@ func (tr *Tree[T]) rebalanceAfterInsert(P *node[T], key T) {
 		}
 		tr.hookSubTree(super, root)
 		break
-	Lup:
-		if P = super; P == nil {
-			break
-		}
 	}
 }
+*/
