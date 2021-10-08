@@ -19,7 +19,7 @@ func Test_Ranker(t *testing.T) {
 	defer utils.FailInPanic(t)
 
 	const size = 2000
-	rand.Seed(time.Now().Unix())
+	rand.Seed(time.Now().UnixNano())
 	lst1 := make([]int, size)
 	lst2 := make([]Unit, size)
 	for i := 0; i < size; i++ {

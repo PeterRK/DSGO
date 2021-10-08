@@ -10,7 +10,7 @@ import (
 )
 
 func genRand(size int) []int {
-	rand.Seed(time.Now().Unix())
+	rand.Seed(time.Now().UnixNano())
 	list := make([]int, size)
 	for i := 0; i < size; i++ {
 		list[i] = rand.Int()

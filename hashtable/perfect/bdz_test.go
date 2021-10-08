@@ -2,12 +2,11 @@ package perfect
 
 import (
 	"DSGO/utils"
-	//"fmt"
 	"testing"
 )
 
 func Test_Hasher(t *testing.T) {
-	//defer utils.FailInPanic(t)
+	defer utils.FailInPanic(t)
 
 	tpl := "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	var keys [52]string

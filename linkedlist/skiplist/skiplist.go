@@ -37,7 +37,7 @@ func NewSkipList[T constraints.Ordered]() SkipList[T] {
 }
 
 func (l *skipList[T]) init() {
-	l.rand = utils.NewXorshift(uint32(time.Now().Unix()))
+	l.rand = utils.NewXorshift(uint32(time.Now().UnixNano()))
 	l.heads, l.knots = make([]*node[T], 1), make([]*node[T], 1)
 	l.level, l.size, l.ceil, l.floor = 1, 1, LevelFactor, 1
 }

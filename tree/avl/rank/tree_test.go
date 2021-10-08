@@ -11,7 +11,7 @@ import (
 type elem int
 
 func genRand(size int) []elem {
-	rand.Seed(time.Now().Unix())
+	rand.Seed(time.Now().UnixNano())
 	list := make([]elem, size)
 	for i := 0; i < size; i++ {
 		list[i] = elem(rand.Uint64())

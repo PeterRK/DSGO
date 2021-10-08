@@ -9,7 +9,7 @@ import (
 )
 
 func genRand(size int) ([]int, int) {
-	rand.Seed(time.Now().Unix())
+	rand.Seed(time.Now().UnixNano())
 	list := make([]int, size)
 	min := math.MaxInt
 	for i := 0; i < size; i++ {

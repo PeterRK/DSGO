@@ -2,6 +2,7 @@ package redblack
 
 import (
 	"constraints"
+	"fmt"
 )
 
 //AVL树的平衡因子有5态，需要3bit存储空间。
@@ -77,3 +78,14 @@ func newNode[T constraints.Ordered](parent *node[T], key T) (unit *node[T]) {
 	return unit
 }
 
+func (root *node[T]) debug(indent int) {
+	if root == nil {
+		return
+	}
+	root.left.debug(indent+1)
+	for i := 0; i < indent; i++ {
+		fmt.Print("  ")
+	}
+	fmt.Println(root.black, root.key)
+	root.right.debug(indent+1)
+}

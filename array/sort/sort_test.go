@@ -44,7 +44,16 @@ func getTrait(list []elem) elem {
 }
 
 func genRand(size int) []elem {
-	rand.Seed(time.Now().Unix())
+	rand.Seed(time.Now().UnixNano())
+	list := make([]elem, size)
+	for i := 0; i < size; i++ {
+		list[i] = elem(rand.Uint64())
+	}
+	return list
+}
+
+func genPseudo(size int) []elem {
+	rand.Seed(999)
 	list := make([]elem, size)
 	for i := 0; i < size; i++ {
 		list[i] = elem(rand.Uint64())
@@ -115,35 +124,35 @@ func Test_RadixSort(t *testing.T) {
 
 /*	这几个要跑很久
 func Benchmark_BubleSort(b *testing.B) {
-	benchSort(b, BubleSort[elem], genRand)
+	benchSort(b, BubleSort[elem], genPseudo)
 }
 func Benchmark_SelectSort(b *testing.B) {
-	benchSort(b, SelectSort[elem], genRand)
+	benchSort(b, SelectSort[elem], genPseudo)
 }
 func Benchmark_InsertSort(b *testing.B) {
-	benchSort(b, InsertSort[elem], genRand)
+	benchSort(b, InsertSort[elem], genPseudo)
 }
 */
 func Benchmark_HeapSort(b *testing.B) {
-	benchSort(b, HeapSort[elem], genRand)
+	benchSort(b, HeapSort[elem], genPseudo)
 }
 func Benchmark_MergeSort(b *testing.B) {
-	benchSort(b, MergeSort[elem], genRand)
+	benchSort(b, MergeSort[elem], genPseudo)
 }
 func Benchmark_QuickSort(b *testing.B) {
-	benchSort(b, QuickSort[elem], genRand)
+	benchSort(b, QuickSort[elem], genPseudo)
 }
 func Benchmark_QuickSortY(b *testing.B) {
-	benchSort(b, QuickSortY[elem], genRand)
+	benchSort(b, QuickSortY[elem], genPseudo)
 }
 func Benchmark_IntroSort(b *testing.B) {
-	benchSort(b, IntroSort[elem], genRand)
+	benchSort(b, IntroSort[elem], genPseudo)
 }
 func Benchmark_IntroSortY(b *testing.B) {
-	benchSort(b, IntroSortY[elem], genRand)
+	benchSort(b, IntroSortY[elem], genPseudo)
 }
 func Benchmark_RadixSort(b *testing.B) {
-	benchSort(b, RadixSort[elem], genRand)
+	benchSort(b, RadixSort[elem], genPseudo)
 }
 
 func Benchmark_DescHeapSort(b *testing.B) {

@@ -54,8 +54,16 @@ func (tr *Tree[T]) Search(key T) bool {
 	return key == node.view[array.SearchFirstGE(node.view, key)]
 }
 
-//成功返回true，冲突返回false。
 func (tr *Tree[T]) Insert(key T) bool {
+	if tr.insert(key) {
+		tr.size++
+		return true
+	}
+	return false
+}
+
+//成功返回true，冲突返回false。
+func (tr *Tree[T]) insert(key T) bool {
 	if tr.root == nil {
 		node := newLeaf[T]()
 		node.data[0] = key
@@ -106,9 +114,17 @@ func (tr *Tree[T]) Insert(key T) bool {
 	return true
 }
 
+func (tr *Tree[T]) Remove(key T) bool {
+	if tr.remove(key) {
+		tr.size--
+		return true
+	}
+	return false
+}
+
 //B+树的删除比较复杂，本实现采用积极合并策略。
 //成功返回true，没有返回false。
-func (tr *Tree[T]) Remove(key T) bool {
+func (tr *Tree[T]) remove(key T) bool {
 	if tr.root == nil ||
 		key > tr.root.ceil() {
 		return false

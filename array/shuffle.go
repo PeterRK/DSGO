@@ -8,7 +8,7 @@ import (
 
 // 随机排列
 func RandomShuffle[T constraints.Ordered](list []T) {
-	rand.Seed(time.Now().Unix())
+	rand.Seed(time.Now().UnixNano())
 	for i := 1; i < len(list); i++ {
 		j := rand.Int() % (i + 1)
 		list[i], list[j] = list[j], list[i]
@@ -18,7 +18,7 @@ func RandomShuffle[T constraints.Ordered](list []T) {
 // 随机组合，前n项为结果
 func RandomPartition[T constraints.Ordered](list []T, n int) {
 	if n > 0 && n < len(list) {
-		rand.Seed(time.Now().Unix())
+		rand.Seed(time.Now().UnixNano())
 		for i := n; i < len(list); i++ {
 			j := rand.Int() % (i + 1)
 			list[i], list[j] = list[j], list[i]

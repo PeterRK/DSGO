@@ -54,7 +54,20 @@ func getTrait(head *ll.Node[elem]) elem {
 }
 
 func genRand(size int) *ll.Node[elem] {
-	rand.Seed(time.Now().Unix())
+	rand.Seed(time.Now().UnixNano())
+	var head *ll.Node[elem]
+	tail := ll.FakeHead(&head)
+	for i := 0; i < size; i++ {
+		tail.Next = new(ll.Node[elem])
+		tail = tail.Next
+		tail.Val = elem(rand.Uint64())
+	}
+	tail.Next = nil
+	return head
+}
+
+func genPseudo(size int) *ll.Node[elem] {
+	rand.Seed(999)
 	var head *ll.Node[elem]
 	tail := ll.FakeHead(&head)
 	for i := 0; i < size; i++ {
@@ -103,16 +116,16 @@ func Test_RadixSort(t *testing.T) {
 }
 
 func Benchmark_MergeSort(b *testing.B) {
-	benchSort(b, MergeSort[elem], genRand)
+	benchSort(b, MergeSort[elem], genPseudo)
 }
 func Benchmark_QuickSort(b *testing.B) {
-	benchSort(b, QuickSort[elem], genRand)
+	benchSort(b, QuickSort[elem], genPseudo)
 }
 func Benchmark_IntroSort(b *testing.B) {
-	benchSort(b, IntroSort[elem], genRand)
+	benchSort(b, IntroSort[elem], genPseudo)
 }
 func Benchmark_RadixSort(b *testing.B) {
-	benchSort(b, RadixSort[elem], genRand)
+	benchSort(b, RadixSort[elem], genPseudo)
 }
 
 func Benchmark_DescMergeSort(b *testing.B) {
