@@ -3,26 +3,14 @@ package bplus
 import (
 	"DSGO/utils"
 	"math"
-	"math/rand"
 	"testing"
-	"time"
 )
-
-func genRand(size int) []int32 {
-	rand.Seed(time.Now().UnixNano())
-	rand.Seed(0)
-	list := make([]int32, size)
-	for i := 0; i < size; i++ {
-		list[i] = rand.Int31()
-	}
-	return list
-}
 
 func Test_Tree(t *testing.T) {
 	defer utils.FailInPanic(t)
 
 	const size = 5000
-	list := genRand(size)
+	list := utils.RandomArray[int32](size)
 
 	var tree Tree[int32]
 	cnt := 0
@@ -58,12 +46,7 @@ func Test_Tree(t *testing.T) {
 type elem int32
 
 func genPseudo(size int) []elem {
-	rand.Seed(999)
-	list := make([]elem, size)
-	for i := 0; i < size; i++ {
-		list[i] = elem(rand.Uint64())
-	}
-	return list
+	return utils.PseudoRandomArray[elem](size, 999)
 }
 
 func Benchmark_Insert(b *testing.B) {

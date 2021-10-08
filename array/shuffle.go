@@ -1,13 +1,12 @@
 package array
 
 import (
-	"constraints"
 	"math/rand"
 	"time"
 )
 
 // 随机排列
-func RandomShuffle[T constraints.Ordered](list []T) {
+func RandomShuffle[T any](list []T) {
 	rand.Seed(time.Now().UnixNano())
 	for i := 1; i < len(list); i++ {
 		j := rand.Int() % (i + 1)
@@ -16,7 +15,7 @@ func RandomShuffle[T constraints.Ordered](list []T) {
 }
 
 // 随机组合，前n项为结果
-func RandomPartition[T constraints.Ordered](list []T, n int) {
+func RandomPartition[T any](list []T, n int) {
 	if n > 0 && n < len(list) {
 		rand.Seed(time.Now().UnixNano())
 		for i := n; i < len(list); i++ {

@@ -163,13 +163,11 @@ func (hp *Heap[T]) Remove(node *Node[T]) {
 			} else { //super为兄
 				super.next = super.hook(node.next)
 			}
-			if node = collect(node.child); node != nil {
-				hp.root = merge(hp.root, node)
+			if child := collect(node.child); child != nil {
+				hp.root = merge(hp.root, child)
 			}
-			node.prev = nil
-			node.next = nil
 		}
-		node.child = nil
+		node.child, node.prev, node.next = nil, nil, nil
 	}
 }
 

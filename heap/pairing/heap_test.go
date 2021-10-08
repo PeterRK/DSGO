@@ -3,17 +3,13 @@ package pairing
 import (
 	"DSGO/utils"
 	"math"
-	"math/rand"
 	"testing"
-	"time"
 )
 
 func genRand(size int) ([]int, int) {
-	rand.Seed(time.Now().UnixNano())
-	list := make([]int, size)
+	list := utils.RandomArray[int](size)
 	min := math.MaxInt
 	for i := 0; i < size; i++ {
-		list[i] = rand.Int()
 		if list[i] < min {
 			min = list[i]
 		}

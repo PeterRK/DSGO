@@ -2,9 +2,7 @@ package sort
 
 import (
 	"DSGO/utils"
-	"math/rand"
 	"testing"
-	"time"
 )
 
 type elem uint
@@ -44,21 +42,11 @@ func getTrait(list []elem) elem {
 }
 
 func genRand(size int) []elem {
-	rand.Seed(time.Now().UnixNano())
-	list := make([]elem, size)
-	for i := 0; i < size; i++ {
-		list[i] = elem(rand.Uint64())
-	}
-	return list
+	return utils.RandomArray[elem](size)
 }
 
 func genPseudo(size int) []elem {
-	rand.Seed(999)
-	list := make([]elem, size)
-	for i := 0; i < size; i++ {
-		list[i] = elem(rand.Uint64())
-	}
-	return list
+	return utils.PseudoRandomArray[elem](size, 999)
 }
 
 func genDesc(size int) []elem {

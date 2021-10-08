@@ -2,21 +2,11 @@ package redblack
 
 import (
 	"DSGO/utils"
-	"math/rand"
 	"testing"
-	"time"
 )
 
 type elem int32
 
-func genRand(size int) []elem {
-	rand.Seed(time.Now().UnixNano())
-	list := make([]elem, size)
-	for i := 0; i < size; i++ {
-		list[i] = elem(rand.Uint64())
-	}
-	return list
-}
 
 func (root *node[T]) check(t *testing.T) bool {
 	if root == nil {
@@ -32,7 +22,7 @@ func Test_Tree(t *testing.T) {
 	defer utils.FailInPanic(t)
 
 	const size = 2000
-	list := genRand(size)
+	list := utils.RandomArray[elem](size)
 
 	var tree Tree[elem]
 	cnt := 0
@@ -61,12 +51,7 @@ func Test_Tree(t *testing.T) {
 
 
 func genPseudo(size int) []elem {
-	rand.Seed(999)
-	list := make([]elem, size)
-	for i := 0; i < size; i++ {
-		list[i] = elem(rand.Uint64())
-	}
-	return list
+	return utils.PseudoRandomArray[elem](size, 999)
 }
 
 func Benchmark_Insert(b *testing.B) {

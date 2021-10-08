@@ -1,29 +1,17 @@
 package skiplist
 
 import (
-	"DSGO/array"
 	"DSGO/utils"
 	"math"
-	"math/rand"
 	"testing"
-	"time"
 )
-
-func genRand(size int) []int {
-	rand.Seed(time.Now().UnixNano())
-	list := make([]int, size)
-	for i := 0; i < size; i++ {
-		list[i] = rand.Int()
-	}
-	return list
-}
 
 func Test_SkipList(t *testing.T) {
 	defer utils.FailInPanic(t)
 
 	dict := NewSkipList[int]()
-	const size = 300
-	list := genRand(size * 2)
+	const size = 3000
+	list := utils.RandomArray[int](size * 2)
 
 	cnt := 0
 
@@ -70,8 +58,7 @@ func Test_SkipList(t *testing.T) {
 func Benchmark_Insert(b *testing.B) {
 	b.StopTimer()
 	dict := NewSkipList[int]()
-	list := genRand(b.N)
-	array.RandomShuffle(list)
+	list := utils.RandomArray[int](b.N)
 	b.StartTimer()
 	for i := 0; i < b.N; i++ {
 		dict.Insert(list[i])
@@ -81,11 +68,10 @@ func Benchmark_Insert(b *testing.B) {
 func Benchmark_Remove(b *testing.B) {
 	b.StopTimer()
 	dict := NewSkipList[int]()
-	list := genRand(b.N)
+	list := utils.RandomArray[int](b.N)
 	for i := 0; i < b.N; i++ {
 		dict.Insert(list[i])
 	}
-	array.RandomShuffle(list)
 	b.StartTimer()
 	for i := 0; i < b.N; i++ {
 		dict.Remove(list[i])
@@ -95,7 +81,7 @@ func Benchmark_Remove(b *testing.B) {
 func Benchmark_Search(b *testing.B) {
 	b.StopTimer()
 	dict := NewSkipList[int]()
-	list := genRand(b.N)
+	list := utils.RandomArray[int](b.N)
 	for i := 0; i < b.N; i++ {
 		dict.Insert(list[i])
 	}

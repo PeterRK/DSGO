@@ -3,27 +3,16 @@ package rank
 import (
 	"DSGO/array"
 	"DSGO/utils"
-	"math/rand"
 	"testing"
-	"time"
 )
 
 type elem int
 
-func genRand(size int) []elem {
-	rand.Seed(time.Now().UnixNano())
-	list := make([]elem, size)
-	for i := 0; i < size; i++ {
-		list[i] = elem(rand.Uint64())
-	}
-	return list
-}
-
 func Test_Tree(t *testing.T) {
 	defer utils.FailInPanic(t)
 
-	const size = 200
-	list := genRand(size)
+	const size = 2000
+	list := utils.RandomArray[elem](size)
 
 	var tree Tree[elem]
 	cnt := 0
