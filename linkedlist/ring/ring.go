@@ -47,6 +47,12 @@ func (r *ring) popHead() *node {
 	return unit
 }
 
+func (r *ring) unsafePopHead() *node {
+	unit := r.next
+	unit.Release()
+	return unit
+}
+
 func (r *ring) pushHead(unit *node) {
 	unit.next = r.next
 	unit.next.prev = unit
@@ -66,6 +72,12 @@ func (r *ring) popTail() *node {
 	if unit != nil {
 		unit.Release()
 	}
+	return unit
+}
+
+func (r *ring) unsafePopTail() *node {
+	unit := r.prev
+	unit.Release()
 	return unit
 }
 

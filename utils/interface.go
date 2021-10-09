@@ -19,6 +19,15 @@ type Queue[T any] interface {
 	Back() T
 }
 
+type Cache[K comparable, V any] interface {
+	Clear()
+	Size() int
+	Capacity() int
+	Put(K, V)
+	Get(K) (V, bool)
+	Discard(K)
+}
+
 type Random interface {
 	Next() uint32
 }
