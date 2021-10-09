@@ -1,6 +1,7 @@
 package tree
 
 import (
+	"DSGO/linkedlist/skiplist"
 	"DSGO/tree/avl"
 	"DSGO/tree/avl/weak"
 	"DSGO/tree/bplus"
@@ -81,7 +82,7 @@ func benchmark(list []uint32, create func() U32Set) result {
 	return res
 }
 
-func Benchmark(size, round int) {
+func Benchmark(size, round int, extend bool) {
 	if round < 1 {
 		return
 	}
@@ -91,23 +92,36 @@ func Benchmark(size, round int) {
 	list := make([]uint32, size)
 	rand.Seed(time.Now().UnixNano())
 
-	var bpTime, rbTime, avlTime, wavlTime result
+	var sklTime result
+	runSkl := func() {
+		sklTime.add(benchmark(list, func() U32Set {
+			skl := skiplist.New[uint32]()
+			return skl
+		}))
+	}
 
+	var bpTime result
 	runBp := func() {
 		bpTime.add(benchmark(list, func() U32Set {
 			return new(bplus.Tree[uint32])
 		}))
 	}
+
+	var rbTime result
 	runRb := func() {
 		rbTime.add(benchmark(list, func() U32Set {
 			return new(redblack.Tree[uint32])
 		}))
 	}
+
+	var avlTime result
 	runAvl := func() {
 		avlTime.add(benchmark(list, func() U32Set {
 			return new(avl.Tree[uint32])
 		}))
 	}
+
+	var wavlTime result
 	runWavl := func() {
 		wavlTime.add(benchmark(list, func() U32Set {
 			return new(weak.Tree[uint32])
@@ -117,6 +131,9 @@ func Benchmark(size, round int) {
 	for i := 0; i < round; i++ {
 		for j := 0; j < size; j++ {
 			list[j] = rand.Uint32()
+		}
+		if extend {
+			runSkl()
 		}
 
 		runBp()
@@ -135,7 +152,16 @@ func Benchmark(size, round int) {
 		runAvl()
 	}
 
-	div := time.Duration(round * 3)
+	div := time.Duration(round)
+
+	if extend {
+		fmt.Println("SKL")
+		fmt.Println("Insert", sklTime.insert/div)
+		fmt.Println("Search", sklTime.search/div)
+		fmt.Println("Remove", sklTime.remove/div)
+	}
+
+	div *= 3
 
 	fmt.Println("\nB+")
 	fmt.Println("Insert", bpTime.insert/div)

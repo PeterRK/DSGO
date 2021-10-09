@@ -10,9 +10,8 @@ func NewSimpleRand(seed uint32) Random {
 	return r
 }
 func (r *simpleRand) Next() uint32 {
-	num := uint32(r.magic)
 	r.magic = r.magic*1103515245 + 12345
-	return num
+	return r.magic
 }
 
 //Xorshift参考维基百科
