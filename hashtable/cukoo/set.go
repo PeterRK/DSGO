@@ -14,6 +14,7 @@ type hashSet struct {
 	buckets [4][]*node
 	master  int //当前主表号
 	size    int
+	full    int
 }
 
 func (s *hashSet) Size() int {
@@ -26,11 +27,12 @@ func (s *hashSet) IsEmpty() bool {
 
 func (s *hashSet) Clear() {
 	s.master, s.size = 0, 0
-	size := 4 //2^n
+	size := 2 //2^n
 	for i := 3; i >= 0; i-- {
-		s.buckets[i] = make([]*node, size)
 		size *= 2
+		s.buckets[i] = make([]*node, size)
 	}
+	s.full = size * 3 / 2 //(size * 15 / 8) * 4 / 5
 }
 
 func NewSet() utils.StrSet {
@@ -99,6 +101,9 @@ func (s *hashSet) Insert(key string) bool {
 			}
 			obj, bucket[pos] = bucket[pos], obj
 			if obj == unit {
+				if s.size > s.full {
+					break
+				}
 				trys++ //回绕计数
 			}
 		}
@@ -122,4 +127,6 @@ func (s *hashSet) expand() {
 			bucket[pos] = unit //倍扩，绝对不会冲突
 		}
 	}
+	s.buckets[s.master] = bucket
+	s.full = len(bucket) * 3 / 2
 }

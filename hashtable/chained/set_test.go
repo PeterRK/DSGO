@@ -10,9 +10,11 @@ func Test_HashSet(t *testing.T) {
 
 	tpl := "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
 		"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	var keys [52]string
-	for i := 0; i < len(keys); i++ {
-		keys[i] = tpl[i : i+26]
+	var keys [52 * 25]string
+	for k := 0; k < 25; k++ {
+		for i := 0; i < 52; i++ {
+			keys[i+52*k] = tpl[i : i+k+1]
+		}
 	}
 
 	set := NewSet()

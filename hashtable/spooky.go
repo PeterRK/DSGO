@@ -157,7 +157,7 @@ func Hash160(seed uint64, str string) (uint64, uint64, uint32) {
 	case 4:
 		s.c += uint64(getU32(str))
 	case 3:
-		s.c += (uint64(str[3]) << 16) | uint64(getU16(str))
+		s.c += (uint64(str[2]) << 16) | uint64(getU16(str))
 	case 2:
 		s.c += uint64(getU16(str))
 	case 1:
