@@ -58,18 +58,40 @@ func (node *lNode[T]) asIndex() *iNode[T] {
 }
 
 func (node *iNode[T]) remove(pos int) {
-	for i := pos; i < len(node.view)-1; i++ {
+	last := len(node.view) - 1
+	for i := pos; i < last; i++ {
 		node.data[i] = node.data[i+1]
 		node.kids[i] = node.kids[i+1]
 	}
-	node.view = node.data[:len(node.view)-1]
+	node.view = node.data[:last]
+	var tmp T
+	node.data[last] = tmp
+	node.kids[last] = nil
 }
 
 func (node *lNode[T]) remove(pos int) {
-	for i := pos; i < len(node.view)-1; i++ {
+	last := len(node.view) - 1
+	for i := pos; i < last; i++ {
 		node.data[i] = node.data[i+1]
 	}
-	node.view = node.data[:len(node.view)-1]
+	node.view = node.data[:last]
+	var tmp T
+	node.data[last] = tmp
+}
+
+func (node *iNode[T]) sweep(begin, end int) {
+	var tmp T
+	for i := begin; i < end; i++ {
+		node.data[i] = tmp
+		node.kids[i] = nil
+	}
+}
+
+func (node *lNode[T]) sweep(begin, end int) {
+	var tmp T
+	for i := begin; i < end; i++ {
+		node.data[i] = tmp
+	}
 }
 
 //peer为分裂项，peer为nil时表示不分裂
@@ -110,6 +132,7 @@ func (node *iNode[T]) insert(pos int, kid *iNode[T]) (peer *iNode[T]) {
 			peer.kids[i] = node.kids[i+iHalfSize]
 		}
 	}
+	node.sweep(iHalfSize+1, len(node.view))
 	node.view = node.data[:iHalfSize+1]
 	peer.view = peer.data[:iHalfSize]
 	return peer
@@ -145,6 +168,7 @@ func (node *lNode[T]) insert(pos int, key T) (peer *lNode[T]) {
 			peer.data[i] = node.data[i+lHalfSize]
 		}
 	}
+	node.sweep(lHalfSize+1, len(node.view))
 	node.view = node.data[:lHalfSize+1]
 	peer.view = peer.data[:lHalfSize]
 	peer.next, node.next = node.next, peer
@@ -154,7 +178,7 @@ func (node *lNode[T]) insert(pos int, key T) (peer *lNode[T]) {
 //要求peer为node后的节点，发生合并返回true
 func (node *iNode[T]) combine(peer *iNode[T]) bool {
 	total := len(node.view) + len(peer.view)
-	if total < iHalfSize+iQuarterSize {
+	if total <= iHalfSize+iQuarterSize {
 		for i := len(node.view); i < total; i++ {
 			node.data[i] = peer.data[i-len(node.view)]
 			node.kids[i] = peer.kids[i-len(node.view)]
@@ -178,6 +202,7 @@ func (node *iNode[T]) combine(peer *iNode[T]) bool {
 			peer.data[i] = peer.data[i+diff]
 			peer.kids[i] = peer.kids[i+diff]
 		}
+		peer.sweep(peerCnt, len(peer.view))
 	} else { //前填后
 		diff := peerCnt - len(peer.view)
 		for i := len(peer.view) - 1; i >= 0; i-- {
@@ -188,6 +213,7 @@ func (node *iNode[T]) combine(peer *iNode[T]) bool {
 			peer.data[i-nodeCnt] = node.data[i]
 			peer.kids[i-nodeCnt] = node.kids[i]
 		}
+		node.sweep(nodeCnt, len(node.view))
 	}
 	node.view = node.data[:nodeCnt]
 	peer.view = peer.data[:peerCnt]
@@ -218,6 +244,7 @@ func (node *lNode[T]) combine(peer *lNode[T]) bool {
 		for i := 0; i < peerCnt; i++ {
 			peer.data[i] = peer.data[i+diff]
 		}
+		peer.sweep(peerCnt, len(peer.view))
 	} else { //前填后
 		diff := peerCnt - len(peer.view)
 		for i := len(peer.view) - 1; i >= 0; i-- {
@@ -226,6 +253,7 @@ func (node *lNode[T]) combine(peer *lNode[T]) bool {
 		for i := len(node.view) - 1; i >= nodeCnt; i-- {
 			peer.data[i-nodeCnt] = node.data[i]
 		}
+		node.sweep(nodeCnt, len(node.view))
 	}
 	node.view = node.data[:nodeCnt]
 	peer.view = peer.data[:peerCnt]
