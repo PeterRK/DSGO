@@ -1,9 +1,9 @@
 package utils
 
 import (
+	"constraints"
 	"math/rand"
 	"time"
-	"constraints"
 )
 
 func Log2Ceil(num uint) uint {

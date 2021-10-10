@@ -118,7 +118,7 @@ func (tr *Tree[T]) rebalanceAfterRemove(P *node[T], key T) {
 				Z.left, Z.right = Z.hook(S), Z.hook(P)
 				S.rDiff, P.lDiff = Z.lDiff, Z.rDiff
 				S.lDiff, P.rDiff = 1, 1
-				Z.lDiff, Z.rDiff = 2, 2 
+				Z.lDiff, Z.rDiff = 2, 2
 				root = Z
 			} else {
 				X, Z := P.right, S.right
@@ -153,7 +153,7 @@ func (tr *Tree[T]) rebalanceAfterRemove(P *node[T], key T) {
 				Z.right, Z.left = Z.hook(S), Z.hook(P)
 				S.lDiff, P.rDiff = Z.rDiff, Z.lDiff
 				S.rDiff, P.lDiff = 1, 1
-				Z.rDiff, Z.lDiff = 2, 2 
+				Z.rDiff, Z.lDiff = 2, 2
 				root = Z
 			} else {
 				X, Z := P.left, S.left
@@ -179,6 +179,7 @@ func (tr *Tree[T]) rebalanceAfterRemove(P *node[T], key T) {
 		}
 	}
 }
+
 /*
 func (tr *Tree[T]) rebalanceAfterRemove(P *node[T], key T) {
 	for {
@@ -218,7 +219,7 @@ func (tr *Tree[T]) rebalanceAfterRemove(P *node[T], key T) {
 				P.left = P.Hook(Z)
 				if X == nil && Z == nil {
 					P.height--
-				}				
+				}
 				root = S
 			}
 		} else {

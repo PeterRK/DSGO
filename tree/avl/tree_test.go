@@ -14,7 +14,7 @@ func (root *node[T]) check(t *testing.T) int8 {
 	lh := root.left.check(t)
 	rh := root.right.check(t)
 	utils.Assert(t, root.state == lh-rh)
-	return utils.Max(lh, rh)+1
+	return utils.Max(lh, rh) + 1
 }
 
 func Test_Tree(t *testing.T) {
@@ -48,7 +48,6 @@ func Test_Tree(t *testing.T) {
 	utils.Assert(t, !tree.Remove(0))
 }
 
-
 func genPseudo(size int) []elem {
 	return utils.PseudoRandomArray[elem](size, 999)
 }
@@ -58,7 +57,7 @@ func Benchmark_Insert(b *testing.B) {
 	var tree Tree[elem]
 	list := genPseudo(b.N)
 	b.StartTimer()
-	for i:= 0; i < len(list); i++ {
+	for i := 0; i < len(list); i++ {
 		tree.Insert(list[i])
 	}
 }
@@ -67,11 +66,11 @@ func Benchmark_Search(b *testing.B) {
 	b.StopTimer()
 	var tree Tree[elem]
 	list := genPseudo(b.N)
-	for i:= 0; i < len(list); i++ {
+	for i := 0; i < len(list); i++ {
 		tree.Insert(list[i])
 	}
 	b.StartTimer()
-	for i:= 0; i < len(list); i++ {
+	for i := 0; i < len(list); i++ {
 		tree.Search(list[i])
 	}
 }
@@ -80,11 +79,11 @@ func Benchmark_Remove(b *testing.B) {
 	b.StopTimer()
 	var tree Tree[elem]
 	list := genPseudo(b.N)
-	for i:= 0; i < len(list); i++ {
+	for i := 0; i < len(list); i++ {
 		tree.Insert(list[i])
 	}
 	b.StartTimer()
-	for i:= 0; i < len(list); i++ {
+	for i := 0; i < len(list); i++ {
 		tree.Remove(list[i])
 	}
 }
@@ -95,22 +94,22 @@ func Benchmark_Mix(b *testing.B) {
 	list := genPseudo(b.N)
 	b.StartTimer()
 	len1, len2, len3 := len(list)/3, len(list)*2/3, len(list)
-	for i:= 0; i < len2; i++ {
+	for i := 0; i < len2; i++ {
 		tree.Insert(list[i])
 	}
-	for i:= len1; i < len2; i++ {
+	for i := len1; i < len2; i++ {
 		tree.Remove(list[i])
 	}
-	for i:= 0; i < len2; i++ {
+	for i := 0; i < len2; i++ {
 		tree.Search(list[i])
 	}
-	for i:= len2; i < len3; i++ {
+	for i := len2; i < len3; i++ {
 		tree.Insert(list[i])
 	}
-	for i:= 0; i < len1; i++ {
+	for i := 0; i < len1; i++ {
 		tree.Remove(list[i])
 	}
-	for i:= len2; i < len3; i++ {
+	for i := len2; i < len3; i++ {
 		tree.Search(list[i])
 	}
 }

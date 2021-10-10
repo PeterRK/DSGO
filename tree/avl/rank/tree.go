@@ -71,7 +71,6 @@ func (unit *node[T]) rank() int32 {
 	return unit.left.Weight() + 1
 }
 
-
 func newNode[T constraints.Ordered](parent *node[T], key T) (unit *node[T]) {
 	unit = new(node[T])
 	//unit.state = 0

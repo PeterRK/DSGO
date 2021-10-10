@@ -121,15 +121,15 @@ func (hp *Heap[T]) merge(list *node[T]) {
 }
 
 func (hp *Heap[T]) Merge(other *Heap[T]) {
-	if hp !=other && !other.IsEmpty() {
+	if hp != other && !other.IsEmpty() {
 		if hp.IsEmpty() {
 			*hp = *other
 		} else {
-			if hp.top.key >other.top.key {
-				hp.top =other.top
+			if hp.top.key > other.top.key {
+				hp.top = other.top
 			}
 			hp.merge(other.list)
-			hp.size +=other.size
+			hp.size += other.size
 		}
 		other.Clear()
 	}

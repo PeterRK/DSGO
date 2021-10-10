@@ -117,6 +117,7 @@ func (tr *Tree[T]) rebalanceAfterInsert(P *node[T], key T) {
 		}
 	}
 }
+
 /*
 func (tr *Tree[T]) rebalanceAfterInsert(P *node[T], key T) {
 	for {

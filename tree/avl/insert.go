@@ -69,4 +69,3 @@ func (tr *Tree[T]) rebalanceAfterInsert(root *node[T], key T) {
 		break
 	}
 }
-

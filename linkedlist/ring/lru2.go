@@ -32,7 +32,7 @@ func (q *queue) reset(limit int) {
 type cache[K comparable, V any] struct {
 	hot, cold queue
 	index     map[K]*nodeC[K, V]
-	warm uint8
+	warm      uint8
 }
 
 //warm一般调成0或1

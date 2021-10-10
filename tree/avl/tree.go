@@ -1,8 +1,8 @@
 package avl
 
 import (
-	"fmt"
 	"constraints"
+	"fmt"
 )
 
 type node[T constraints.Ordered] struct {
@@ -65,15 +65,14 @@ func newNode[T constraints.Ordered](parent *node[T], key T) *node[T] {
 	return unit
 }
 
-
 func (root *node[T]) debug(indent int) {
 	if root == nil {
 		return
 	}
-	root.left.debug(indent+1)
+	root.left.debug(indent + 1)
 	for i := 0; i < indent; i++ {
 		fmt.Print("  ")
 	}
 	fmt.Println(root.state, root.key)
-	root.right.debug(indent+1)
+	root.right.debug(indent + 1)
 }

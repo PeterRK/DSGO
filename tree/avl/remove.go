@@ -31,7 +31,7 @@ func (tr *Tree[T]) findRemoveTarget(key T) *node[T] {
 	return target
 }
 
-func (target *node[T])findVictim() (victim, orphan *node[T]) {
+func (target *node[T]) findVictim() (victim, orphan *node[T]) {
 	switch {
 	case target.left == nil:
 		victim, orphan = target, target.right

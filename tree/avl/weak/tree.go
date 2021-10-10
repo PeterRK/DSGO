@@ -10,7 +10,7 @@ import (
 //当节点为叶节点（子节点皆为nil）时，高度必须为0
 //节点和子节点的高度差为1或2
 type node[T constraints.Ordered] struct {
-//	height int8 //足以支持2^64的节点数
+	//	height int8 //足以支持2^64的节点数
 	lDiff  uint8
 	rDiff  uint8
 	key    T
@@ -18,6 +18,7 @@ type node[T constraints.Ordered] struct {
 	left   *node[T]
 	right  *node[T]
 }
+
 /*
 func (unit *node[T]) Height() int8 {
 	if unit == nil {
@@ -95,10 +96,10 @@ func (root *node[T]) debug(indent int) {
 	if root == nil {
 		return
 	}
-	root.left.debug(indent+1)
+	root.left.debug(indent + 1)
 	for i := 0; i < indent; i++ {
 		fmt.Print("  ")
 	}
 	fmt.Println(root.lDiff, root.rDiff, root.key)
-	root.right.debug(indent+1)
+	root.right.debug(indent + 1)
 }

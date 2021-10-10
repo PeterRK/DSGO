@@ -50,7 +50,7 @@ func InsertTo[T any](list []T, pos int, val T) []T {
 		panic("illegal pos")
 	}
 	list = append(list, val)
-	for i := len(list)-1; i > pos; i-- {
+	for i := len(list) - 1; i > pos; i-- {
 		list[i] = list[i-1]
 	}
 	list[pos] = val
