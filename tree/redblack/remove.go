@@ -47,7 +47,7 @@ func (tr *Tree[T]) findRemoveTarget(key T) *node[T] {
 	return target
 }
 
-func (target *node[T])findVictim() (victim, orphan *node[T]) {
+func (target *node[T]) findVictim() (victim, orphan *node[T]) {
 	switch {
 	case target.left == nil:
 		victim, orphan = target, target.right
@@ -104,26 +104,25 @@ func (tr *Tree[T]) rebalanceAfterRemove(G *node[T], key T) {
 				U.black, G.black = true, false
 				tr.hookSubTree(super, U)
 				continue //变出黑U后再行解决
-			} else {
-				if L == nil || L.black {
-					if R == nil || R.black { //双黑，变色解决
-						U.black = false
-						if G.black && super != nil {
-							G = super
-							continue //上溯
-						}
-						G.black = true
-					} else { //中黑外红
-						G.right, U.left = G.Hook(L), U.hook(G)
-						U.black, G.black, R.black = G.black, true, true
-						tr.hookSubTree(super, U)
+			}
+			if L == nil || L.black {
+				if R == nil || R.black { //双黑，变色解决
+					U.black = false
+					if G.black && super != nil {
+						G = super
+						continue //上溯
 					}
-				} else { //中红
-					U.left, G.right = U.Hook(L.right), G.Hook(L.left)
-					L.right, L.left = L.hook(U), L.hook(G)
-					L.black, G.black = G.black, true
-					tr.hookSubTree(super, L)
+					G.black = true
+				} else { //中黑外红
+					G.right, U.left = G.Hook(L), U.hook(G)
+					U.black, G.black, R.black = G.black, true, true
+					tr.hookSubTree(super, U)
 				}
+			} else { //中红
+				U.left, G.right = U.Hook(L.right), G.Hook(L.left)
+				L.right, L.left = L.hook(U), L.hook(G)
+				L.black, G.black = G.black, true
+				tr.hookSubTree(super, L)
 			}
 		} else {
 			U := G.left //U != nil
@@ -133,26 +132,25 @@ func (tr *Tree[T]) rebalanceAfterRemove(G *node[T], key T) {
 				U.black, G.black = true, false
 				tr.hookSubTree(super, U)
 				continue //变出黑U后再行解决
-			} else {
-				if R == nil || R.black {
-					if L == nil || L.black { //双黑，变色解决
-						U.black = false
-						if G.black && super != nil {
-							G = super
-							continue //上溯
-						}
-						G.black = true
-					} else { //中黑外红
-						G.left, U.right = G.Hook(R), U.hook(G)
-						U.black, G.black, L.black = G.black, true, true
-						tr.hookSubTree(super, U)
+			}
+			if R == nil || R.black {
+				if L == nil || L.black { //双黑，变色解决
+					U.black = false
+					if G.black && super != nil {
+						G = super
+						continue //上溯
 					}
-				} else { //中红
-					U.right, G.left = U.Hook(R.left), G.Hook(R.right)
-					R.left, R.right = R.hook(U), R.hook(G)
-					R.black, G.black = G.black, true
-					tr.hookSubTree(super, R)
+					G.black = true
+				} else { //中黑外红
+					G.left, U.right = G.Hook(R), U.hook(G)
+					U.black, G.black, L.black = G.black, true, true
+					tr.hookSubTree(super, U)
 				}
+			} else { //中红
+				U.right, G.left = U.Hook(R.left), G.Hook(R.right)
+				R.left, R.right = R.hook(U), R.hook(G)
+				R.black, G.black = G.black, true
+				tr.hookSubTree(super, R)
 			}
 		}
 		break //个别情况需要循环

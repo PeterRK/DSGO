@@ -73,7 +73,7 @@ func (tr *Tree[T]) rebalanceAfterInsert(P *node[T], key T) {
 				P.black, U.black = true, true
 				if super != nil {
 					G.black = false
-					P = G.parent
+					P = super
 					continue //上溯，检查双红禁
 				} //遇根终止
 			} else { //黑叔模式，旋转解决
@@ -95,7 +95,7 @@ func (tr *Tree[T]) rebalanceAfterInsert(P *node[T], key T) {
 				P.black, U.black = true, true
 				if super != nil {
 					G.black = false
-					P = G.parent
+					P = super
 					continue //上溯，检查双红禁
 				} //遇根终止
 			} else { //黑叔模式，旋转解决

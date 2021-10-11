@@ -82,10 +82,14 @@ func (root *node[T]) debug(indent int) {
 	if root == nil {
 		return
 	}
-	root.left.debug(indent+1)
+	root.left.debug(indent + 1)
 	for i := 0; i < indent; i++ {
 		fmt.Print("  ")
 	}
-	fmt.Println(root.black, root.key)
-	root.right.debug(indent+1)
+	mark := "R"
+	if root.black {
+		mark = "B"
+	}
+	fmt.Println(mark, root.key)
+	root.right.debug(indent + 1)
 }

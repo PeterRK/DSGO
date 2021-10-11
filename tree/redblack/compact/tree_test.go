@@ -1,4 +1,4 @@
-package redblack
+package compact
 
 import (
 	"DSGO/utils"
@@ -11,19 +11,18 @@ func (root *node[T]) check(t *testing.T) bool {
 	if root == nil {
 		return true
 	}
-	l := root.left.check(t)
-	r := root.right.check(t)
-	utils.Assert(t, root.black || (l && r))
-	return root.black
+	l := root.kids[Left].check(t)
+	r := root.kids[Right].check(t)
+	black := root.isBlack()
+	utils.Assert(t, black || (l && r))
+	return root.isBlack()
 }
 
 func Test_Tree(t *testing.T) {
 	defer utils.FailInPanic(t)
 
-	//const size = 2000
-	//list := utils.RandomArray[elem](size)
-	const size = 50
-	list := utils.PseudoRandomArray[elem](size, 1)
+	const size = 2000
+	list := utils.RandomArray[elem](size)
 
 	var tree Tree[elem]
 	cnt := 0
