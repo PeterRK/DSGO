@@ -11,9 +11,9 @@ func (root *node[T]) check(t *testing.T) int8 {
 	if root == nil {
 		return 0
 	}
-	lh := root.left.check(t)
-	rh := root.right.check(t)
-	utils.Assert(t, root.state == lh-rh)
+	lh := root.kids[Left].check(t)
+	rh := root.kids[Right].check(t)
+	utils.Assert(t, root.state == rh-lh)
 	return utils.Max(lh, rh) + 1
 }
 
@@ -32,7 +32,7 @@ func Test_Tree(t *testing.T) {
 		tree.root.check(t)
 	}
 	utils.Assert(t, tree.Size() == cnt)
-
+	
 	for i := 0; i < size; i++ {
 		utils.Assert(t, tree.Search(list[i]))
 		utils.Assert(t, !tree.Insert(list[i]))

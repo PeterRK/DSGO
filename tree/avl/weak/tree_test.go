@@ -11,13 +11,13 @@ func (root *node[T]) check(t *testing.T) {
 	if root == nil {
 		return
 	}
-	if root.left == nil && root.right == nil {
-		utils.Assert(t, root.lDiff == 1 && root.rDiff == 1)
+	if root.kids[Left] == nil && root.kids[Right] == nil {
+		utils.Assert(t, root.diff[Left] == 1 && root.diff[Right] == 1)
 	} else {
-		utils.Assert(t, root.lDiff == 1 || root.lDiff == 2)
-		utils.Assert(t, root.rDiff == 1 || root.rDiff == 2)
-		root.left.check(t)
-		root.right.check(t)
+		utils.Assert(t, root.diff[Left] == 1 || root.diff[Left] == 2)
+		utils.Assert(t, root.diff[Right] == 1 || root.diff[Right] == 2)
+		root.kids[Left].check(t)
+		root.kids[Right].check(t)
 	}
 }
 

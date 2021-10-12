@@ -6,7 +6,6 @@ import (
 	"DSGO/tree/avl/weak"
 	"DSGO/tree/bplus"
 	"DSGO/tree/redblack"
-	"DSGO/tree/redblack/compact"
 	"fmt"
 	"math/rand"
 	"time"
@@ -111,11 +110,7 @@ func Benchmark(size, round int, extend bool) {
 	var rbTime result
 	runRb := func() {
 		rbTime.add(benchmark(list, func() U32Set {
-			if extend {
-				return new(compact.Tree[uint32])
-			} else {
-				return new(redblack.Tree[uint32])
-			}
+			return new(redblack.Tree[uint32])
 		}))
 	}
 

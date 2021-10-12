@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-type elem int
+type elem int32
 
 func Test_Tree(t *testing.T) {
 	defer utils.FailInPanic(t)
@@ -61,6 +61,7 @@ func Test_Rank(t *testing.T) {
 		pos := array.SearchSuccessor(shadow[:i], key)
 		array.InsertTo(shadow[:i], pos, key)
 		utils.Assert(t, rank == pos+1)
+		utils.Assert(t, tree.Insert(key) == -(pos+1))
 	}
 
 	for i := 0; i < size; i++ {
