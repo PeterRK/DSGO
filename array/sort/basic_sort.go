@@ -76,9 +76,8 @@ func SimpleSort[T constraints.Ordered](list []T) {
 			list[0] = key
 		} else {
 			pos := i
-			for list[pos-1] > key {
+			for ; list[pos-1] > key; pos-- {
 				list[pos] = list[pos-1]
-				pos--
 			}
 			list[pos] = key
 		}
@@ -98,9 +97,8 @@ func SimpleSort_v2[T constraints.Ordered](list []T) {
 	list[0], list[best] = list[best], list[0]
 	for i := 1; i < len(list); i++ {
 		key, pos := list[i], i
-		for list[pos-1] > key {
+		for ; list[pos-1] > key; pos-- {
 			list[pos] = list[pos-1]
-			pos--
 		}
 		list[pos] = key
 	}
