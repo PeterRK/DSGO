@@ -15,7 +15,7 @@ func UnitLess(a, b *Unit) bool {
 	return a.val < b.val
 }
 
-func Test_Ranker(t *testing.T) {
+func Test_GeneralSort(t *testing.T) {
 	defer utils.FailInPanic(t)
 
 	const size = 2000
@@ -31,8 +31,7 @@ func Test_Ranker(t *testing.T) {
 	MergeSort(lst1)
 	utils.Assert(t, IsSorted(lst1))
 
-	ranker := Ranker[Unit]{Less: UnitLess}
-	ranker.Sort(lst2)
+	Less[Unit](UnitLess).Sort(lst2)
 	for i := 0; i < size; i++ {
 		utils.Assert(t, lst1[i] == lst2[i].val)
 	}

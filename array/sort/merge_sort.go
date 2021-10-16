@@ -9,58 +9,55 @@ import (
 // 其中比较操作是O(NlogN)，但常数小于HeapSort；挪移操作是O(NlogN)，常数与HeapSort相当。
 func MergeSort[T constraints.Ordered](list []T) {
 	if len(list) < lowerBound {
-		InsertSort(list)
+		SimpleSort(list)
 	} else {
-		shadow := make([]T, len(list))
-		for i := 0; i < len(list); i++ {
-			shadow[i] = list[i]
-		}
-		mergeSort(shadow, list)
+		temp := make([]T, len(list))
+		copy(temp, list)
+		mergeSort(temp, list)
 	}
 }
 
-func mergeSort[T constraints.Ordered](in, out []T) {
-	if len(in) < lowerBound {
-		if len(in) == 0 {
+func mergeSort[T constraints.Ordered](a, b []T) {
+	if size := len(a); size < lowerBound {
+		if size < 2 {
 			return
 		}
-		out[0] = in[0]
-		for i := 1; i < len(in); i++ {
-			if key := in[i]; key < out[0] {
+		b[0] = a[0]
+		for i := 1; i < len(a); i++ {
+			if key := a[i]; key < b[0] {
 				for j := i; j > 0; j-- {
-					out[j] = out[j-1]
+					b[j] = b[j-1]
 				}
-				out[0] = key
+				b[0] = key
 			} else {
 				pos := i
-				for out[pos-1] > key {
-					out[pos] = out[pos-1]
-					pos--
+				for ; b[pos-1] > key; pos-- {
+					b[pos] = b[pos-1]
 				}
-				out[pos] = key
+				b[pos] = key
 			}
 		}
 	} else {
-		half, size := len(in)/2, len(in)
-		mergeSort(out[:half], in[:half])
-		mergeSort(out[half:], in[half:])
+		half := len(a)/2
+		mergeSort(b[:half], a[:half])
+		mergeSort(b[half:], a[half:])
 
 		pos, i, j := 0, 0, half
 		for ; i < half && j < size; pos++ {
-			if in[i] > in[j] {
-				out[pos] = in[j]
+			if a[i] > a[j] {
+				b[pos] = a[j]
 				j++
 			} else {
-				out[pos] = in[i]
+				b[pos] = a[i]
 				i++
 			}
 		}
 		for ; i < half; pos++ {
-			out[pos] = in[i]
+			b[pos] = a[i]
 			i++
 		}
 		for ; j < size; pos++ {
-			out[pos] = in[j]
+			b[pos] = a[j]
 			j++
 		}
 	}

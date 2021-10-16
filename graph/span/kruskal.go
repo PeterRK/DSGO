@@ -16,8 +16,7 @@ func Kruskal(roads []graph.Edge, size int) (uint, error) {
 	if size < 2 || len(roads) < size-1 {
 		return 0, errors.New("illegal input")
 	}
-	ranker := sort.Ranker[graph.Edge]{Less: edgeLess}
-	ranker.Sort(roads)
+	sort.Less[graph.Edge](edgeLess).Sort(roads)
 
 	nodes := make([]int, size)
 	for i := 0; i < size; i++ {
@@ -59,8 +58,7 @@ func Kruskal_v2(roads []graph.Edge, size int) (uint, error) {
 	if size < 2 || len(roads) < size-1 {
 		return 0, errors.New("illegal input")
 	}
-	ranker := sort.Ranker[graph.Edge]{Less: edgeLess}
-	ranker.Sort(roads)
+	sort.Less[graph.Edge](edgeLess).Sort(roads)
 
 	type node struct {
 		mark int //正数表示归属

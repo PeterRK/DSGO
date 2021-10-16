@@ -15,7 +15,7 @@ type contextL struct {
 	level      []uint32
 	queue      utils.Queue[int]
 	stack      utils.Stack[memo]
-	ranker     sort.Ranker[graph.Path]
+	ranker     sort.Less[graph.Path]
 	start, end int
 }
 
@@ -24,7 +24,7 @@ func nextOrder(a, b *graph.Path) bool {
 }
 
 func (ctx *contextL) init(roads [][]graph.Path, start, end int) {
-	ctx.ranker.Less = nextOrder
+	ctx.ranker = nextOrder
 	size := len(roads)
 	for i := 0; i < size; i++ {
 		ctx.ranker.Sort(roads[i]) //要求有序

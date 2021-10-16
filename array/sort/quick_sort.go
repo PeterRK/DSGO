@@ -99,32 +99,29 @@ func QuickSortY[T constraints.Ordered](list []T) {
 
 // 返回两个分界元素的位置
 func triPartition[T constraints.Ordered](list []T) (fst, snd int) {
-	sz := len(list)
-	m, s := sz/2, sz/8
-	a, b, c := m-s, m, m+s
+	size := len(list)
+	m, s := size/2, size/8
+	a, b := m-s, m+s
 
-	if list[a] < list[b] {
-		if list[b] < list[c] {
-			b = c //a b c
-		} else if list[a] < list[c] {
-			//a c b
+	if list[b] < list[a] {
+		if list[m] < list[b] {
+			a, b = m, a //m b a
+		} else if list[a] < list[m] {
+			a, b = b, m //b a m
 		} else {
-			a = c //c a b
+			a, b = b, a //b m a
 		}
-	} else {
-		if list[a] < list[c] {
-			a, b = b, c //b a c
-		} else if list[b] < list[c] {
-			a, b = b, a //b c a
-		} else {
-			a, b = c, a //c b a
-		}
-	}
+	} else if list[m] < list[a] {
+		a = m //m a b
+	} else if list[b] < list[m] {
+		b = m //a b m
+	} //a m b
 
+	s = size - 1
 	pivot1, pivot2 := list[a], list[b]
-	list[a], list[b] = list[0], list[sz-1]
+	list[a], list[b] = list[0], list[s]
 
-	a, b = 1, sz-2
+	a, b = 1, s-1
 	for {
 		for list[a] < pivot1 {
 			a++
@@ -165,6 +162,6 @@ func triPartition[T constraints.Ordered](list []T) (fst, snd int) {
 	}
 
 	list[0], list[a-1] = list[a-1], pivot1
-	list[sz-1], list[b+1] = list[b+1], pivot2
+	list[s], list[b+1] = list[b+1], pivot2
 	return a - 1, b + 1
 }
