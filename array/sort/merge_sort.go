@@ -38,7 +38,7 @@ func mergeSort[T constraints.Ordered](a, b []T) {
 			}
 		}
 	} else {
-		half := len(a)/2
+		half := len(a) / 2
 		mergeSort(b[:half], a[:half])
 		mergeSort(b[half:], a[half:])
 
