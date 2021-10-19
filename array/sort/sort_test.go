@@ -94,6 +94,9 @@ func Test_HeapSort(t *testing.T) {
 func Test_MergeSort(t *testing.T) {
 	testSort(t, MergeSort[elem], bigSize, smallSize)
 }
+func Test_SymMergeSort(t *testing.T) {
+	testSort(t, SymMergeSort[elem], bigSize, smallSize)
+}
 func Test_QuickSort(t *testing.T) {
 	testSort(t, QuickSort[elem], bigSize, smallSize)
 }
@@ -126,6 +129,9 @@ func Benchmark_HeapSort(b *testing.B) {
 }
 func Benchmark_MergeSort(b *testing.B) {
 	benchSort(b, MergeSort[elem], genPseudo)
+}
+func Benchmark_SymMergeSort(b *testing.B) {
+	benchSort(b, SymMergeSort[elem], genPseudo)
 }
 func Benchmark_QuickSort(b *testing.B) {
 	benchSort(b, QuickSort[elem], genPseudo)

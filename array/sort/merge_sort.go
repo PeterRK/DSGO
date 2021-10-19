@@ -1,6 +1,7 @@
 package sort
 
 import (
+	"DSGO/array"
 	"constraints"
 )
 
@@ -82,4 +83,102 @@ func merge[T constraints.Ordered](in1, in2, out []T) {
 		out[k] = in2[j]
 		j++
 	}
+}
+
+func SymMergeSort[T constraints.Ordered](list []T) {
+	size := len(list)
+
+	step := lowerBound
+	a, b := 0, step
+	for b <= size {
+		SimpleSort(list[a:b])
+		a = b
+		b += step
+	}
+	SimpleSort(list[a:])
+
+	for step < size {
+		a, b = 0, step*2
+		for b <= size {
+			symmerge(list[a:b], step)
+			a = b
+			b += step * 2
+		}
+		if a+step < size {
+			symmerge(list[a:], step)
+		}
+		step *= 2
+	}
+}
+
+func symmerge[T constraints.Ordered](list []T, border int) {
+	size := len(list)
+
+	if border == 1 {
+		curr := list[0]
+		a, b := 1, size
+		for a < b {
+			m := int(uint(a+b)/2)
+			if list[m] < curr {
+				a = m + 1
+			} else {
+				b = m
+			}
+		}
+		for i := 1; i < a; i++ {
+			list[i-1] = list[i]
+		}
+		list[a-1] = curr
+		return
+	}
+
+	if border == size-1 {
+		curr := list[border]
+		a, b := 0, border
+		for a < b {
+			m := int(uint(a+b)/2)
+			if curr < list[m] {
+				b = m
+			} else {
+				a = m + 1
+			}
+		}
+		for i := border; i > a; i-- {
+			list[i] = list[i-1]
+		}
+		list[a] = curr
+		return
+	}
+
+	half := size / 2
+	n := border + half
+	a, b := 0, border
+	if border > half {
+		a, b = n-size, half
+	}
+	p := n - 1
+	for a < b {
+		m := int(uint(a+b)/2)
+		if list[p-m] < list[m] {
+			b = m
+		} else {
+			a = m + 1
+		}
+	}
+	b = n - a
+	if a < border && border < b {
+		rotate(list[a:b], border-a)
+	}
+	if 0 < a && a < half {
+		symmerge(list[:half], a)
+	}
+	if half < b && b < size {
+		symmerge(list[half:], b-half)
+	}
+}
+
+func rotate[T any](list []T, border int) {
+	array.Reverse(list[:border])
+	array.Reverse(list[border:])
+	array.Reverse(list)
 }
