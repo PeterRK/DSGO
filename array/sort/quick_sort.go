@@ -2,6 +2,7 @@ package sort
 
 import (
 	"DSGO/array"
+	"DSGO/utils"
 	"constraints"
 )
 
@@ -59,31 +60,176 @@ func sort3[T constraints.Ordered](list []T, a, b, c int) (int, int, int) {
 	}
 }
 
+const sort3on3bound = 128
+
 func partition[T constraints.Ordered](list []T) int {
 	size := len(list)
 	m, s := size/2, size/4
-	a, m, b := sort3(list, m-s, m, m+s)
+	l, m, r := sort3(list, m-s, m, m+s)
+	if size > sort3on3bound {
+		s = size / 8
+		_, l, _ = sort3(list, s, m-s, m-1)
+		_, r, _ = sort3(list, m+1, m+s, size-s)
+		l, m, r = sort3(list, l, m, r)
+	}
 	s = size - 1
 	pivot := list[m]
-	list[0], list[a] = list[a], list[0]
-	list[s], list[b] = list[b], list[s]
+	list[0], list[l] = list[l], list[0]
+	list[s], list[r] = list[r], list[s]
 
-	a, b = 1, s-1
+	l, r = 1, s-1
 	for { //注意对称性
-		for list[a] < pivot {
-			a++
+		for list[l] < pivot {
+			l++
 		}
-		for list[b] > pivot {
-			b--
+		for list[r] > pivot {
+			r--
 		}
-		if a >= b {
+		if l >= r {
 			break
 		}
-		list[a], list[b] = list[b], list[a]
-		a++
-		b--
+		list[l], list[r] = list[r], list[l]
+		l++
+		r--
 	}
-	return a
+	return l
+}
+
+func BlockQuickSort[E constraints.Ordered](list []E) {
+	for len(list) >= lowerBound {
+		m := blockPartition(list)
+		BlockQuickSort(list[m:])
+		list = list[:m]
+	}
+	SimpleSort(list)
+}
+
+func compGE[T constraints.Ordered](a, b T) int {
+	if a < b {
+		return 0
+	} else {
+		return 1
+	}
+}
+
+func blockPartition[T constraints.Ordered](list []T) int {
+	size := len(list)
+	m, s := size/2, size/4
+	l, m, r := sort3(list, m-s, m, m+s)
+	if size > sort3on3bound {
+		s = size / 8
+		_, l, _ = sort3(list, s, m-s, m-1)
+		_, r, _ = sort3(list, m+1, m+s, size-s)
+		l, m, r = sort3(list, l, m, r)
+	}
+	s = size - 1
+	pivot := list[m]
+	list[0], list[l] = list[l], list[0]
+	list[s], list[r] = list[r], list[s]
+
+	l, r = 1, s-1
+
+	const blockSize = 64
+	if r-l > blockSize*2-1 {
+		var ml, mr struct {
+			v [blockSize]uint8
+			a int
+			b int
+		}
+		for r-l > blockSize*2-1 {
+			if ml.a == ml.b {
+				ml.a, ml.b = 0, 0
+				for i := 0; i < blockSize; i++ {
+					ml.v[ml.b] = uint8(i)
+					ml.b += compGE(list[l+i], pivot)
+				}
+			}
+			if mr.a == mr.b {
+				mr.a, mr.b = 0, 0
+				for i := 0; i < blockSize; i++ {
+					mr.v[mr.b] = uint8(i)
+					mr.b += compGE(pivot, list[r-i])
+				}
+			}
+			sz := utils.Min(ml.b-ml.a, mr.b-mr.a)
+			for i := 0; i < sz; i++ {
+				ll := l + int(ml.v[ml.a])
+				ml.a++
+				rr := r - int(mr.v[mr.a])
+				mr.a++
+				list[ll], list[rr] = list[rr], list[ll]
+			}
+			if ml.a == ml.b {
+				l += blockSize
+			}
+			if mr.a == mr.b {
+				r -= blockSize
+			}
+		}
+		if ml.a != ml.b {
+			for {
+				for list[r] > pivot {
+					r--
+				}
+				ll := l + int(ml.v[ml.a])
+				// list[r] <= pivot
+				// list[r+1] > pivot
+				if ll >= r {
+					return r + 1
+				}
+				list[ll], list[r] = list[r], list[ll]
+				r--
+				// list[r] ?
+				// list[r+1] >= pivot
+				if ml.a++; ml.a == ml.b {
+					l += blockSize
+					if l > r {
+						return r + 1
+					}
+					break
+				}
+			}
+		} else if mr.a != mr.b {
+			for {
+				for list[l] < pivot {
+					l++
+				}
+				rr := r - int(mr.v[mr.a])
+				// list[l] >= pivot
+				// list[l-1] < pivot
+				if l >= rr {
+					return l
+				}
+				list[l], list[rr] = list[rr], list[l]
+				l++
+				// list[l] ?
+				// list[l-1] <= pivot
+				if mr.a++; mr.a == mr.b {
+					r -= blockSize
+					if l > r {
+						return l
+					}
+					break
+				}
+			}
+		}
+	}
+
+	for { //注意对称性
+		for list[l] < pivot {
+			l++
+		}
+		for list[r] > pivot {
+			r--
+		}
+		if l >= r {
+			break
+		}
+		list[l], list[r] = list[r], list[l]
+		l++
+		r--
+	}
+	return l
 }
 
 // 三分快速排序，比二分版本略为复杂

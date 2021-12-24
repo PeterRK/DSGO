@@ -25,6 +25,25 @@ func introSort[T constraints.Ordered](list []T, life uint) {
 	}
 }
 
+func BlockIntroSort[T constraints.Ordered](list []T) {
+	life := utils.Log2Ceil(uint(len(list))) * 2
+	blockIntroSort(list, life)
+}
+
+func blockIntroSort[E constraints.Ordered](list []E, life uint) {
+	for len(list) >= lowerBound {
+		if life == 0 {
+			HeapSort(list)
+			return
+		}
+		life--
+		m := blockPartition(list)
+		blockIntroSort(list[m:], life)
+		list = list[:m]
+	}
+	SimpleSort(list)
+}
+
 // 三分内省排序
 func IntroSortY[T constraints.Ordered](list []T) {
 	life := utils.Log2Ceil(uint(len(list))) * 3 / 2

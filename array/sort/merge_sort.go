@@ -118,7 +118,7 @@ func symmerge[T constraints.Ordered](list []T, border int) {
 		curr := list[0]
 		a, b := 1, size
 		for a < b {
-			m := int(uint(a+b)/2)
+			m := int(uint(a+b) / 2)
 			if list[m] < curr {
 				a = m + 1
 			} else {
@@ -136,7 +136,7 @@ func symmerge[T constraints.Ordered](list []T, border int) {
 		curr := list[border]
 		a, b := 0, border
 		for a < b {
-			m := int(uint(a+b)/2)
+			m := int(uint(a+b) / 2)
 			if curr < list[m] {
 				b = m
 			} else {
@@ -158,7 +158,7 @@ func symmerge[T constraints.Ordered](list []T, border int) {
 	}
 	p := n - 1
 	for a < b {
-		m := int(uint(a+b)/2)
+		m := int(uint(a+b) / 2)
 		if list[p-m] < list[m] {
 			b = m
 		} else {

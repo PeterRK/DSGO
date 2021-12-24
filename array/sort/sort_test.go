@@ -103,11 +103,17 @@ func Test_QuickSort(t *testing.T) {
 func Test_QuickSortY(t *testing.T) {
 	testSort(t, QuickSortY[elem], bigSize, smallSize)
 }
+func Test_BlockQuickSort(t *testing.T) {
+	testSort(t, BlockQuickSort[elem], bigSize, smallSize)
+}
 func Test_IntroSort(t *testing.T) {
 	testSort(t, IntroSort[elem], bigSize, bigSize)
 }
 func Test_IntroSortY(t *testing.T) {
 	testSort(t, IntroSortY[elem], bigSize, bigSize)
+}
+func Test_BlockIntroSort(t *testing.T) {
+	testSort(t, BlockIntroSort[elem], bigSize, bigSize)
 }
 func Test_RadixSort(t *testing.T) {
 	testSort(t, RadixSort[elem], bigSize, smallSize)
@@ -139,11 +145,17 @@ func Benchmark_QuickSort(b *testing.B) {
 func Benchmark_QuickSortY(b *testing.B) {
 	benchSort(b, QuickSortY[elem], genPseudo)
 }
+func Benchmark_BlockQuickSort(b *testing.B) {
+	benchSort(b, BlockQuickSort[elem], genPseudo)
+}
 func Benchmark_IntroSort(b *testing.B) {
 	benchSort(b, IntroSort[elem], genPseudo)
 }
 func Benchmark_IntroSortY(b *testing.B) {
 	benchSort(b, IntroSortY[elem], genPseudo)
+}
+func Benchmark_BlockIntroSort(b *testing.B) {
+	benchSort(b, BlockIntroSort[elem], genPseudo)
 }
 func Benchmark_RadixSort(b *testing.B) {
 	benchSort(b, RadixSort[elem], genPseudo)
@@ -161,11 +173,17 @@ func Benchmark_DescQuickSort(b *testing.B) {
 func Benchmark_DescQuickSortY(b *testing.B) {
 	benchSort(b, QuickSortY[elem], genDesc)
 }
+func Benchmark_DescBlockQuickSort(b *testing.B) {
+	benchSort(b, BlockQuickSort[elem], genDesc)
+}
 func Benchmark_DescIntroSort(b *testing.B) {
 	benchSort(b, IntroSort[elem], genDesc)
 }
 func Benchmark_DescIntroSortY(b *testing.B) {
 	benchSort(b, IntroSortY[elem], genDesc)
+}
+func Benchmark_DescBlockIntroSort(b *testing.B) {
+	benchSort(b, BlockIntroSort[elem], genDesc)
 }
 func Benchmark_DescRadixSort(b *testing.B) {
 	benchSort(b, RadixSort[elem], genDesc)
@@ -183,11 +201,17 @@ func Benchmark_ConstQuickSort(b *testing.B) {
 func Benchmark_ConstQuickSortY(b *testing.B) {
 	benchSort(b, QuickSortY[elem], genConst)
 }
+func Benchmark_ConstBlockQuickSort(b *testing.B) {
+	benchSort(b, BlockQuickSort[elem], genConst)
+}
 func Benchmark_ConstIntroSort(b *testing.B) {
 	benchSort(b, IntroSort[elem], genConst)
 }
 func Benchmark_ConstIntroSortY(b *testing.B) {
 	benchSort(b, IntroSortY[elem], genConst)
+}
+func Benchmark_ConstBlockIntroSort(b *testing.B) {
+	benchSort(b, BlockIntroSort[elem], genConst)
 }
 func Benchmark_ConstRadixSort(b *testing.B) {
 	benchSort(b, RadixSort[elem], genConst)
