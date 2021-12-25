@@ -1,42 +1,41 @@
 package sort
 
 import (
-	"DSGO/utils"
 	"constraints"
+	"math/bits"
 )
 
 // 内省排序，基于快速排序的一种混合排序算法，不具有稳定性。
 // 复杂度为O(NlogN) & O(logN)。
 // 主要限制了QuickSort的最坏情况，适合递归实现(没有爆栈风险)。
 func IntroSort[T constraints.Ordered](list []T) {
-	life := utils.Log2Ceil(uint(len(list))) * 2
+	life := bits.Len(uint(len(list))) * 2
 	introSort(list, life)
 }
 
-func introSort[T constraints.Ordered](list []T, life uint) {
+func introSort[T constraints.Ordered](list []T, life int) {
 	if len(list) < lowerBound {
 		SimpleSort(list)
-	} else if life == 0 {
+	} else if life--; life < 0 {
 		HeapSort(list)
 	} else {
 		m := partition(list)
-		introSort(list[:m], life-1)
-		introSort(list[m:], life-1)
+		introSort(list[:m], life)
+		introSort(list[m:], life)
 	}
 }
 
 func BlockIntroSort[T constraints.Ordered](list []T) {
-	life := utils.Log2Ceil(uint(len(list))) * 2
+	life := bits.Len(uint(len(list))) * 2
 	blockIntroSort(list, life)
 }
 
-func blockIntroSort[E constraints.Ordered](list []E, life uint) {
+func blockIntroSort[E constraints.Ordered](list []E, life int) {
 	for len(list) >= lowerBound {
-		if life == 0 {
+		if life--; life < 0 {
 			HeapSort(list)
 			return
 		}
-		life--
 		m := blockPartition(list)
 		blockIntroSort(list[m:], life)
 		list = list[:m]
@@ -46,17 +45,16 @@ func blockIntroSort[E constraints.Ordered](list []E, life uint) {
 
 // 三分内省排序
 func IntroSortY[T constraints.Ordered](list []T) {
-	life := utils.Log2Ceil(uint(len(list))) * 3 / 2
+	life := bits.Len(uint(len(list))) * 3 / 2
 	introSortY(list, life)
 }
 
-func introSortY[T constraints.Ordered](list []T, life uint) {
+func introSortY[T constraints.Ordered](list []T, life int) {
 	for len(list) > lowerBoundY {
-		if life == 0 {
+		if life--; life < 0 {
 			HeapSort(list)
 			return
 		}
-		life--
 		fst, snd := triPartition(list)
 		introSortY(list[:fst], life)
 		introSortY(list[snd+1:], life)

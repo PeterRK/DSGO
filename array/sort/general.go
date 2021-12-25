@@ -1,7 +1,7 @@
 package sort
 
 import (
-	"DSGO/utils"
+	"math/bits"
 )
 
 type Less[T any] func(a, b *T) bool
@@ -76,19 +76,19 @@ func (lt Less[T]) partition(list []T) int {
 	return a
 }
 
-func (lt Less[T]) introSort(list []T, life uint) {
+func (lt Less[T]) introSort(list []T, life int) {
 	if len(list) < lowerBound {
 		lt.simpleSort(list)
-	} else if life == 0 {
+	} else if life--; life < 0 {
 		lt.heapSort(list)
 	} else {
 		m := lt.partition(list)
-		lt.introSort(list[:m], life-1)
-		lt.introSort(list[m:], life-1)
+		lt.introSort(list[:m], life)
+		lt.introSort(list[m:], life)
 	}
 }
 
 func (lt Less[T]) Sort(list []T) {
-	life := utils.Log2Ceil(uint(len(list))) * 2
+	life := bits.Len(uint(len(list))) * 2
 	lt.introSort(list, life)
 }
