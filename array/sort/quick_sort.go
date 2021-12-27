@@ -67,9 +67,9 @@ func partition[T constraints.Ordered](list []T) int {
 	m, s := size/2, size/4
 	l, m, r := sort3(list, m-s, m, m+s)
 	if size > sort3on3bound {
-		s = size / 8
-		_, l, _ = sort3(list, s, m-s, m-1)
-		_, r, _ = sort3(list, m+1, m+s, size-s)
+		x, s := size/2, size/8
+		_, l, _ = sort3(list, s, x-s, x-1)
+		_, r, _ = sort3(list, x+1, x+s, size-s)
 		l, m, r = sort3(list, l, m, r)
 	}
 	s = size - 1
@@ -117,9 +117,9 @@ func blockPartition[T constraints.Ordered](list []T) int {
 	m, s := size/2, size/4
 	l, m, r := sort3(list, m-s, m, m+s)
 	if size > sort3on3bound {
-		s = size / 8
-		_, l, _ = sort3(list, s, m-s, m-1)
-		_, r, _ = sort3(list, m+1, m+s, size-s)
+		x, s := size/2, size/8
+		_, l, _ = sort3(list, s, x-s, x-1)
+		_, r, _ = sort3(list, x+1, x+s, size-s)
 		l, m, r = sort3(list, l, m, r)
 	}
 	s = size - 1
