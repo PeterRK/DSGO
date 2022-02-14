@@ -1,7 +1,7 @@
 package pairing
 
 import (
-	"constraints"
+	"golang.org/x/exp/constraints"
 	"unsafe"
 )
 

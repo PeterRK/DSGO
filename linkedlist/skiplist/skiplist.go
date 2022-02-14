@@ -2,7 +2,7 @@ package skiplist
 
 import (
 	"DSGO/utils"
-	"constraints"
+	"golang.org/x/exp/constraints"
 	"math"
 	"time"
 	"unsafe"

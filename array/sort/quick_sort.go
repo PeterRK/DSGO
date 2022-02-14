@@ -3,7 +3,7 @@ package sort
 import (
 	"DSGO/array"
 	"DSGO/utils"
-	"constraints"
+	"golang.org/x/exp/constraints"
 )
 
 // 快速排序，改进的冒泡排序，不具有稳定性。

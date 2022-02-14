@@ -2,7 +2,7 @@ package bplus
 
 import (
 	"DSGO/array"
-	"constraints"
+	"golang.org/x/exp/constraints"
 	"fmt"
 )
 

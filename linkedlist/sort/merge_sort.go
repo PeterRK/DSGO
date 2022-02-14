@@ -2,7 +2,7 @@ package sort
 
 import (
 	ll "DSGO/linkedlist"
-	"constraints"
+	"golang.org/x/exp/constraints"
 )
 
 // 归并排序，复杂度为O(2NlogN) & O(1)，具有稳定性。

@@ -1,7 +1,7 @@
 package rank
 
 import (
-	"constraints"
+	"golang.org/x/exp/constraints"
 	"fmt"
 )
 

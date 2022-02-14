@@ -1,7 +1,7 @@
 package sort
 
 import (
-	"constraints"
+	"golang.org/x/exp/constraints"
 )
 
 const lowerBound = 16

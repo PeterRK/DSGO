@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"constraints"
+	"golang.org/x/exp/constraints"
 	"math/rand"
 	"time"
 )

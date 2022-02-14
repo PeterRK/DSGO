@@ -1,7 +1,7 @@
 package sort
 
 import (
-	"constraints"
+	"golang.org/x/exp/constraints"
 )
 
 // 堆排序，改进的选择排序，不具备稳定性。

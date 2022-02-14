@@ -1,7 +1,7 @@
 package array
 
 import (
-	"constraints"
+	"golang.org/x/exp/constraints"
 )
 
 // 寻找key的位置(未必是第一个)，没有返回-1

@@ -1,7 +1,7 @@
 package redblack
 
 import (
-	"constraints"
+	"golang.org/x/exp/constraints"
 	"fmt"
 	"unsafe"
 )

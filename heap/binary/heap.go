@@ -1,7 +1,7 @@
 package binary
 
 import (
-	"constraints"
+	"golang.org/x/exp/constraints"
 )
 
 //二叉堆，底层采用数组。

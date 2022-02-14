@@ -2,7 +2,7 @@ package sort
 
 import (
 	"DSGO/array"
-	"constraints"
+	"golang.org/x/exp/constraints"
 )
 
 // 归并排序，改进的插入排序，具有稳定性。

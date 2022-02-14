@@ -2,7 +2,7 @@ package sort
 
 import (
 	ll "DSGO/linkedlist"
-	"constraints"
+	"golang.org/x/exp/constraints"
 )
 
 // 快速排序，平均复杂度为O(NlogN) & O(logN)，最坏情况是O(N^2) & O(N)，不具有稳定性。

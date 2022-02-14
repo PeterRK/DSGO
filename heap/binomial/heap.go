@@ -1,7 +1,7 @@
 package binomial
 
 import (
-	"constraints"
+	"golang.org/x/exp/constraints"
 	"unsafe"
 )
 

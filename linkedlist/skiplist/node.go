@@ -1,7 +1,7 @@
 package skiplist
 
 import (
-	"constraints"
+	"golang.org/x/exp/constraints"
 )
 
 func newLeaf[T constraints.Ordered](level int) *lNode[T] {

@@ -3,7 +3,7 @@ package sort
 import (
 	ll "DSGO/linkedlist"
 	"DSGO/utils"
-	"constraints"
+	"golang.org/x/exp/constraints"
 )
 
 // 内省排序，基于快速排序的一种混合排序算法，不具有稳定性。

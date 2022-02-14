@@ -1,7 +1,7 @@
 package avl
 
 import (
-	"constraints"
+	"golang.org/x/exp/constraints"
 	"fmt"
 )
 

@@ -1,7 +1,7 @@
 package tree
 
 import (
-	"constraints"
+	"golang.org/x/exp/constraints"
 )
 
 type node[T constraints.Ordered] struct {
