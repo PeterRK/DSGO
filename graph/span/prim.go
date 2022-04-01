@@ -1,8 +1,8 @@
 package span
 
 import (
-	bheap "DSGO/Heap/binary"
-	pheap "DSGO/Heap/pairing"
+	bheap "DSGO/heap/binary"
+	pheap "DSGO/heap/pairing"
 	"DSGO/graph"
 	"errors"
 )
