@@ -130,13 +130,13 @@ func blockPartition[T constraints.Ordered](list []T) int {
 	l, r = 1, s-1
 
 	const blockSize = 64
-	if r-l > blockSize*2-1 {
+	if r-l >= blockSize*2 {
 		var ml, mr struct {
 			v [blockSize]uint8
 			a int
 			b int
 		}
-		for r-l > blockSize*2-1 {
+		for r-l >= blockSize*2 {
 			if ml.a == ml.b {
 				ml.a, ml.b = 0, 0
 				for i := 0; i < blockSize; i++ {
