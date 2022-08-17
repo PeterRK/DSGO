@@ -102,6 +102,7 @@ func getU16(str string) uint16 {
 func Hash160(seed uint64, str string) (uint64, uint64, uint32) {
 	const magic uint64 = 0xdeadbeefdeadbeef
 	s := state{seed, seed, magic, magic}
+	l := uint64(len(str))
 
 	for ; len(str) >= 32; str = str[32:] {
 		s.c += getU64(str)
@@ -117,7 +118,7 @@ func Hash160(seed uint64, str string) (uint64, uint64, uint32) {
 		str = str[16:]
 	}
 
-	s.d += uint64(len(str)) << 56
+	s.d += l << 56
 	switch len(str) {
 	case 15:
 		s.d += (uint64(str[14]) << 48) |
