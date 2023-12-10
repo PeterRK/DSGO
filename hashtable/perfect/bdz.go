@@ -4,14 +4,15 @@ import (
 	"DSGO/array"
 	"DSGO/hashtable"
 	"DSGO/utils"
+	"crypto/rand"
+	"encoding/binary"
 	"fmt"
 	"math"
-	"math/rand"
 	"time"
 )
 
 type bdz struct {
-	seed   uint64
+	seed   uint32
 	width  uint32
 	bitmap []uint32
 }
@@ -52,7 +53,7 @@ func setBitWithCheck(bitmap []uint32, pos uint32) bool {
 }
 
 func (h *bdz) hash(key string) (slots [3]uint32) {
-	a, b := hashtable.Hash128(h.seed, key)
+	a, b := hashtable.Hash128(uint64(h.seed), key)
 	slots[0] = uint32(a) % h.width
 	slots[1] = uint32(a>>32)%h.width + h.width
 	slots[2] = uint32(b)%h.width + h.width*2
@@ -82,11 +83,20 @@ type hypergraph struct {
 	nodes []list      //超图的点，表现为链表
 }
 
+func rand32() uint32 {
+	var tmp [4]byte
+	_, err := rand.Read(tmp[:])
+	if err != nil {
+		return uint32(time.Now().UnixNano())
+	}
+	return binary.LittleEndian.Uint32(tmp[:])
+}
+
 func (h *bdz) init(keys []string) bool {
 	if len(keys) > math.MaxInt32 { //注意，这里不用MaxUint32
 		return false
 	}
-	h.width = uint32((uint64(len(keys))*41 + 99) / 100) //此比例来自BDZ论文
+	h.width = uint32((uint64(len(keys))*105 + 255) / 256) //此比例来自BDZ论文
 	h.width |= 1
 	slotCnt := int(h.width * 3)
 	h.bitmap = make([]uint32, (slotCnt+15)/16)
@@ -99,9 +109,8 @@ func (h *bdz) init(keys []string) bool {
 
 	free := make([]uint32, 0, len(keys))
 
-	rnd := rand.New(rand.NewSource(time.Now().UnixNano()))
-	for trys := 0; trys < 16; trys++ {
-		h.seed = rnd.Uint64()
+	for trys := 0; trys < 8; trys++ {
+		h.seed = rand32()
 		if trys != 0 {
 			fmt.Printf("retry with seed %x\n", h.seed)
 		}
@@ -133,7 +142,7 @@ func (g *hypergraph) init(keys []string, hash func(string) [3]uint32) bool {
 			v.next = n.head
 			n.head = uint32(i)
 			n.size++
-			if n.size > 100 { //扎堆是不正常的
+			if n.size > 50 { //扎堆是不正常的
 				return false
 			}
 		}

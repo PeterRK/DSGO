@@ -2,6 +2,7 @@ package perfect
 
 import (
 	"DSGO/utils"
+	"strconv"
 	"testing"
 )
 
@@ -34,4 +35,14 @@ func Test_Hasher(t *testing.T) {
 	hasher = New([]string{msg})
 	utils.Assert(t, hasher != nil)
 	hasher.Hash(msg)
+}
+
+func Test_10K(t *testing.T) {
+	const size = 10000
+	keys := make([]string, size)
+	for i := 0; i < size; i++ {
+		keys[i] = strconv.Itoa(i)
+	}
+	hasher := New(keys)
+	utils.Assert(t, hasher != nil)
 }
