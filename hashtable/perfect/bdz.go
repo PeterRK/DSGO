@@ -44,7 +44,7 @@ func setBit(bitmap []uint32, pos uint32) {
 	bitmap[blk] |= uint32(1) << sft
 }
 
-func setBitWithCheck(bitmap []uint32, pos uint32) bool {
+func testAndSetBit(bitmap []uint32, pos uint32) bool {
 	if testBit(bitmap, pos) {
 		return false
 	}
@@ -147,6 +147,7 @@ func (g *hypergraph) init(keys []string, hash func(string) [3]uint32) bool {
 			}
 		}
 	}
+
 	return true
 }
 
@@ -155,11 +156,10 @@ func (g *hypergraph) tear(free []uint32, bitmap []uint32) []uint32 {
 	for i := 0; i < len(g.edges); i++ {
 		for j := 0; j < 3; j++ {
 			n := g.nodes[g.edges[i][j].slot]
-			if n.size == 1 {
+			if n.size == 1 && testAndSetBit(bitmap, n.head) {
 				if n.head != uint32(i) {
 					panic("broken graph")
 				}
-				setBit(bitmap, n.head)
 				free = append(free, n.head)
 				break
 			}
@@ -178,7 +178,7 @@ func (g *hypergraph) tear(free []uint32, bitmap []uint32) []uint32 {
 			*p = v.next
 			v.next = endIdx
 			n.size--
-			if n.size == 1 && setBitWithCheck(bitmap, n.head) {
+			if n.size == 1 && testAndSetBit(bitmap, n.head) {
 				free = append(free, n.head)
 			}
 		}
@@ -193,14 +193,14 @@ func (h *bdz) mapping(edges [][3]vertex, free []uint32, bitmap []uint32) {
 		e := edges[free[i]]
 		v0, v1, v2 := e[0].slot, e[1].slot, e[2].slot
 		switch {
-		case setBitWithCheck(bitmap, v0):
-			setBitWithCheck(bitmap, v1)
-			setBitWithCheck(bitmap, v2)
+		case testAndSetBit(bitmap, v0):
+			setBit(bitmap, v1)
+			setBit(bitmap, v2)
 			setBit2on11(h.bitmap, v0, (6-(bit2(h.bitmap, v1)+bit2(h.bitmap, v2)))%3)
-		case setBitWithCheck(bitmap, v1):
-			setBitWithCheck(bitmap, v2)
+		case testAndSetBit(bitmap, v1):
+			setBit(bitmap, v2)
 			setBit2on11(h.bitmap, v1, (7-(bit2(h.bitmap, v0)+bit2(h.bitmap, v2)))%3)
-		case setBitWithCheck(bitmap, v2):
+		case testAndSetBit(bitmap, v2):
 			setBit2on11(h.bitmap, v2, (8-(bit2(h.bitmap, v0)+bit2(h.bitmap, v1)))%3)
 		default:
 			panic("all nodes are occupied")
