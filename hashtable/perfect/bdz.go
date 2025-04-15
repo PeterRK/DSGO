@@ -70,17 +70,13 @@ const endIdx = uint32(math.MaxUint32)
 
 type vertex struct {
 	slot uint32
+	prev uint32
 	next uint32
-}
-
-type list struct {
-	size uint8
-	head uint32
 }
 
 type hypergraph struct {
 	edges [][3]vertex //超图的边，每条边三个顶点
-	nodes []list      //超图的点，表现为链表
+	nodes []uint32    //超图的点，表现为链表
 }
 
 func rand32() uint32 {
@@ -105,7 +101,7 @@ func (h *bdz) init(keys []string) bool {
 	bitmap := make([]uint32, utils.Max(ebmSize, nbmSize)) //nbmSize > ebmSize
 	graph := hypergraph{
 		edges: make([][3]vertex, len(keys)),
-		nodes: make([]list, slotCnt)}
+		nodes: make([]uint32, slotCnt)}
 
 	free := make([]uint32, 0, len(keys))
 
@@ -114,10 +110,7 @@ func (h *bdz) init(keys []string) bool {
 		if trys != 0 {
 			fmt.Printf("retry with seed %x\n", h.seed)
 		}
-		if !graph.init(keys, h.hash) { //根据随机种子生成超图
-			return false
-		}
-
+		graph.init(keys, h.hash) //根据随机种子生成超图
 		array.SetAll(bitmap[:ebmSize], 0)
 		free = graph.tear(free, bitmap) //拆解超图获得边序列
 		if len(free) != len(graph.edges) {
@@ -131,55 +124,55 @@ func (h *bdz) init(keys []string) bool {
 	return false
 }
 
-func (g *hypergraph) init(keys []string, hash func(string) [3]uint32) bool {
-	array.SetAll(g.nodes, list{0, endIdx})
+func (g *hypergraph) init(keys []string, hash func(string) [3]uint32) {
+	array.SetAll(g.nodes, endIdx)
 	for i := 0; i < len(keys); i++ {
 		slots := hash(keys[i])
 		for j := 0; j < 3; j++ {
 			v := &g.edges[i][j]
 			v.slot = slots[j]
-			n := &g.nodes[v.slot]
-			v.next = n.head
-			n.head = uint32(i)
-			n.size++
-			if n.size > 50 { //扎堆是不正常的
-				return false
+			v.prev = endIdx
+			v.next = g.nodes[v.slot]
+			g.nodes[v.slot] = uint32(i)
+			if v.next != endIdx {
+				g.edges[v.next][j].prev = uint32(i)
 			}
 		}
 	}
-
-	return true
 }
 
 func (g *hypergraph) tear(free []uint32, bitmap []uint32) []uint32 {
-	free, head := free[:0], 0
-	for i := 0; i < len(g.edges); i++ {
+	free = free[:0]
+	for i := len(g.edges) - 1; i >= 0; i-- {
+		edge := g.edges[i]
 		for j := 0; j < 3; j++ {
-			n := g.nodes[g.edges[i][j].slot]
-			if n.size == 1 && testAndSetBit(bitmap, n.head) {
-				if n.head != uint32(i) {
-					panic("broken graph")
-				}
-				free = append(free, n.head)
-				break
+			v := edge[j]
+			if v.prev == endIdx && v.next == endIdx &&
+				testAndSetBit(bitmap, uint32(i)) {
+				free = append(free, uint32(i))
 			}
 		}
 	}
-	for head < len(free) {
+	for head := 0; head < len(free); head++ {
 		curr := free[head]
-		head++
 		for j := 0; j < 3; j++ {
 			v := &g.edges[curr][j]
-			n := &g.nodes[v.slot]
-			p := &n.head
-			for *p != curr {
-				p = &g.edges[*p][j].next
+			i := endIdx
+			if v.prev != endIdx {
+				i = v.prev
+				g.edges[i][j].next = v.next
 			}
-			*p = v.next
-			v.next = endIdx
-			n.size--
-			if n.size == 1 && testAndSetBit(bitmap, n.head) {
-				free = append(free, n.head)
+			if v.next != endIdx {
+				i = v.next
+				g.edges[i][j].prev = v.prev
+			}
+			if i == endIdx {
+				continue
+			}
+			u := &g.edges[i][j]
+			if u.prev == endIdx && u.next == endIdx &&
+				testAndSetBit(bitmap, uint32(i)) {
+				free = append(free, i)
 			}
 		}
 	}
