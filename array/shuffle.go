@@ -25,7 +25,7 @@ func RandomPartition[T any](list []T, n int) {
 	}
 }
 
-//随机组合，当m远小于m时比RandomPartition划算
+// 随机组合，当m远小于n时比RandomPartition划算
 func RandomInts(n, m int) []int {
 	if m <= 0 || n <= m {
 		return nil
@@ -41,7 +41,7 @@ func RandomInts(n, m int) []int {
 		if i != n-1 {
 			b, got := memo[n-1]
 			if !got {
-				b = n-1
+				b = n - 1
 			}
 			memo[i] = b
 		}
