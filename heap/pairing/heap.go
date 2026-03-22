@@ -1,17 +1,17 @@
 package pairing
 
 import (
-	"golang.org/x/exp/constraints"
+	"cmp"
 	"unsafe"
 )
 
 //虽然Fibonacci理论复杂度更好，但配对堆实际上更为实用。
-type Heap[T constraints.Ordered] struct {
+type Heap[T cmp.Ordered] struct {
 	root *Node[T]
 	size int
 }
 
-type Node[T constraints.Ordered] struct {
+type Node[T cmp.Ordered] struct {
 	key   T
 	child *Node[T]
 	prev  *Node[T] //父兄节点
@@ -46,7 +46,7 @@ func (hp *Heap[T]) Top() T {
 }
 
 //master != nil && slave != nil
-func merge[T constraints.Ordered](master, slave *Node[T]) *Node[T] {
+func merge[T cmp.Ordered](master, slave *Node[T]) *Node[T] {
 	if master.key > slave.key {
 		master, slave = slave, master
 	}
@@ -87,13 +87,13 @@ func (hp *Heap[T]) Push(key T) *Node[T] {
 	return node
 }
 
-func fakeHead[T constraints.Ordered](spt **Node[T]) *Node[T] {
+func fakeHead[T cmp.Ordered](spt **Node[T]) *Node[T] {
 	base := uintptr(unsafe.Pointer(spt))
 	off := unsafe.Offsetof((*spt).next)
 	return (*Node[T])(unsafe.Pointer(base - off))
 }
 
-func collect[T constraints.Ordered](head *Node[T]) *Node[T] {
+func collect[T cmp.Ordered](head *Node[T]) *Node[T] {
 	if head != nil && head.next != nil {
 		list, last := head, fakeHead(&head)
 		for list != nil && list.next != nil { //两两配对
@@ -117,7 +117,7 @@ func collect[T constraints.Ordered](head *Node[T]) *Node[T] {
 	return head
 }
 
-func collect_v2[T constraints.Ordered](head *Node[T]) *Node[T] {
+func collect_v2[T cmp.Ordered](head *Node[T]) *Node[T] {
 	if head != nil {
 		for head.next != nil {
 			list, knot := head, fakeHead(&head)

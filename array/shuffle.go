@@ -1,15 +1,20 @@
 package array
 
 import (
-	"math/rand"
+	"math/rand/v2"
 	"time"
 )
 
+func newRand() *rand.Rand {
+	seed := uint64(time.Now().UnixNano())
+	return rand.New(rand.NewPCG(seed, ^seed))
+}
+
 // 随机排列
 func RandomShuffle[T any](list []T) {
-	rand.Seed(time.Now().UnixNano())
+	rng := newRand()
 	for i := 1; i < len(list); i++ {
-		j := rand.Int() % (i + 1)
+		j := rng.IntN(i + 1)
 		list[i], list[j] = list[j], list[i]
 	}
 }
@@ -17,23 +22,24 @@ func RandomShuffle[T any](list []T) {
 // 随机组合，前n项为结果
 func RandomPartition[T any](list []T, n int) {
 	if n > 0 && n < len(list) {
-		rand.Seed(time.Now().UnixNano())
+		rng := newRand()
 		for i := n; i < len(list); i++ {
-			j := rand.Int() % (i + 1)
+			j := rng.IntN(i + 1)
 			list[i], list[j] = list[j], list[i]
 		}
 	}
 }
 
-// 随机组合，当m远小于n时比RandomPartition划算
+//随机组合，当m远小于m时比RandomPartition划算
 func RandomInts(n, m int) []int {
 	if m <= 0 || n <= m {
 		return nil
 	}
+	rng := newRand()
 	list := make([]int, m)
 	memo := make(map[int]int, m)
 	for m > 0 {
-		i := rand.Int() % n
+		i := rng.IntN(n)
 		a, got := memo[i]
 		if !got {
 			a = i
@@ -41,7 +47,7 @@ func RandomInts(n, m int) []int {
 		if i != n-1 {
 			b, got := memo[n-1]
 			if !got {
-				b = n - 1
+				b = n-1
 			}
 			memo[i] = b
 		}

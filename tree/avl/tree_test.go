@@ -14,7 +14,7 @@ func (root *node[T]) check(t *testing.T) int8 {
 	lh := root.kids[Left].check(t)
 	rh := root.kids[Right].check(t)
 	utils.Assert(t, root.state == rh-lh)
-	return utils.Max(lh, rh) + 1
+	return max(lh, rh) + 1
 }
 
 func Test_Tree(t *testing.T) {

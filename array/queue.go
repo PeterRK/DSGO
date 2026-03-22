@@ -29,6 +29,7 @@ func (q *queue[T]) init(size int) {
 }
 
 func (q *queue[T]) Clear() {
+	clear(q.space)
 	q.r, q.w = 0, 0
 }
 
@@ -41,7 +42,7 @@ func (q *queue[T]) IsFull() bool {
 }
 
 func (q *queue[T]) Size() int {
-	size := q.r - q.w
+	size := q.w - q.r
 	if size < 0 {
 		size += len(q.space)
 	}
@@ -62,6 +63,8 @@ func (q *queue[T]) Pop() T {
 		panic("empty queue")
 	}
 	unit := q.space[q.r]
+	var zero T
+	q.space[q.r] = zero
 	q.r = (q.r + 1) % len(q.space)
 	return unit
 }

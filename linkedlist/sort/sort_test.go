@@ -3,7 +3,7 @@ package sort
 import (
 	ll "DSGO/linkedlist"
 	"DSGO/utils"
-	"math/rand"
+	"math/rand/v2"
 	"testing"
 	"time"
 )
@@ -54,26 +54,27 @@ func getTrait(head *ll.Node[elem]) elem {
 }
 
 func genRand(size int) *ll.Node[elem] {
-	rand.Seed(time.Now().UnixNano())
+	seed := uint64(time.Now().UnixNano())
+	rng := rand.New(rand.NewPCG(seed, ^seed))
 	var head *ll.Node[elem]
 	tail := ll.FakeHead(&head)
 	for i := 0; i < size; i++ {
 		tail.Next = new(ll.Node[elem])
 		tail = tail.Next
-		tail.Val = elem(rand.Uint64())
+		tail.Val = elem(rng.Uint64())
 	}
 	tail.Next = nil
 	return head
 }
 
 func genPseudo(size int) *ll.Node[elem] {
-	rand.Seed(999)
+	rng := rand.New(rand.NewPCG(999, ^uint64(999)))
 	var head *ll.Node[elem]
 	tail := ll.FakeHead(&head)
 	for i := 0; i < size; i++ {
 		tail.Next = new(ll.Node[elem])
 		tail = tail.Next
-		tail.Val = elem(rand.Uint64())
+		tail.Val = elem(rng.Uint64())
 	}
 	tail.Next = nil
 	return head

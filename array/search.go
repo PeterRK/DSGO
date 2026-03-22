@@ -1,11 +1,11 @@
 package array
 
 import (
-	"golang.org/x/exp/constraints"
+	"cmp"
 )
 
 // 寻找key的位置(未必是第一个)，没有返回-1
-func Search[T constraints.Ordered](list []T, key T) int {
+func Search[T cmp.Ordered](list []T, key T) int {
 	for a, b := 0, len(list); a < b; {
 		m := a + (b-a)/2 //(a+b)/2
 		switch {
@@ -21,7 +21,7 @@ func Search[T constraints.Ordered](list []T, key T) int {
 }
 
 // 在由小到大的序列中寻找第一个大于key的位置
-func SearchSuccessor[T constraints.Ordered](list []T, key T) int {
+func SearchSuccessor[T cmp.Ordered](list []T, key T) int {
 	a, b := 0, len(list)
 	for a < b {
 		m := a + (b-a)/2 //(a+b)/2
@@ -35,7 +35,7 @@ func SearchSuccessor[T constraints.Ordered](list []T, key T) int {
 }
 
 // 在由小到大的序列中寻找第一个大于或等于key的位置
-func SearchFirstGE[T constraints.Ordered](list []T, key T) int {
+func SearchFirstGE[T cmp.Ordered](list []T, key T) int {
 	a, b := 0, len(list)
 	for a < b {
 		m := a + (b-a)/2 //(a+b)/2
@@ -49,7 +49,7 @@ func SearchFirstGE[T constraints.Ordered](list []T, key T) int {
 }
 
 // 在由小到大的序列中寻找最后一个小于或等于key的位置
-func SearchLastLE[T constraints.Ordered](list []T, key T) int {
+func SearchLastLE[T cmp.Ordered](list []T, key T) int {
 	a, b := len(list)-1, -1
 	for a > b {
 		m := a + (b-a+1)/2 //(a+b+1)/2，(a+b+2)/2也可以，但(a+b)/2+1不行
@@ -63,7 +63,7 @@ func SearchLastLE[T constraints.Ordered](list []T, key T) int {
 }
 
 // 在由小到大的序列中寻找目标，找打返回索引范围，没有则返回false
-func SearchRange[T constraints.Ordered](list []T, key T) (first, last int, ok bool) {
+func SearchRange[T cmp.Ordered](list []T, key T) (first, last int, ok bool) {
 	last = SearchLastLE(list, key)
 	if last == -1 || list[last] != key {
 		return -1, -1, false
@@ -73,7 +73,7 @@ func SearchRange[T constraints.Ordered](list []T, key T) (first, last int, ok bo
 }
 
 // 向有序数组插入值
-func Insert[T constraints.Ordered](list []T, key T) []T {
+func Insert[T cmp.Ordered](list []T, key T) []T {
 	spot := SearchSuccessor(list, key)
 	list = append(list, key)
 	for i := len(list) - 1; i > spot; i-- {
@@ -84,7 +84,7 @@ func Insert[T constraints.Ordered](list []T, key T) []T {
 }
 
 // 选取第k大数
-func Pick[T constraints.Ordered](list []T, k int) T {
+func Pick[T cmp.Ordered](list []T, k int) T {
 	if k <= 0 || k > len(list) {
 		panic("out of range")
 	}

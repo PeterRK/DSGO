@@ -1,16 +1,16 @@
 package tree
 
 import (
-	"golang.org/x/exp/constraints"
+	"cmp"
 )
 
-type node[T constraints.Ordered] struct {
+type node[T cmp.Ordered] struct {
 	key   T
 	left  *node[T]
 	right *node[T]
 }
 
-type NaiveBST[T constraints.Ordered] struct {
+type NaiveBST[T cmp.Ordered] struct {
 	root *node[T]
 }
 
@@ -33,7 +33,7 @@ func (tr *NaiveBST[T]) Search(key T) bool {
 	return false
 }
 
-func newNode[T constraints.Ordered](key T) (unit *node[T]) {
+func newNode[T cmp.Ordered](key T) (unit *node[T]) {
 	unit = new(node[T])
 	unit.key = key
 	//unit.left, unit.right = nil, nil

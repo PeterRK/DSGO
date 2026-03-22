@@ -1,14 +1,13 @@
 package skiplist
 
 import (
-	"DSGO/utils"
-	"golang.org/x/exp/constraints"
+	"cmp"
 	"math"
 	"time"
 	"unsafe"
 )
 
-type SkipList[T constraints.Ordered] interface {
+type SkipList[T cmp.Ordered] interface {
 	Size() int
 	IsEmpty() bool
 	Clear()
@@ -23,11 +22,11 @@ const (
 	LeafCapacity = 5
 )
 
-type bNode[T constraints.Ordered] struct {
+type bNode[T cmp.Ordered] struct {
 	next []*bNode[T]
 }
 
-type lNode[T constraints.Ordered] struct {
+type lNode[T cmp.Ordered] struct {
 	bNode[T]
 	cnt int
 	key [LeafCapacity]T //节点空间开销比较大，如果只带一个元素很亏
@@ -37,7 +36,7 @@ func (n *bNode[T]) asLeaf() *lNode[T] {
 	return (*lNode[T])(unsafe.Pointer(n))
 }
 
-type skipList[T constraints.Ordered] struct {
+type skipList[T cmp.Ordered] struct {
 	bNode[T]    //head
 	size        int
 	floor, ceil int    //非零
@@ -50,7 +49,7 @@ func (l *skipList[T]) rand() uint32 {
 	return l.magic
 }
 
-func New[T constraints.Ordered]() SkipList[T] {
+func New[T cmp.Ordered]() SkipList[T] {
 	l := new(skipList[T])
 	l.init()
 	return l
@@ -70,7 +69,7 @@ func (l *skipList[T]) Clear() {
 	l.size = 0
 	l.floor, l.ceil = LeafCapacity/2, (LeafCapacity/2)*LevelFactor
 	l.knots = l.knots[:1]
-	l.knots = nil
+	l.knots[0] = &l.bNode
 }
 
 func (l *skipList[T]) IsEmpty() bool {
@@ -220,7 +219,7 @@ func (l *skipList[T]) Remove(key T) bool {
 		var tmp T
 		node.key[node.cnt] = tmp
 	} else {
-		level := utils.Min(len(l.knots), len(node.next))
+		level := min(len(l.knots), len(node.next))
 		for i := 0; i < level; i++ {
 			l.knots[i].next[i] = node.next[i]
 		}
@@ -243,11 +242,11 @@ func (l *skipList[T]) Remove(key T) bool {
 /*
 const LevelFactor = 3
 
-type bNode[T constraints.Ordered] struct {
+type bNode[T cmp.Ordered] struct {
 	next []*bNode[T]
 }
 
-type lNode[T constraints.Ordered] struct {
+type lNode[T cmp.Ordered] struct {
 	bNode[T]
 	key T
 }
@@ -256,7 +255,7 @@ func (n *bNode[T]) asLeaf() *lNode[T] {
 	return (*lNode[T])(unsafe.Pointer(n))
 }
 
-type skipList[T constraints.Ordered] struct {
+type skipList[T cmp.Ordered] struct {
 	bNode[T]    //head
 	size        int
 	floor, ceil int    //非零
@@ -269,7 +268,7 @@ func (l *skipList[T]) rand() uint32 {
 	return l.magic
 }
 
-func New[T constraints.Ordered]() SkipList[T] {
+func New[T cmp.Ordered]() SkipList[T] {
 	l := new(skipList[T])
 	l.init()
 	return l
@@ -365,7 +364,7 @@ func (l *skipList[T]) Remove(key T) bool {
 		return false
 	}
 
-	level := utils.Min(len(l.knots), len(node.next))
+	level := min(len(l.knots), len(node.next))
 	for i := 0; i < level; i++ {
 		l.knots[i].next[i] = node.next[i]
 	}

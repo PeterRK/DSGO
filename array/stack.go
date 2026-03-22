@@ -23,6 +23,7 @@ func (s *Stack[T]) IsEmpty() bool {
 }
 
 func (s *Stack[T]) Clear() {
+	clear(s.vec)
 	s.vec = s.vec[:0]
 }
 
@@ -36,6 +37,8 @@ func (s *Stack[T]) Pop() T {
 	}
 	last := len(s.vec) - 1
 	elem := s.vec[last]
+	var zero T
+	s.vec[last] = zero
 	s.vec = s.vec[:last]
 	return elem
 }

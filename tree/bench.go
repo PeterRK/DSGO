@@ -7,7 +7,7 @@ import (
 	"DSGO/tree/bplus"
 	"DSGO/tree/redblack"
 	"fmt"
-	"math/rand"
+	"math/rand/v2"
 	"time"
 )
 
@@ -90,7 +90,8 @@ func Benchmark(size, round int, extend bool) {
 		size = 10000
 	}
 	list := make([]uint32, size)
-	rand.Seed(time.Now().UnixNano())
+	seed := uint64(time.Now().UnixNano())
+	rng := rand.New(rand.NewPCG(seed, ^seed))
 
 	var sklTime result
 	runSkl := func() {
@@ -130,7 +131,7 @@ func Benchmark(size, round int, extend bool) {
 
 	for i := 0; i < round; i++ {
 		for j := 0; j < size; j++ {
-			list[j] = rand.Uint32()
+			list[j] = rng.Uint32()
 		}
 		if extend {
 			runSkl()

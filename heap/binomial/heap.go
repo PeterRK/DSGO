@@ -1,18 +1,18 @@
 package binomial
 
 import (
-	"golang.org/x/exp/constraints"
+	"cmp"
 	"unsafe"
 )
 
 //二项堆的Push和Top操作的复杂度为O(1)，其余核心操作复杂度为O(logN)。
-type Heap[T constraints.Ordered] struct {
+type Heap[T cmp.Ordered] struct {
 	list *node[T]
 	top  *node[T]
 	size int
 }
 
-type node[T constraints.Ordered] struct {
+type node[T cmp.Ordered] struct {
 	key   T
 	level uint8
 	peer  *node[T]
@@ -55,7 +55,7 @@ func (hp *Heap[T]) Push(key T) {
 }
 
 //list是从少到多的，而child相反
-func reverse[T constraints.Ordered](list *node[T]) *node[T] {
+func reverse[T cmp.Ordered](list *node[T]) *node[T] {
 	head := (*node[T])(nil)
 	for list != nil {
 		unit := list
@@ -90,7 +90,7 @@ func (hp *Heap[T]) Pop() T {
 	return key
 }
 
-func fakeHead[T constraints.Ordered](spt **node[T]) *node[T] {
+func fakeHead[T cmp.Ordered](spt **node[T]) *node[T] {
 	base := uintptr(unsafe.Pointer(spt))
 	off := unsafe.Offsetof((*spt).peer)
 	return (*node[T])(unsafe.Pointer(base - off))

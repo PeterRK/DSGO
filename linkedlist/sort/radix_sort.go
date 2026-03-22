@@ -2,7 +2,7 @@ package sort
 
 import (
 	ll "DSGO/linkedlist"
-	"golang.org/x/exp/constraints"
+	"DSGO/utils/constraints"
 	"unsafe"
 )
 

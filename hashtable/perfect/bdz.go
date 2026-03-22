@@ -3,7 +3,6 @@ package perfect
 import (
 	"DSGO/array"
 	"DSGO/hashtable"
-	"DSGO/utils"
 	"crypto/rand"
 	"encoding/binary"
 	"fmt"
@@ -98,7 +97,7 @@ func (h *bdz) init(keys []string) bool {
 	h.bitmap = make([]uint32, (slotCnt+15)/16)
 	ebmSize := (len(keys) + 31) / 32
 	nbmSize := (slotCnt + 31) / 32
-	bitmap := make([]uint32, utils.Max(ebmSize, nbmSize)) //nbmSize > ebmSize
+	bitmap := make([]uint32, max(ebmSize, nbmSize)) //nbmSize > ebmSize
 	graph := hypergraph{
 		edges: make([][3]vertex, len(keys)),
 		nodes: make([]uint32, slotCnt)}

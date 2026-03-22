@@ -29,6 +29,7 @@ func (hp *heap[T]) IsEmpty() bool {
 }
 
 func (hp *heap[T]) Clear() {
+	clear(hp.vec)
 	hp.vec = hp.vec[:0]
 }
 
@@ -55,9 +56,11 @@ func (hp *heap[T]) Pop() *NodeG[T] {
 	}
 	node := hp.vec[0]
 	if size == 1 {
+		hp.vec[0] = nil
 		hp.vec = hp.vec[:0]
 	} else {
 		hp.vec[0] = hp.vec[size-1]
+		hp.vec[size-1] = nil
 		hp.vec = hp.vec[:size-1]
 		hp.down(0)
 	}

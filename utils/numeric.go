@@ -1,8 +1,8 @@
 package utils
 
 import (
-	"golang.org/x/exp/constraints"
-	"math/rand"
+	"DSGO/utils/constraints"
+	"math/rand/v2"
 	"time"
 )
 
@@ -14,25 +14,12 @@ func Log2Ceil(num uint) uint {
 	return ceil
 }
 
-func Min[T constraints.Ordered](a, b T) T {
-	if a < b {
-		return a
-	}
-	return b
-}
-
-func Max[T constraints.Ordered](a, b T) T {
-	if a > b {
-		return a
-	}
-	return b
-}
-
 func PseudoRandomArray[T constraints.Integer](size int, seed int64) []T {
-	rand.Seed(seed)
+	base := uint64(seed)
+	rng := rand.New(rand.NewPCG(base, ^base))
 	list := make([]T, size)
 	for i := 0; i < size; i++ {
-		list[i] = T(rand.Uint64())
+		list[i] = T(rng.Uint64())
 	}
 	return list
 }

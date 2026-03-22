@@ -1,7 +1,7 @@
 package rank
 
 import (
-	"golang.org/x/exp/constraints"
+	"cmp"
 	"fmt"
 )
 
@@ -11,7 +11,7 @@ const (
 )
 
 //为了方便查询排行，加入了数量记录
-type node[T constraints.Ordered] struct {
+type node[T cmp.Ordered] struct {
 	state  int8 //(-2), -1, 0, 1, (2)
 	weight int32
 	key    T
@@ -19,7 +19,7 @@ type node[T constraints.Ordered] struct {
 	kids   [2]*node[T]
 }
 
-func newNode[T constraints.Ordered](parent *node[T], key T) (unit *node[T]) {
+func newNode[T cmp.Ordered](parent *node[T], key T) (unit *node[T]) {
 	unit = new(node[T])
 	unit.key = key
 	//unit.state = 0
@@ -41,7 +41,7 @@ func (root *node[T]) debug(indent int) {
 	root.kids[Right].debug(indent + 1)
 }
 
-type Tree[T constraints.Ordered] struct {
+type Tree[T cmp.Ordered] struct {
 	root *node[T]
 	size int
 }

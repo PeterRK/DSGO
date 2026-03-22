@@ -2,19 +2,19 @@ package sort
 
 import (
 	ll "DSGO/linkedlist"
-	"golang.org/x/exp/constraints"
+	"cmp"
 )
 
 // 快速排序，平均复杂度为O(NlogN) & O(logN)，最坏情况是O(N^2) & O(N)，不具有稳定性。
 // 这里采用递归实现，但实际上QuickSort不适合递归实现(有爆栈风险)。
-func QuickSort[T constraints.Ordered](list *ll.Node[T]) *ll.Node[T] {
+func QuickSort[T cmp.Ordered](list *ll.Node[T]) *ll.Node[T] {
 	if list != nil {
 		list, _ = quickSort(list)
 	}
 	return list
 }
 
-func quickSort[T constraints.Ordered](list *ll.Node[T]) (head, tail *ll.Node[T]) {
+func quickSort[T cmp.Ordered](list *ll.Node[T]) (head, tail *ll.Node[T]) {
 	head, tail = sort2(list)
 	if head == nil {
 		lst1, pivot, lst2, _ := partition(list)
@@ -27,7 +27,7 @@ func quickSort[T constraints.Ordered](list *ll.Node[T]) (head, tail *ll.Node[T])
 
 //list != nil
 //done if head != nil
-func sort2[T constraints.Ordered](list *ll.Node[T]) (head, tail *ll.Node[T]) {
+func sort2[T cmp.Ordered](list *ll.Node[T]) (head, tail *ll.Node[T]) {
 	if list.Next == nil {
 		return list, list
 	}
@@ -42,7 +42,7 @@ func sort2[T constraints.Ordered](list *ll.Node[T]) (head, tail *ll.Node[T]) {
 	return nil, nil
 }
 
-func partition[T constraints.Ordered](list *ll.Node[T]) (lst1, pivot, lst2 *ll.Node[T], size int) {
+func partition[T cmp.Ordered](list *ll.Node[T]) (lst1, pivot, lst2 *ll.Node[T], size int) {
 	a := list
 	b := a.Next
 	c := b.Next

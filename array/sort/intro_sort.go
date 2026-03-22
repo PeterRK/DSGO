@@ -1,19 +1,19 @@
 package sort
 
 import (
-	"golang.org/x/exp/constraints"
+	"cmp"
 	"math/bits"
 )
 
 // 内省排序，基于快速排序的一种混合排序算法，不具有稳定性。
 // 复杂度为O(NlogN) & O(logN)。
 // 主要限制了QuickSort的最坏情况，适合递归实现(没有爆栈风险)。
-func IntroSort[T constraints.Ordered](list []T) {
+func IntroSort[T cmp.Ordered](list []T) {
 	life := bits.Len(uint(len(list))) * 2
 	introSort(list, life)
 }
 
-func introSort[T constraints.Ordered](list []T, life int) {
+func introSort[T cmp.Ordered](list []T, life int) {
 	if len(list) < lowerBound {
 		SimpleSort(list)
 	} else if life--; life < 0 {
@@ -25,12 +25,12 @@ func introSort[T constraints.Ordered](list []T, life int) {
 	}
 }
 
-func BlockIntroSort[T constraints.Ordered](list []T) {
+func BlockIntroSort[T cmp.Ordered](list []T) {
 	life := bits.Len(uint(len(list))) * 2
 	blockIntroSort(list, life)
 }
 
-func blockIntroSort[E constraints.Ordered](list []E, life int) {
+func blockIntroSort[E cmp.Ordered](list []E, life int) {
 	for len(list) >= lowerBound {
 		if life--; life < 0 {
 			HeapSort(list)
@@ -44,12 +44,12 @@ func blockIntroSort[E constraints.Ordered](list []E, life int) {
 }
 
 // 三分内省排序
-func IntroSortY[T constraints.Ordered](list []T) {
+func IntroSortY[T cmp.Ordered](list []T) {
 	life := bits.Len(uint(len(list))) * 3 / 2
 	introSortY(list, life)
 }
 
-func introSortY[T constraints.Ordered](list []T, life int) {
+func introSortY[T cmp.Ordered](list []T, life int) {
 	for len(list) > lowerBoundY {
 		if life--; life < 0 {
 			HeapSort(list)

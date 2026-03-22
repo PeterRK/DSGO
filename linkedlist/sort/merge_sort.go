@@ -2,16 +2,16 @@ package sort
 
 import (
 	ll "DSGO/linkedlist"
-	"golang.org/x/exp/constraints"
+	"cmp"
 )
 
 // 归并排序，复杂度为O(2NlogN) & O(1)，具有稳定性。
-func MergeSort[T constraints.Ordered](list *ll.Node[T]) *ll.Node[T] {
+func MergeSort[T cmp.Ordered](list *ll.Node[T]) *ll.Node[T] {
 	list, _ = mergeSort(list)
 	return list
 }
 
-func mergeSort[T constraints.Ordered](list *ll.Node[T]) (head, tail *ll.Node[T]) {
+func mergeSort[T cmp.Ordered](list *ll.Node[T]) (head, tail *ll.Node[T]) {
 	head, tail = list, ll.FakeHead(&head)
 	size := 0
 	for ; list != nil; size += 2 {
@@ -53,7 +53,7 @@ func cut[T any](list *ll.Node[T], size int) *ll.Node[T] {
 	return list
 }
 
-func merge[T constraints.Ordered](lst1, lst2 *ll.Node[T]) (head, tail *ll.Node[T]) {
+func merge[T cmp.Ordered](lst1, lst2 *ll.Node[T]) (head, tail *ll.Node[T]) {
 	head, tail = nil, ll.FakeHead(&head)
 	for {
 		tail.Next = lst1

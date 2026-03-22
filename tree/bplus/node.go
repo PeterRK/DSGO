@@ -1,11 +1,11 @@
 package bplus
 
 import (
-	"golang.org/x/exp/constraints"
+	"cmp"
 	"unsafe"
 )
 
-type bNode[T constraints.Ordered] struct {
+type bNode[T cmp.Ordered] struct {
 	inner bool
 	view  []T
 }
@@ -18,13 +18,13 @@ const iHalfSize = 15
 const iFullSize = iHalfSize * 2
 const iQuarterSize = iHalfSize / 2
 
-type iNode[T constraints.Ordered] struct {
+type iNode[T cmp.Ordered] struct {
 	bNode[T] //inner==true
 	data     [iFullSize]T
 	kids     [iFullSize]*iNode[T]
 }
 
-func newIndex[T constraints.Ordered]() *iNode[T] {
+func newIndex[T cmp.Ordered]() *iNode[T] {
 	node := new(iNode[T])
 	node.inner = true
 	node.view = node.data[:0]
@@ -35,13 +35,13 @@ const lHalfSize = 30
 const lFullSize = lHalfSize * 2
 const lQuarterSize = lHalfSize / 2
 
-type lNode[T constraints.Ordered] struct {
+type lNode[T cmp.Ordered] struct {
 	bNode[T] //inner==false
 	data     [lFullSize]T
 	next     *lNode[T]
 }
 
-func newLeaf[T constraints.Ordered]() *lNode[T] {
+func newLeaf[T cmp.Ordered]() *lNode[T] {
 	node := new(lNode[T])
 	//node.inner = false
 	node.view = node.data[:0]

@@ -1,10 +1,10 @@
 package skiplist
 
 import (
-	"golang.org/x/exp/constraints"
+	"cmp"
 )
 
-func newLeaf[T constraints.Ordered](level int) *lNode[T] {
+func newLeaf[T cmp.Ordered](level int) *lNode[T] {
 	switch level {
 	case 1:
 		node1 := new(lNode1[T])
@@ -133,123 +133,123 @@ func newLeaf[T constraints.Ordered](level int) *lNode[T] {
 	}
 }
 
-type lNode1[T constraints.Ordered] struct {
+type lNode1[T cmp.Ordered] struct {
 	lNode[T]
 	space [1]*bNode[T]
 }
-type lNode2[T constraints.Ordered] struct {
+type lNode2[T cmp.Ordered] struct {
 	lNode[T]
 	space [2]*bNode[T]
 }
-type lNode3[T constraints.Ordered] struct {
+type lNode3[T cmp.Ordered] struct {
 	lNode[T]
 	space [3]*bNode[T]
 }
-type lNode4[T constraints.Ordered] struct {
+type lNode4[T cmp.Ordered] struct {
 	lNode[T]
 	space [4]*bNode[T]
 }
-type lNode5[T constraints.Ordered] struct {
+type lNode5[T cmp.Ordered] struct {
 	lNode[T]
 	space [5]*bNode[T]
 }
-type lNode6[T constraints.Ordered] struct {
+type lNode6[T cmp.Ordered] struct {
 	lNode[T]
 	space [6]*bNode[T]
 }
-type lNode7[T constraints.Ordered] struct {
+type lNode7[T cmp.Ordered] struct {
 	lNode[T]
 	space [7]*bNode[T]
 }
-type lNode8[T constraints.Ordered] struct {
+type lNode8[T cmp.Ordered] struct {
 	lNode[T]
 	space [8]*bNode[T]
 }
-type lNode9[T constraints.Ordered] struct {
+type lNode9[T cmp.Ordered] struct {
 	lNode[T]
 	space [9]*bNode[T]
 }
-type lNode10[T constraints.Ordered] struct {
+type lNode10[T cmp.Ordered] struct {
 	lNode[T]
 	space [10]*bNode[T]
 }
-type lNode11[T constraints.Ordered] struct {
+type lNode11[T cmp.Ordered] struct {
 	lNode[T]
 	space [11]*bNode[T]
 }
-type lNode12[T constraints.Ordered] struct {
+type lNode12[T cmp.Ordered] struct {
 	lNode[T]
 	space [12]*bNode[T]
 }
-type lNode13[T constraints.Ordered] struct {
+type lNode13[T cmp.Ordered] struct {
 	lNode[T]
 	space [13]*bNode[T]
 }
-type lNode14[T constraints.Ordered] struct {
+type lNode14[T cmp.Ordered] struct {
 	lNode[T]
 	space [14]*bNode[T]
 }
-type lNode15[T constraints.Ordered] struct {
+type lNode15[T cmp.Ordered] struct {
 	lNode[T]
 	space [15]*bNode[T]
 }
-type lNode16[T constraints.Ordered] struct {
+type lNode16[T cmp.Ordered] struct {
 	lNode[T]
 	space [16]*bNode[T]
 }
-type lNode17[T constraints.Ordered] struct {
+type lNode17[T cmp.Ordered] struct {
 	lNode[T]
 	space [17]*bNode[T]
 }
-type lNode18[T constraints.Ordered] struct {
+type lNode18[T cmp.Ordered] struct {
 	lNode[T]
 	space [18]*bNode[T]
 }
-type lNode19[T constraints.Ordered] struct {
+type lNode19[T cmp.Ordered] struct {
 	lNode[T]
 	space [19]*bNode[T]
 }
-type lNode20[T constraints.Ordered] struct {
+type lNode20[T cmp.Ordered] struct {
 	lNode[T]
 	space [20]*bNode[T]
 }
-type lNode21[T constraints.Ordered] struct {
+type lNode21[T cmp.Ordered] struct {
 	lNode[T]
 	space [21]*bNode[T]
 }
-type lNode22[T constraints.Ordered] struct {
+type lNode22[T cmp.Ordered] struct {
 	lNode[T]
 	space [22]*bNode[T]
 }
-type lNode23[T constraints.Ordered] struct {
+type lNode23[T cmp.Ordered] struct {
 	lNode[T]
 	space [23]*bNode[T]
 }
-type lNode24[T constraints.Ordered] struct {
+type lNode24[T cmp.Ordered] struct {
 	lNode[T]
 	space [24]*bNode[T]
 }
-type lNode25[T constraints.Ordered] struct {
+type lNode25[T cmp.Ordered] struct {
 	lNode[T]
 	space [25]*bNode[T]
 }
-type lNode26[T constraints.Ordered] struct {
+type lNode26[T cmp.Ordered] struct {
 	lNode[T]
 	space [26]*bNode[T]
 }
-type lNode27[T constraints.Ordered] struct {
+type lNode27[T cmp.Ordered] struct {
 	lNode[T]
 	space [27]*bNode[T]
 }
-type lNode28[T constraints.Ordered] struct {
+type lNode28[T cmp.Ordered] struct {
 	lNode[T]
 	space [28]*bNode[T]
 }
-type lNode29[T constraints.Ordered] struct {
+type lNode29[T cmp.Ordered] struct {
 	lNode[T]
 	space [29]*bNode[T]
 }
-type lNode30[T constraints.Ordered] struct {
+type lNode30[T cmp.Ordered] struct {
 	lNode[T]
 	space [30]*bNode[T]
 }

@@ -2,16 +2,16 @@ package bplus
 
 import (
 	"DSGO/array"
-	"golang.org/x/exp/constraints"
+	"cmp"
 	"fmt"
 )
 
-type trait[T constraints.Ordered] struct {
+type trait[T cmp.Ordered] struct {
 	node *iNode[T]
 	idx  int
 }
 
-type Tree[T constraints.Ordered] struct {
+type Tree[T cmp.Ordered] struct {
 	root *iNode[T]
 	head *lNode[T]
 	size int

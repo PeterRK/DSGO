@@ -1,7 +1,7 @@
 package linkedlist
 
 import (
-	"golang.org/x/exp/constraints"
+	"cmp"
 	"unsafe"
 )
 
@@ -10,14 +10,14 @@ type Node[T any] struct {
 	Val  T
 }
 
-func FakeHead[T constraints.Ordered](spt **Node[T]) *Node[T] {
+func FakeHead[T cmp.Ordered](spt **Node[T]) *Node[T] {
 	//base := uintptr(unsafe.Pointer(spt))
 	//off := unsafe.Offsetof((*spt).Next)
 	//return (*Node[T])(unsafe.Pointer(base - off))
 	return (*Node[T])(unsafe.Pointer(spt))
 }
 
-func Merge[T constraints.Ordered](lst1, lst2 *Node[T]) (list *Node[T]) {
+func Merge[T cmp.Ordered](lst1, lst2 *Node[T]) (list *Node[T]) {
 	last := FakeHead(&list)
 	for {
 		last.Next = lst1
@@ -38,7 +38,7 @@ func Merge[T constraints.Ordered](lst1, lst2 *Node[T]) (list *Node[T]) {
 	}
 }
 
-func IsSorted[T constraints.Ordered](head *Node[T]) bool {
+func IsSorted[T cmp.Ordered](head *Node[T]) bool {
 	if head == nil {
 		return true
 	}

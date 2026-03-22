@@ -1,7 +1,7 @@
 package redblack
 
 import (
-	"golang.org/x/exp/constraints"
+	"cmp"
 	"fmt"
 	"unsafe"
 )
@@ -16,7 +16,7 @@ const (
 )
 
 /*
-type node[T constraints.Ordered] struct {
+type node[T cmp.Ordered] struct {
 	key   T
 	black  bool
 	parent *node[T]
@@ -52,7 +52,7 @@ func (unit *node[T]) copyColor(peer *node[T]) {
 }
 */
 
-type node[T constraints.Ordered] struct {
+type node[T cmp.Ordered] struct {
 	key   T
 	trait uintptr
 	kids  [2]*node[T]
@@ -93,7 +93,7 @@ func (unit *node[T]) copyColor(peer *node[T]) {
 	unit.trait |= mark
 }
 
-func newNode[T constraints.Ordered](parent *node[T], key T) (unit *node[T]) {
+func newNode[T cmp.Ordered](parent *node[T], key T) (unit *node[T]) {
 	unit = new(node[T])
 	unit.key = key
 	//unit.setRead()
@@ -129,7 +129,7 @@ func (parent *node[T]) hook(child *node[T]) *node[T] {
 	return child
 }
 
-type Tree[T constraints.Ordered] struct {
+type Tree[T cmp.Ordered] struct {
 	root *node[T]
 	size int
 }

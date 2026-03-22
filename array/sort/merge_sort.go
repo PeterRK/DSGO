@@ -2,13 +2,13 @@ package sort
 
 import (
 	"DSGO/array"
-	"golang.org/x/exp/constraints"
+	"cmp"
 )
 
 // 归并排序，改进的插入排序，具有稳定性。
 // 复杂度为O(NlogN) & O(N)。
 // 其中比较操作是O(NlogN)，但常数小于HeapSort；挪移操作是O(NlogN)，常数与HeapSort相当。
-func MergeSort[T constraints.Ordered](list []T) {
+func MergeSort[T cmp.Ordered](list []T) {
 	if len(list) < lowerBound {
 		SimpleSort(list)
 	} else {
@@ -18,7 +18,7 @@ func MergeSort[T constraints.Ordered](list []T) {
 	}
 }
 
-func mergeSort[T constraints.Ordered](a, b []T) {
+func mergeSort[T cmp.Ordered](a, b []T) {
 	if size := len(a); size < lowerBound {
 		if size < 2 {
 			return
@@ -64,7 +64,7 @@ func mergeSort[T constraints.Ordered](a, b []T) {
 	}
 }
 
-func merge[T constraints.Ordered](in1, in2, out []T) {
+func merge[T cmp.Ordered](in1, in2, out []T) {
 	i, j, k := 0, 0, 0
 	for ; i < len(in1) && j < len(in2); k++ {
 		if in1[i] <= in2[j] {
@@ -85,7 +85,7 @@ func merge[T constraints.Ordered](in1, in2, out []T) {
 	}
 }
 
-func SymMergeSort[T constraints.Ordered](list []T) {
+func SymMergeSort[T cmp.Ordered](list []T) {
 	size := len(list)
 
 	step := lowerBound
@@ -111,7 +111,7 @@ func SymMergeSort[T constraints.Ordered](list []T) {
 	}
 }
 
-func symmerge[T constraints.Ordered](list []T, border int) {
+func symmerge[T cmp.Ordered](list []T, border int) {
 	size := len(list)
 
 	if border == 1 {

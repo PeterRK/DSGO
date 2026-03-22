@@ -1,7 +1,7 @@
 package weak
 
 import (
-	"golang.org/x/exp/constraints"
+	"cmp"
 	"fmt"
 )
 
@@ -14,14 +14,14 @@ const (
 //nil的高度为-1
 //当节点为叶节点（子节点皆为nil）时，高度必须为0
 //节点和子节点的高度差为1或2
-type node[T constraints.Ordered] struct {
+type node[T cmp.Ordered] struct {
 	diff   [2]uint8
 	key    T
 	parent *node[T]
 	kids   [2]*node[T]
 }
 
-func newNode[T constraints.Ordered](parent *node[T], key T) *node[T] {
+func newNode[T cmp.Ordered](parent *node[T], key T) *node[T] {
 	unit := new(node[T])
 	unit.key = key
 	unit.diff[Left], unit.diff[Right] = 1, 1
@@ -53,7 +53,7 @@ func (parent *node[T]) hook(child *node[T]) *node[T] {
 	return child
 }
 
-type Tree[T constraints.Ordered] struct {
+type Tree[T cmp.Ordered] struct {
 	root *node[T]
 	size int
 }

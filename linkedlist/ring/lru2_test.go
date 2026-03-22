@@ -79,3 +79,14 @@ func Test_LruCache(t *testing.T) {
 	val, got = c.Get(1)
 	utils.Assert(t, got && val == "A")
 }
+
+func Test_LruCacheWarmSetting(t *testing.T) {
+	defer utils.FailInPanic(t)
+
+	c := new(cache[int, string])
+	c.init(5, 4, 2)
+	utils.Assert(t, c.warm == 2)
+
+	c.init(5, 4, 9)
+	utils.Assert(t, c.warm == 3)
+}

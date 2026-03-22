@@ -33,10 +33,10 @@ func Test_Heap(t *testing.T) {
 	for i := 0; i < size; i++ {
 		hp.Push(lst2[i])
 	}
-	utils.Assert(t, hp.Top() == utils.Min(m1, m2))
+	utils.Assert(t, hp.Top() == min(m1, m2))
 
 	//删除
-	mark := utils.Min(m1, m2)
+	mark := min(m1, m2)
 	for i := 0; i < size*2; i++ {
 		key := hp.Pop()
 		utils.Assert(t, key >= mark)

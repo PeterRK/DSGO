@@ -1,13 +1,13 @@
 package sort
 
 import (
-	"golang.org/x/exp/constraints"
+	"cmp"
 )
 
 const lowerBound = 16
 const lowerBoundY = 20
 
-func IsSorted[T constraints.Ordered](list []T) bool {
+func IsSorted[T cmp.Ordered](list []T) bool {
 	for i, size := 1, len(list); i < size; i++ {
 		if list[i-1] > list[i] {
 			return false
@@ -18,7 +18,7 @@ func IsSorted[T constraints.Ordered](list []T) bool {
 
 // 冒泡排序，最原始的排序方法，具有稳定性。
 // 比较操作是O(N^2)，挪移是O(N^2)，性能差。
-func BubleSort[T constraints.Ordered](list []T) {
+func BubleSort[T cmp.Ordered](list []T) {
 	for i := 0; i < len(list)-1; i++ {
 		for j := len(list) - 1; j > i; j-- {
 			if list[j] < list[j-1] {
@@ -30,7 +30,7 @@ func BubleSort[T constraints.Ordered](list []T) {
 
 // 选择排序，不具有稳定性。
 // 比较操作是O(N^2)，挪移是O(N)，综合性能不如InsertSort。
-func SelectSort[T constraints.Ordered](list []T) {
+func SelectSort[T cmp.Ordered](list []T) {
 	for i := 0; i < len(list)-1; i++ {
 		pos := i
 		for j := i + 1; j < len(list); j++ {
@@ -44,7 +44,7 @@ func SelectSort[T constraints.Ordered](list []T) {
 
 // 插入排序，具有稳定性。
 // 比较操作是O(NlogN)，挪移是O(N^2)，综合性能优于SelectSort。
-func InsertSort[T constraints.Ordered](list []T) {
+func InsertSort[T cmp.Ordered](list []T) {
 	for i := 1; i < len(list); i++ {
 		key := list[i]
 		a, b := 0, i
@@ -63,7 +63,7 @@ func InsertSort[T constraints.Ordered](list []T) {
 	}
 }
 
-func SimpleSort[T constraints.Ordered](list []T) {
+func SimpleSort[T cmp.Ordered](list []T) {
 	if len(list) < 2 {
 		return
 	}
@@ -84,7 +84,7 @@ func SimpleSort[T constraints.Ordered](list []T) {
 	}
 }
 
-func SimpleSort_v2[T constraints.Ordered](list []T) {
+func SimpleSort_v2[T cmp.Ordered](list []T) {
 	if len(list) < 2 {
 		return
 	}

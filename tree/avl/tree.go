@@ -1,7 +1,7 @@
 package avl
 
 import (
-	"golang.org/x/exp/constraints"
+	"cmp"
 	"fmt"
 )
 
@@ -10,14 +10,14 @@ const (
 	Right = 1
 )
 
-type node[T constraints.Ordered] struct {
+type node[T cmp.Ordered] struct {
 	key    T
 	state  int8 //(-2), -1, 0, 1, (2)
 	parent *node[T]
 	kids   [2]*node[T]
 }
 
-func newNode[T constraints.Ordered](parent *node[T], key T) (unit *node[T]) {
+func newNode[T cmp.Ordered](parent *node[T], key T) (unit *node[T]) {
 	unit = new(node[T])
 	unit.key = key
 	//unit.state = 0
@@ -49,7 +49,7 @@ func (parent *node[T]) hook(child *node[T]) *node[T] {
 	return child
 }
 
-type Tree[T constraints.Ordered] struct {
+type Tree[T cmp.Ordered] struct {
 	root *node[T]
 	size int
 }

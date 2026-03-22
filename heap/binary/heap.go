@@ -1,12 +1,12 @@
 package binary
 
 import (
-	"golang.org/x/exp/constraints"
+	"cmp"
 )
 
 //二叉堆，底层采用数组。
 //Build的复杂度为O(N)，Top的复杂度为O(1)，其余核心操作复杂度为O(logN)。
-type Heap[T constraints.Ordered] struct {
+type Heap[T cmp.Ordered] struct {
 	vec []T
 }
 
@@ -19,6 +19,7 @@ func (hp *Heap[T]) IsEmpty() bool {
 }
 
 func (hp *Heap[T]) Clear() {
+	clear(hp.vec)
 	hp.vec = hp.vec[:0]
 }
 
@@ -56,9 +57,13 @@ func (hp *Heap[T]) Pop() T {
 	}
 	unit := hp.vec[0]
 	if size == 1 {
+		var zero T
+		hp.vec[0] = zero
 		hp.vec = hp.vec[:0]
 	} else {
 		hp.vec[0] = hp.vec[size-1]
+		var zero T
+		hp.vec[size-1] = zero
 		hp.vec = hp.vec[:size-1]
 		hp.down(0)
 	}

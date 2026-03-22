@@ -1,8 +1,9 @@
 package sort
 
 import (
-	"golang.org/x/exp/constraints"
 	"unsafe"
+
+	"DSGO/utils/constraints"
 )
 
 // 基数排序，不依赖比较操作，具有稳定性

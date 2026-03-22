@@ -71,7 +71,7 @@ func (ctx *contextL) search() uint {
 			if sz != 0 {
 				ctx.stack.Push(memo{idx: curr, stream: stream})
 				path := ctx.shadow[curr][sz-1]
-				curr, stream = path.Next, utils.Min(stream, path.Weight)
+				curr, stream = path.Next, min(stream, path.Weight)
 			} else { //碰壁，退一步
 				if ctx.stack.IsEmpty() { //退无可退
 					return flow

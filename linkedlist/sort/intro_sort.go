@@ -3,12 +3,12 @@ package sort
 import (
 	ll "DSGO/linkedlist"
 	"DSGO/utils"
-	"golang.org/x/exp/constraints"
+	"cmp"
 )
 
 // 内省排序，基于快速排序的一种混合排序算法，不具有稳定性。
 // 主要限制了QuickSort的最坏情况，适合递归实现(没有爆栈风险)。
-func IntroSort[T constraints.Ordered](list *ll.Node[T]) *ll.Node[T] {
+func IntroSort[T cmp.Ordered](list *ll.Node[T]) *ll.Node[T] {
 	if list == nil {
 		return nil
 	} else if head, _ := sort2(list); head != nil {
@@ -24,7 +24,7 @@ func IntroSort[T constraints.Ordered](list *ll.Node[T]) *ll.Node[T] {
 	return list
 }
 
-func introSort[T constraints.Ordered](list *ll.Node[T], life uint) (head, tail *ll.Node[T]) {
+func introSort[T cmp.Ordered](list *ll.Node[T], life uint) (head, tail *ll.Node[T]) {
 	head, tail = sort2(list)
 	if head == nil {
 		if life == 0 {

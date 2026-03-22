@@ -1,10 +1,10 @@
 package heap
 
 import (
-	"golang.org/x/exp/constraints"
+	"cmp"
 )
 
-type Heap[T constraints.Ordered] interface {
+type Heap[T cmp.Ordered] interface {
 	Size() int
 	IsEmpty() bool
 	Clear()

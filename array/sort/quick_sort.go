@@ -2,15 +2,14 @@ package sort
 
 import (
 	"DSGO/array"
-	"DSGO/utils"
-	"golang.org/x/exp/constraints"
+	"cmp"
 )
 
 // 快速排序，改进的冒泡排序，不具有稳定性。
 // 平均复杂度为O(NlogN) & O(logN)，最坏情况是O(N^2) & O(N)。
 // 其中比较操作是O(NlogN)，常数与MergeSort相当；挪移操作是O(NlogN)，常数小于MergeSort。
 // 这里采用递归实现，但QuickSort不适合递归实现(有爆栈风险)。
-func QuickSort[T constraints.Ordered](list []T) {
+func QuickSort[T cmp.Ordered](list []T) {
 	if len(list) < lowerBound {
 		SimpleSort(list)
 	} else {
@@ -25,7 +24,7 @@ type pair struct {
 	b int
 }
 
-func QuickSort_v2[T constraints.Ordered](list []T) {
+func QuickSort_v2[T cmp.Ordered](list []T) {
 	var tasks array.Stack[pair]
 	tasks.Push(pair{0, len(list)})
 	for !tasks.IsEmpty() {
@@ -40,7 +39,7 @@ func QuickSort_v2[T constraints.Ordered](list []T) {
 	}
 }
 
-func sort3[T constraints.Ordered](list []T, a, b, c int) (int, int, int) {
+func sort3[T cmp.Ordered](list []T, a, b, c int) (int, int, int) {
 	if list[a] < list[b] {
 		if list[b] < list[c] {
 			return a, b, c
@@ -62,7 +61,7 @@ func sort3[T constraints.Ordered](list []T, a, b, c int) (int, int, int) {
 
 const sort3on3bound = 128
 
-func partition[T constraints.Ordered](list []T) int {
+func partition[T cmp.Ordered](list []T) int {
 	size := len(list)
 	m, s := size/2, size/4
 	l, m, r := sort3(list, m-s, m, m+s)
@@ -95,7 +94,7 @@ func partition[T constraints.Ordered](list []T) int {
 	return l
 }
 
-func BlockQuickSort[E constraints.Ordered](list []E) {
+func BlockQuickSort[E cmp.Ordered](list []E) {
 	for len(list) >= lowerBound {
 		m := blockPartition(list)
 		BlockQuickSort(list[m:])
@@ -104,7 +103,7 @@ func BlockQuickSort[E constraints.Ordered](list []E) {
 	SimpleSort(list)
 }
 
-func compGE[T constraints.Ordered](a, b T) int {
+func compGE[T cmp.Ordered](a, b T) int {
 	if a < b {
 		return 0
 	} else {
@@ -112,7 +111,7 @@ func compGE[T constraints.Ordered](a, b T) int {
 	}
 }
 
-func blockPartition[T constraints.Ordered](list []T) int {
+func blockPartition[T cmp.Ordered](list []T) int {
 	size := len(list)
 	m, s := size/2, size/4
 	l, m, r := sort3(list, m-s, m, m+s)
@@ -151,7 +150,7 @@ func blockPartition[T constraints.Ordered](list []T) int {
 					mr.b += compGE(pivot, list[r-i])
 				}
 			}
-			sz := utils.Min(ml.b-ml.a, mr.b-mr.a)
+			sz := min(ml.b-ml.a, mr.b-mr.a)
 			for i := 0; i < sz; i++ {
 				ll := l + int(ml.v[ml.a])
 				ml.a++
@@ -233,7 +232,7 @@ func blockPartition[T constraints.Ordered](list []T) int {
 }
 
 // 三分快速排序，比二分版本略为复杂
-func QuickSortY[T constraints.Ordered](list []T) {
+func QuickSortY[T cmp.Ordered](list []T) {
 	for len(list) > lowerBoundY {
 		fst, snd := triPartition(list)
 		QuickSortY(list[:fst])
@@ -246,7 +245,7 @@ func QuickSortY[T constraints.Ordered](list []T) {
 	SimpleSort(list)
 }
 
-func sort5[T constraints.Ordered](list []T, a, b, c, d, e int) (int, int, int, int, int) {
+func sort5[T cmp.Ordered](list []T, a, b, c, d, e int) (int, int, int, int, int) {
 	if list[b] < list[a] {
 		a, b = b, a
 	}
@@ -305,7 +304,7 @@ func sort5[T constraints.Ordered](list []T, a, b, c, d, e int) (int, int, int, i
 }
 
 // 返回两个分界元素的位置
-func triPartition[T constraints.Ordered](list []T) (fst, snd int) {
+func triPartition[T cmp.Ordered](list []T) (fst, snd int) {
 	size := len(list)
 	m, s := size/2, size/4
 	x, l, _, r, y := sort5(list, m-s, m-1, m, m+1, m+s)
@@ -363,7 +362,7 @@ func triPartition[T constraints.Ordered](list []T) (fst, snd int) {
 	return l, r
 }
 
-func QuickSortY_v2[T constraints.Ordered](list []T) {
+func QuickSortY_v2[T cmp.Ordered](list []T) {
 	for len(list) > lowerBoundY {
 		l, r, skip := triPartition_v2(list)
 		QuickSortY_v2(list[:l])
@@ -376,7 +375,7 @@ func QuickSortY_v2[T constraints.Ordered](list []T) {
 	SimpleSort(list)
 }
 
-func sort4[T constraints.Ordered](list []T, a, b, c, d int) (int, int, int, int) {
+func sort4[T cmp.Ordered](list []T, a, b, c, d int) (int, int, int, int) {
 	if list[b] < list[a] {
 		a, b = b, a
 	}
@@ -406,7 +405,7 @@ func sort4[T constraints.Ordered](list []T, a, b, c, d int) (int, int, int, int)
 	}
 }
 
-func triPartition_v2[T constraints.Ordered](list []T) (l, r int, skip bool) {
+func triPartition_v2[T cmp.Ordered](list []T) (l, r int, skip bool) {
 	size := len(list)
 	m, s := size/2, size/4
 	x, l, r, y := sort4(list, m-s, m-1, m+1, m+s)

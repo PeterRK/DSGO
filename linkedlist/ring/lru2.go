@@ -53,12 +53,13 @@ func (c *cache[K, V]) init(hot, cold int, warm uint8) {
 	c.hot.reset(hot)
 	c.cold.reset(cold)
 	c.index = make(map[K]*nodeC[K, V])
+	c.warm = warm
 }
 
 func (c *cache[K, V]) Clear() {
 	c.hot.reset(c.hot.limit)
 	c.cold.reset(c.cold.limit)
-	c.index = make(map[K]*nodeC[K, V])
+	clear(c.index)
 }
 
 func (c *cache[K, V]) Size() int {

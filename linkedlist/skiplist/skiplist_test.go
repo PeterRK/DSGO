@@ -57,6 +57,22 @@ func Test_SkipList(t *testing.T) {
 	utils.Assert(t, !set.Remove(0))
 }
 
+func Test_SkipListClearReuse(t *testing.T) {
+	defer utils.FailInPanic(t)
+
+	set := New[int]()
+	utils.Assert(t, set.Insert(3))
+	utils.Assert(t, set.Insert(1))
+	set.Clear()
+
+	utils.Assert(t, set.IsEmpty())
+	utils.Assert(t, set.Insert(2))
+	utils.Assert(t, set.Insert(4))
+	utils.Assert(t, set.Search(2))
+	utils.Assert(t, set.Search(4))
+	utils.Assert(t, !set.Search(1))
+}
+
 func Benchmark_Insert(b *testing.B) {
 	b.StopTimer()
 	set := New[int]()
