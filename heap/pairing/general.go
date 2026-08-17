@@ -122,7 +122,10 @@ func (hp *heap[T]) collect(head *NodeG[T]) *NodeG[T] {
 			last, list = list, list.prev
 			head = hp.merge(head, last)
 		}
-		head.prev, head.next = nil, nil
+		head.next = nil
+	}
+	if head != nil {
+		head.prev = nil
 	}
 	return head
 }

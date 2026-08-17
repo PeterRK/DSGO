@@ -30,7 +30,7 @@ func RandomPartition[T any](list []T, n int) {
 	}
 }
 
-//随机组合，当m远小于m时比RandomPartition划算
+//从[0,n)中随机选取m个互不重复的整数，要求0<m<n；适合m远小于n的场景。
 func RandomInts(n, m int) []int {
 	if m <= 0 || n <= m {
 		return nil

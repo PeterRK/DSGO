@@ -74,7 +74,7 @@ func Dijkstra(roads [][]graph.Path, start int) []int {
 	return result
 }
 
-//输入邻接表，返回两点间的最短路径及其长度(-1指不通)。
+//输入邻接表，返回两点间的最短路径；不可达时返回nil。
 func DijkstraPath(roads [][]graph.Path, start, end int) []int {
 	size := len(roads)
 	if start < 0 || end < 0 || start >= size || end >= size {

@@ -6,14 +6,6 @@ import (
 	"time"
 )
 
-func Log2Ceil(num uint) uint {
-	ceil := uint(0)
-	for ; num != 0; ceil++ {
-		num /= 2
-	}
-	return ceil
-}
-
 func PseudoRandomArray[T constraints.Integer](size int, seed int64) []T {
 	base := uint64(seed)
 	rng := rand.New(rand.NewPCG(base, ^base))

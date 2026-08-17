@@ -43,6 +43,22 @@ func Test_DinicL(t *testing.T) {
 	utils.Assert(t, DinicL(roads, 0, 5) == 2)
 }
 
+func Test_DinicLMultiplePhases(t *testing.T) {
+	roads := [][]graph.Path{
+		{{Next: 2, Weight: 4}, {Next: 4, Weight: 4}},
+		{{Next: 5, Weight: 2}},
+		{{Next: 3, Weight: 2}},
+		{{Next: 5, Weight: 1}},
+		{{Next: 1, Weight: 2}, {Next: 3, Weight: 1}, {Next: 5, Weight: 3}},
+		nil,
+	}
+	// 割 {0, 2, 3} 的容量为 4+1=5；路径 0→4→5、0→4→1→5、
+	// 0→2→3→5 分别可输送 3、1、1。重复回填历史逆流会错误地返回 6。
+	if got := DinicL(roads, 0, 5); got != 5 {
+		t.Fatalf("DinicL() = %d; want 5", got)
+	}
+}
+
 func Test_DinicM(t *testing.T) {
 	defer utils.FailInPanic(t)
 

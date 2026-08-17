@@ -29,6 +29,9 @@ func (hp *heap[T]) IsEmpty() bool {
 }
 
 func (hp *heap[T]) Clear() {
+	for _, node := range hp.vec {
+		node.pos = -1
+	}
 	clear(hp.vec)
 	hp.vec = hp.vec[:0]
 }
@@ -39,6 +42,7 @@ func (hp *heap[T]) Push(node *NodeG[T]) {
 	}
 	place := len(hp.vec)
 	hp.vec = append(hp.vec, node)
+	node.pos = place
 	hp.up(place)
 }
 
@@ -60,10 +64,12 @@ func (hp *heap[T]) Pop() *NodeG[T] {
 		hp.vec = hp.vec[:0]
 	} else {
 		hp.vec[0] = hp.vec[size-1]
+		hp.vec[0].pos = 0
 		hp.vec[size-1] = nil
 		hp.vec = hp.vec[:size-1]
 		hp.down(0)
 	}
+	node.pos = -1
 	return node
 }
 
@@ -78,12 +84,16 @@ func (hp *heap[T]) down(pos int) {
 			break
 		}
 		hp.vec[pos] = hp.vec[kid]
+		hp.vec[pos].pos = pos
 		pos, kid = kid, kid*2+1
 	}
 	if kid == last && hp.less(&hp.vec[kid].Val, &tgt.Val) {
-		hp.vec[pos], pos = hp.vec[kid], kid
+		hp.vec[pos] = hp.vec[kid]
+		hp.vec[pos].pos = pos
+		pos = kid
 	}
 	hp.vec[pos] = tgt
+	tgt.pos = pos
 }
 
 func (hp *heap[T]) up(pos int) {
@@ -93,13 +103,16 @@ func (hp *heap[T]) up(pos int) {
 		if !hp.less(&tgt.Val, &hp.vec[parent].Val) {
 			break
 		}
-		hp.vec[pos], pos = hp.vec[parent], parent
+		hp.vec[pos] = hp.vec[parent]
+		hp.vec[pos].pos = pos
+		pos = parent
 	}
 	hp.vec[pos] = tgt
+	tgt.pos = pos
 }
 
 func (hp *heap[T]) FloatUp(node *NodeG[T]) {
-	if node == nil || hp.vec[node.pos] != node {
+	if node == nil || node.pos < 0 || node.pos >= len(hp.vec) || hp.vec[node.pos] != node {
 		return
 	}
 	hp.floatUp(node.pos)

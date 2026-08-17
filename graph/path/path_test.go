@@ -28,6 +28,19 @@ func Test_Dijkstra(t *testing.T) {
 	utils.Assert(t, array.Equal(vec, expected))
 }
 
+func Test_DijkstraPathDecreaseKey(t *testing.T) {
+	defer utils.FailInPanic(t)
+
+	roads := [][]graph.Path{
+		{{Next: 1, Weight: 5}, {Next: 2, Weight: 10}, {Next: 3, Weight: 8}},
+		{{Next: 2, Weight: 1}},
+		{{Next: 3, Weight: 1}},
+		nil,
+	}
+	expected := []int{0, 1, 2, 3}
+	utils.Assert(t, array.Equal(DijkstraPath(roads, 0, 3), expected))
+}
+
 func Test_PlainDijkstra(t *testing.T) {
 	defer utils.FailInPanic(t)
 

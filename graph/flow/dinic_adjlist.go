@@ -163,6 +163,7 @@ func (ctx *contextL) flushBack() {
 		if len(reflux) != 0 {
 			ctx.ranker.Sort(reflux)
 			origin = merge(origin, reflux)
+			ctx.reflux[i] = reflux[:0] //本轮逆流已回填，避免下轮重复加入
 		}
 		ctx.origin[i] = compact(origin) //去重去零
 	}

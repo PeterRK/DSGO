@@ -2,8 +2,8 @@ package sort
 
 import (
 	ll "DSGO/linkedlist"
-	"DSGO/utils"
 	"cmp"
+	"math/bits"
 )
 
 // 内省排序，基于快速排序的一种混合排序算法，不具有稳定性。
@@ -16,7 +16,7 @@ func IntroSort[T cmp.Ordered](list *ll.Node[T]) *ll.Node[T] {
 	}
 
 	lst1, pivot, lst2, size := partition(list)
-	life := utils.Log2Ceil(uint(size)) * 2
+	life := uint(bits.Len(uint(size))) * 2
 
 	list, tail := introSort(lst1, life)
 	tail.Next = pivot

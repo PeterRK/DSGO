@@ -83,7 +83,7 @@ func Insert[T cmp.Ordered](list []T, key T) []T {
 	return list
 }
 
-// 选取第k大数
+// 选取第k小数，k从1开始
 func Pick[T cmp.Ordered](list []T, k int) T {
 	if k <= 0 || k > len(list) {
 		panic("out of range")

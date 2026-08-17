@@ -108,3 +108,32 @@ func Test_FloatUpAndRemove(t *testing.T) {
 	kid = node.child
 	hp.FloatUp(kid, mark-1)
 }
+
+func Test_PopSingleChildThenFloatUp(t *testing.T) {
+	defer utils.FailInPanic(t)
+
+	var hp Heap[int]
+	hp.Push(1)
+	node := hp.Push(10)
+	utils.Assert(t, hp.Pop() == 1)
+
+	hp.FloatUp(node, 0)
+	utils.Assert(t, hp.Size() == 1 && hp.Top() == 0)
+	utils.Assert(t, hp.Pop() == 0 && hp.IsEmpty())
+}
+
+func Test_NodeHeapPopSingleChildThenFloatUp(t *testing.T) {
+	defer utils.FailInPanic(t)
+
+	less := func(a, b *int) bool { return *a < *b }
+	hp := New(less)
+	nodes := []NodeG[int]{{Val: 1}, {Val: 10}}
+	hp.Push(&nodes[0])
+	hp.Push(&nodes[1])
+	utils.Assert(t, hp.Pop() == &nodes[0])
+
+	nodes[1].Val = 0
+	hp.FloatUp(&nodes[1])
+	utils.Assert(t, hp.Size() == 1 && hp.Top() == &nodes[1])
+	utils.Assert(t, hp.Pop() == &nodes[1] && hp.IsEmpty())
+}

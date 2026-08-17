@@ -7,7 +7,7 @@ import (
 	"math"
 )
 
-//输入邻接表，返回某点到各点的最短路径的长度(MAX_DIST指不通)。
+//输入邻接表，返回某点到各点的最短路径长度(math.MaxInt指不通)。
 //实为改良的Bellman-Ford算法，复杂度为O(EV)，逊于Dijkstra，但可以处理负权边。
 func SPFA(roads [][]graph.PathS, start int) ([]int, error) {
 	size := len(roads)

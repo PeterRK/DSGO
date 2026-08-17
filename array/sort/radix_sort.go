@@ -53,10 +53,10 @@ func RadixSort[T constraints.Integer](list []T) {
 	} else {
 		if signed {
 			for i := 0; i < size; i++ {
-				list[i] = temp[i] - base
+				temp[i] = list[i] - base
 			}
 		} else {
-			copy(list, temp)
+			copy(temp, list)
 		}
 	}
 }
